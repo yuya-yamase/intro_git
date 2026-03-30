@@ -120,7 +120,6 @@ void    vd_g_oXDoCANRoutMainTask(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_ANS * st
         u2_g_oxdc_rout_xid = (U2)U2_MAX;
     }
 }
-#ifdef OXDC_FUNC_ROUT_STOP
 /*===================================================================================================================================*/
 /*  void    vd_g_oXDoCANRoutStop(const U1 u1_a_NEW)                                                                                  */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -137,7 +136,7 @@ void    vd_g_oXDoCANRoutStop(const U1 u1_a_NEW)
 
     for(u2_t_lpcnt = (U2)0U; u2_t_lpcnt < u2_g_OXDC_ROUT_NUM_XID; u2_t_lpcnt++){
         fp_t_u1_func  = st_gp_OXDC_ROUT_CFG[u2_t_lpcnt].fp_u1_STOP;
-        u2_t_conf_ses = st_gp_OXDC_ROUT_XID[u2_t_lpcnt].u2_ses;
+        u2_t_conf_ses = st_gp_OXDC_ROUT_XID[u2_t_lpcnt].u2_rd_ses;
         u1_t_proc     = u1_g_oXDoCANCfgDidSessionBitChk(u1_a_NEW, u2_t_conf_ses);
 
         if((fp_t_u1_func != vdp_PTR_NA) &&
@@ -147,7 +146,6 @@ void    vd_g_oXDoCANRoutStop(const U1 u1_a_NEW)
         }
     }
 }
-#endif
 /*===================================================================================================================================*/
 /*  static void    vd_s_oXdcRoutReqchk(const ST_OXDC_REQ * st_ap_REQ)                                                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -199,7 +197,7 @@ static U1      u1_s_oXdcRoutXidchk(const ST_OXDC_REQ * st_ap_REQ)
 
         u2_t_xid  = (U2)st_ap_REQ->u1p_RX[OXDC_ROUT_RID_HI] << OXDC_ROUT_LSB_RID_HI;
         u2_t_xid |= (U2)st_ap_REQ->u1p_RX[OXDC_ROUT_RID_LO];
-        u2_t_xid  = u2_g_oXDoCANXidSearchRid(u2_t_xid, &st_gp_OXDC_ROUT_XID[0], u2_g_OXDC_ROUT_NUM_XID);
+        u2_t_xid  = u2_g_oXDoCANXidSearchXid(u2_t_xid, &st_gp_OXDC_ROUT_XID[0], u2_g_OXDC_ROUT_NUM_XID);
 
         u2_g_oxdc_rout_xid = u2_t_xid;
 
@@ -237,7 +235,7 @@ static U1      u1_s_oXdcRoutSessionchk(const ST_OXDC_REQ * st_ap_REQ)
     U2                       u2_t_conf_ses;
     U1                       u1_t_proc;
 
-    u2_t_conf_ses = st_gp_OXDC_ROUT_XID[u2_g_oxdc_rout_xid].u2_ses;
+    u2_t_conf_ses = st_gp_OXDC_ROUT_XID[u2_g_oxdc_rout_xid].u2_rd_ses;
     u1_t_proc = u1_g_oXDoCANCfgDidSessionBitChk(st_ap_REQ->u1_ses_aft, u2_t_conf_ses);
 
     if(u1_t_proc == (U1)E_OK){
@@ -258,16 +256,10 @@ static U1      u1_s_oXdcRoutSessionchk(const ST_OXDC_REQ * st_ap_REQ)
 static U1      u1_s_oXdcRoutSecuritychk(const ST_OXDC_REQ * st_ap_REQ)
 {
     U1                       u1_t_proc;
-    U1                       u1_t_sec;
+    U2                       u2_t_sec;
 
-    if(st_gp_OXDC_ROUT_XID[u2_g_oxdc_rout_xid].fp_u1_SEC_CHK == vdp_PTR_NA){
-        u1_t_proc = (U1)OXDC_SAL_PROC_RUN;
-    }
-    else{
-        u1_t_sec = DCM_SEC_LEV_LOCKED;
-        (void)Dcm_GetSecurityLevel(&u1_t_sec);
-        u1_t_proc = (*st_gp_OXDC_ROUT_XID[u2_g_oxdc_rout_xid].fp_u1_SEC_CHK)(u1_t_sec);
-    }
+    u2_t_sec = st_gp_OXDC_ROUT_XID[u2_g_oxdc_rout_xid].u2_rd_sec;
+    u1_t_proc = u1_g_oXDoCANCfgSecurityBitChk(u2_t_sec);
 
     return(u1_t_proc);
 }
@@ -318,11 +310,6 @@ static U1      u1_s_oXdcRoutCorchk(const ST_OXDC_REQ * st_ap_REQ)
     U2                       u2_t_req_nbyte;
     U1                       u1_t_subf;
     U1                       u1_t_proc;
-#if(OXDC_SID31_NR_22_USE == OXDC_USE)
-    U1                       u1_t_cod_chk;
-
-    u1_t_cod_chk = u1_g_oXDoCANCRoutineChk();
-#endif
 
     u1_t_subf = st_ap_REQ->u1p_RX[OXDC_ROUT_SUBF] & (U1)OXDC_ROUT_SUBF_CHK;
     if(u1_t_subf == (U1)OXDC_ROUT_SUBF_START){
@@ -340,11 +327,6 @@ static U1      u1_s_oXdcRoutCorchk(const ST_OXDC_REQ * st_ap_REQ)
     if(st_ap_REQ->u4_nbyte != u4_t_rx_nbyte){
         u1_t_proc = (U1)OXDC_SAL_PROC_NR_13;
     }
-#if(OXDC_SID31_NR_22_USE == OXDC_USE)
-    else if(u1_t_cod_chk != (U1)E_OK){
-        u1_t_proc = (U1)OXDC_SAL_PROC_NR_22;
-    }
-#endif
     else if(fp_t_u1_cor_chk == vdp_PTR_NA){
         u1_t_proc = (U1)OXDC_SAL_PROC_RUN;
     }

@@ -139,6 +139,7 @@ CONST( AB_83_ConstV Dem_u16_UdmDemMemKindIndexType           ,DEM_CONFIG_DATA ) 
 CONST( AB_83_ConstV Dem_u08_UdmMemoryInfoTableIndexType      ,DEM_CONFIG_DATA )  Dem_UserDefinedMemoryInfoNum          = DEM_USER_DEFINED_MEMORY_INFO_NUM;
 CONST( AB_83_ConstV Dem_u08_UdmMemoryInfoTableIndexType      ,DEM_CONFIG_DATA )  Dem_UserDefinedMemoryInternalInfoNum  = DEM_USER_DEFINED_MEMORY_INTERNAL_INFO_NUM;
 
+CONST( AB_83_ConstV Dem_u16_PaddingIndexType           ,DEM_CONFIG_DATA )  Dem_EventRecordBlockPaddingSize        = DEM_EVENT_RECORD_PADDINGSIZE_TO_BLOCKSIZE;
 CONST( AB_83_ConstV Dem_u16_PaddingIndexType           ,DEM_CONFIG_DATA )  Dem_ClrInfoRecordBlockPaddingSize      = DEM_CLRINFO_RECORD_PADDINGSIZE_TO_BLOCKSIZE;
 CONST( AB_83_ConstV Dem_u16_PaddingIndexType           ,DEM_CONFIG_DATA )  Dem_UdmFaultRecordBlockPaddingSize     = DEM_UDMFAULT_RECORD_PADDINGSIZE_TO_BLOCKSIZE;
 

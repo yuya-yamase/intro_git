@@ -959,6 +959,7 @@
 ../../src/PE1VM1/BSW/Memory/Nvmc/core/scc/Common/nvmc_mgr.c
 ../../src/PE1VM1/BSW/Memory/Nvmc/core/scc/Common/nvmc_mgr_acsreq.c
 ../../src/PE1VM1/BSW/Memory/Nvmc/core/scc/Common/nvmc_mgr_acstask.c
+../../src/PE1VM1/BSW/Memory/Nvmc/core/scc/Common/nvmc_mgr_custompreread.c
 ../../src/PE1VM1/BSW/Memory/Nvmc/core/scc/Ren_U2A/nvmc_dtf.c
 ../../src/PE1VM1/BSW/Memory/Nvmc/core/scc/Ren_U2A/nvmc_dtf_adapt.c
 ../../src/PE1VM1/BSW/Memory/Nvmc/module/config_Ren_U2A/nvmc_mod_cfg.c
@@ -1003,9 +1004,12 @@
 ###../../src/PE1VM1/BSW/Security/oXSEC/scc/oxsec_aubif_csm.c
 ../../src/PE1VM1/BSW/Security/oXSEC/scc/oxsec_aubif_idsm.c
 ###../../src/PE1VM1/BSW/Security/oXSEC/scc/oxsec_aubif_secoc.c
+../../src/PE1VM1/BSW/Security/oXSEC/scc/oxsec_fv.c
+../../src/PE1VM1/BSW/Security/oXSEC/scc/oxsec_ied.c
 ###../../src/PE1VM1/BSW/Security/oXSEC/scc/oxsec_rh850u2a.c
-../../src/PE1VM1/BSW/Security/vCryCl/config/vCryCl_cfg.c
-../../src/PE1VM1/BSW/Security/vCryCl/scc/vCryCl.c
+###../../src/PE1VM1/BSW/Security/vCryCl/config/vCryCl_cfg.c
+###../../src/PE1VM1/BSW/Security/vCryCl/scc/vCryCl.c
+../../src/PE1VM1/BSW/Security/vCryCl/scc/vCryCl_stub.c
 ../../src/PE1VM1/BSW/System/22SS/config/22SS_Callout.c
 ../../src/PE1VM1/BSW/System/22SS/scc/Ecu_Arb.c
 ../../src/PE1VM1/BSW/System/22SS/scc/Ecu_Arb_Callout.c
@@ -1096,6 +1100,6 @@
 
 # ----------------------------------------------------------------------------------------------------------------------------------
 # ghsprj version 1-1-0
-# Date generated: 2026/01/22 23:22:22
+# Date generated: 2026/02/26 15:33:34
 # ----------------------------------------------------------------------------------------------------------------------------------
 

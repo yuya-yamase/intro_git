@@ -38,7 +38,6 @@
 
 /* Memory               */
 #include "rim_ctl.h"
-/* #include "nvmc_mgr.h" */
 
 /* aubist */
 #include <bswa_com.h>
@@ -386,7 +385,6 @@ void SS_Pm_shutdownCallout(void)
 
     /* TPcsw_SS_Pm_shutdownCallout_if0 */
     vd_g_oXCANShtdwn();
-    /* vd_g_Nvmc_DeInit(); */
     vd_g_Rim_DeInit();
 
     Adc_StopGroupConversion(ADC_GR_0);

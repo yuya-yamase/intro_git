@@ -354,19 +354,13 @@ static const ST_CAN_LPR_RR     st_sp_CAN_LPR_RR_G2M_1[] = {
     {(U4)0x00000200U, (U4)0x40000629U, (U4)0x40000633U, (U2)8U,  (U2)87U},    /* 176 : BDB1S27     = 0x40000629 */
 /*  {(U4)0x00000200U, (U4)0x40000629U, (U4)0x40000633U, (U2)8U,  (U2)87U}, */ /*     : BDB1S28     = 0x4000062a */
 /*  {(U4)0x00000200U, (U4)0x40000629U, (U4)0x40000633U, (U2)8U,  (U2)87U}, */ /*     : IDT1S02     = 0x40000633 */
-    {(U4)0x00000200U, (U4)0x00000708U, (U4)0x0000070fU, (U2)8U,  (U2)87U},    /* 177 : UDS/CAN     = 0x00000708 */
-/*  {(U4)0x00000200U, (U4)0x00000708U, (U4)0x0000070fU, (U2)8U,  (U2)87U}, */ /*     : UDS/CAN     = 0x0000070f */
-    {(U4)0x00000200U, (U4)0x40000708U, (U4)0x4000070fU, (U2)32U, (U2)87U},    /* 178 : UDS/CAN-FD  = 0x40000708 */
-/*  {(U4)0x00000200U, (U4)0x40000708U, (U4)0x4000070fU, (U2)32U, (U2)87U}, */ /*     : UDS/CAN-FD  = 0x4000070f */
-    {(U4)0x00000200U, (U4)0x000007dfU, (U4)0x000007dfU, (U2)8U,  (U2)87U},    /* 179 : UDS/CAN     = 0x000007df */
-    {(U4)0x00000200U, (U4)0x400007dfU, (U4)0x400007dfU, (U2)32U, (U2)87U},    /* 180 : UDS/CAN-FD  = 0x400007df */
-    {(U4)0x00000200U, (U4)0x98000000U, (U4)0x980003ffU, (U2)0U,  (U2)87U},    /* 181 : QSEv/CAN    = 0x98000000 */
+    {(U4)0x00000200U, (U4)0x98000000U, (U4)0x980003ffU, (U2)0U,  (U2)87U},    /* 177 : QSEv/CAN    = 0x98000000 */
 /*  {(U4)0x00000200U, (U4)0x98000000U, (U4)0x980003ffU, (U2)0U,  (U2)87U}, */ /*     : QSEv/CAN    = 0x980003ff */
-    {(U4)0x00000200U, (U4)0xd8000000U, (U4)0xd80003ffU, (U2)0U,  (U2)87U},    /* 182 : QSEv/CAN-FD = 0xd8000000 */
+    {(U4)0x00000200U, (U4)0xd8000000U, (U4)0xd80003ffU, (U2)0U,  (U2)87U},    /* 178 : QSEv/CAN-FD = 0xd8000000 */
 /*  {(U4)0x00000200U, (U4)0xd8000000U, (U4)0xd80003ffU, (U2)0U,  (U2)87U}, */ /*     : QSEv/CAN-FD = 0xd80003ff */
-    {(U4)0x00000400U, (U4)0x98da0000U, (U4)0x98dbffffU, (U2)8U,  (U2)90U},    /* 183 : UDS/CAN     = 0x98da0000 */
+    {(U4)0x00000400U, (U4)0x98da0000U, (U4)0x98dbffffU, (U2)8U,  (U2)90U},    /* 179 : UDS/CAN     = 0x98da0000 */
 /*  {(U4)0x00000400U, (U4)0x98da0000U, (U4)0x98dbffffU, (U2)8U,  (U2)90U}, */ /*     : UDS/CAN     = 0x98dbffff */
-    {(U4)0x00000400U, (U4)0xd8da0000U, (U4)0xd8dbffffU, (U2)8U,  (U2)90U}     /* 184 : UDS/CAN-FD  = 0xd8da0000 */
+    {(U4)0x00000400U, (U4)0xd8da0000U, (U4)0xd8dbffffU, (U2)8U,  (U2)90U}     /* 180 : UDS/CAN-FD  = 0xd8da0000 */
 /*  {(U4)0x00000400U, (U4)0xd8da0000U, (U4)0xd8dbffffU, (U2)8U,  (U2)90U}, */ /*     : UDS/CAN-FD  = 0xd8dbffff */
 };
 
@@ -515,10 +509,8 @@ static const ST_CAN_LPR_RRMB   st_sp_CAN_LPR_RRMB_G2M_1[] = {
     {(U2)81U,         (U2)1U},    /* MBOX = 149 / 0x0000036e : Rx Mask = NOUSE      */
     {(U2)78U,         (U2)1U},    /* MBOX = 150 / 0x00000353 : Rx Mask = NOUSE      */
     {(U2)95U,         (U2)1U},    /* MBOX = 151 / 0x00000390 : Rx Mask = NOUSE      */
-    {(U2)183U,        (U2)2U},    /* MBOX = 152 / 0x18da0000 : Rx Mask = 0x8001FFFF */
-    {(U2)181U,        (U2)2U},    /* MBOX = 153 / 0x18000000 : Rx Mask = 0x800003FF */
-    {(U2)177U,        (U2)2U},    /* MBOX = 154 / 0x00000708 : Rx Mask = 0x00000007 */
-    {(U2)179U,        (U2)2U}     /* MBOX = 155 / 0x000007df : Rx Mask = NOUSE      */
+    {(U2)179U,        (U2)2U},    /* MBOX = 152 / 0x18da0000 : Rx Mask = 0x8001FFFF */
+    {(U2)177U,        (U2)2U}     /* MBOX = 153 / 0x18000000 : Rx Mask = 0x800003FF */
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -547,9 +539,9 @@ static const ST_CAN_LPR_ING    st_s_CAN_LPR_ING_G2M_1 = {
     &st_sp_CAN_LPR_EGR_G2M_1[0U],                                          /* stp_EGR     */
     &u2_sp_CAN_LPR_EPDU_G2M_1[0U],                                         /* u2p_EPDU_ID */
     (U4)CAN_LPR_REGR_EN_PHY_RX_G2M1,                                       /* u4_ifrx_en  */
-    (U2)185,                                                               /* u2_num_rr   */
+    (U2)181,                                                               /* u2_num_rr   */
     (U2)10U,                                                               /* u2_mb_min   */
-    (U2)155U,                                                              /* u2_mb_max   */
+    (U2)153U,                                                              /* u2_mb_max   */
     (U2)3U                                                                 /* u2_num_egr  */
 };
 

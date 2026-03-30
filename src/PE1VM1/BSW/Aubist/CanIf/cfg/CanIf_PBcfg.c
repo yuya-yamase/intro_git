@@ -499,9 +499,11 @@ BswConst Bsw_CanIf_RxPduTblType bsw_canif_stRxCanTpPduTbl[BSW_CANIF_RXCANTPPDUNU
      { 0x98DA17E0UL, (BswU1) 8U, (BswU1)BSW_CANIF_CH0,  (BswU2)0U }  /* [0] Nsdu_RX_RxNPdu_Diag_Physical_Service */
     ,{ 0x98DBEFE0UL, (BswU1) 8U, (BswU1)BSW_CANIF_CH0,  (BswU2)0U }  /* [1] Nsdu_RX_RxNPdu_Diag_Functional_Service */
     ,{ 0x98DA17E1UL, (BswU1) 8U, (BswU1)BSW_CANIF_CH0,  (BswU2)0U }  /* [2] Nsdu_RX_RxNPdu_Diag_Physical_Remote */
-    ,{ 0xD8DA17E0UL, (BswU1)32U, (BswU1)BSW_CANIF_CH0,  (BswU2)0U }  /* [3] Nsdu_RX_RxNPdu_Diag_Physical_FD_Service */
-    ,{ 0xD8DBEFE0UL, (BswU1)32U, (BswU1)BSW_CANIF_CH0,  (BswU2)0U }  /* [4] Nsdu_RX_RxNPdu_Diag_Functional_FD_Service */
-    ,{ 0xD8DA17E1UL, (BswU1)32U, (BswU1)BSW_CANIF_CH0,  (BswU2)0U }  /* [5] Nsdu_RX_RxNPdu_Diag_Physical_FD_Remote */
+    ,{ 0x98DBEFE1UL, (BswU1) 8U, (BswU1)BSW_CANIF_CH0,  (BswU2)0U }  /* [3] Nsdu_RX_RxNPdu_Diag_Functional_Remote */
+    ,{ 0xD8DA17E0UL, (BswU1)32U, (BswU1)BSW_CANIF_CH0,  (BswU2)0U }  /* [4] Nsdu_RX_RxNPdu_Diag_Physical_FD_Service */
+    ,{ 0xD8DBEFE0UL, (BswU1)32U, (BswU1)BSW_CANIF_CH0,  (BswU2)0U }  /* [5] Nsdu_RX_RxNPdu_Diag_Functional_FD_Service */
+    ,{ 0xD8DA17E1UL, (BswU1)32U, (BswU1)BSW_CANIF_CH0,  (BswU2)0U }  /* [6] Nsdu_RX_RxNPdu_Diag_Physical_FD_Remote */
+    ,{ 0xD8DBEFE1UL, (BswU1)32U, (BswU1)BSW_CANIF_CH0,  (BswU2)0U }  /* [7] Nsdu_RX_RxNPdu_Diag_Functional_FD_Remote */
 };
 
 #if(BSW_CANIF_CFG_CANID_MASK_TYPE == BSW_CANIF_MASK_RXMSG)

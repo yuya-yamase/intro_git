@@ -266,7 +266,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         5U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -310,7 +310,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         6U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -354,7 +354,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         7U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -398,7 +398,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         8U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -442,7 +442,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         9U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -486,7 +486,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         10U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -530,7 +530,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         11U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -574,7 +574,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         12U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -618,7 +618,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         13U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -662,7 +662,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         14U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -706,7 +706,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         15U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -750,7 +750,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         16U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -794,7 +794,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         17U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -838,7 +838,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         18U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -882,7 +882,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         19U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -926,7 +926,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         20U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -1014,7 +1014,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         22U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -1278,7 +1278,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        12U,    /* NvMNvBlockLength */
         28U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -1322,7 +1322,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        12U,    /* NvMNvBlockLength */
         29U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -1366,7 +1366,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        12U,    /* NvMNvBlockLength */
         30U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -1410,7 +1410,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        12U,    /* NvMNvBlockLength */
         31U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -1454,7 +1454,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        12U,    /* NvMNvBlockLength */
         32U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -1498,7 +1498,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        12U,    /* NvMNvBlockLength */
         33U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -1542,7 +1542,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        12U,    /* NvMNvBlockLength */
         34U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -1586,7 +1586,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        12U,    /* NvMNvBlockLength */
         35U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -1630,7 +1630,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        12U,    /* NvMNvBlockLength */
         36U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -1674,7 +1674,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        12U,    /* NvMNvBlockLength */
         37U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -1718,7 +1718,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        12U,    /* NvMNvBlockLength */
         38U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -1762,7 +1762,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        12U,    /* NvMNvBlockLength */
         39U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -1806,7 +1806,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        12U,    /* NvMNvBlockLength */
         40U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -1850,7 +1850,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        12U,    /* NvMNvBlockLength */
         41U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -1894,7 +1894,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        12U,    /* NvMNvBlockLength */
         42U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -1938,7 +1938,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        12U,    /* NvMNvBlockLength */
         43U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -2202,7 +2202,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        12U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         49U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -2246,7 +2246,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        12U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         50U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -2290,7 +2290,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        12U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         51U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -2334,7 +2334,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        12U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         52U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -2378,7 +2378,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        12U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         53U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -2422,7 +2422,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        12U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         54U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -2466,7 +2466,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        12U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         55U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -2510,7 +2510,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        12U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         56U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -2554,7 +2554,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        12U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         57U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -2598,7 +2598,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        12U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         58U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -2642,7 +2642,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        12U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         59U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -2686,7 +2686,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        12U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         60U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -2730,7 +2730,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        12U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         61U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -2774,7 +2774,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        12U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         62U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -2818,7 +2818,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        12U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         63U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -2862,7 +2862,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        12U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         64U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -3126,7 +3126,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         70U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -3170,7 +3170,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        4U,    /* NvMNvBlockLength */
         71U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -3214,7 +3214,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        4U,    /* NvMNvBlockLength */
         72U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -3258,7 +3258,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        4U,    /* NvMNvBlockLength */
         73U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -3302,7 +3302,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        4U,    /* NvMNvBlockLength */
         74U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -3346,7 +3346,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        4U,    /* NvMNvBlockLength */
         75U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -3390,7 +3390,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        4U,    /* NvMNvBlockLength */
         76U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -3434,7 +3434,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        4U,    /* NvMNvBlockLength */
         77U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -3478,7 +3478,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        4U,    /* NvMNvBlockLength */
         78U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -3522,7 +3522,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        4U,    /* NvMNvBlockLength */
         79U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -3566,7 +3566,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         80U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -3610,7 +3610,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         81U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -3654,7 +3654,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         82U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -3698,7 +3698,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         83U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -3742,7 +3742,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         84U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -3786,7 +3786,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         85U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -3830,7 +3830,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         86U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -3874,7 +3874,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         87U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -3918,7 +3918,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         88U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -3962,7 +3962,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         89U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -4006,7 +4006,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         90U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -4050,7 +4050,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         91U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -4094,7 +4094,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         92U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -4138,7 +4138,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         93U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -4182,7 +4182,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         94U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -4226,7 +4226,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         95U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -4270,7 +4270,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         96U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -4314,7 +4314,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         97U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -4358,7 +4358,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         98U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -4402,7 +4402,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         99U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -4446,7 +4446,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         100U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -4490,7 +4490,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         101U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -6206,7 +6206,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        4U,    /* NvMNvBlockLength */
         140U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -6250,7 +6250,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        4U,    /* NvMNvBlockLength */
         141U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -6294,7 +6294,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         142U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -6338,7 +6338,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         143U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -6470,7 +6470,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        4U,    /* NvMNvBlockLength */
         146U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -6514,7 +6514,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        4U,    /* NvMNvBlockLength */
         147U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -6558,7 +6558,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         148U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -6602,7 +6602,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         149U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -6822,7 +6822,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        4U,    /* NvMNvBlockLength */
         154U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -6866,7 +6866,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        4U,    /* NvMNvBlockLength */
         155U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -6998,7 +6998,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        4U,    /* NvMNvBlockLength */
         158U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -7042,7 +7042,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        4U,    /* NvMNvBlockLength */
         159U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -7086,7 +7086,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        4U,    /* NvMNvBlockLength */
         160U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -7130,7 +7130,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        4U,    /* NvMNvBlockLength */
         161U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -7262,7 +7262,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        4U,    /* NvMNvBlockLength */
         164U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -7306,7 +7306,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        4U,    /* NvMNvBlockLength */
         165U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -7350,7 +7350,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        4U,    /* NvMNvBlockLength */
         166U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -7394,7 +7394,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        4U,    /* NvMNvBlockLength */
         167U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -7438,7 +7438,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        4U,    /* NvMNvBlockLength */
         168U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -7482,7 +7482,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        4U,    /* NvMNvBlockLength */
         169U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -7702,7 +7702,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         174U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -7746,7 +7746,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         175U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -7790,7 +7790,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         176U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -7834,7 +7834,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         177U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -7878,7 +7878,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         178U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -7922,7 +7922,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         179U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -7966,7 +7966,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         180U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -8010,7 +8010,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         181U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -8054,7 +8054,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         182U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -8098,7 +8098,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         183U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -8142,7 +8142,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         184U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -8186,7 +8186,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         185U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -8230,7 +8230,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         186U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -8274,7 +8274,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         187U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -8318,7 +8318,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         188U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -8362,7 +8362,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         189U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -8582,7 +8582,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         194U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -8626,7 +8626,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         195U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -8670,7 +8670,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         196U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -8714,7 +8714,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         197U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -8758,7 +8758,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         198U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -8802,7 +8802,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         199U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -8846,7 +8846,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         200U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -8890,7 +8890,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         201U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -8934,7 +8934,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         202U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -8978,7 +8978,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         203U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -9022,7 +9022,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         204U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -9066,7 +9066,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         205U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -9110,7 +9110,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         206U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -9154,7 +9154,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         207U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -9198,7 +9198,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         208U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -9242,7 +9242,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
+        32U,    /* NvMNvBlockLength */
         209U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -11354,7 +11354,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        4U,    /* NvMNvBlockLength */
         257U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -11398,7 +11398,7 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_CRC16,    /* NvMBlockCrcType */
 #endif
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
+        8U,    /* NvMNvBlockLength */
         258U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
@@ -11444,710 +11444,6 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
         32U,    /* NvMNvBlockLength */
         259U,    /* NvMNvBlockBaseNumber */
-#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
-        1U,    /* NvMWriteVerificationDataSize */
-#endif
-        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
-        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
-#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
-        NULL_PTR,    /* NvMRomBlockDataAddress */
-#endif
-#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMSingleBlockCallback */
-#endif
-#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
-#endif
-#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
-#endif
-#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
-        NULL_PTR    /* NvMInitBlockCallback */
-#endif
-    },
-    {
-        /* ID.260 */
-        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
-#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
-        1U,    /* NvMBlockJobPriority */
-#endif
-        0U,    /* NvMNvramDeviceId */
-        1U,    /* NvMNvBlockNum */
-#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
-        0U,    /* NvMRomBlockNum */
-#endif
-#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
-        0U,    /* NvMMaxNumOfReadRetries */
-#endif
-#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
-        0U,    /* NvMMaxNumOfWriteRetries */
-#endif
-#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
-        NVM_CRC16,    /* NvMBlockCrcType */
-#endif
-        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
-        260U,    /* NvMNvBlockBaseNumber */
-#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
-        1U,    /* NvMWriteVerificationDataSize */
-#endif
-        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
-        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
-#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
-        NULL_PTR,    /* NvMRomBlockDataAddress */
-#endif
-#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMSingleBlockCallback */
-#endif
-#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
-#endif
-#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
-#endif
-#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
-        NULL_PTR    /* NvMInitBlockCallback */
-#endif
-    },
-    {
-        /* ID.261 */
-        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
-#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
-        1U,    /* NvMBlockJobPriority */
-#endif
-        0U,    /* NvMNvramDeviceId */
-        1U,    /* NvMNvBlockNum */
-#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
-        0U,    /* NvMRomBlockNum */
-#endif
-#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
-        0U,    /* NvMMaxNumOfReadRetries */
-#endif
-#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
-        0U,    /* NvMMaxNumOfWriteRetries */
-#endif
-#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
-        NVM_CRC16,    /* NvMBlockCrcType */
-#endif
-        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
-        261U,    /* NvMNvBlockBaseNumber */
-#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
-        1U,    /* NvMWriteVerificationDataSize */
-#endif
-        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
-        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
-#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
-        NULL_PTR,    /* NvMRomBlockDataAddress */
-#endif
-#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMSingleBlockCallback */
-#endif
-#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
-#endif
-#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
-#endif
-#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
-        NULL_PTR    /* NvMInitBlockCallback */
-#endif
-    },
-    {
-        /* ID.262 */
-        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
-#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
-        1U,    /* NvMBlockJobPriority */
-#endif
-        0U,    /* NvMNvramDeviceId */
-        1U,    /* NvMNvBlockNum */
-#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
-        0U,    /* NvMRomBlockNum */
-#endif
-#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
-        0U,    /* NvMMaxNumOfReadRetries */
-#endif
-#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
-        0U,    /* NvMMaxNumOfWriteRetries */
-#endif
-#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
-        NVM_CRC16,    /* NvMBlockCrcType */
-#endif
-        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
-        262U,    /* NvMNvBlockBaseNumber */
-#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
-        1U,    /* NvMWriteVerificationDataSize */
-#endif
-        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
-        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
-#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
-        NULL_PTR,    /* NvMRomBlockDataAddress */
-#endif
-#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMSingleBlockCallback */
-#endif
-#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
-#endif
-#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
-#endif
-#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
-        NULL_PTR    /* NvMInitBlockCallback */
-#endif
-    },
-    {
-        /* ID.263 */
-        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
-#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
-        1U,    /* NvMBlockJobPriority */
-#endif
-        0U,    /* NvMNvramDeviceId */
-        1U,    /* NvMNvBlockNum */
-#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
-        0U,    /* NvMRomBlockNum */
-#endif
-#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
-        0U,    /* NvMMaxNumOfReadRetries */
-#endif
-#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
-        0U,    /* NvMMaxNumOfWriteRetries */
-#endif
-#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
-        NVM_CRC16,    /* NvMBlockCrcType */
-#endif
-        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
-        263U,    /* NvMNvBlockBaseNumber */
-#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
-        1U,    /* NvMWriteVerificationDataSize */
-#endif
-        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
-        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
-#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
-        NULL_PTR,    /* NvMRomBlockDataAddress */
-#endif
-#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMSingleBlockCallback */
-#endif
-#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
-#endif
-#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
-#endif
-#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
-        NULL_PTR    /* NvMInitBlockCallback */
-#endif
-    },
-    {
-        /* ID.264 */
-        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
-#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
-        1U,    /* NvMBlockJobPriority */
-#endif
-        0U,    /* NvMNvramDeviceId */
-        1U,    /* NvMNvBlockNum */
-#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
-        0U,    /* NvMRomBlockNum */
-#endif
-#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
-        0U,    /* NvMMaxNumOfReadRetries */
-#endif
-#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
-        0U,    /* NvMMaxNumOfWriteRetries */
-#endif
-#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
-        NVM_CRC16,    /* NvMBlockCrcType */
-#endif
-        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
-        264U,    /* NvMNvBlockBaseNumber */
-#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
-        1U,    /* NvMWriteVerificationDataSize */
-#endif
-        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
-        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
-#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
-        NULL_PTR,    /* NvMRomBlockDataAddress */
-#endif
-#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMSingleBlockCallback */
-#endif
-#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
-#endif
-#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
-#endif
-#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
-        NULL_PTR    /* NvMInitBlockCallback */
-#endif
-    },
-    {
-        /* ID.265 */
-        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
-#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
-        1U,    /* NvMBlockJobPriority */
-#endif
-        0U,    /* NvMNvramDeviceId */
-        1U,    /* NvMNvBlockNum */
-#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
-        0U,    /* NvMRomBlockNum */
-#endif
-#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
-        0U,    /* NvMMaxNumOfReadRetries */
-#endif
-#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
-        0U,    /* NvMMaxNumOfWriteRetries */
-#endif
-#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
-        NVM_CRC16,    /* NvMBlockCrcType */
-#endif
-        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
-        265U,    /* NvMNvBlockBaseNumber */
-#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
-        1U,    /* NvMWriteVerificationDataSize */
-#endif
-        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
-        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
-#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
-        NULL_PTR,    /* NvMRomBlockDataAddress */
-#endif
-#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMSingleBlockCallback */
-#endif
-#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
-#endif
-#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
-#endif
-#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
-        NULL_PTR    /* NvMInitBlockCallback */
-#endif
-    },
-    {
-        /* ID.266 */
-        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
-#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
-        1U,    /* NvMBlockJobPriority */
-#endif
-        0U,    /* NvMNvramDeviceId */
-        1U,    /* NvMNvBlockNum */
-#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
-        0U,    /* NvMRomBlockNum */
-#endif
-#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
-        0U,    /* NvMMaxNumOfReadRetries */
-#endif
-#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
-        0U,    /* NvMMaxNumOfWriteRetries */
-#endif
-#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
-        NVM_CRC16,    /* NvMBlockCrcType */
-#endif
-        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
-        266U,    /* NvMNvBlockBaseNumber */
-#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
-        1U,    /* NvMWriteVerificationDataSize */
-#endif
-        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
-        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
-#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
-        NULL_PTR,    /* NvMRomBlockDataAddress */
-#endif
-#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMSingleBlockCallback */
-#endif
-#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
-#endif
-#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
-#endif
-#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
-        NULL_PTR    /* NvMInitBlockCallback */
-#endif
-    },
-    {
-        /* ID.267 */
-        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
-#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
-        1U,    /* NvMBlockJobPriority */
-#endif
-        0U,    /* NvMNvramDeviceId */
-        1U,    /* NvMNvBlockNum */
-#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
-        0U,    /* NvMRomBlockNum */
-#endif
-#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
-        0U,    /* NvMMaxNumOfReadRetries */
-#endif
-#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
-        0U,    /* NvMMaxNumOfWriteRetries */
-#endif
-#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
-        NVM_CRC16,    /* NvMBlockCrcType */
-#endif
-        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
-        267U,    /* NvMNvBlockBaseNumber */
-#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
-        1U,    /* NvMWriteVerificationDataSize */
-#endif
-        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
-        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
-#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
-        NULL_PTR,    /* NvMRomBlockDataAddress */
-#endif
-#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMSingleBlockCallback */
-#endif
-#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
-#endif
-#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
-#endif
-#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
-        NULL_PTR    /* NvMInitBlockCallback */
-#endif
-    },
-    {
-        /* ID.268 */
-        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
-#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
-        1U,    /* NvMBlockJobPriority */
-#endif
-        0U,    /* NvMNvramDeviceId */
-        1U,    /* NvMNvBlockNum */
-#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
-        0U,    /* NvMRomBlockNum */
-#endif
-#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
-        0U,    /* NvMMaxNumOfReadRetries */
-#endif
-#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
-        0U,    /* NvMMaxNumOfWriteRetries */
-#endif
-#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
-        NVM_CRC16,    /* NvMBlockCrcType */
-#endif
-        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
-        268U,    /* NvMNvBlockBaseNumber */
-#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
-        1U,    /* NvMWriteVerificationDataSize */
-#endif
-        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
-        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
-#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
-        NULL_PTR,    /* NvMRomBlockDataAddress */
-#endif
-#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMSingleBlockCallback */
-#endif
-#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
-#endif
-#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
-#endif
-#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
-        NULL_PTR    /* NvMInitBlockCallback */
-#endif
-    },
-    {
-        /* ID.269 */
-        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
-#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
-        1U,    /* NvMBlockJobPriority */
-#endif
-        0U,    /* NvMNvramDeviceId */
-        1U,    /* NvMNvBlockNum */
-#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
-        0U,    /* NvMRomBlockNum */
-#endif
-#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
-        0U,    /* NvMMaxNumOfReadRetries */
-#endif
-#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
-        0U,    /* NvMMaxNumOfWriteRetries */
-#endif
-#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
-        NVM_CRC16,    /* NvMBlockCrcType */
-#endif
-        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
-        269U,    /* NvMNvBlockBaseNumber */
-#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
-        1U,    /* NvMWriteVerificationDataSize */
-#endif
-        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
-        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
-#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
-        NULL_PTR,    /* NvMRomBlockDataAddress */
-#endif
-#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMSingleBlockCallback */
-#endif
-#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
-#endif
-#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
-#endif
-#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
-        NULL_PTR    /* NvMInitBlockCallback */
-#endif
-    },
-    {
-        /* ID.270 */
-        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
-#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
-        1U,    /* NvMBlockJobPriority */
-#endif
-        0U,    /* NvMNvramDeviceId */
-        1U,    /* NvMNvBlockNum */
-#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
-        0U,    /* NvMRomBlockNum */
-#endif
-#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
-        0U,    /* NvMMaxNumOfReadRetries */
-#endif
-#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
-        0U,    /* NvMMaxNumOfWriteRetries */
-#endif
-#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
-        NVM_CRC16,    /* NvMBlockCrcType */
-#endif
-        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
-        270U,    /* NvMNvBlockBaseNumber */
-#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
-        1U,    /* NvMWriteVerificationDataSize */
-#endif
-        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
-        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
-#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
-        NULL_PTR,    /* NvMRomBlockDataAddress */
-#endif
-#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMSingleBlockCallback */
-#endif
-#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
-#endif
-#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
-#endif
-#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
-        NULL_PTR    /* NvMInitBlockCallback */
-#endif
-    },
-    {
-        /* ID.271 */
-        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
-#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
-        1U,    /* NvMBlockJobPriority */
-#endif
-        0U,    /* NvMNvramDeviceId */
-        1U,    /* NvMNvBlockNum */
-#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
-        0U,    /* NvMRomBlockNum */
-#endif
-#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
-        0U,    /* NvMMaxNumOfReadRetries */
-#endif
-#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
-        0U,    /* NvMMaxNumOfWriteRetries */
-#endif
-#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
-        NVM_CRC16,    /* NvMBlockCrcType */
-#endif
-        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
-        271U,    /* NvMNvBlockBaseNumber */
-#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
-        1U,    /* NvMWriteVerificationDataSize */
-#endif
-        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
-        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
-#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
-        NULL_PTR,    /* NvMRomBlockDataAddress */
-#endif
-#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMSingleBlockCallback */
-#endif
-#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
-#endif
-#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
-#endif
-#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
-        NULL_PTR    /* NvMInitBlockCallback */
-#endif
-    },
-    {
-        /* ID.272 */
-        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
-#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
-        1U,    /* NvMBlockJobPriority */
-#endif
-        0U,    /* NvMNvramDeviceId */
-        1U,    /* NvMNvBlockNum */
-#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
-        0U,    /* NvMRomBlockNum */
-#endif
-#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
-        0U,    /* NvMMaxNumOfReadRetries */
-#endif
-#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
-        0U,    /* NvMMaxNumOfWriteRetries */
-#endif
-#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
-        NVM_CRC16,    /* NvMBlockCrcType */
-#endif
-        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
-        272U,    /* NvMNvBlockBaseNumber */
-#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
-        1U,    /* NvMWriteVerificationDataSize */
-#endif
-        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
-        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
-#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
-        NULL_PTR,    /* NvMRomBlockDataAddress */
-#endif
-#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMSingleBlockCallback */
-#endif
-#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
-#endif
-#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
-#endif
-#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
-        NULL_PTR    /* NvMInitBlockCallback */
-#endif
-    },
-    {
-        /* ID.273 */
-        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
-#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
-        1U,    /* NvMBlockJobPriority */
-#endif
-        0U,    /* NvMNvramDeviceId */
-        1U,    /* NvMNvBlockNum */
-#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
-        0U,    /* NvMRomBlockNum */
-#endif
-#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
-        0U,    /* NvMMaxNumOfReadRetries */
-#endif
-#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
-        0U,    /* NvMMaxNumOfWriteRetries */
-#endif
-#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
-        NVM_CRC16,    /* NvMBlockCrcType */
-#endif
-        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        4U,    /* NvMNvBlockLength */
-        273U,    /* NvMNvBlockBaseNumber */
-#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
-        1U,    /* NvMWriteVerificationDataSize */
-#endif
-        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
-        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
-#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
-        NULL_PTR,    /* NvMRomBlockDataAddress */
-#endif
-#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMSingleBlockCallback */
-#endif
-#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
-#endif
-#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
-#endif
-#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
-        NULL_PTR    /* NvMInitBlockCallback */
-#endif
-    },
-    {
-        /* ID.274 */
-        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
-#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
-        1U,    /* NvMBlockJobPriority */
-#endif
-        0U,    /* NvMNvramDeviceId */
-        1U,    /* NvMNvBlockNum */
-#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
-        0U,    /* NvMRomBlockNum */
-#endif
-#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
-        0U,    /* NvMMaxNumOfReadRetries */
-#endif
-#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
-        0U,    /* NvMMaxNumOfWriteRetries */
-#endif
-#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
-        NVM_CRC16,    /* NvMBlockCrcType */
-#endif
-        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        8U,    /* NvMNvBlockLength */
-        274U,    /* NvMNvBlockBaseNumber */
-#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
-        1U,    /* NvMWriteVerificationDataSize */
-#endif
-        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
-        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
-#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
-        NULL_PTR,    /* NvMRomBlockDataAddress */
-#endif
-#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMSingleBlockCallback */
-#endif
-#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
-#endif
-#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
-        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
-#endif
-#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
-        NULL_PTR    /* NvMInitBlockCallback */
-#endif
-    },
-    {
-        /* ID.275 */
-        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
-#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
-        1U,    /* NvMBlockJobPriority */
-#endif
-        0U,    /* NvMNvramDeviceId */
-        1U,    /* NvMNvBlockNum */
-#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
-        0U,    /* NvMRomBlockNum */
-#endif
-#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
-        0U,    /* NvMMaxNumOfReadRetries */
-#endif
-#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
-        0U,    /* NvMMaxNumOfWriteRetries */
-#endif
-#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
-        NVM_CRC16,    /* NvMBlockCrcType */
-#endif
-        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
-        32U,    /* NvMNvBlockLength */
-        275U,    /* NvMNvBlockBaseNumber */
 #if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
         1U,    /* NvMWriteVerificationDataSize */
 #endif

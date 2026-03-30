@@ -183,7 +183,7 @@ static const U4             u4_sp_CAN_LPR_UDS_EGR_SO_VIR_0[] = {
 
 #if (CAN_LPR_UDS_RX_VIR_EN == 1U)
 static const U4             u4_sp_CAN_LPR_UDS_REC_TA_VIR_0[] = {
-    (U4)0x00800000U,           /* CAN-ID bit#7-0  Source Address : 0x00 - 0x1f */
+    (U4)0x00000000U,           /* CAN-ID bit#7-0  Source Address : 0x00 - 0x1f */
     (U4)0x00000000U,           /* CAN-ID bit#7-0  Source Address : 0x20 - 0x3f */
     (U4)0x00000000U,           /* CAN-ID bit#7-0  Source Address : 0x40 - 0x5f */
     (U4)0x00000000U,           /* CAN-ID bit#7-0  Source Address : 0x60 - 0x7f */

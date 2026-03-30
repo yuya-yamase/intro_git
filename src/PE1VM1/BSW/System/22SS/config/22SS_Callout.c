@@ -64,12 +64,17 @@ void vd_g_22SSCallout_StaBonInit(void)
     vd_g_Rim_BonInit();
 
     vd_g_Nvmc_BonInit();
+    
+    vd_g_oXSECInit();
+    vd_g_oXSECFvRead((U4)OXSEC_BOOT_CAUSE_BON);
+    
     do{
         u1_t_rslt = u1_g_Nvmc_BonRead();
     }while(u1_t_rslt != (U1)FALSE);
 
+    vd_g_oXSECFvWrite();
+
     vd_g_oXDoCANPreInit();      /* vd_g_oXDoCANPreInit shall be called before vd_g_oXCANRstInit */
-    vd_g_oXSECInit();
     vd_g_oXCANRstInit();
     vd_g_oXDoCANBonInit();
     vd_g_VehopemdRstInit();
@@ -100,12 +105,16 @@ void vd_g_22SSCallout_StaRstInit(void)
     vd_g_Rim_WkupInit();
 
     vd_g_Nvmc_WkupInit();
+
+    vd_g_oXSECInit();
+    vd_g_oXSECFvRead((U4)OXSEC_BOOT_CAUSE_RST_WKUP);
+    
     do{
         u1_t_rslt = u1_g_Nvmc_WkupRead();
     }while(u1_t_rslt != (U1)FALSE);
 
+    vd_g_oXSECFvWrite();
     vd_g_oXDoCANPreInit();      /* vd_g_oXDoCANPreInit shall be called before vd_g_oXCANRstInit */
-    vd_g_oXSECInit();
     vd_g_oXCANRstInit();
     vd_g_oXDoCANRstInit();
     vd_g_VehopemdRstInit();
@@ -136,12 +145,17 @@ void vd_g_22SSCallout_StaWkupInit(void)
     vd_g_Rim_WkupInit();
 
     vd_g_Nvmc_WkupInit();
+
+    vd_g_oXSECInit();
+    vd_g_oXSECFvRead((U4)OXSEC_BOOT_CAUSE_RST_WKUP);
+    
     do{
         u1_t_rslt = u1_g_Nvmc_WkupRead();
     }while(u1_t_rslt != (U1)FALSE);
 
+    vd_g_oXSECFvWrite();
+
     vd_g_oXDoCANPreInit();      /* vd_g_oXDoCANPreInit shall be called before vd_g_oXCANWkupInit */
-    vd_g_oXSECInit();
     vd_g_oXCANWkupInit();
     vd_g_oXDoCANWkupInit();
     vd_g_VehopemdWkupInit();

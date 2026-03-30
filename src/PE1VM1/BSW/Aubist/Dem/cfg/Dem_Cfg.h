@@ -191,6 +191,7 @@ extern CONST( AB_83_ConstV Dem_u16_UdmDemMemKindIndexType           ,DEM_CONFIG_
 extern CONST( AB_83_ConstV Dem_u08_UdmMemoryInfoTableIndexType      ,DEM_CONFIG_DATA )  Dem_UserDefinedMemoryInfoNum;
 extern CONST( AB_83_ConstV Dem_u08_UdmMemoryInfoTableIndexType      ,DEM_CONFIG_DATA )  Dem_UserDefinedMemoryInternalInfoNum;
 
+extern CONST( AB_83_ConstV Dem_u16_PaddingIndexType           ,DEM_CONFIG_DATA )  Dem_EventRecordBlockPaddingSize;
 extern CONST( AB_83_ConstV Dem_u16_PaddingIndexType           ,DEM_CONFIG_DATA )  Dem_ClrInfoRecordBlockPaddingSize;
 extern CONST( AB_83_ConstV Dem_u16_PaddingIndexType           ,DEM_CONFIG_DATA )  Dem_UdmFaultRecordBlockPaddingSize;
 

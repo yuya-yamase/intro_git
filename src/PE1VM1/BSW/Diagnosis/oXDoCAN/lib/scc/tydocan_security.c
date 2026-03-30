@@ -82,9 +82,6 @@ uint8   u1_g_oXDoCANAubIfSaSeed(const uint8 u1_a_ID, const Dcm_OpStatusType OpSt
         u1_t_ret = (U1)E_OK;
 
         if(OpStatus == DCM_INITIAL){
-#if(OXDC_SID27_NR_22_USE == OXDC_USE)            
-            u1_t_ret = u1_g_oXDoCANSecurityAccessChk((U1)OXDC_SEC_KIND_SEED, u1_a_ID);
-#endif
             if(u1_t_ret != (U1)E_OK){
                 *u1_ap_err = (U1)DCM_E_CONDITIONSNOTCORRECT;      /* NRC 0x22 */
             }
@@ -115,18 +112,11 @@ uint8   u1_g_oXDoCANAubIfSaKeyOk(const uint8 u1_a_ID, const uint8 * u1_ap_KEY, u
     U1                       u1_t_ret;
 
     if(u1_ap_KEY != vdp_PTR_NA){
-#if(OXDC_SID27_NR_22_USE == OXDC_USE)        
-        u1_t_ret = u1_g_oXDoCANSecurityAccessChk((U1)OXDC_SEC_KIND_KEY, u1_a_ID);
-#else
         u1_t_ret = (U1)E_OK;
-#endif
         if(u1_t_ret == (U1)E_OK){
             u1_t_ret = u1_g_TyDoCANSecurityCfgCompareKey(u1_a_ID, u1_ap_KEY);
             if(u1_t_ret != (U1)E_OK){
                 *u1_ap_err = (U1)DCM_E_INVALIDKEY;                /* NRC 0x35 */
-#if (OXDC_IDS_REQ_SUP == 1U)
-                vd_g_TyDoCANSecurityCfgEventReg(u1_a_ID, *u1_ap_err);
-#endif      /* #if (OXCAN_IDS_REQ_SUP == 1U) */
             }
         }
         else{

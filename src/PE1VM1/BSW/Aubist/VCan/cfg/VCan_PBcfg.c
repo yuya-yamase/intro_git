@@ -105,7 +105,7 @@ BswConst Bsw_VCan_RxTblType bsw_vcan_stRxMessageTbl[ BSW_VCAN_VHRHNUM ] =
     ,{ 0x40000500UL, 0xFFFFFF00UL }   /* [2] */
     ,{ 0x40000600UL, 0xFFFFFF00UL }   /* [3] */
     ,{ 0x98DA17E0UL, 0xBFFFFFFEUL }   /* [4] */
-    ,{ 0x98DBEFE0UL, 0xBFFFFFFFUL }   /* [5] */
+    ,{ 0x98DBEFE0UL, 0xBFFFFFFEUL }   /* [5] */
 };
 #endif /* ( BSW_VCAN_VHRHNUM != 0U ) */
 

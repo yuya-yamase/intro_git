@@ -1,7 +1,7 @@
-/* Dcm_Dsl_Ctrl_SesSrv_c(v5-3-0)                                            */
+/* Dcm_Dsl_Ctrl_SesSrv_c(v5-9-0)                                            */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -45,6 +45,8 @@
 #define DCM_START_SEC_CODE
 #include <Dcm_MemMap.h>
 
+static FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsl_Ctrl_ResetToDefaultSession
+( void );
 
 #define DCM_STOP_SEC_CODE
 #include <Dcm_MemMap.h>
@@ -105,14 +107,49 @@ FUNC( Std_ReturnType, DCM_CODE ) Dcm_GetSesCtrlType
 
 }
 
+#if( DCM_ASYNC_RESETTODEFAULTSESSION == STD_ON )
 /****************************************************************************/
 /* Function Name | Dcm_ResetToDefaultSession                                */
 /* Description   | Allows the application to reset the current session to   */
-/*               | to Default session.                                      */
+/*               | Default session.                                         */
 /* Preconditions | none                                                     */
 /* Parameters    | none                                                     */
 /* Return Value  | Std_ReturnType                                           */
-/*               |        E_OK : Sucess.                                    */
+/*               |        E_OK : Transition Acceptance Success              */
+/*               |    E_NOT_OK : Transition Acceptance Failure              */
+/* Notes         | -                                                        */
+/****************************************************************************/
+FUNC( Std_ReturnType, DCM_CODE ) Dcm_ResetToDefaultSession
+( void )
+{
+    Dcm_Main_EvtDistr_RetType u1_EvtResult;
+    Std_ReturnType            u1_RetVal;
+
+    u1_RetVal = E_NOT_OK;
+
+    /* Prevent queue overflow. Return value ignoring */
+    (void)Dcm_Main_EvtDistr_DeleteEvent(DCM_M_EVTID_DSL_RESETTODEFSES, FALSE);
+    u1_EvtResult = Dcm_Main_EvtDistr_SendEvent(DCM_M_EVTID_DSL_RESETTODEFSES);
+
+    if( u1_EvtResult == (Dcm_Main_EvtDistr_RetType)DCM_MAIN_EVTDISTR_E_OK )
+    {
+        u1_RetVal = E_OK;
+    }
+
+    return u1_RetVal;
+
+}
+#endif /* DCM_ASYNC_RESETTODEFAULTSESSION == STD_ON */
+
+#if( DCM_ASYNC_RESETTODEFAULTSESSION == STD_OFF )
+/****************************************************************************/
+/* Function Name | Dcm_ResetToDefaultSession                                */
+/* Description   | Allows the application to reset the current session to   */
+/*               | Default session.                                         */
+/* Preconditions | none                                                     */
+/* Parameters    | none                                                     */
+/* Return Value  | Std_ReturnType                                           */
+/*               |        E_OK : Transition Success                         */
 /*               |    E_NOT_OK : Provisional(For a busy, retry it)          */
 /* Notes         | -                                                        */
 /****************************************************************************/
@@ -120,22 +157,46 @@ FUNC( Std_ReturnType, DCM_CODE ) Dcm_ResetToDefaultSession
 ( void )
 {
     Std_ReturnType u1_RetVal;
-    boolean        b_Active;
-    uint16         u2_PduMapIndex;
 
-    u1_RetVal      = E_NOT_OK;
-
-    b_Active = Dcm_Dsl_Ctrl_IsActiveDiag();
-    if( b_Active == (boolean)FALSE )
-    {
-        u2_PduMapIndex = Dcm_Dsl_Ctrl_GetRxPduMapIndex();
-        Dcm_Dsl_Ctrl_SetDefSes(u2_PduMapIndex);
-        u1_RetVal = E_OK;
-    }
+    u1_RetVal = Dcm_Dsl_Ctrl_ResetToDefaultSession();
 
     return u1_RetVal;
 
 }
+#endif /* DCM_ASYNC_RESETTODEFAULTSESSION == STD_OFF */
+
+#if( DCM_ASYNC_RESETTODEFAULTSESSION == STD_ON )
+/****************************************************************************/
+/* Function Name | Dcm_Dsl_ResetToDefaultSessionCbk                         */
+/* Description   | Set default session. (Application request)               */
+/* Preconditions | none                                                     */
+/* Parameters    | [in] u1EventId : DCM_M_EVTID_DSL_RESETTODEFSES           */
+/* Return Value  | none                                                     */
+/* Notes         | -                                                        */
+/****************************************************************************/
+FUNC( void, DCM_CODE ) Dcm_Dsl_ResetToDefaultSessionCbk
+(
+    const uint8 u1EventId /* MISRA DEVIATION */
+)
+{
+    Std_ReturnType u1_RetSesChgResult;
+    boolean        b_Qualified;
+
+    b_Qualified = (boolean)FALSE;
+
+    u1_RetSesChgResult = Dcm_Dsl_Ctrl_ResetToDefaultSession();
+
+    if( u1_RetSesChgResult == (Std_ReturnType)E_OK )
+    {
+        b_Qualified = (boolean)TRUE;
+    }
+    
+    /* Return value ignoring */
+    (void)Dcm_Dsl_NotifyResetToDefaultSessionResult(b_Qualified);
+    
+    return;
+}
+#endif /* DCM_ASYNC_RESETTODEFAULTSESSION == STD_ON */
 
 /****************************************************************************/
 /* Function Name | DslInternal_SetSesCtrlType                               */
@@ -317,6 +378,41 @@ FUNC( boolean, DCM_CODE ) Dcm_Dsl_Ctrl_IsSesCtrlPermission
     return b_Result;
 }
 
+/****************************************************************************/
+/* Internal Functions                                                       */
+/****************************************************************************/
+
+/****************************************************************************/
+/* Function Name | Dcm_Dsl_Ctrl_ResetToDefaultSession                       */
+/* Description   | This function transitions the current session to the     */
+/*               | Default session.                                         */
+/* Preconditions | none                                                     */
+/* Parameters    | none                                                     */
+/* Return Value  | Std_ReturnType                                           */
+/*               |        E_OK : Transition Success                         */
+/*               |    E_NOT_OK : Transition Failure                         */
+/* Notes         | -                                                        */
+/****************************************************************************/
+static FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsl_Ctrl_ResetToDefaultSession
+( void )
+{
+    uint16         u2_PduMapIndex;
+    Std_ReturnType u1_RetVal;
+    boolean        b_Active;
+
+    u1_RetVal      = E_NOT_OK;
+
+    b_Active = Dcm_Dsl_Ctrl_IsActiveDiag();
+    if( b_Active == (boolean)FALSE )
+    {
+        u2_PduMapIndex = Dcm_Dsl_Ctrl_GetRxPduMapIndex();
+        Dcm_Dsl_Ctrl_SetDefSes(u2_PduMapIndex);
+        u1_RetVal = E_OK;
+    }
+
+    return u1_RetVal;
+
+}
 
 #define DCM_STOP_SEC_CODE
 #include <Dcm_MemMap.h>
@@ -328,6 +424,7 @@ FUNC( boolean, DCM_CODE ) Dcm_Dsl_Ctrl_IsSesCtrlPermission
 /*  v3-2-0         :2020-10-28                                              */
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2022-12-23                                              */
+/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

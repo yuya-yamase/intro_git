@@ -70,7 +70,7 @@ static void    vd_s_TydcEsiProcRun(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_ANS * 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const U1               u1_g_TYDC_ESI_SEC_LV_CHK = (U1)0x02U;
+const U2               u2_g_TYDC_ESI_SEC_LVL_BIT = (U2)0x0001U;     /* Security Level 2 is authorized */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const ST_TYDC_ESI      st_gp_TYDC_ESI_CFG[] = {
@@ -200,7 +200,7 @@ static void    vd_s_TydcEsiReqchk(const ST_OXDC_REQ * st_ap_REQ)
 /*===================================================================================================================================*/
 static U1      u1_s_TydcEsiSecuritychk(const ST_OXDC_REQ * st_ap_REQ)
 {
-    return(u1_g_oXDoCANSecurityOk(u1_g_TYDC_ESI_SEC_LV_CHK));
+    return(u1_g_oXDoCANCfgSecurityBitChk(u2_g_TYDC_ESI_SEC_LVL_BIT));
 }
 /*===================================================================================================================================*/
 /*  static U1      u1_s_TydcEsiCidchk(const ST_OXDC_REQ * st_ap_REQ)                                                                 */

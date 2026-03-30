@@ -25,30 +25,32 @@
 #define DCM_DSL_R0_CONNECTION_NUM           ((uint16)0x05U)  /* Number of Dcm_Dsl_ConnectionType */
 #define DCM_DSL_R0_SESSION_NUM              ((uint8)0x00U)   /* Number of sessions to activate the S3Server */
 #define DCM_DSL_R0_C1_PROTOCOLRX_NUM        ((uint8)0x02U)   /* Number of Dcm_Dsl_ProtocolRxType */
-#define DCM_DSL_R0_C2_PROTOCOLRX_NUM        ((uint8)0x01U)   /* Number of Dcm_Dsl_ProtocolRxType */
+#define DCM_DSL_R0_C2_PROTOCOLRX_NUM        ((uint8)0x02U)   /* Number of Dcm_Dsl_ProtocolRxType */
 #define DCM_DSL_R0_C3_PROTOCOLRX_NUM        ((uint8)0x02U)   /* Number of Dcm_Dsl_ProtocolRxType */
-#define DCM_DSL_R0_C4_PROTOCOLRX_NUM        ((uint8)0x01U)   /* Number of Dcm_Dsl_ProtocolRxType */
-#define DCM_DSL_PDUID_NUM                   ((uint16)0x06U)  /* Number of Dcm_Dsl_PduIdMapTableType */
+#define DCM_DSL_R0_C4_PROTOCOLRX_NUM        ((uint8)0x02U)   /* Number of Dcm_Dsl_ProtocolRxType */
+#define DCM_DSL_PDUID_NUM                   ((uint16)0x08U)  /* Number of Dcm_Dsl_PduIdMapTableType */
 #define DCM_DSL_CLIENT_NUM                  ((uint16)0x04U)  /* Number of Client */
 #define DCM_DSL_IFPDUID_NUM                 ((uint16)0x00U)  /* Number of Periodic Connection */
 #define DCM_DSL_ROEID_NUM                   ((uint16)0x00U)  /* Number of ROE Connection */
 #define DCM_DSL_INDSESCHG_NUM               ((uint8)3U)      /* Number of notification destinations at session change */
 #define DCM_DSL_INDSECLEVELCHG_NUM          ((uint8)0U)      /* Number of notification destinations at security Level change */
 #define DCM_DSL_INDAUTHSTSCHG_NUM           ((uint8)0U)      /* Number of notification destinations at authentication state change */
-#define DCM_DSL_FUNCADDR_NUM                ((uint16)2U)     /* Number of DCM_DSL_ADDINFO_FUNC */
-#define DCM_DSL_FUNCADDRINFO_NUM            ((uint16)2U)     /* Number of DCM_DSL_ADDINFO_FUNC Management Information */
+#define DCM_DSL_FUNCADDR_NUM                ((uint16)4U)     /* Number of DCM_DSL_ADDINFO_FUNC */
+#define DCM_DSL_FUNCADDRINFO_NUM            ((uint16)4U)     /* Number of DCM_DSL_ADDINFO_FUNC Management Information */
 
 #define DCM_DSL_BUF_SIZE_0                  ((uint32)4095UL) /* Transmit buffer size */
 #define DCM_DSL_BUF_SIZE_1                  ((uint32)4095UL) /* Receive buffer size */
 #define DCM_DSL_BUF_SIZE_2                  ((uint32)4095UL) /* Receive buffer size */
 #define DCM_DSL_BUF_SIZE_3                  ((uint32)4095UL) /* Transmit buffer size */
 #define DCM_DSL_BUF_SIZE_4                  ((uint32)4095UL) /* Receive buffer size */
-#define DCM_DSL_BUF_SIZE_5                  ((uint32)4095UL) /* Transmit buffer size */
-#define DCM_DSL_BUF_SIZE_6                  ((uint32)4095UL) /* Receive buffer size */
+#define DCM_DSL_BUF_SIZE_5                  ((uint32)4095UL) /* Receive buffer size */
+#define DCM_DSL_BUF_SIZE_6                  ((uint32)4095UL) /* Transmit buffer size */
 #define DCM_DSL_BUF_SIZE_7                  ((uint32)4095UL) /* Receive buffer size */
-#define DCM_DSL_BUF_SIZE_8                  ((uint32)4095UL) /* Transmit buffer size */
-#define DCM_DSL_BUF_SIZE_9                  ((uint32)4095UL) /* Receive buffer size */
-#define DCM_DSL_BUF_SIZE_10                 ((uint32)4095UL) 
+#define DCM_DSL_BUF_SIZE_8                  ((uint32)4095UL) /* Receive buffer size */
+#define DCM_DSL_BUF_SIZE_9                  ((uint32)4095UL) /* Transmit buffer size */
+#define DCM_DSL_BUF_SIZE_10                 ((uint32)4095UL) /* Receive buffer size */
+#define DCM_DSL_BUF_SIZE_11                 ((uint32)4095UL) /* Receive buffer size */
+#define DCM_DSL_BUF_SIZE_12                 ((uint32)4095UL) 
 #define DCM_DSL_TXBUF_MAXSIZE               ((uint32)4095UL) /* Transmit buffer max size */
 #define DCM_DSL_TXIFBUF_MAXSIZE             ((uint32)1UL)    /* Periodic buffer size */
 #define DCM_DSL_ROEBUF_SIZE                 ((uint32)4095UL) /* ROE buffer size */

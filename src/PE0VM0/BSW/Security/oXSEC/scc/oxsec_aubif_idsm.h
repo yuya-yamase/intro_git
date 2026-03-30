@@ -36,7 +36,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-Std_ReturnType vd_g_oXSECAubIfIdsMIdsRTxAck( const uint8* ptData, uint16 u2DataSize );
+Std_ReturnType u1_g_oXSECAubIfIdsMIdsRTxAck( const uint8* ptData, uint16 u2DataSize );
 void vd_g_oXSECAubIfIdsMQSEvErrAck( const uint8* ptEventFrame, const IdsM_TimestampType* ptTimestamp,
                           const volatile uint8* ptContextData, uint16 u2ContextDataSize, IdsM_Ab_ErrorStatusType udQSEvError );
 void vd_g_oXSECAubIfIdsMParamErrAck( IdsM_SecurityEventIdType udSecurityEventId, IdsM_Ab_ErrorStatusType udParamError );

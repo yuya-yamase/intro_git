@@ -1,7 +1,7 @@
-/* Dcm_Dsp_SID23_c(v5-3-0)                                                  */
+/* Dcm_Dsp_SID23_c(v5-6-0)                                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -492,7 +492,9 @@ static FUNC(Std_ReturnType, DCM_CODE) Dcm_Dsp_SID23_InitialProcSub
 {
     boolean                         b_SendNegRes;
     Dcm_NegativeResponseCodeType    u1_NegResCode;
+    Dcm_SesCtrlType                 u1_SesCtrlType;
     Dcm_SecLevelType                u1_SecLevel;
+    Std_ReturnType                  u1_RetChkMemSes;
     Std_ReturnType                  u1_RetChkMemSec;
     Std_ReturnType                  u1_RetChkCondition;
     Std_ReturnType                  u1_RetVal;
@@ -502,43 +504,55 @@ static FUNC(Std_ReturnType, DCM_CODE) Dcm_Dsp_SID23_InitialProcSub
     u1_SecLevel         = DCM_SEC_LEV_LOCKED;
     u1_RetVal           = E_OK;
 
-
-    /* Get active security level */
-    (void)Dcm_GetSecurityLevel( &u1_SecLevel ); /* no return check required */
-    /* Check Security lock is canceled */
-    u1_RetChkMemSec = Dcm_Dsp_DidMng_ChkMemSec( DCM_DSP_DIDMNG_MEM_READ,
+    /* Get active session */
+    u1_SesCtrlType = DCM_DEFAULT_SESSION;
+    (void)Dcm_GetSesCtrlType( &u1_SesCtrlType ); /* no return check required */
+    /* Check session support */
+    u1_RetChkMemSes = Dcm_Dsp_DidMng_ChkMemSes( DCM_DSP_DIDMNG_MEM_READ,
                                                 Dcm_Dsp_SID23_u1MemIdIndex,
                                                 Dcm_Dsp_SID23_u1MemRangeIndex,
-                                                u1_SecLevel );
-    if( u1_RetChkMemSec == (Std_ReturnType)E_OK )
+                                                u1_SesCtrlType );
+    if( u1_RetChkMemSes == (Std_ReturnType)E_OK )
     {
-        u1_RetChkCondition = Dcm_Dsp_MemMng_CheckCondition( Dcm_Dsp_SID23_u1MemId, Dcm_Dsp_SID23_u4MemAddr, Dcm_Dsp_SID23_u4MemSize, &u1_NegResCode );
-        if( u1_RetChkCondition == (Std_ReturnType)E_OK )
+        /* Get active security level */
+        (void)Dcm_GetSecurityLevel( &u1_SecLevel ); /* no return check required */
+        /* Check Security lock is canceled */
+        u1_RetChkMemSec = Dcm_Dsp_DidMng_ChkMemSec( DCM_DSP_DIDMNG_MEM_READ,
+                                                    Dcm_Dsp_SID23_u1MemIdIndex,
+                                                    Dcm_Dsp_SID23_u1MemRangeIndex,
+                                                    u1_SecLevel );
+        if( u1_RetChkMemSec == (Std_ReturnType)E_OK )
         {
-            /* Read Memory by Address */
-            u1_RetVal = Dcm_Dsp_SID23_ReadMem(DCM_INITIAL);
+            u1_RetChkCondition = Dcm_Dsp_MemMng_CheckCondition( Dcm_Dsp_SID23_u1MemId, Dcm_Dsp_SID23_u4MemAddr, Dcm_Dsp_SID23_u4MemSize, &u1_NegResCode );
+            if( u1_RetChkCondition == (Std_ReturnType)E_OK )
+            {
+                /* Read Memory by Address */
+                u1_RetVal = Dcm_Dsp_SID23_ReadMem(DCM_INITIAL);
+            }
+            else
+            {
+                b_SendNegRes    = (boolean)TRUE;
+                /* u1_NegResCode have been already set by Dcm_Dsp_MemMng_CheckCondition function. */
+            }
         }
         else
         {
+            /* This Route                                                  */
+            /*   Security lock is non-cancellation    -> 0x33              */
             b_SendNegRes    = (boolean)TRUE;
-            /* u1_NegResCode have been already set by Dcm_Dsp_MemMng_CheckCondition function. */
+            u1_NegResCode   = DCM_E_SECURITYACCESSDENIED;
         }
     }
     else
     {
-        /* This Route                                                  */
-        /*   Security lock is non-cancellation    -> 0x33              */
+        /* NRC 0x31 */
         b_SendNegRes    = (boolean)TRUE;
-        u1_NegResCode   = DCM_E_SECURITYACCESSDENIED;
+        u1_NegResCode   = DCM_E_REQUESTOUTOFRANGE;
     }
 
     if( b_SendNegRes == (boolean)TRUE )
     {
         Dcm_Dsp_MsgMaker_SendNegRes( &Dcm_Dsp_Main_stMsgContext, u1_NegResCode );
-    }
-    else
-    {
-        /* No process */
     }
 
     return u1_RetVal;
@@ -550,7 +564,9 @@ static FUNC(Std_ReturnType, DCM_CODE) Dcm_Dsp_SID23_InitialProcSub
 {
     boolean                         b_SendNegRes;
     Dcm_NegativeResponseCodeType    u1_NegResCode;
+    Dcm_SesCtrlType                 u1_SesCtrlType;
     Dcm_SecLevelType                u1_SecLevel;
+    Std_ReturnType                  u1_RetChkMemSes;
     Std_ReturnType                  u1_RetChkMemSec;
     Std_ReturnType                  u1_RetChkCondition;
     Std_ReturnType                  u1_RetChkResBufSize;
@@ -561,53 +577,65 @@ static FUNC(Std_ReturnType, DCM_CODE) Dcm_Dsp_SID23_InitialProcSub
     u1_SecLevel         = DCM_SEC_LEV_LOCKED;
     u1_RetVal           = E_OK;
 
-
-    /* Get active security level */
-    (void)Dcm_GetSecurityLevel( &u1_SecLevel ); /* no return check required */
-    /* Check Security lock is canceled */
-    u1_RetChkMemSec = Dcm_Dsp_DidMng_ChkMemSec( DCM_DSP_DIDMNG_MEM_READ,
+    /* Get active session */
+    u1_SesCtrlType = DCM_DEFAULT_SESSION;
+    (void)Dcm_GetSesCtrlType( &u1_SesCtrlType ); /* no return check required */
+    /* Check session support */
+    u1_RetChkMemSes = Dcm_Dsp_DidMng_ChkMemSes( DCM_DSP_DIDMNG_MEM_READ,
                                                 Dcm_Dsp_SID23_u1MemIdIndex,
                                                 Dcm_Dsp_SID23_u1MemRangeIndex,
-                                                u1_SecLevel );
-    if( u1_RetChkMemSec == (Std_ReturnType)E_OK )
+                                                u1_SesCtrlType );
+    if( u1_RetChkMemSes == (Std_ReturnType)E_OK )
     {
-        u1_RetChkCondition = Dcm_Dsp_MemMng_CheckCondition( Dcm_Dsp_SID23_u1MemId, Dcm_Dsp_SID23_u4MemAddr, Dcm_Dsp_SID23_u4MemSize, &u1_NegResCode );
-        if( u1_RetChkCondition == (Std_ReturnType)E_OK )
+        /* Get active security level */
+        (void)Dcm_GetSecurityLevel( &u1_SecLevel ); /* no return check required */
+        /* Check Security lock is canceled */
+        u1_RetChkMemSec = Dcm_Dsp_DidMng_ChkMemSec( DCM_DSP_DIDMNG_MEM_READ,
+                                                    Dcm_Dsp_SID23_u1MemIdIndex,
+                                                    Dcm_Dsp_SID23_u1MemRangeIndex,
+                                                    u1_SecLevel );
+        if( u1_RetChkMemSec == (Std_ReturnType)E_OK )
         {
-            u1_RetChkResBufSize = Dcm_Dsp_SID23_ChkResBufSize();
-            if( u1_RetChkResBufSize == (Std_ReturnType)E_OK )
+            u1_RetChkCondition = Dcm_Dsp_MemMng_CheckCondition( Dcm_Dsp_SID23_u1MemId, Dcm_Dsp_SID23_u4MemAddr, Dcm_Dsp_SID23_u4MemSize, &u1_NegResCode );
+            if( u1_RetChkCondition == (Std_ReturnType)E_OK )
             {
-                /* Read Memory by Address */
-                u1_RetVal = Dcm_Dsp_SID23_ReadMem(DCM_INITIAL);
+                u1_RetChkResBufSize = Dcm_Dsp_SID23_ChkResBufSize();
+                if( u1_RetChkResBufSize == (Std_ReturnType)E_OK )
+                {
+                    /* Read Memory by Address */
+                    u1_RetVal = Dcm_Dsp_SID23_ReadMem(DCM_INITIAL);
+                }
+                else
+                {
+                    /* NRC0x14 */
+                    b_SendNegRes = Dcm_Dsp_SID23_bNegativeResponseSendResponseTooLong;
+                    u1_NegResCode = DCM_E_RESPONSETOOLONG;
+                }
             }
             else
             {
-                /* NRC0x14 */
-                b_SendNegRes = Dcm_Dsp_SID23_bNegativeResponseSendResponseTooLong;
-                u1_NegResCode = DCM_E_RESPONSETOOLONG;
+                b_SendNegRes    = (boolean)TRUE;
+                /* u1_NegResCode have been already set by Dcm_Dsp_MemMng_CheckCondition function. */
             }
         }
         else
         {
+            /* This Route                                                  */
+            /*   Security lock is non-cancellation    -> 0x33              */
             b_SendNegRes    = (boolean)TRUE;
-            /* u1_NegResCode have been already set by Dcm_Dsp_MemMng_CheckCondition function. */
+            u1_NegResCode   = DCM_E_SECURITYACCESSDENIED;
         }
     }
     else
     {
-        /* This Route                                                  */
-        /*   Security lock is non-cancellation    -> 0x33              */
+        /* NRC 0x31 */
         b_SendNegRes    = (boolean)TRUE;
-        u1_NegResCode   = DCM_E_SECURITYACCESSDENIED;
+        u1_NegResCode   = DCM_E_REQUESTOUTOFRANGE;
     }
 
     if( b_SendNegRes == (boolean)TRUE )
     {
         Dcm_Dsp_MsgMaker_SendNegRes( &Dcm_Dsp_Main_stMsgContext, u1_NegResCode );
-    }
-    else
-    {
-        /* No process */
     }
 
     return u1_RetVal;
@@ -739,7 +767,7 @@ static FUNC(Std_ReturnType, DCM_CODE) Dcm_Dsp_SID23_ChkMemSize
 
     if( Dcm_Dsp_SID23_u4MemSize != DCM_DSP_SID23_Illegal_MemSize )
     {
-        u4_MaxMemorySize = Dcm_Dsp_MemMng_GetMaxMemorySize();
+        u4_MaxMemorySize = Dcm_Dsp_MemMng_GetMaxReadMemorySize();
         if( Dcm_Dsp_SID23_u4MemSize <= u4_MaxMemorySize )
         {
             u1_RetVal = E_OK;
@@ -1088,6 +1116,7 @@ static FUNC(Std_ReturnType, DCM_CODE) Dcm_Dsp_SID23_ReadMem
 /*  v4-0-0         :2020-12-23                                              */
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
+/*  v5-6-0         :2024-02-27                                              */
 /****************************************************************************/
 
 /**** End of File************************************************************/

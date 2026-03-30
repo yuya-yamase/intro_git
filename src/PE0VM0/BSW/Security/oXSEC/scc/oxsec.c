@@ -44,7 +44,13 @@
 #include "SchM_IdsM.h"
 #endif /* #if (OXSEC_AUB_EN_IDSM == 1U) */
 
-#include "vCryPx.h"
+#if (OXSEC_AUB_EN_IED == 1U)
+#include "oxsec_ied.h"
+#endif /* (OXSEC_AUB_EN_IED == 1U) */
+
+#if ((OXSEC_FV_EN_SET == 1U) || (OXSEC_FV_EN_RW == 1U))
+#include "oxsec_fv.h"
+#endif /* ((OXSEC_FV_EN_SET == 1U) || (OXSEC_FV_EN_RW == 1U)) */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -101,7 +107,7 @@ typedef struct{
 static U1               u1_s_oxsec_shtdwn_ok;
 
 #if (OXSEC_AUB_EN_SECOC == 1U)
-static U4               u4_s_oxsec_tripcnt                  __attribute__((section(".bss_BACK_BSW")));
+static U1               u1_s_oxsec_fv_rx_ok;
 #endif /* #if (OXSEC_AUB_EN_SECOC == 1U) */
 
 #if (OXSEC_AUB_EN_SEV_HB == 1U)
@@ -123,7 +129,6 @@ static U4      u4_s_oXSECCrySoMaEchk(void);
 
 #if (OXSEC_AUB_EN_SECOC == 1U)
 static U4      u4_s_oXSECSecOCMaEchk(void);
-static void    vd_s_oXSECSecOCFvSet(void);
 #endif /* #if (OXSEC_AUB_EN_SECOC == 1U) */
 
 #if (OXSEC_AUB_EN_SEV_HB == 1U)
@@ -189,11 +194,9 @@ void    vd_g_oXSECInit(void)
     Csm_Init(NULL_PTR);
 #endif /* #if (OXSEC_AUB_EN_CSM == 1U) */
 
-    vd_g_vCryPx_Init();
-
 #if (OXSEC_AUB_EN_SECOC == 1U)
     SecOC_Init(NULL_PTR);         /* ./inc/Compiler.h:52:#define NULL_PTR            ((void *)0).. */
-    vd_s_oXSECSecOCFvSet();
+    u1_s_oxsec_fv_rx_ok = (U1)FALSE;
 #endif /* #if (OXSEC_AUB_EN_SECOC == 1U) */
 
 #if (OXSEC_AUB_EN_IDSM == 1U)
@@ -204,6 +207,14 @@ void    vd_g_oXSECInit(void)
     u4_s_oxsec_tim_elpsd = (U4)0U;
     u4_s_oxsec_hb_intvl  = (U4)((U4)OXSEC_HEARTBEAT_FIRST_DELAY / (U4)OXSEC_MAIN_TICK_MID);
 #endif /* #if (OXSEC_AUB_EN_SEV_HB == 1U) */
+
+#if (OXSEC_AUB_EN_IED == 1U)
+    vd_g_oXSECIedInit();
+#endif /* (OXSEC_AUB_EN_IED == 1U) */
+
+#if ((OXSEC_FV_EN_SET == 1U) || (OXSEC_FV_EN_RW == 1U))
+    vd_g_oXSECFvInit();
+#endif /* ((OXSEC_FV_EN_SET == 1U) || (OXSEC_FV_EN_RW == 1U)) */
 
 }
 /*===================================================================================================================================*/
@@ -294,6 +305,12 @@ void    vd_g_oXSECMainPosMid(void)
     IdsM_Ab_MainFunctionTx();
 #endif  /* #if (OXSEC_AUB_EN_IDSM == 1U) */
 
+#if (OXSEC_AUB_EN_SECOC == 1U)
+    if(u1_s_oxsec_fv_rx_ok != (U1)TRUE){
+        u1_s_oxsec_fv_rx_ok = u1_g_oXSECFvRx();
+    }
+#endif  /* #if (OXSEC_AUB_EN_SECOC == 1U) */
+
 #if (OXSEC_AUB_EN_CSM == 1U)
     u4_t_mae  = u4_s_oXSECCsmMaEchk();
 #endif /* #if (OXSEC_AUB_EN_CSM == 1U) */
@@ -347,7 +364,6 @@ void    vd_g_oXSECMainPreHigh(void)
 #if (OXSEC_AUB_EN_CSM == 1U)
     Csm_MainFunction();
 #endif /* #if (OXSEC_AUB_EN_CSM == 1U) */
-    vd_g_vCryPx_MainFunction();
 
 }
 /*===================================================================================================================================*/
@@ -507,62 +523,6 @@ static void    vd_s_oXSECReset(void)
 
     vd_g_oXSEC_IRQ_EI(u4_t_gli);
 }
-#if (OXSEC_AUB_EN_SECOC == 1U)
-/*===================================================================================================================================*/
-/*  static void    vd_s_oXSECSecOCFvSet(void)                                                                                        */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_oXSECSecOCFvSet(void)
-{
-    U4    u4_t_loop_cnt;
-    U4    u4_t_cnt_len;
-    U2    u2_t_fvid;
-    U1    u1_t_tripcnt[3];
-
-    /*--------------------------------------------------------- */
-    /*  TripCounter Increment                                   */
-    /*----------------------------------------------------------*/
-    if(u4_s_oxsec_tripcnt < (U4)OXSEC_TRIPCNT_MAX){
-        u4_s_oxsec_tripcnt++;
-    } else {
-        u4_s_oxsec_tripcnt = (U4)1U;
-    }
-    /*----------------------------------------------------------*/
-
-    /*----------------------------------------------------------*/
-    /* SECTODO:                                                 */
-    /* Since notifications are sent during initialization,      */
-    /* the notification timing must be consistent with the app. */
-    /*----------------------------------------------------------*/
-    if(u4_s_oxsec_tripcnt >= (U4)OXSEC_TRIPCNT_MAX){
-        vd_g_oXSECCfgTrCntMax();
-    }
-    /*----------------------------------------------------------*/
-
-    /*----------------------------------------------------------*/
-    /* Set the value read from the Retention RAM                */
-    /*   u1_t_tripcnt[0] - u1_t_tripcnt[2]                      */
-    /*   MSB                           LSB                      */
-    /*----------------------------------------------------------*/
-    u1_t_tripcnt[0] = (U1)((u4_s_oxsec_tripcnt & (U4)OXSEC_TRIPCNT_SET_HI) >> 16U);
-    u1_t_tripcnt[1] = (U1)((u4_s_oxsec_tripcnt & (U4)OXSEC_TRIPCNT_SET_MID) >> 8U);
-    u1_t_tripcnt[2] = (U1)(u4_s_oxsec_tripcnt & (U4)OXSEC_TRIPCNT_SET_LOW);
-
-    u4_t_cnt_len = (U4)SECOC_AB_FULLFV_TRIP_CNT_LENGTH;
-    for(u4_t_loop_cnt = (U4)0U;u4_t_loop_cnt < (U4)SECOC_AB_BUS_MAX;u4_t_loop_cnt++){
-        u2_t_fvid = (U2)SecOC_Ab_BusCollection[u4_t_loop_cnt].Ab_FreshnessValueID;
-        (void)SecOC_Ab_FreshnessValueWrite(u2_t_fvid ,u1_t_tripcnt, u4_t_cnt_len);
-        /*---------------------------------------------------------------------------------*/
-        /* With the current usage, the return value "E_NOT_OK" will never be obtained.     */
-        /* The policy is not to judge the return value.                                    */
-        /*---------------------------------------------------------------------------------*/
-   }
-
-    return;
-}
-#endif  /* #if (OXSEC_AUB_EN_SECOC == 1U) */
 
 #if (OXSEC_AUB_EN_CSM == 1U)
 /*===================================================================================================================================*/

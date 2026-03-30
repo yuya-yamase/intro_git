@@ -48,7 +48,7 @@
 #define OXDC_ROUT_D000_IDX_RID_WIDE_L          (6U)
 #define OXDC_ROUT_D000_IDX_RECNUM              (7U)
 
-#define OXDC_ROUT_D001_TARGET_MAX              (2U)
+#define OXDC_ROUT_D001_TARGET_MAX              (3U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -71,6 +71,7 @@ static U1     u1_s_oxdc_rout_d001_target_idx;
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static const U2   u2_sp_OXDC_ROUT_D001_UDM_DEL_LIST[OXDC_ROUT_D001_TARGET_MAX] = {
+    (U2)(DEM_DTC_ORIGIN_USERDEFINED_MEMORY | (U2)0x11U),
     (U2)(DEM_DTC_ORIGIN_USERDEFINED_MEMORY | (U2)0x12U),
     (U2)(DEM_DTC_ORIGIN_USERDEFINED_MEMORY | (U2)0x13U)
 };
@@ -145,7 +146,7 @@ U1      u1_g_oXDoCANRoutStart_D100(U1 * u1_ap_ans, const U2 u2_a_ELPSD, U2 * u2_
         vd_g_oXDoCANXidSupInit((U2)0U, &u1_ap_ans[OXDC_ROUT_POS_DATA]);
     }
     u1_ap_ans[OXDC_ROUT_POS_INFO] = (U1)OXDC_ROUT_INFO_02;
-    return(u1_g_oXDoCANRgrSupchk(&st_gp_OXDC_ROUT_XID[0], u2_g_OXDC_ROUT_NUM_XID, &u1_ap_ans[OXDC_ROUT_POS_DATA]));
+    return(u1_g_oXDoCANXgrSupchk(&st_gp_OXDC_ROUT_XID[0], u2_g_OXDC_ROUT_NUM_XID, &u1_ap_ans[OXDC_ROUT_POS_DATA]));
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_oXDoCANRoutStart_D1XX(U1 * u1_ap_ans, const U2 u2_a_ELPSD, U2 * u2_ap_nbyte)                                        */
@@ -159,7 +160,7 @@ U1      u1_g_oXDoCANRoutStart_D1XX(U1 * u1_ap_ans, const U2 u2_a_ELPSD, U2 * u2_
         vd_g_oXDoCANRidSupInit(u2_g_oxdc_rout_xid, &u1_ap_ans[OXDC_ROUT_POS_DATA]);
     }
     u1_ap_ans[OXDC_ROUT_POS_INFO] = (U1)OXDC_ROUT_INFO_02;
-    return(u1_g_oXDoCANRidSupchk(&st_gp_OXDC_ROUT_XID[0], u2_g_OXDC_ROUT_NUM_XID, &u1_ap_ans[OXDC_ROUT_POS_DATA]));
+    return(u1_g_oXDoCANXidSupchk(&st_gp_OXDC_ROUT_XID[0], u2_g_OXDC_ROUT_NUM_XID, &u1_ap_ans[OXDC_ROUT_POS_DATA]));
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_oXDoCANRoutCorchk_D000(const U1 u1_a_SUBF, const U1 * u1_ap_COR)                                                    */
@@ -222,12 +223,8 @@ U1      u1_g_oXDoCANRoutStart_D000(U1 * u1_ap_ans, const U2 u2_a_ELPSD, U2 * u2_
         }
         u1_t_recnum = (U1)u2_t_recnum;
         u2_t_dtc_origin = (U2)DEM_DTC_ORIGIN_USERDEFINED_MEMORY | (U2)u1_s_oxdc_rout_d000_memsel;
-#if ( DEM_USERDEFINEDMEMORY_SUPPORT == STD_ON )
         u1_t_result = Dem_GetUserDefinedMemoryFreezeFrameRecordNumber(u4_s_oxdc_rout_d000_dtc, u2_t_dtc_origin,
                                                                     &u1_tp_data[OXDC_ROUT_D000_IDX_RECNUM], &u1_t_recnum);
-#else
-       u1_t_result = E_NOT_OK;
-#endif
         if(u1_t_result == (U1)E_OK){
             *u2_ap_nbyte = (U2)u1_t_recnum + (U2)OXDC_ROUT_D000_ANS_NBYTE_MIN;
             u1_t_ret = (U1)OXDC_SAL_PROC_FIN;

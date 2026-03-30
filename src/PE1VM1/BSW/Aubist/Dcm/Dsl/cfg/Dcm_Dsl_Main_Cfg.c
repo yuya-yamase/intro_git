@@ -44,12 +44,16 @@
 static  VAR(uint8, DCM_VAR_NO_INIT)   Dcm_Dsl_u1RxBuf_PduID_0[DCM_DSL_BUF_SIZE_1]; /* RxBuffer */
 static  VAR(uint8, DCM_VAR_NO_INIT)   Dcm_Dsl_u1RxBuf_PduID_1[DCM_DSL_BUF_SIZE_2]; /* RxBuffer */
 static  VAR(uint8, DCM_VAR_NO_INIT)   Dcm_Dsl_u1RxBuf_PduID_2[DCM_DSL_BUF_SIZE_4]; /* RxBuffer */
-static  VAR(uint8, DCM_VAR_NO_INIT)   Dcm_Dsl_u1RxBuf_PduID_3[DCM_DSL_BUF_SIZE_6]; /* RxBuffer */
+static  VAR(uint8, DCM_VAR_NO_INIT)   Dcm_Dsl_u1RxBuf_PduID_3[DCM_DSL_BUF_SIZE_5]; /* RxBuffer */
 static  VAR(uint8, DCM_VAR_NO_INIT)   Dcm_Dsl_u1RxBuf_PduID_4[DCM_DSL_BUF_SIZE_7]; /* RxBuffer */
-static  VAR(uint8, DCM_VAR_NO_INIT)   Dcm_Dsl_u1RxBuf_PduID_5[DCM_DSL_BUF_SIZE_9]; /* RxBuffer */
+static  VAR(uint8, DCM_VAR_NO_INIT)   Dcm_Dsl_u1RxBuf_PduID_5[DCM_DSL_BUF_SIZE_8]; /* RxBuffer */
+static  VAR(uint8, DCM_VAR_NO_INIT)   Dcm_Dsl_u1RxBuf_PduID_6[DCM_DSL_BUF_SIZE_10]; /* RxBuffer */
+static  VAR(uint8, DCM_VAR_NO_INIT)   Dcm_Dsl_u1RxBuf_PduID_7[DCM_DSL_BUF_SIZE_11]; /* RxBuffer */
 
 static  VAR(uint8, DCM_VAR_NO_INIT)   Dcm_Dsl_u1KALBuf_0[DCM_DSL_KEEPALIVE_LEN];
 static  VAR(uint8, DCM_VAR_NO_INIT)   Dcm_Dsl_u1KALBuf_1[DCM_DSL_KEEPALIVE_LEN];
+static  VAR(uint8, DCM_VAR_NO_INIT)   Dcm_Dsl_u1KALBuf_2[DCM_DSL_KEEPALIVE_LEN];
+static  VAR(uint8, DCM_VAR_NO_INIT)   Dcm_Dsl_u1KALBuf_3[DCM_DSL_KEEPALIVE_LEN];
 
 static VAR( uint8, DCM_VAR_NO_INIT ) Dcm_Dsl_u1RoeTxBuf[DCM_DSL_ROEBUF_SIZE];
 
@@ -74,13 +78,19 @@ CONST(AB_83_ConstV Dcm_Dsl_RxBufferType, DCM_CONFIG_DATA) Dcm_Dsl_stRxBufferTabl
         DCM_DSL_BUF_SIZE_4,  &Dcm_Dsl_u1RxBuf_PduID_2[0], (boolean)FALSE
     },
     {
-        DCM_DSL_BUF_SIZE_6,  &Dcm_Dsl_u1RxBuf_PduID_3[0], (boolean)FALSE
+        DCM_DSL_BUF_SIZE_5,  &Dcm_Dsl_u1RxBuf_PduID_3[0], (boolean)FALSE
     },
     {
         DCM_DSL_BUF_SIZE_7,  &Dcm_Dsl_u1RxBuf_PduID_4[0], (boolean)FALSE
     },
     {
-        DCM_DSL_BUF_SIZE_9,  &Dcm_Dsl_u1RxBuf_PduID_5[0], (boolean)FALSE
+        DCM_DSL_BUF_SIZE_8,  &Dcm_Dsl_u1RxBuf_PduID_5[0], (boolean)FALSE
+    },
+    {
+        DCM_DSL_BUF_SIZE_10,  &Dcm_Dsl_u1RxBuf_PduID_6[0], (boolean)FALSE
+    },
+    {
+        DCM_DSL_BUF_SIZE_11,  &Dcm_Dsl_u1RxBuf_PduID_7[0], (boolean)FALSE
     }
 };
 
@@ -119,12 +129,22 @@ CONST(AB_83_ConstV Dcm_Dsl_PduIdMapTableType, DCM_CONFIG_DATA) Dcm_Dsl_PduIdMapT
     },
     {
         (uint16)0U,    /* u2RowIndex */
+        (uint16)2U,    /* u2ConnectionIndex */
+        (uint16)1U,    /* u2ProtocolRxIndex */
+        (uint16)1U,    /* u2ClientIndex */
+        (uint16)0xFFFFU,    /* u2IfMapIndex */
+        (uint16)1U,     /* u2FuncAddrMapIndex */
+        (PduIdType)0x0007U,     /* RxPduId */
+        DCM_DSL_UDS_PROTOCOL    /* u1ProtocolGroup */
+    },
+    {
+        (uint16)0U,    /* u2RowIndex */
         (uint16)3U,    /* u2ConnectionIndex */
         (uint16)0U,    /* u2ProtocolRxIndex */
         (uint16)2U,    /* u2ClientIndex */
         (uint16)0xFFFFU,    /* u2IfMapIndex */
         (uint16)0xFFFFU,    /* u2FuncAddrMapIndex */
-        (PduIdType)0x0007U,     /* RxPduId */
+        (PduIdType)0x0008U,     /* RxPduId */
         DCM_DSL_UDS_PROTOCOL    /* u1ProtocolGroup */
     },
     {
@@ -133,8 +153,8 @@ CONST(AB_83_ConstV Dcm_Dsl_PduIdMapTableType, DCM_CONFIG_DATA) Dcm_Dsl_PduIdMapT
         (uint16)1U,    /* u2ProtocolRxIndex */
         (uint16)2U,    /* u2ClientIndex */
         (uint16)0xFFFFU,    /* u2IfMapIndex */
-        (uint16)1U,     /* u2FuncAddrMapIndex */
-        (PduIdType)0x0008U,     /* RxPduId */
+        (uint16)2U,     /* u2FuncAddrMapIndex */
+        (PduIdType)0x0009U,     /* RxPduId */
         DCM_DSL_UDS_PROTOCOL    /* u1ProtocolGroup */
     },
     {
@@ -144,7 +164,17 @@ CONST(AB_83_ConstV Dcm_Dsl_PduIdMapTableType, DCM_CONFIG_DATA) Dcm_Dsl_PduIdMapT
         (uint16)3U,    /* u2ClientIndex */
         (uint16)0xFFFFU,    /* u2IfMapIndex */
         (uint16)0xFFFFU,    /* u2FuncAddrMapIndex */
-        (PduIdType)0x0009U,     /* RxPduId */
+        (PduIdType)0x000AU,     /* RxPduId */
+        DCM_DSL_UDS_PROTOCOL    /* u1ProtocolGroup */
+    },
+    {
+        (uint16)0U,    /* u2RowIndex */
+        (uint16)4U,    /* u2ConnectionIndex */
+        (uint16)1U,    /* u2ProtocolRxIndex */
+        (uint16)3U,    /* u2ClientIndex */
+        (uint16)0xFFFFU,    /* u2IfMapIndex */
+        (uint16)3U,     /* u2FuncAddrMapIndex */
+        (PduIdType)0x000BU,     /* RxPduId */
         DCM_DSL_UDS_PROTOCOL    /* u1ProtocolGroup */
     }
 };
@@ -174,7 +204,7 @@ CONST(AB_83_ConstV Dcm_Dsl_ProtocolTxType, DCM_CONFIG_DATA) Dcm_Dsl_R0_C2_stProt
 CONST(AB_83_ConstV Dcm_Dsl_ProtocolTxType, DCM_CONFIG_DATA) Dcm_Dsl_R0_C3_stProtocolTx[1] =
 {
     {
-        DCM_DSL_BUF_SIZE_5,    /* u4TxBufSize */
+        DCM_DSL_BUF_SIZE_6,    /* u4TxBufSize */
         (PduIdType)0x02U,    /* TxConfirmationPduId */
         (PduIdType)0x0002U,    /* TxPdu */
         DCM_TXERR_DISCON    /* u1TxErrorHandling */
@@ -183,7 +213,7 @@ CONST(AB_83_ConstV Dcm_Dsl_ProtocolTxType, DCM_CONFIG_DATA) Dcm_Dsl_R0_C3_stProt
 CONST(AB_83_ConstV Dcm_Dsl_ProtocolTxType, DCM_CONFIG_DATA) Dcm_Dsl_R0_C4_stProtocolTx[1] =
 {
     {
-        DCM_DSL_BUF_SIZE_8,    /* u4TxBufSize */
+        DCM_DSL_BUF_SIZE_9,    /* u4TxBufSize */
         (PduIdType)0x03U,    /* TxConfirmationPduId */
         (PduIdType)0x0003U,    /* TxPdu */
         DCM_TXERR_DISCON    /* u1TxErrorHandling */
@@ -216,21 +246,28 @@ CONST(AB_83_ConstV Dcm_Dsl_ProtocolRxType, DCM_CONFIG_DATA) Dcm_Dsl_R0_C2_stProt
         (PduIdType)0x0006U,    /* RxPdu */
         DCM_DSL_ADDINFO_PHYS,    /* u1AddrType */
         (boolean)FALSE    /* bExtSuppressRspMsg */
+    },
+    {
+        (uint32)0UL,    /* u4ExtResTimeout */
+        (PduIdType)0x007U,     /* PduId */
+        (PduIdType)0x0007U,    /* RxPdu */
+        DCM_DSL_ADDINFO_FUNC,    /* u1AddrType */
+        (boolean)FALSE    /* bExtSuppressRspMsg */
     }
 };
 CONST(AB_83_ConstV Dcm_Dsl_ProtocolRxType, DCM_CONFIG_DATA) Dcm_Dsl_R0_C3_stProtocolRx[DCM_DSL_R0_C3_PROTOCOLRX_NUM]=
 {
     {
         (uint32)0UL,    /* u4ExtResTimeout */
-        (PduIdType)0x007U,     /* PduId */
-        (PduIdType)0x0007U,    /* RxPdu */
+        (PduIdType)0x008U,     /* PduId */
+        (PduIdType)0x0008U,    /* RxPdu */
         DCM_DSL_ADDINFO_PHYS,    /* u1AddrType */
         (boolean)FALSE    /* bExtSuppressRspMsg */
     },
     {
         (uint32)0UL,    /* u4ExtResTimeout */
-        (PduIdType)0x008U,     /* PduId */
-        (PduIdType)0x0008U,    /* RxPdu */
+        (PduIdType)0x009U,     /* PduId */
+        (PduIdType)0x0009U,    /* RxPdu */
         DCM_DSL_ADDINFO_FUNC,    /* u1AddrType */
         (boolean)FALSE    /* bExtSuppressRspMsg */
     }
@@ -239,9 +276,16 @@ CONST(AB_83_ConstV Dcm_Dsl_ProtocolRxType, DCM_CONFIG_DATA) Dcm_Dsl_R0_C4_stProt
 {
     {
         (uint32)0UL,    /* u4ExtResTimeout */
-        (PduIdType)0x009U,     /* PduId */
-        (PduIdType)0x0009U,    /* RxPdu */
+        (PduIdType)0x00AU,     /* PduId */
+        (PduIdType)0x000AU,    /* RxPdu */
         DCM_DSL_ADDINFO_PHYS,    /* u1AddrType */
+        (boolean)FALSE    /* bExtSuppressRspMsg */
+    },
+    {
+        (uint32)0UL,    /* u4ExtResTimeout */
+        (PduIdType)0x00BU,     /* PduId */
+        (PduIdType)0x000BU,    /* RxPdu */
+        DCM_DSL_ADDINFO_FUNC,    /* u1AddrType */
         (boolean)FALSE    /* bExtSuppressRspMsg */
     }
 };
@@ -253,7 +297,7 @@ CONST(AB_83_ConstV Dcm_Dsl_MainConnectionType, DCM_CONFIG_DATA) Dcm_Dsl_R0_C1_st
         (uint16)0x00U,   /* u2ConnectionId */
         (uint16)0x00U,   /* u2ConnectionGroup */
         (uint16)0U,    /* u2ProtocolRxTesterSourceAddr */
-        (uint8)0U,    /* u1ProtocolComMChannel */
+        (uint8)0x00U,    /* u1ProtocolComMChannel */
         (uint8)2U,    /* u1ConnectionPriority */
         (boolean)FALSE,    /* bExtPduLength */
         &Dcm_Dsl_R0_C1_stProtocolRx[0],    /* ptProtocolRx */
@@ -268,7 +312,7 @@ CONST(AB_83_ConstV Dcm_Dsl_MainConnectionType, DCM_CONFIG_DATA) Dcm_Dsl_R0_C2_st
         (uint16)0x01U,   /* u2ConnectionId */
         (uint16)0x01U,   /* u2ConnectionGroup */
         (uint16)0U,    /* u2ProtocolRxTesterSourceAddr */
-        (uint8)0U,    /* u1ProtocolComMChannel */
+        (uint8)0x00U,    /* u1ProtocolComMChannel */
         (uint8)3U,    /* u1ConnectionPriority */
         (boolean)FALSE,    /* bExtPduLength */
         &Dcm_Dsl_R0_C2_stProtocolRx[0],    /* ptProtocolRx */
@@ -283,7 +327,7 @@ CONST(AB_83_ConstV Dcm_Dsl_MainConnectionType, DCM_CONFIG_DATA) Dcm_Dsl_R0_C3_st
         (uint16)0x02U,   /* u2ConnectionId */
         (uint16)0x00U,   /* u2ConnectionGroup */
         (uint16)0U,    /* u2ProtocolRxTesterSourceAddr */
-        (uint8)0U,    /* u1ProtocolComMChannel */
+        (uint8)0x00U,    /* u1ProtocolComMChannel */
         (uint8)2U,    /* u1ConnectionPriority */
         (boolean)FALSE,    /* bExtPduLength */
         &Dcm_Dsl_R0_C3_stProtocolRx[0],    /* ptProtocolRx */
@@ -298,7 +342,7 @@ CONST(AB_83_ConstV Dcm_Dsl_MainConnectionType, DCM_CONFIG_DATA) Dcm_Dsl_R0_C4_st
         (uint16)0x03U,   /* u2ConnectionId */
         (uint16)0x01U,   /* u2ConnectionGroup */
         (uint16)0U,    /* u2ProtocolRxTesterSourceAddr */
-        (uint8)0U,    /* u1ProtocolComMChannel */
+        (uint8)0x00U,    /* u1ProtocolComMChannel */
         (uint8)3U,    /* u1ConnectionPriority */
         (boolean)FALSE,    /* bExtPduLength */
         &Dcm_Dsl_R0_C4_stProtocolRx[0],    /* ptProtocolRx */
@@ -312,7 +356,7 @@ CONST(AB_83_ConstV Dcm_Dsl_MainConnectionType, DCM_CONFIG_DATA) Dcm_Dsl_R0_C4_st
 CONST(AB_83_ConstV Dcm_Dsl_SubConnectionType, DCM_CONFIG_DATA) Dcm_Dsl_R0_C0_stResponseOnEvent[1] =
 {
     {
-        DCM_DSL_BUF_SIZE_10,                   /* u4TxBufSize */
+        DCM_DSL_BUF_SIZE_12,                   /* u4TxBufSize */
         &Dcm_Dsl_u1RoeTxBuf[0],               /* ptTxBuf */
         (PduIdType)0xFFFFU,                   /* TxConfirmationPduId */
         (PduIdType)0xFFFFU                    /* TxPdu */
@@ -413,8 +457,8 @@ CONST(AB_83_ConstV uint16, DCM_CONFIG_DATA) Dcm_Dsl_ConnectionIdMapTable[DCM_DSL
 {
     (uint16)0U,
     (uint16)2U,
-    (uint16)3U,
-    (uint16)5U
+    (uint16)4U,
+    (uint16)6U
 };
 
 CONST(AB_83_ConstV Dcm_Dsl_KALBufferType, DCM_CONFIG_DATA) Dcm_Dsl_stKALBufferTable[DCM_DSL_FUNCADDR_NUM] =
@@ -424,6 +468,12 @@ CONST(AB_83_ConstV Dcm_Dsl_KALBufferType, DCM_CONFIG_DATA) Dcm_Dsl_stKALBufferTa
     },
     {
         DCM_DSL_KEEPALIVE_LEN,  &Dcm_Dsl_u1KALBuf_1[0]
+    },
+    {
+        DCM_DSL_KEEPALIVE_LEN,  &Dcm_Dsl_u1KALBuf_2[0]
+    },
+    {
+        DCM_DSL_KEEPALIVE_LEN,  &Dcm_Dsl_u1KALBuf_3[0]
     }
 };
 

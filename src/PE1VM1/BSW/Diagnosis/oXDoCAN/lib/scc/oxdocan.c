@@ -20,21 +20,11 @@
 
 #include "Dcm.h"
 #include "Dcm_Apl_SID22.h"
-#if(OXDC_SID23_USE == OXDC_USE)
-#include "Dcm_Apl_SID23.h"
-#endif
 #include "Dcm_Dsp_SID28_Cfg.h"
 #include "Dcm_Apl_SID2E.h"
-#if(OXDC_SID2F_USE == OXDC_USE)
 #include "Dcm_Apl_SID2F.h"
-#endif
 #include "Dcm_Apl_SID31.h"
-#if(OXDC_SIDAB_USE == OXDC_USE)
-#include "Dcm_Apl_SIDAB.h"
-#endif
-#if(OXDC_SIDBA_USE == OXDC_USE)
 #include "Dcm_Apl_SIDBA.h"
-#endif
 
 #include "Dem.h"
 #include "SchM_Dem.h"
@@ -223,8 +213,9 @@ void    vd_g_oXDoCANMainTask(void)
     vd_g_oXDoCANCfgMainStart(&st_t_req, u2_t_tslot);
 
     /* ---------------------------------------------------------------------------------------------------- */
+#if ( OXDC_FUNC_RPG_RESET == OXDC_USE )
     vd_g_oXDoCANRpgChk((st_t_req.u1_eom_aft & (U1)OXDC_EOM_RPG_EN));
-
+#endif /*  ( OXDC_FUNC_RPG_RESET == OXDC_USE ) */
     /* ---------------------------------------------------------------------------------------------------- */
     
     vd_g_oXDoCANCfgServiceMain(&st_t_req, &st_t_ans, u2_t_tslot);
@@ -300,19 +291,6 @@ Std_ReturnType u1_g_oXDoCANApl_SID22(Dcm_OpStatusType OpStatus, const Dcm_MsgCon
     vd_s_oXdcServiceAct((U1)OXDC_SID_22, OpStatus, pMsgContext);
     return((Std_ReturnType)E_OK); /* The return value is discarded in Aubist/Dcm. */
 }
-#if(OXDC_SID23_USE == OXDC_USE)
-/*===================================================================================================================================*/
-/*  Std_ReturnType u1_g_oXDoCANApl_SID23(Dcm_OpStatusType OpStatus, const Dcm_MsgContextType * pMsgContext)                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-Std_ReturnType u1_g_oXDoCANApl_SID23(Dcm_OpStatusType OpStatus, const Dcm_MsgContextType * pMsgContext)
-{
-    vd_s_oXdcServiceAct((U1)OXDC_SID_23, OpStatus, pMsgContext);
-    return((Std_ReturnType)E_OK); /* The return value is discarded in Aubist/Dcm. */
-}
-#endif
 /*===================================================================================================================================*/
 /*  Std_ReturnType u1_g_oXDoCANApl_SID2E(Dcm_OpStatusType OpStatus, const Dcm_MsgContextType * pMsgContext)                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -324,7 +302,6 @@ Std_ReturnType u1_g_oXDoCANApl_SID2E(Dcm_OpStatusType OpStatus, const Dcm_MsgCon
     vd_s_oXdcServiceAct((U1)OXDC_SID_2E, OpStatus, pMsgContext);
     return((Std_ReturnType)E_OK); /* The return value is discarded in Aubist/Dcm. */
 }
-#if(OXDC_SID2F_USE == OXDC_USE)
 /*===================================================================================================================================*/
 /*  Std_ReturnType u1_g_oXDoCANApl_SID2F(Dcm_OpStatusType OpStatus, const Dcm_MsgContextType * pMsgContext)                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -336,7 +313,6 @@ Std_ReturnType u1_g_oXDoCANApl_SID2F(Dcm_OpStatusType OpStatus, const Dcm_MsgCon
     vd_s_oXdcServiceAct((U1)OXDC_SID_2F, OpStatus, pMsgContext);
     return((Std_ReturnType)E_OK); /* The return value is discarded in Aubist/Dcm. */
 }
-#endif
 /*===================================================================================================================================*/
 /*  Std_ReturnType u1_g_oXDoCANApl_SID31(Dcm_OpStatusType OpStatus, const Dcm_MsgContextType * pMsgContext)                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -348,20 +324,6 @@ Std_ReturnType u1_g_oXDoCANApl_SID31(Dcm_OpStatusType OpStatus, const Dcm_MsgCon
     vd_s_oXdcServiceAct((U1)OXDC_SID_31, OpStatus, pMsgContext);
     return((Std_ReturnType)E_OK); /* The return value is discarded in Aubist/Dcm. */
 }
-#if(OXDC_SIDAB_USE == OXDC_USE)
-/*===================================================================================================================================*/
-/*  Std_ReturnType u1_g_oXDoCANApl_SIDAB(Dcm_OpStatusType OpStatus, const Dcm_MsgContextType * pMsgContext)                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-Std_ReturnType u1_g_oXDoCANApl_SIDAB(Dcm_OpStatusType OpStatus, const Dcm_MsgContextType * pMsgContext)
-{
-    vd_s_oXdcServiceAct((U1)OXDC_SID_AB, OpStatus, pMsgContext);
-    return((Std_ReturnType)E_OK); /* The return value is discarded in Aubist/Dcm. */
-}
-#endif
-#if(OXDC_SIDBA_USE == OXDC_USE)
 /*===================================================================================================================================*/
 /*  Std_ReturnType u1_g_oXDoCANApl_SIDBA(Dcm_OpStatusType OpStatus, const Dcm_MsgContextType * pMsgContext)                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -372,27 +334,6 @@ Std_ReturnType u1_g_oXDoCANApl_SIDBA(Dcm_OpStatusType OpStatus, const Dcm_MsgCon
 {
     vd_s_oXdcServiceAct((U1)OXDC_SID_BA, OpStatus, pMsgContext);
     return((Std_ReturnType)E_OK); /* The return value is discarded in Aubist/Dcm. */
-}
-#endif
-/*===================================================================================================================================*/
-/*  U1      u1_g_oXDoCANSecurityOk(const U1 u1_a_LVL)                                                                                */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_oXDoCANSecurityOk(const U1 u1_a_LVL)
-{
-    U1                     u1_t_sec;
-    U1                     u1_t_proc;
-
-    u1_t_proc = (U1)OXDC_SAL_PROC_NR_33;
-    u1_t_sec = DCM_SEC_LEV_LOCKED;
-    (void)Dcm_GetSecurityLevel(&u1_t_sec);
-    if(u1_t_sec == u1_a_LVL){
-        u1_t_proc = (U1)OXDC_SAL_PROC_RUN;
-    }
-
-    return(u1_t_proc);
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_oXDoCANGetStoredReqData(ST_OXDC_REQMSG * st_ap_req)                                                                 */
@@ -505,7 +446,7 @@ uint8   u1_g_oXDoCANAubIfRpgToRun(uint8 OpStatus)
 
     return(u1_g_oXDoCANRpgToRun(OpStatus));
 }
-#ifdef OXDC_FUNC_RPG_RESET
+#if ( OXDC_FUNC_RPG_RESET == OXDC_USE )
 /*===================================================================================================================================*/
 /*  void    vd_g_oXDoCANAubIfRpgSwReset(void)                                                                                        */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -527,7 +468,7 @@ void    vd_g_oXDoCANAubIfRpgSwReset(void)
 
     vd_g_oXDoCANRpgSwReset();
 }
-#endif
+#endif /* ( OXDC_FUNC_RPG_RESET == OXDC_USE ) */
 /*===================================================================================================================================*/
 /*  U1      u1_g_oXDoCANRebyId_F186(U1 * u1_ap_ans, const U2 u2_a_ELPSD)                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */

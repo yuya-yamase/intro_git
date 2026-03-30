@@ -44,7 +44,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if ( OXDC_FUNC_RPG_RESET == OXDC_USE )
 static U2                    u2_s_oxdc_rpg_vsok_tmcnt;
+#endif /* ( OXDC_FUNC_RPG_RESET == OXDC_USE ) */   
 static U2                    u2_s_oxdc_rpg_prep_tmcnt;
 static U1                    u1_s_oxdc_rpg_ctrl;
 
@@ -65,7 +67,9 @@ static U1                    u1_s_oxdc_rpg_ctrl;
 /*===================================================================================================================================*/
 void    vd_g_oXDoCANRpgInit(void)
 {
+#if ( OXDC_FUNC_RPG_RESET == OXDC_USE )
     u2_s_oxdc_rpg_vsok_tmcnt = (U2)U2_MAX;
+#endif /* ( OXDC_FUNC_RPG_RESET == OXDC_USE ) */       
     u2_s_oxdc_rpg_prep_tmcnt = (U2)U2_MAX;
     u1_s_oxdc_rpg_ctrl       = (U1)OXDC_RPG_CTRL_RDY_ACT;
 }
@@ -135,7 +139,9 @@ U1   u1_g_oXDoCANRpgToRun(const U1 u1_a_STATUS)
         u1_t_run                 = (U1)E_OK;
         u1_s_oxdc_rpg_ctrl       = (U1)OXDC_RPG_CTRL_RDY_ACT;
         u2_s_oxdc_rpg_prep_tmcnt = (U2)U2_MAX;
+#if ( OXDC_FUNC_RPG_RESET == OXDC_USE )        
         vd_g_oXDoCANCfgRpgCancel();
+#endif /* ( OXDC_FUNC_RPG_RESET == OXDC_USE ) */        
     }
     else{
         if(u1_s_oxdc_rpg_ctrl > (U1)OXDC_RPG_CTRL_REQ_ACT){
@@ -151,9 +157,9 @@ U1   u1_g_oXDoCANRpgToRun(const U1 u1_a_STATUS)
 
     return(u1_t_run);
 }
-#ifdef OXDC_FUNC_RPG_RESET
+#if ( OXDC_FUNC_RPG_RESET == OXDC_USE )
 /*===================================================================================================================================*/
-/*  void    vd_g_oXDoCANAubIfRpgSwReset(void)                                                                                        */
+/*  void    vd_g_oXDoCANRpgSwReset(void)                                                                                        */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -166,7 +172,6 @@ void    vd_g_oXDoCANRpgSwReset(void)
         vd_g_oXDoCANCfgRpgSwReset();
     }
 }
-#endif
 /*====================================================================================================================================*/
 /*  void    vd_g_oXDoCANRpgChk(const U1 u1_a_RPG_EN)                                                                                  */
 /* ---------------------------------------------------------------------------------------------------------------------------------- */
@@ -237,6 +242,7 @@ void    vd_g_oXDoCANRpgChk(const U1 u1_a_RPG_EN)
         vd_g_oXDoCANCfgRpgPrepToRun(u2_s_oxdc_rpg_prep_tmcnt);
     }
 }
+#endif /*  ( OXDC_FUNC_RPG_RESET == OXDC_USE ) */
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */

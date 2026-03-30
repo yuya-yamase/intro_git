@@ -36,11 +36,11 @@
 
 /* VCC */
 /* Number of VccId */
-#define VCC_NUM_OF_VCCID                  (0x0017U)
+#define VCC_NUM_OF_VCCID                  (0x0018U)
 
 /* Number of VccIds associated with SPID */
 #define SPID0_NUM_OF_RECEIVED_VCCID       (0x01U)
-#define SPID1_NUM_OF_RECEIVED_VCCID       (0x0DU)
+#define SPID1_NUM_OF_RECEIVED_VCCID       (0x0EU)
 #define SPID2_NUM_OF_RECEIVED_VCCID       (0x01U)
 #define SPID3_NUM_OF_RECEIVED_VCCID       (0x01U)
 #define SPID4_NUM_OF_RECEIVED_VCCID       (0x0EU)
@@ -209,6 +209,12 @@
 #define VCC_NUM_OF_RING_ELEMENT_CH22         (0x03U)
 #define VCC_SIZE_OF_PACKET_CH22              (0x00000010U)
 #define VCC_SIZE_OF_MESSAGE_BUFFER_CH22      (VCC_SIZE_OF_PACKET_CH22 / VCC_MESSAGE_ALIGN)
+
+/* VCCID:23 */
+#define VCC_NUM_OF_RECEIVER_CHANNEL_CH23     (0x01U)
+#define VCC_NUM_OF_RING_ELEMENT_CH23         (0x03U)
+#define VCC_SIZE_OF_PACKET_CH23              (0x00000008U)
+#define VCC_SIZE_OF_MESSAGE_BUFFER_CH23      (VCC_SIZE_OF_PACKET_CH23 / VCC_MESSAGE_ALIGN)
 
 
 /* EM */

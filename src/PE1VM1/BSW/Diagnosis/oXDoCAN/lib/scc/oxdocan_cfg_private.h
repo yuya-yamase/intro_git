@@ -35,7 +35,7 @@
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define OXDC_EOM_IGN_ON                          (0x01U)                 /* Ignition is ON                        */
-#define OXDC_EOM_RPG_EN                          (0x02U)                 /* Reprog is enabled                     */
+#define OXDC_EOM_DIAG_ON                          (0x02U)                 /* DiagPower is ON                     */
 #define OXDC_EOM_SI_ACT                          (0x04U)                 /* Shipping Inspection is activated      */
 #define OXDC_EOM_NUO_DI                          (0x08U)                 /* NvM update operation is disabled      */
 
@@ -47,14 +47,12 @@
 #define OXDC_SESSION_OTA                         (0x50U)                 /* 0x50  otaSession                      */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define OXDC_NUM_SID                             (7U)
+#define OXDC_NUM_SID                             (5U)
 #define OXDC_SID_22                              (0U)                    /* 0x22 : Read by Identifier             */
-#define OXDC_SID_23                              (1U)                    /* 0x23 : Read by Address                */
-#define OXDC_SID_2E                              (2U)                    /* 0x2E : Write by Identifier            */
-#define OXDC_SID_2F                              (3U)                    /* 0x2F : I/O Control                    */
-#define OXDC_SID_31                              (4U)                    /* 0x31 : Routine                        */
-#define OXDC_SID_AB                              (5U)                    /* 0xAB : Record on Behavior             */
-#define OXDC_SID_BA                              (6U)                    /* 0xBA : ECU Shipping Inspection        */
+#define OXDC_SID_2E                              (1U)                    /* 0x2E : Write by Identifier            */
+#define OXDC_SID_2F                              (2U)                    /* 0x2F : I/O Control                    */
+#define OXDC_SID_31                              (3U)                    /* 0x31 : Routine                        */
+#define OXDC_SID_BA                              (4U)                    /* 0xBA : ECU Shipping Inspection        */
 #define OXDC_SID_INA                             (0xffU)                 /*        Service Inactive               */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -76,10 +74,8 @@
 #define OXDC_REQ_TYPE_PHYS                       (0U)
 #define OXDC_REQ_TYPE_FUNC                       (1U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if(OXDC_SID2F_USE == OXDC_USE)
 #define OXDC_IOC_PRM                             (2U)
 #define OXDC_IOC_CSM                             (3U)                    /* Control State and/or Mask */
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -120,7 +116,6 @@ typedef struct{
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-U1      u1_g_oXDoCANSecurityOk(const U1 u1_a_LVL);
 void    vd_g_oXDoCANAnsTx(const U1 u1_a_NRC, const ST_OXDC_ANS * st_ap_ANS);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -143,53 +138,29 @@ void    vd_g_oXDoCANTmstpStaTmrwk(void);
 /* SID 0x22 : ReadDataByIdentifier          */
 void    vd_g_oXDoCANRebyIdInit(void);
 void    vd_g_oXDoCANRebyIdMainTask(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_ANS * st_ap_ans);
-#if(OXDC_SID23_USE == OXDC_USE)
-/* SID : 0x23 */
-void    vd_g_oXDoCANRebyAdrInit(void);
-void    vd_g_oXDoCANRebyAdrMainTask(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_ANS * st_ap_ans);
-void    vd_g_oXDoCANRebyAdrStartRamSet(const U1 u1_a_MEM, const U4 u4_a_BEGIN, const U4 u4_a_NBYTE);
-U1      u1_g_oXDoCANCfgRbaReqchk(const ST_OXDC_REQ * st_ap_REQ, const ST_OXDC_ANS * st_ap_ANS);
-#endif
 
 /* SID 0x2E : WriteDataByIdentifier          */
 void    vd_g_oXDoCANWrbyIdInit(void);
 void    vd_g_oXDoCANWrbyIdMainTask(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_ANS * st_ap_ans);
 
-#if(OXDC_SID2F_USE == OXDC_USE)
 /* SID 0x2F : InputOutputControlByIdentifier */
 void    vd_g_oXDoCANIocInit(void);
 void    vd_g_oXDoCANIocMainTask(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_ANS * st_ap_ans);
-#if(OXDC_SID2F_NR_22_USE == OXDC_USE)
-U1      u1_g_oXDoCANIocConditionChk(const ST_OXDC_REQ * st_ap_REQ);
-#endif
 U1      u1_g_oXDoCANIocReqLenChk(const ST_OXDC_REQ * st_ap_REQ);
-#endif
 
 /* SID 0x31 : RoutineControl                 */
 void    vd_g_oXDoCANRoutInit(void);
 void    vd_g_oXDoCANRoutMainTask(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_ANS * st_ap_ans);
-#ifdef OXDC_FUNC_ROUT_STOP
 void    vd_g_oXDoCANRoutStop(const U1 u1_a_NEW);
-#endif
 
-#if(OXDC_SID86_USE == OXDC_USE)
 /* SID 0x86 : ResponseOnEvent                */
 void    vd_g_oXDoCANRoePreInit(const U1 u1_a_BON_INIT);
 void    vd_g_oXDoCANRoeInit(void);
 void    vd_g_oXDoCANRoeMainTask(const U1 u1_a_EOM);
-#endif
 
-#if(OXDC_SIDAB_USE == OXDC_USE)
-/* SID 0xAB : ReadRoBInformation             */
-void    vd_g_TyDoCANRobInit(void);
-void    vd_g_TyDoCANRobMainTask(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_ANS * st_ap_ans);
-#endif
-
-#if(OXDC_SIDBA_USE == OXDC_USE)
 /* SID 0xBA : ECUShippingInspection          */
 void    vd_g_TyDoCANEsiInit(void);
 void    vd_g_TyDoCANEsiMainTask(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_ANS * st_ap_ans);
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 void    vd_g_oXDoCANCfgBonPreInit(void);
@@ -211,30 +182,23 @@ void    vd_g_oXDoCANCfgComTREOvrrd(const U1 u1_a_COM_CH, const U1 u1_a_MODE);
 void    vd_g_oXDoCANRpgInit(void);
 U1      u1_g_oXDoCANRpgToAct(U1 * u1_a_errcode);
 U1      u1_g_oXDoCANRpgToRun(const U1 u1_a_STATUS);
+#if ( OXDC_FUNC_RPG_RESET == OXDC_USE )
 void    vd_g_oXDoCANRpgChk(const U1 u1_a_RPG_EN);
+#endif /* ( OXDC_FUNC_RPG_RESET == OXDC_USE ) */
 
 void    vd_g_oXDoCANCfgRpgPrepToRun(const U2 u2_a_ELPSD);
-#ifdef OXDC_FUNC_RPG_RESET
+#if ( OXDC_FUNC_RPG_RESET == OXDC_USE )
 void    vd_g_oXDoCANRpgSwReset(void);
 void    vd_g_oXDoCANCfgRpgSwReset(void);
-#endif
+#endif /* ( OXDC_FUNC_RPG_RESET == OXDC_USE ) */
 U1      u1_g_oXDoCANCfgRpgCheck(void);
 void    vd_g_oXDoCANCfgRpgCancel(void);
 
 U2      u2_g_oXDoCANCfgKmph(void);
 U1      u1_g_oXDoCANCfgEomchk(void);
 
-#if(OXDC_SID22_NR_22_USE == OXDC_USE)
-U1      u1_g_oXDoCANCReadByIdChk(void);
-#endif
-#if(OXDC_SID2E_NR_22_USE == OXDC_USE)
-U1      u1_g_oXDoCANCWriteByIdChk(void);
-#endif
-#if(OXDC_SID31_NR_22_USE == OXDC_USE)
-U1      u1_g_oXDoCANCRoutineChk(void);
-#endif
-
 U1      u1_g_oXDoCANCfgDidSessionBitChk(const U1 u1_a_CUR_SES, const U2 u2_a_CONF_SES);
+U1      u1_g_oXDoCANCfgSecurityBitChk(const U2 u2_a_CONF_SEC);
 void    vd_g_oXDoCANGetStoredReqData(ST_OXDC_REQMSG * st_ap_req);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

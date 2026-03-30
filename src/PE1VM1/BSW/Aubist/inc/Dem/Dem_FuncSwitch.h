@@ -79,7 +79,7 @@
 #define DEM_TRIGGER_FIM_REPORTS                         (STD_OFF)    /* DemTriggerFiMReports */
 #define DEM_DTCSTOREDDATA_DEMINTERNAL_SUPPORT           (STD_OFF)    /* DemDTCStoredData */
 #define DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT       (STD_OFF)    /* DemUseGetUDSDTCByConfirmedDTCOrder */
-#define DEM_GETOCCURRENCECOUNTER_SUPPORT                (STD_ON)     /* DemUseGetEventOccurrenceCounter */
+#define DEM_GETOCCURRENCECOUNTER_SUPPORT                (STD_OFF)    /* DemUseGetEventOccurrenceCounter */
 
 #define DEM_CYCLEQUALIFIED_SUPPORT                      (STD_OFF)    /* DemOBDSupport */
 #define DEM_PID_SUPPORT                                 (STD_OFF)    /* DemOBDSupport */
@@ -124,7 +124,7 @@
 #define DEM_NVM_SYNC_PROCESS_ENABLE                     (STD_ON)     /* NvM Sync Process */
 
 #define DEM_CLRINFO_RECORD_PADDING_EXIST                (STD_ON)     /* Padding exists in ClearInformation Record */
-#define DEM_EVENT_RECORD_PADDING_EXIST                  (STD_OFF)    /* Padding exists in EventRecord */
+#define DEM_EVENT_RECORD_PADDING_EXIST                  (STD_ON)     /* Padding exists in EventRecord */
 #define DEM_FAULT_RECORD_PADDING_EXIST                  (STD_OFF)    /* Padding exists in FaultRecord */
 #define DEM_IUMPR_RECORD_PADDING_EXIST                  (STD_OFF)    /* Padding exists in IUMPRRecord */
 #define DEM_ALTIUMPR_RECORD_PADDING_EXIST               (STD_OFF)    /* Padding exists in AltIUMPRRecord */

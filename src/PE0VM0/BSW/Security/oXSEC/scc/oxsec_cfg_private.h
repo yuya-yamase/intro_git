@@ -61,6 +61,10 @@ void    vd_g_oXSEC_IRQ_EI(const U4 u4_a_GLI);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 void    vd_g_oXSECCfgErrEvhk(const U4 u4_a_MAE);
 
+#if (OXSEC_AUB_EN_IDSM == 1U)
+U1      u1_g_oXSECCfgQsevTxEnabled(void);
+#endif  /* #if (OXSEC_AUB_EN_IDSM == 1U) */
+
 #if (OXSEC_AUB_EN_SECOC == 1U)
 void    vd_g_oXSECCfgTrCntMax(void);
 #endif  /* #if (OXSEC_AUB_EN_SECOC == 1U) */

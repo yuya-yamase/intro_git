@@ -322,16 +322,12 @@ void    vd_g_oXDoCANTmstpStaTmrwk(void)
 #endif /* OXDOCAN_TIME_CNT_AVAILABLE */
 }
 /*===================================================================================================================================*/
-/*  uint8   u1_g_oXDoCANAubIfTripcnt(uint8 * u1_ap_tripcnt, Dem_MonitorDataType u4_a_mon)                                            */
+/*  uint8   u1_g_oXDoCANAubIfTripcnt(uint8 * u1_ap_tripcnt)                                                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-#if (DEM_READFUNC_MONITORDATA_SUPPORT == STD_ON)
-uint8   u1_g_oXDoCANAubIfTripcnt(uint8 * u1_ap_tripcnt, Dem_MonitorDataType u4_a_mon)
-#else
 uint8   u1_g_oXDoCANAubIfTripcnt(uint8 * u1_ap_tripcnt)
-#endif
 {
     /* ---------------------------------------------------------------------------------------------------- */
     /* Attention                                                                                            */
@@ -351,16 +347,12 @@ uint8   u1_g_oXDoCANAubIfTripcnt(uint8 * u1_ap_tripcnt)
     return((Std_ReturnType)E_OK);
 }
 /*===================================================================================================================================*/
-/*  uint8   u1_g_oXDoCANAubIfOdo(uint8 * u1_ap_odo, Dem_MonitorDataType u4_a_mon)                                                    */
+/*  uint8   u1_g_oXDoCANAubIfOdo(uint8 * u1_ap_odo)                                                                                  */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-#if (DEM_READFUNC_MONITORDATA_SUPPORT == STD_ON)
-uint8   u1_g_oXDoCANAubIfOdo(uint8 * u1_ap_odo, Dem_MonitorDataType u4_a_mon)
-#else
 uint8   u1_g_oXDoCANAubIfOdo(uint8 * u1_ap_odo)
-#endif
 {
     /* ---------------------------------------------------------------------------------------------------- */
     /* Attention                                                                                            */
@@ -380,16 +372,12 @@ uint8   u1_g_oXDoCANAubIfOdo(uint8 * u1_ap_odo)
     return((Std_ReturnType)E_OK);
 }
 /*===================================================================================================================================*/
-/*  uint8   u1_g_oXDoCANAubIfGmt(uint8 * u1_ap_gmt, Dem_MonitorDataType u4_a_mon)                                                    */
+/*  uint8   u1_g_oXDoCANAubIfGmt(uint8 * u1_ap_gmt)                                                                                  */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:                                                                                                                       */
 /*  Return:                                                                                                                          */
 /*===================================================================================================================================*/
-#if (DEM_READFUNC_MONITORDATA_SUPPORT == STD_ON)
-uint8   u1_g_oXDoCANAubIfGmt(uint8 * u1_ap_gmt, Dem_MonitorDataType u4_a_mon)
-#else
 uint8   u1_g_oXDoCANAubIfGmt(uint8 * u1_ap_gmt)
-#endif
 {
     /* ---------------------------------------------------------------------------------------------------- */
     /* Attention                                                                                            */
@@ -458,7 +446,6 @@ U1      u1_g_oXDoCANRebyId_A002(U1 * u1_ap_ans, const U2 u2_a_ELPSD)
 
     return((U1)OXDC_SAL_PROC_FIN);
 }
-#ifdef TYDOCAN_DID_SSR
 /*===================================================================================================================================*/
 /*  U2      u2_g_oXDoCANTmstpTripcnt(void)                                                                                           */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -520,8 +507,6 @@ void    vd_g_oXDoCANTmstpGmt(U1 * u1_ap_gmt, const U4 u4_a_size)
         u1_ap_gmt[OXDC_TMSTP_GMT_IDX_SE] = u1_tp_bcd[OXDC_TMSTP_GMT_IDX_SE];
     }
 }
-#endif /* TYDOCAN_DID_SSR */
-/*===================================================================================================================================*/
 /*  static void    vd_s_oXdcTmstpStampUpdt(const U2 u2_a_TSLOT, const U1 u1_a_TMSTP_POW)                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */

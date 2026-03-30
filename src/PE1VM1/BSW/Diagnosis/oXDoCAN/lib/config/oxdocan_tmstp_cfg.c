@@ -86,14 +86,13 @@ U2      u2_g_oXDoCANTmstpCfgTricRx(void)
     U1                      u1_t_rx_stat;
 
     u2_t_tric_rx = (U2)OXDC_TMSTP_TRIC_UNK;
- 
-#ifdef MSG_BDB1F03_RXCH0  
+
     u1_t_rx_stat = Com_GetIPDUStatus((U2)MSG_BDB1F03_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     (void)Com_ReceiveSignal(ComConf_ComSignal_TRIP_CNT, &u2_t_tric_rx);
     if(u1_t_rx_stat != (U1)0U){
         u2_t_tric_rx = (U2)OXDC_TMSTP_TRIC_UNK;
     }
-#endif
+
     return(u2_t_tric_rx);
 }
 /*===================================================================================================================================*/
@@ -125,7 +124,6 @@ void    vd_g_oXDoCANTmstpCfgOdoRx(U4 * u4_ap_odo_0p1km)
 /*===================================================================================================================================*/
 U1      u1_g_oXDoCANTmstpCfgGmtRx(U1 * u1_ap_gmt)
 {
-#ifdef MSG_RSE1G20_RXCH0
     U1                      u1_t_rx_stat;
     U1                      u1_t_gmt_chk;
     U1                      u1_tp_rx[OXDC_TMSTP_GMT_RX_NBYTE];
@@ -147,9 +145,6 @@ U1      u1_g_oXDoCANTmstpCfgGmtRx(U1 * u1_ap_gmt)
     }
 
     return(u1_t_gmt_chk);
-#else
-    return((U1)FALSE);
-#endif
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_oXDoCANTmstpCfgAccOn(void)                                                                                          */

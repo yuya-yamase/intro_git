@@ -1,7 +1,7 @@
-/* Dcm_Dsp_SID2F_c(v5-3-0)                                                  */
+/* Dcm_Dsp_SID2F_c(v5-8-0)                                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -444,22 +444,26 @@ static FUNC ( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID2F_CancelProc
     P2CONST( Dcm_MsgContextType, AUTOMATIC, DCM_APPL_DATA ) ptMsgContext
 )
 {
+    uint8                           u1_SetReportControlState;
     boolean                         b_UserNotifyFlag;
-    boolean                         b_ReportControlStateOnlyIOCP03;
     boolean                         b_ReportControlState;
     Dcm_NegativeResponseCodeType    u1_ErrorCode;
 
-    b_ReportControlStateOnlyIOCP03 = Dcm_Dsp_Sid2F_bReportControlStateOnlyIOCP03;
+    u1_SetReportControlState = Dcm_Dsp_Sid2F_u1SetReportControlState;
     b_ReportControlState = (boolean)FALSE;
     
-    if( b_ReportControlStateOnlyIOCP03 == (boolean)TRUE )
+    if( u1_SetReportControlState == DCM_DSP_SID2F_CONTROLSTATE_ALLNOSET )
+    {
+        /* No process */
+    }
+    else if( u1_SetReportControlState == DCM_DSP_SID2F_CONTROLSTATE_IOCP03SET )
     {
         if( Dcm_Dsp_SID2F_u1IOCP == DCM_DSP_SID2F_IOCP_SHTTERMADJ )
         {
             b_ReportControlState = (boolean)TRUE;
         }
     }
-    else
+    else /* u1_SetReportControlState == DCM_DSP_SID2F_CONTROLSTATE_ALLSET */
     {
         b_ReportControlState = (boolean)TRUE;
     }
@@ -511,26 +515,30 @@ static FUNC ( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID2F_CancelProc
 )
 {
     uint8                           u1_SignalIndex;
+    uint8                           u1_SetReportControlState;
     boolean                         b_UserNotifyFlag;
-    boolean                         b_ReportControlStateOnlyIOCP03;
     boolean                         b_ReportControlState;
     Dcm_NegativeResponseCodeType    u1_ErrorCode;
     P2VAR( uint8, AUTOMATIC, DCM_APPL_DATA ) pt_ControlMaskInfo;
     
     /* External has only one signal */
     u1_SignalIndex      = (uint8)0U;
-    b_ReportControlStateOnlyIOCP03 = Dcm_Dsp_Sid2F_bReportControlStateOnlyIOCP03;
+    u1_SetReportControlState = Dcm_Dsp_Sid2F_u1SetReportControlState;
     b_ReportControlState = (boolean)FALSE;
     u1_ErrorCode        = DCM_E_GENERALREJECT;
 
-    if( b_ReportControlStateOnlyIOCP03 == (boolean)TRUE )
+    if( u1_SetReportControlState == DCM_DSP_SID2F_CONTROLSTATE_ALLNOSET )
+    {
+        /* No process */
+    }
+    else if( u1_SetReportControlState == DCM_DSP_SID2F_CONTROLSTATE_IOCP03SET )
     {
         if( Dcm_Dsp_SID2F_u1IOCP == DCM_DSP_SID2F_IOCP_SHTTERMADJ )
         {
             b_ReportControlState = (boolean)TRUE;
         }
     }
-    else
+    else /* u1_SetReportControlState == DCM_DSP_SID2F_CONTROLSTATE_ALLSET */
     {
         b_ReportControlState = (boolean)TRUE;
     }
@@ -1489,8 +1497,8 @@ static FUNC ( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID2F_Read_Loop
     Std_ReturnType                  u1_RetVal;
     Std_ReturnType                  u1_RetReadFnc;
     uint8                           u1_LoopCnt;
+    uint8                           u1_SetReportControlState;
     boolean                         b_BreakFlag;
-    boolean                         b_ReportControlStateOnlyIOCP03;
     boolean                         b_ReportControlState;
     Dcm_NegativeResponseCodeType    u1_ErrorCode;
     Dcm_OpStatusType                u1_OpStatusTmp;
@@ -1499,17 +1507,21 @@ static FUNC ( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID2F_Read_Loop
     u1_OpStatusTmp      = u1OpStatus;
     u1_ErrorCode        = (Dcm_NegativeResponseCodeType)0x00U;
     b_BreakFlag         = (boolean)FALSE;
-    b_ReportControlStateOnlyIOCP03 = Dcm_Dsp_Sid2F_bReportControlStateOnlyIOCP03;
+    u1_SetReportControlState = Dcm_Dsp_Sid2F_u1SetReportControlState;
     b_ReportControlState = (boolean)FALSE;
 
-    if( b_ReportControlStateOnlyIOCP03 == (boolean)TRUE )
+    if( u1_SetReportControlState == DCM_DSP_SID2F_CONTROLSTATE_ALLNOSET )
+    {
+        /* No process */
+    }
+    else if( u1_SetReportControlState == DCM_DSP_SID2F_CONTROLSTATE_IOCP03SET )
     {
         if( Dcm_Dsp_SID2F_u1IOCP == DCM_DSP_SID2F_IOCP_SHTTERMADJ )
         {
             b_ReportControlState = (boolean)TRUE;
         }
     }
-    else
+    else /* u1_SetReportControlState == DCM_DSP_SID2F_CONTROLSTATE_ALLSET */
     {
         b_ReportControlState = (boolean)TRUE;
     }
@@ -1592,9 +1604,9 @@ static FUNC ( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID2F_Read_LoopBool
     uint8                           u1_LoopCnt;
     uint8                           u1_BoolResData;
     uint8                           u1_ResControlState;
+    uint8                           u1_SetReportControlState;
     uint16                          u2_Pos;
     boolean                         b_BreakFlag;
-    boolean                         b_ReportControlStateOnlyIOCP03;
     boolean                         b_ReportControlState;
     Dcm_NegativeResponseCodeType    u1_ErrorCode;
     Dcm_OpStatusType                u1_OpStatusTmp;
@@ -1603,17 +1615,21 @@ static FUNC ( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID2F_Read_LoopBool
     u1_OpStatusTmp      = u1OpStatus;
     u1_ErrorCode        = (Dcm_NegativeResponseCodeType)0x00U;
     b_BreakFlag         = (boolean)FALSE;
-    b_ReportControlStateOnlyIOCP03 = Dcm_Dsp_Sid2F_bReportControlStateOnlyIOCP03;
+    u1_SetReportControlState = Dcm_Dsp_Sid2F_u1SetReportControlState;
     b_ReportControlState = (boolean)FALSE;
 
-    if( b_ReportControlStateOnlyIOCP03 == (boolean)TRUE )
+    if( u1_SetReportControlState == DCM_DSP_SID2F_CONTROLSTATE_ALLNOSET )
+    {
+        /* No process */
+    }
+    else if( u1_SetReportControlState == DCM_DSP_SID2F_CONTROLSTATE_IOCP03SET )
     {
         if( Dcm_Dsp_SID2F_u1IOCP == DCM_DSP_SID2F_IOCP_SHTTERMADJ )
         {
             b_ReportControlState = (boolean)TRUE;
         }
     }
-    else
+    else /* u1_SetReportControlState == DCM_DSP_SID2F_CONTROLSTATE_ALLSET */
     {
         b_ReportControlState = (boolean)TRUE;
     }
@@ -1708,24 +1724,28 @@ static FUNC ( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID2F_Read_External
     Std_ReturnType                  u1_RetReadFnc;
     Dcm_NegativeResponseCodeType    u1_ErrorCode;
     uint8                           u1_SignalIndex;
-    boolean                         b_ReportControlStateOnlyIOCP03;
+    uint8                           u1_SetReportControlState;
     boolean                         b_ReportControlState;
 
     u1_RetVal           = E_OK;
     u1_ErrorCode        = DCM_E_GENERALREJECT;
-    b_ReportControlStateOnlyIOCP03 = Dcm_Dsp_Sid2F_bReportControlStateOnlyIOCP03;
+    u1_SetReportControlState = Dcm_Dsp_Sid2F_u1SetReportControlState;
     b_ReportControlState = (boolean)FALSE;
     /* External has only one signal */
     u1_SignalIndex      = (uint8)0U;
 
-    if( b_ReportControlStateOnlyIOCP03 == (boolean)TRUE )
+    if( u1_SetReportControlState == DCM_DSP_SID2F_CONTROLSTATE_ALLNOSET )
+    {
+        /* No process */
+    }
+    else if( u1_SetReportControlState == DCM_DSP_SID2F_CONTROLSTATE_IOCP03SET )
     {
         if( Dcm_Dsp_SID2F_u1IOCP == DCM_DSP_SID2F_IOCP_SHTTERMADJ )
         {
             b_ReportControlState = (boolean)TRUE;
         }
     }
-    else
+    else /* u1_SetReportControlState == DCM_DSP_SID2F_CONTROLSTATE_ALLSET */
     {
         b_ReportControlState = (boolean)TRUE;
     }
@@ -1784,12 +1804,16 @@ static FUNC( uint16, DCM_CODE ) Dcm_Dsp_SID2F_GetCtrlStateLenforResData
     const uint16 u2CtrlStateLen
 )
 {
+    uint8           u1_SetReportControlState;
     uint16          u2_CtrlStateLenforResData;
-    boolean         b_ReportControlStateOnlyIOCP03;
     
-    b_ReportControlStateOnlyIOCP03 = Dcm_Dsp_Sid2F_bReportControlStateOnlyIOCP03;
+    u1_SetReportControlState = Dcm_Dsp_Sid2F_u1SetReportControlState;
 
-    if( b_ReportControlStateOnlyIOCP03 == (boolean)TRUE )
+    if( u1_SetReportControlState == DCM_DSP_SID2F_CONTROLSTATE_ALLNOSET )
+    {
+        u2_CtrlStateLenforResData = (uint16)0U;
+    }
+    else if( u1_SetReportControlState == DCM_DSP_SID2F_CONTROLSTATE_IOCP03SET )
     {
         if( Dcm_Dsp_SID2F_u1IOCP == DCM_DSP_SID2F_IOCP_SHTTERMADJ )
         {
@@ -1800,7 +1824,7 @@ static FUNC( uint16, DCM_CODE ) Dcm_Dsp_SID2F_GetCtrlStateLenforResData
             u2_CtrlStateLenforResData = (uint16)0U;
         }
     }
-    else
+    else /* u1_SetReportControlState == DCM_DSP_SID2F_CONTROLSTATE_ALLSET */
     {
          u2_CtrlStateLenforResData = u2CtrlStateLen;
     }
@@ -1821,6 +1845,7 @@ static FUNC( uint16, DCM_CODE ) Dcm_Dsp_SID2F_GetCtrlStateLenforResData
 /*  v4-0-0         :2020-12-23                                              */
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
+/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

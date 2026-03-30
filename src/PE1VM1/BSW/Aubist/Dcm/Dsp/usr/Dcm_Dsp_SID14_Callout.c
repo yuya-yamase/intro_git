@@ -78,18 +78,8 @@ FUNC( Std_ReturnType, DCM_CODE_CALLOUT ) Dem_ClearDTCCheckFnc
 
     Std_ReturnType u1_RetVal;
 
-#if(OXDC_SID14_NR_22_USE == OXDC_USE)
-    u1_RetVal = u1_g_oXDoCANClearDTCChk();
-    if(u1_RetVal == (Std_ReturnType)E_NOT_OK){
-        (*ptErrorCode) = DCM_E_CONDITIONSNOTCORRECT;
-    }
-    else{
-        vd_g_oXDoCANAubIfDtcEvmAct((uint8)OXDC_DTC_EVM_S14);
-    }
-#else
     vd_g_oXDoCANAubIfDtcEvmAct((uint8)OXDC_DTC_EVM_S14);
     u1_RetVal       = E_OK;
-#endif
 
     return u1_RetVal;
 	

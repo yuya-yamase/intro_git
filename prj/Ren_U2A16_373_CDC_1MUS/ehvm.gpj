@@ -5,24 +5,7 @@ primaryTarget=v800_standalone.tgt
     :optionsFile=../ghs_ccal_rh850g4mh.opt
     -object_dir=obj/ehvm
 
-    # --------------------------------------
-    # EHVM/Hv Options
-    # --------------------------------------
-    -DEHVM_CORE_NUM=4U
-    -DEHVM_CORE_NUM_2=2U
-    -DEHVM_CORE_NUM_4=4U
-    -DEHVM_TARGET_U2A
-    # --------------------------------------
-    # --------------------------------------
-    # System/22SS Options
-    # --------------------------------------
-    -DECU_HOST
-    # --------------------------------------
-
-    {isdefined(__GMM_AIP_THROUGHPUT__)} -D__AIP_THROUGHPUT__=${__GMM_AIP_THROUGHPUT__}
-
     -o dst/ehvm.elf
-
 
     :macro=GCLI_PAR="0x003c0000 0x003fffff 0xff -start 0x003c0000 -end 0x003fffff"
     :macro=GCLI_MOT="gsrec -sort -S3 -noS5 -bytes 16 -pad1"
@@ -44,6 +27,6 @@ sub/ehvm_bsw.gpj
 
 # ----------------------------------------------------------------------------------------------------------------------------------
 # ghsprj version 1-1-0
-# Date generated: 2026/01/22 23:22:22
+# Date generated: 2026/02/26 15:33:34
 # ----------------------------------------------------------------------------------------------------------------------------------
 

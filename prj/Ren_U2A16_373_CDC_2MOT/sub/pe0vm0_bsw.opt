@@ -73,12 +73,6 @@
     -I../../src/PE0VM0/BSW/Aubist/CycurHSM/ecy_hsm_RH850_GHS_D7_DM/api
 ###    -I../../src/PE0VM0/BSW/Aubist/CycurHSM/ecy_hsm_RH850_GHS_D7_DM/bin
 ###    -I../../src/PE0VM0/BSW/Aubist/E2E/inc
-###    -I../../src/PE0VM0/BSW/Aubist/Fee/cfg
-###    -I../../src/PE0VM0/BSW/Aubist/Fee/inc
-###    -I../../src/PE0VM0/BSW/Aubist/Fee/usr
-###    -I../../src/PE0VM0/BSW/Aubist/Fls/cfg
-###    -I../../src/PE0VM0/BSW/Aubist/Fls/inc
-###    -I../../src/PE0VM0/BSW/Aubist/Fls/usr
 ###    -I../../src/PE0VM0/BSW/Aubist/inc                    should be defined as first in order to reduce compilation time
 ###    -I../../src/PE0VM0/BSW/Aubist/inc/bswm_can
 ###    -I../../src/PE0VM0/BSW/Aubist/inc/bswm_cs
@@ -105,21 +99,8 @@
 ###    -I../../src/PE0VM0/BSW/Aubist/IpduM/inc
 ###    -I../../src/PE0VM0/BSW/Aubist/LdCom/cfg
 ###    -I../../src/PE0VM0/BSW/Aubist/LdCom/inc
-###    -I../../src/PE0VM0/BSW/Aubist/Mem/inc
-###    -I../../src/PE0VM0/BSW/Aubist/Mem/usr
-###    -I../../src/PE0VM0/BSW/Aubist/MemAcc/cfg
-###    -I../../src/PE0VM0/BSW/Aubist/MemAcc/inc
-###    -I../../src/PE0VM0/BSW/Aubist/MemAcc/usr
-###    -I../../src/PE0VM0/BSW/Aubist/MemIf/cfg
-###    -I../../src/PE0VM0/BSW/Aubist/MemIf/inc
-###    -I../../src/PE0VM0/BSW/Aubist/Mscd/cfg
-###    -I../../src/PE0VM0/BSW/Aubist/Mscd/inc
-###    -I../../src/PE0VM0/BSW/Aubist/Mscd/usr
 ###    -I../../src/PE0VM0/BSW/Aubist/Nm/cfg
 ###    -I../../src/PE0VM0/BSW/Aubist/Nm/inc
-###    -I../../src/PE0VM0/BSW/Aubist/NvM/cfg
-###    -I../../src/PE0VM0/BSW/Aubist/NvM/inc
-###    -I../../src/PE0VM0/BSW/Aubist/NvM/usr
 ###    -I../../src/PE0VM0/BSW/Aubist/Os/source/config/hal/board/yrh850x2xmbt1
 ###    -I../../src/PE0VM0/BSW/Aubist/Os/source/config/hal/chip/rh850u2a/mcos
 ###    -I../../src/PE0VM0/BSW/Aubist/Os/source/config/hal/chip/rh850u2a
@@ -214,12 +195,6 @@
     -I../../src/PE0VM0/BSW/MCAL/Ren_U2Ax/Common/Pwm/scc
     -I../../src/PE0VM0/BSW/MCAL/Ren_U2Ax/Common/SPI/scc
     -I../../src/PE0VM0/BSW/MCAL/Ren_U2Ax/Common/Wdg/scc
-###    -I../../src/PE0VM0/BSW/Memory/Nvmc/core/config/Common
-###    -I../../src/PE0VM0/BSW/Memory/Nvmc/core/config/Ren_U2A
-###    -I../../src/PE0VM0/BSW/Memory/Nvmc/core/scc/Common
-###    -I../../src/PE0VM0/BSW/Memory/Nvmc/core/scc/Ren_U2A
-###    -I../../src/PE0VM0/BSW/Memory/Nvmc/module/config_Ren_U2A
-###    -I../../src/PE0VM0/BSW/Memory/Nvmc/module/scc
     -I../../src/PE0VM0/BSW/Memory/Rim/config
     -I../../src/PE0VM0/BSW/Memory/Rim/scc
     -I../../src/PE0VM0/BSW/Security/oXSEC/config
@@ -237,6 +212,6 @@
 
 # ----------------------------------------------------------------------------------------------------------------------------------
 # ghsprj version 1-1-0
-# Date generated: 2026/01/22 23:22:22
+# Date generated: 2026/02/26 15:33:34
 # ----------------------------------------------------------------------------------------------------------------------------------
 

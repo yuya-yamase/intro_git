@@ -60,18 +60,9 @@ typedef struct{
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if (OXDC_IDS_REQ_SUP == 1U)
-static U1        u1_s_tydc_security_chk;                                     /* Tool authentication error DTC */
-static U2        u2_s_tydc_security_ctx;
-
-static U4        u4_s_tydc_security_evt_cnt;
-#endif      /* #if (OXCAN_IDS_REQ_SUP == 1U) */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if (OXDC_IDS_REQ_SUP == 1U)
-static void      vd_s_TyDoCANSecCfgEvCapt_U2B76(const U1 u1_a_SECID, const U1 u1_a_NRC);
-#endif      /* #if (OXCAN_IDS_REQ_SUP == 1U) */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -86,20 +77,7 @@ static void      vd_s_TyDoCANSecCfgEvCapt_U2B76(const U1 u1_a_SECID, const U1 u1
 /*===================================================================================================================================*/
 void   vd_g_TyDoCANSecurityCfgInit(void)
 {
-#if (OXDC_IDS_REQ_SUP == 1U)
-    U1                      u1_t_ret;
 
-    u1_s_tydc_security_chk         = (U1)OXDC_DTC_TR_UNK;
-    u2_s_tydc_security_ctx         = (U2)0x0000U;
-#ifdef OXDOCAN_27_IN_VM1
-    u1_t_ret = u1_g_Nvmc_ReadU4withSts((U2)NVMCID_U4_OXDC_TAECNT_001, &u4_s_tydc_security_evt_cnt);
-    if(u1_t_ret != (U1)NVMC_STATUS_COMP){
-        u4_s_tydc_security_evt_cnt = (U4)0U;
-    }
-#else
-    u4_s_tydc_security_evt_cnt = 0U;
-#endif
-#endif      /* #if (OXCAN_IDS_REQ_SUP == 1U) */
 }
 /*===================================================================================================================================*/
 /*  U1   u1_g_TyDoCANSecurityCfgGetSeed(const U1 u1_a_ID, const Dcm_OpStatusType OpStatus, U1 * u1_ap_seed)                          */
@@ -160,92 +138,6 @@ U1     u1_g_TyDoCANSecurityCfgCompareKey(const U1 u1_a_ID, const U1 * u1_ap_KEY)
 
     return(u1_t_ret);
 }
-#if (OXDC_IDS_REQ_SUP == 1U)
-/*===================================================================================================================================*/
-/*  void   vd_g_TyDoCANSecurityCfgEventReg(const U1 u1_a_ID, const U1 u1_a_err)                                                      */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_TyDoCANSecurityCfgEventReg(const U1 u1_a_ID, const U1 u1_a_err)
-{
-    u1_s_tydc_security_chk = (U1)OXDC_DTC_TR_ACT;
-    vd_s_TyDoCANSecCfgEvCapt_U2B76(u1_a_ID, u1_a_err);
-    if(u4_s_tydc_security_evt_cnt < (U4)U4_MAX){
-        u4_s_tydc_security_evt_cnt++;
-    }
-#ifdef OXDOCAN_27_IN_VM1    
-    vd_g_Nvmc_WriteU4((U2)NVMCID_U4_OXDC_TAECNT_001, u4_s_tydc_security_evt_cnt);
-#endif
-}
-/*===================================================================================================================================*/
-/*  static void    vd_s_TyDoCANSecCfgEvCapt_U2B76(const U1 u1_a_SECID, const U1 u1_a_NRC)                                            */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_TyDoCANSecCfgEvCapt_U2B76(const U1 u1_a_SECID, const U1 u1_a_NRC)
-{
-    U1                       u1_t_lv;
-
-    if((u1_a_SECID >= (U1)OXDC_SECURITY_ID01) && (u1_a_SECID <= (U1)OXDC_SECURITY_ID63)){
-        u1_t_lv = st_sp_TYDC_SECURITY_KEYCFG[u1_a_SECID - (U1)1U].u1_level;
-    } 
-    else{
-        u1_t_lv = (U1)0xFFU;
-    }
-
-    u2_s_tydc_security_ctx = ((U2)u1_a_NRC << 8U) | (U2)u1_t_lv;
-}
-/*===================================================================================================================================*/
-/*  U1      u1_g_oXDoCANDtcTrchk_U2B76(const U2 u2_a_ELPSD)                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_oXDoCANDtcTrchk_U2B76(const U2 u2_a_ELPSD)
-{
-    if(u1_s_tydc_security_chk == (U1)OXDC_DTC_TR_ACT){
-#ifdef OXDOCAN_27_IN_VM1        
-        (void)Dem_SetEventFailedWithSyncFreezeFrame((Dem_EventIdType)DemConf_DemEventParameter_DemEventDTC_U2B76);
-        u2_s_tydc_security_ctx        = (U2)0x0000U;
-        u1_s_tydc_security_chk        = (U1)OXDC_DTC_TR_INA;
-#endif
-    }
-
-    return((U1)OXDC_DTC_TR_UNK);
-}
-/*===================================================================================================================================*/
-/*  uint8   u1_g_oXDoCANAubIfTangFactor(uint8 * u1_ap_factor, Dem_MonitorDataType u4_a_mon)                                           */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:                                                                                                                       */
-/*  Return:                                                                                                                          */
-/*===================================================================================================================================*/
-uint8   u1_g_oXDoCANAubIfTangFactor(uint8 * u1_ap_factor, Dem_MonitorDataType u4_a_mon)
-{
-    if(u1_ap_factor != vdp_PTR_NA){
-        u1_ap_factor[0] = (U1)(u2_s_tydc_security_ctx >> 8U);
-        u1_ap_factor[1] = (U1)((u2_s_tydc_security_ctx      ) & (U2)0x00FFU);
-    }
-
-    return((uint8)E_OK);
-}
-/*===================================================================================================================================*/
-/*  U1      u1_g_oXDoCANRebyId_A9F6(U1 * u1_ap_ans, const U2 u2_a_ELPSD)                                                             */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_oXDoCANRebyId_A9F6(U1 * u1_ap_ans, const U2 u2_a_ELPSD)
-{
-    u1_ap_ans[0U] = (U1)(u4_s_tydc_security_evt_cnt >> 24U);
-    u1_ap_ans[1U] = (U1)(u4_s_tydc_security_evt_cnt >> 16U);
-    u1_ap_ans[2U] = (U1)(u4_s_tydc_security_evt_cnt >>  8U);
-    u1_ap_ans[3U] = (U1)u4_s_tydc_security_evt_cnt;
-
-    return((U1)OXDC_SAL_PROC_FIN);
-}
-#endif      /* #if (OXCAN_IDS_REQ_SUP == 1U) */
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
