@@ -58,6 +58,10 @@
 #define FWUPX_SHIFT_BIT                       (8U)
 #define FWUPX_WORD_SIZE                       (4U)
 
+#define FWUPX_REQ_SUBTYPE_OFFSET              (0U)
+#define FWUPX_REQ_LB_OFFSET                   (1U)
+#define FWUPX_REQ_PREP_SIZE                   (FWUPX_WRI_PREP_DATA_SIZE + FWUPX_WRI_PREP_DATA_START)
+#define FWUPX_REQ_RUN_SIZE                    (FWUPX_WRI_RUN_DATA_SIZE + FWUPX_WRI_RUN_DATA_START)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
