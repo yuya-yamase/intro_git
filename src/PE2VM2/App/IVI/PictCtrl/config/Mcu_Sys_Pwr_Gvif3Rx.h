@@ -13,8 +13,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define MCU_SYS_PWR_GVIF3RX_SLAVEADR_WR                        (0x46U)
 #define MCU_SYS_PWR_GVIF3RX_SLAVEADR_RD                        (0x47U)
-#define MCU_SYS_PWR_GVIF3RX_REG_INIT_NUM                       (107U)
-#define MCU_SYS_PWR_GVIF3RX_REG_CAMKIND_NUM                    (13U)
+#define MCU_SYS_PWR_GVIF3RX_REG_INIT_NUM                       (108U)
+#define MCU_SYS_PWR_GVIF3RX_REG_CAMKIND_NUM                    (14U)
 #define MCU_SYS_PWR_GVIF3RX_REG_TXDAT_NUM                      (3U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
