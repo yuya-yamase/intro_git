@@ -48,6 +48,7 @@ static void vd_s_FwushHandleInvalidReq(void);
 
 static U1 u1_s_FwushCheckValidArea(void);
 static U1 u1_s_FwushCheckPrepTarget(U4 *u4_ap_adr);
+static U1 u1_s_FwushCheckRunTarget(U4 *u4_ap_adr, U2 *u2_ap_ofst);
 
 /* CANCEL handlers */
 static void vd_s_FwushHandleCancel(void);
@@ -343,16 +344,16 @@ static void vd_s_FwushHandleEraseReq(void)
         vd_g_FwushResetSeqProgress();
         vd_g_FwushUpdateFswaStat();
 
-        u1_t_result = u1_g_FwuMemAccEraseReq(u1_gp_fwush_header[FWUSH_REQ_PREP_CUR_TARGET_OFFSET], u4_g_fwush_prep_data_crc);
+        u1_t_result = u1_g_FwuMemAccEraseReq(u1_gp_fwush_header[FWUSH_REQ_CUR_TARGET_OFFSET], u4_g_fwush_prep_data_crc);
         if(u1_t_result != (U1)FWUMEMACC_RET_OK){
             u1_g_fwush_abort     = (U1)TRUE;
             u1_g_fwush_error_log = u1_g_FwushMapMemAccErrorToAck();
         }
         else if(u2_g_fwush_veri_stat == (U2)FWUSH_VERI_LB_STAT_INIT){
-            u1_g_fwush_veri_target = u1_gp_fwush_header[FWUSH_REQ_PREP_CUR_TARGET_OFFSET];
-            vd_g_FwushUpdateVeriStat(u1_gp_fwush_header[FWUSH_REQ_PREP_ALL_TARGET_OFFSET], (U1)FWUSH_VERI_LB_NONE);
+            u1_g_fwush_veri_target = u1_gp_fwush_header[FWUSH_REQ_CUR_TARGET_OFFSET];
+            vd_g_FwushUpdateVeriStat(u1_gp_fwush_header[FWUSH_REQ_ALL_TARGET_OFFSET], (U1)FWUSH_VERI_LB_NONE);
         }else{
-            u1_g_fwush_veri_target = u1_gp_fwush_header[FWUSH_REQ_PREP_CUR_TARGET_OFFSET];
+            u1_g_fwush_veri_target = u1_gp_fwush_header[FWUSH_REQ_CUR_TARGET_OFFSET];
         }
     }
     else{
@@ -368,12 +369,12 @@ static void vd_s_FwushHandleEraseReq(void)
 /*===================================================================================================================================*/
 static void vd_s_FwushHandleRunReq(void)
 {
-    U1 u1_t_read_ok;
+    U1 u1_t_ack;
     U4 u4_t_adr;
     U1 u1_t_result;
 
-    u1_t_read_ok = u1_g_FwushMakeRunData(&u4_t_adr, &u2_g_fwush_run_ofst);
-    if(u1_t_read_ok == (U1)TRUE){
+    u1_t_ack = u1_s_FwushCheckRunTarget(&u4_t_adr, &u2_g_fwush_run_ofst);
+    if(u1_t_ack == (U1)FWUSH_ACK_OK){
         u1_t_result = u1_g_FwuMemAccUpdateReq(u2_g_fwush_run_ofst, (const U4 *)u4_t_adr);
         if(u1_t_result != (U1)FWUMEMACC_RET_OK){
             u1_g_fwush_abort     = (U1)TRUE;
@@ -382,7 +383,7 @@ static void vd_s_FwushHandleRunReq(void)
     }
     else{
         u1_g_fwush_abort     = (U1)TRUE;
-        u1_g_fwush_error_log = (U1)FWUSH_ACK_PRECONDITION_ERR;
+        u1_g_fwush_error_log = (U1)u1_t_ack;
     }
 }
 /*===================================================================================================================================*/
@@ -393,6 +394,13 @@ static void vd_s_FwushHandleRunReq(void)
 /*===================================================================================================================================*/
 static void vd_s_FwushHandleVerifyReq(void)
 {
+    U1 u1_t_cur_target;
+
+    u1_t_cur_target = u1_gp_fwush_header[FWUSH_REQ_CUR_TARGET_OFFSET];
+    if(u1_t_cur_target != u1_g_fwush_veri_target){
+        u1_g_fwush_abort     = (U1)TRUE;
+        u1_g_fwush_error_log = (U1)FWUSH_ACK_LB_ERR;
+    }
 }
 /*===================================================================================================================================*/
 /* static void vd_s_FwushHandleActivateReq(void)                                                                                     */
@@ -528,8 +536,8 @@ static U1 u1_s_FwushCheckPrepTarget(U4 *u4_ap_adr)
         u1_t_ack = (U1)FWUSH_ACK_PRECONDITION_ERR;
     }
     else{
-        u1_t_cur_target = u1_gp_fwush_header[FWUSH_REQ_PREP_CUR_TARGET_OFFSET];
-        u1_t_all_target = u1_gp_fwush_header[FWUSH_REQ_PREP_ALL_TARGET_OFFSET];
+        u1_t_cur_target = u1_gp_fwush_header[FWUSH_REQ_CUR_TARGET_OFFSET];
+        u1_t_all_target = u1_gp_fwush_header[FWUSH_REQ_ALL_TARGET_OFFSET];
 
         if(u1_t_all_target == (U1)FWUSH_VERI_LB_NONE){
             u1_t_ack = (U1)FWUSH_ACK_NO_REPRO_TARGET;
@@ -537,6 +545,37 @@ static U1 u1_s_FwushCheckPrepTarget(U4 *u4_ap_adr)
         else if(((u1_t_cur_target & u1_t_all_target) != u1_t_cur_target) ||
                 ((u1_t_cur_target & u1_s_FWUSH_LB_VALID_MASK) != u1_t_cur_target) ||
                 ((u1_t_all_target & u1_s_FWUSH_LB_VALID_MASK) != u1_t_all_target)){
+            u1_t_ack = (U1)FWUSH_ACK_LB_ERR;
+        }
+        else{
+            u1_t_ack = (U1)FWUSH_ACK_OK;
+        }
+    }
+
+    return(u1_t_ack);
+}
+
+/*===================================================================================================================================*/
+/* static U1 u1_s_FwushCheckRunTarget(U4 *u4_ap_adr, U2 *u2_ap_ofst)                                                                 */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      U4 *u4_ap_adr  : Pointer to receive data address from FwushMakeRunData                                           */
+/*                  U2 *u2_ap_ofst : Pointer to receive block offset from FwushMakeRunData                                           */
+/*  Return:         U1 : FWUSH_ACK_OK / FWUSH_ACK_PRECONDITION_ERR / FWUSH_ACK_LB_ERR                                                */
+/*===================================================================================================================================*/
+static U1 u1_s_FwushCheckRunTarget(U4 *u4_ap_adr, U2 *u2_ap_ofst)
+{
+    U1 u1_t_read_ok;
+    U1 u1_t_cur_target;
+    U1 u1_t_ack;
+
+    u1_t_read_ok = u1_g_FwushMakeRunData(u4_ap_adr, u2_ap_ofst);
+    if(u1_t_read_ok == (U1)FALSE){
+        u1_t_ack = (U1)FWUSH_ACK_PRECONDITION_ERR;
+    }
+    else{
+        u1_t_cur_target = u1_gp_fwush_header[FWUSH_REQ_CUR_TARGET_OFFSET];
+
+        if(u1_t_cur_target != u1_g_fwush_veri_target){
             u1_t_ack = (U1)FWUSH_ACK_LB_ERR;
         }
         else{

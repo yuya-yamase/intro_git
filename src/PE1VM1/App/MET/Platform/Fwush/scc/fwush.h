@@ -52,11 +52,11 @@
 
 /* Request frame offset */
 #define FWUSH_REQ_SUBTYPE_OFFSET                (0U)
-#define FWUSH_REQ_SEQCNT_OFFSET                 (7U)
-#define FWUSH_REQ_PREP_CUR_TARGET_OFFSET        (1U)
-#define FWUSH_REQ_PREP_ALL_TARGET_OFFSET        (2U)
-#define FWUSH_REQ_PREP_DATA_CRC_OFFSET          (0U)
+#define FWUSH_REQ_CUR_TARGET_OFFSET             (1U)
+#define FWUSH_REQ_ALL_TARGET_OFFSET             (2U)
 #define FWUSH_REQ_RUN_BLKOFS_OFFSET             (3U)
+#define FWUSH_REQ_SEQCNT_OFFSET                 (7U)
+#define FWUSH_REQ_PREP_DATA_CRC_OFFSET          (0U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
