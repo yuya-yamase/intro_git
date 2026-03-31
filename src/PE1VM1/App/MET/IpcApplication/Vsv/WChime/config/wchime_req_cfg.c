@@ -114,8 +114,6 @@ U4                           u4_gp_wchime_evtmsk[WCHIME_REQBIT_NUM_WORD]; /* Bit
                                                                           /* or lower-priority event (Single) buzzer.                */
 U2                           u2_gp_wchime_wt_tim[WCHIME_NUM_CH];          /* Result of wait time(silent duration) at last judgement. */
 
-static U1                    u1_s_wchime_rcta_vol;                        /* Last volume kind of RCTA.                               */
-
 U1                           u1_g_wchime_silencetime_flag;                /*  silencetime_flag                                       */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -133,10 +131,10 @@ static U1   u1_s_wChimeCfgClesonVolGet(const U1 u1_a_REQ_SEL);
 const U4                     u4_gp_WCHIME_REQBIT_SIN[WCHIME_REQBIT_NUM_WORD] = {                    /* Bitmap of single buzzer.      */
     (U4)0x00000020U,
     (U4)0x01410000U,
-    (U4)0x81407FFEU,
-    (U4)0x14F9E9E1U,
-    (U4)0xF3FF91EBU,
-    (U4)0x00003FFFU
+    (U4)0x0280FFFEU,
+    (U4)0x53E793C3U,
+    (U4)0xCFFE47ACU,
+    (U4)0x0000FFFFU
 };
 
 const U4                     u4_gp_WCHIME_REQBIT_PRIFREE[WCHIME_REQBIT_NUM_WORD] = {               /* Bitmap of priority-free buzzer.*/
@@ -145,7 +143,7 @@ const U4                     u4_gp_WCHIME_REQBIT_PRIFREE[WCHIME_REQBIT_NUM_WORD]
     (U4)0x00000000U,
     (U4)0x00000000U,
     (U4)0x00000000U,
-    (U4)0x000007E0U
+    (U4)0x00001F80U
 };
 const U1                     u1_g_WCHIME_REQBIT_NUM_WORD = (U1)WCHIME_REQBIT_NUM_WORD;
 const U1                     u1_g_WCHIME_NUM_REQ         = (U1)WCHIME_NUM_REQ;
@@ -154,10 +152,10 @@ const U1                     u1_g_WCHIME_NUM_REQ         = (U1)WCHIME_NUM_REQ;
 static const U4              u4_sp_WCHIME_REQBIT_BAT_ON[WCHIME_REQBIT_NUM_WORD] = {               /* Bitmap of +B-ON start buzzer.   */
     (U4)0x00000800U,
     (U4)0x00410042U,
-    (U4)0x00085000U,
-    (U4)0x18120000U,
-    (U4)0x80000808U,
-    (U4)0x000007F7U
+    (U4)0x0010A000U,
+    (U4)0x60480000U,
+    (U4)0x00002020U,
+    (U4)0x00001FDEU
 };
 
 static const U4              u4_sp_WCHIME_REQBIT_IGN_ON[WCHIME_REQBIT_NUM_WORD] = {               /* Bitmap of IG-ON start buzzer.   */
@@ -166,7 +164,7 @@ static const U4              u4_sp_WCHIME_REQBIT_IGN_ON[WCHIME_REQBIT_NUM_WORD] 
     (U4)0xFFFFFFFFU,
     (U4)0xFFFFFFFFU,
     (U4)0xFFFFFFFFU,
-    (U4)0x0000FFFFU
+    (U4)0x0003FFFFU
 };
 
 const U4 * const             u4p_gp_WCHIME_REQBIT_BY_OPEMD[WCHIME_NUM_OPEMD] = {
@@ -255,6 +253,7 @@ const ST_WCHIME_MM_INFO      st_gp_WCHIME_BUZ_OUTPUT_INFO[WCHIME_NUM_REQ] = {
     {(U1)WCHIME_BUZ_LV4,     (U1)WCHIME_BUZ_SHORT,   (U1)WCHIME_BUZ_EMOFF},    /* WCHIME_REQ_SI_APP_CMPLT          */
     {(U1)WCHIME_BUZ_LV4,     (U1)WCHIME_BUZ_SHORT,   (U1)WCHIME_BUZ_EMOFF},    /* WCHIME_REQ_SI_DCLDSP_OPERJCT     */
     {(U1)WCHIME_BUZ_LV4,     (U1)WCHIME_BUZ_SHORT,   (U1)WCHIME_BUZ_EMOFF},    /* WCHIME_REQ_SI_LCS_ACK            */
+    {(U1)WCHIME_BUZ_LV4,     (U1)WCHIME_BUZ_SHORT,   (U1)WCHIME_BUZ_EMOFF},    /* WCHIME_REQ_SI_BSTMOD_RJCT        */
     {(U1)WCHIME_BUZ_LV4,     (U1)WCHIME_BUZ_SHORT,   (U1)WCHIME_BUZ_EMOFF},    /* WCHIME_REQ_SI_DOA_RJCT           */
     {(U1)WCHIME_BUZ_LV4,     (U1)WCHIME_BUZ_SHORT,   (U1)WCHIME_BUZ_EMOFF},    /* WCHIME_REQ_SI_MET_WRN_VOL_CSTM   */
     {(U1)WCHIME_BUZ_LV4,     (U1)WCHIME_BUZ_SHORT,   (U1)WCHIME_BUZ_EMOFF},    /* WCHIME_REQ_SI_SBW_SPL_STATE      */
@@ -288,6 +287,7 @@ const ST_WCHIME_MM_INFO      st_gp_WCHIME_BUZ_OUTPUT_INFO[WCHIME_NUM_REQ] = {
     {(U1)WCHIME_BUZ_LV4,     (U1)WCHIME_BUZ_LONG,    (U1)WCHIME_BUZ_EMOFF},    /* WCHIME_REQ_IN_TMBZR_TEN_PRI4     */
     {(U1)WCHIME_BUZ_LV3,     (U1)WCHIME_BUZ_SHORT,   (U1)WCHIME_BUZ_EMOFF},    /* WCHIME_REQ_SI_MINDSPWR_LV1       */
     {(U1)WCHIME_BUZ_LV3,     (U1)WCHIME_BUZ_LONG,    (U1)WCHIME_BUZ_EMOFF},    /* WCHIME_REQ_IN_SBLT_LV1           */
+    {(U1)WCHIME_BUZ_LV3,     (U1)WCHIME_BUZ_LONG,    (U1)WCHIME_BUZ_EMOFF},    /* WCHIME_REQ_IN_SBLT_MISUSE        */
     {(U1)WCHIME_BUZ_LV3,     (U1)WCHIME_BUZ_SHORT,   (U1)WCHIME_BUZ_EMOFF},    /* WCHIME_REQ_SI_SBLT               */
     {(U1)WCHIME_BUZ_LV3,     (U1)WCHIME_BUZ_SHORT,   (U1)WCHIME_BUZ_EMOFF},    /* WCHIME_REQ_SI_RSA_SIGN_CTN1      */
     {(U1)WCHIME_BUZ_LV3,     (U1)WCHIME_BUZ_SHORT,   (U1)WCHIME_BUZ_EMOFF},    /* WCHIME_REQ_SI_DMC_LV1            */
@@ -436,6 +436,7 @@ static const U1              u1_sp2_WCHIME_REQ_VOL_INFO[WCHIME_NUM_REQ][WCHIME_V
     {  (U1)WCHIME_VOL_BASE_NOTICE1_MID,      (U1)WCHIME_VOL_BASE_NOTICE1_MID,      (U1)WCHIME_VOL_BASE_NOTICE1_MAX       },    /* WCHIME_REQ_SI_APP_CMPLT          */
     {  (U1)WCHIME_VOL_BASE_REJECT_MID,       (U1)WCHIME_VOL_BASE_REJECT_MID,       (U1)WCHIME_VOL_BASE_REJECT_MAX        },    /* WCHIME_REQ_SI_DCLDSP_OPERJCT     */
     {  (U1)WCHIME_VOL_BASE_ACCEPT_MID,       (U1)WCHIME_VOL_BASE_ACCEPT_MID,       (U1)WCHIME_VOL_BASE_ACCEPT_MAX        },    /* WCHIME_REQ_SI_LCS_ACK            */
+    {  (U1)WCHIME_VOL_BASE_REJECT_MID,       (U1)WCHIME_VOL_BASE_REJECT_MID,       (U1)WCHIME_VOL_BASE_REJECT_MAX        },    /* WCHIME_REQ_SI_BSTMOD_RJCT        */
     {  (U1)WCHIME_VOL_SEA_REJECT_MID,        (U1)WCHIME_VOL_SEA_REJECT_MID,        (U1)WCHIME_VOL_SEA_REJECT_MAX         },    /* WCHIME_REQ_SI_DOA_RJCT           */
     {  (U1)WCHIME_VOL_BASE_NOTICE1_MID,      (U1)WCHIME_VOL_BASE_NOTICE1_MID,      (U1)WCHIME_VOL_BASE_NOTICE1_MAX       },    /* WCHIME_REQ_SI_MET_WRN_VOL_CSTM   */
     {  (U1)WCHIME_VOL_BASE_NOTICE1_MID,      (U1)WCHIME_VOL_BASE_NOTICE1_MID,      (U1)WCHIME_VOL_BASE_NOTICE1_MAX       },    /* WCHIME_REQ_SI_SBW_SPL_STATE      */
@@ -469,6 +470,7 @@ static const U1              u1_sp2_WCHIME_REQ_VOL_INFO[WCHIME_NUM_REQ][WCHIME_V
     {  (U1)WCHIME_VOL_BASE_INTWARNL_MID,     (U1)WCHIME_VOL_BASE_INTWARNL_MID,     (U1)WCHIME_VOL_BASE_INTWARNL_MAX      },    /* WCHIME_REQ_IN_TMBZR_TEN_PRI4     */
     {  (U1)WCHIME_VOL_BASE_NOTICE1_MID,      (U1)WCHIME_VOL_BASE_NOTICE1_MID,      (U1)WCHIME_VOL_BASE_NOTICE1_MAX       },    /* WCHIME_REQ_SI_MINDSPWR_LV1       */
     {  (U1)WCHIME_VOL_SEAREM_LV1_MID,        (U1)WCHIME_VOL_SEAREM_LV1_MID,        (U1)WCHIME_VOL_SEAREM_LV1_MAX         },    /* WCHIME_REQ_IN_SBLT_LV1           */
+    {  (U1)WCHIME_VOL_SEAREM_LV1_MID,        (U1)WCHIME_VOL_SEAREM_LV1_MID,        (U1)WCHIME_VOL_SEAREM_LV1_MAX         },    /* WCHIME_REQ_IN_SBLT_MISUSE        */
     {  (U1)WCHIME_VOL_SEAREM_SI_MID,         (U1)WCHIME_VOL_SEAREM_SI_MID,         (U1)WCHIME_VOL_SEAREM_SI_MAX          },    /* WCHIME_REQ_SI_SBLT               */
     {  (U1)WCHIME_VOL_BASE_NOTICE1_MID,      (U1)WCHIME_VOL_BASE_NOTICE1_MID,      (U1)WCHIME_VOL_BASE_NOTICE1_MAX       },    /* WCHIME_REQ_SI_RSA_SIGN_CTN1      */
     {  (U1)WCHIME_VOL_BASE_NOTICE1_MID,      (U1)WCHIME_VOL_BASE_NOTICE1_MID,      (U1)WCHIME_VOL_BASE_NOTICE1_MAX       },    /* WCHIME_REQ_SI_DMC_LV1            */
@@ -549,7 +551,6 @@ static const U1              u1_sp2_WCHIME_REQ_VOL_INFO[WCHIME_NUM_REQ][WCHIME_V
 /*===================================================================================================================================*/
 void    vd_g_wChimeReqCfgInit(void)
 {
-    u1_s_wchime_rcta_vol = (U1)WCHIME_VOL_CSR_RCTA_5;
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_wChimeCfgOpemdchk(void)                                                                                             */
@@ -647,6 +648,7 @@ U1      u1_g_wChimeReqSwCtrl(const U1 u1_a_REQ_SEL)
         (U1)0x03U,  /* WCHIME_REQ_SI_APP_CMPLT          */
         (U1)0x03U,  /* WCHIME_REQ_SI_DCLDSP_OPERJCT     */
         (U1)0x03U,  /* WCHIME_REQ_SI_LCS_ACK            */
+        (U1)0x03U,  /* WCHIME_REQ_SI_BSTMOD_RJCT        */
         (U1)0x02U,  /* WCHIME_REQ_SI_DOA_RJCT           */
         (U1)0x03U,  /* WCHIME_REQ_SI_MET_WRN_VOL_CSTM   */
         (U1)0x02U,  /* WCHIME_REQ_SI_SBW_SPL_STATE      */
@@ -680,6 +682,7 @@ U1      u1_g_wChimeReqSwCtrl(const U1 u1_a_REQ_SEL)
         (U1)0x00U,  /* WCHIME_REQ_IN_TMBZR_TEN_PRI4     */
         (U1)0x03U,  /* WCHIME_REQ_SI_MINDSPWR_LV1       */
         (U1)0x00U,  /* WCHIME_REQ_IN_SBLT_LV1           */
+        (U1)0x00U,  /* WCHIME_REQ_IN_SBLT_MISUSE        */
         (U1)0x03U,  /* WCHIME_REQ_SI_SBLT               */
         (U1)0x03U,  /* WCHIME_REQ_SI_RSA_SIGN_CTN1      */
         (U1)0x03U,  /* WCHIME_REQ_SI_DMC_LV1            */
@@ -1214,7 +1217,7 @@ static U1   u1_s_wChimeCfgClesonVolGet(const U1 u1_a_REQ_SEL)
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  800B-1    8/28/2020  YK       Appry 800B CV-R spec.                                                                              */
+/*  800B-1    8/28/2020  YK       Apply 800B CV-R spec.                                                                              */
 /*  800B-2   11/18/2020  SK       Correct sound pressure settings for WCHIME_REQ_IN_PKSB, WCHIME_REQ_IN_DOA, WCHIME_REQ_SI_FCTA,     */
 /*                                and WCHIME_REQ_IN_DESA_R04.                                                                        */
 /*  800B-3   12/23/2020  YK       Add the function to judge whether to buzzer until the end of 1 cycle or not,                       */
@@ -1242,7 +1245,7 @@ static U1   u1_s_wChimeCfgClesonVolGet(const U1 u1_a_REQ_SEL)
 /*  19PFv3-5  2/16/2024  SH       Change MCUCONST v010->v012                                                                         */
 /*  19PFv3-6  2/20/2024  GM       Change config for 19PFv3 CV                                                                        */
 /*  19PFv3-7  4/23/2024  TR      Deleted RCTA Volume logic                                                                           */
-/*  19PFv3-8  5/13/2024  DR       Changed the volume of master caution buuzzer                                                       */
+/*  19PFv3-8  5/13/2024  DR       Changed the volume of master caution buzzer                                                        */
 /*  19PFv3-8  5/13/2024  YR       Change FCTA priority                                                                               */
 /*  19PFv3-9  7/10/2024  TR       Add SBRDMB buzzer req                                                                              */
 /*  19PFv3-10 9/12/2024  YR       Change SFTPOS buzzer and ITS buzzer config                                                         */
@@ -1254,6 +1257,12 @@ static U1   u1_s_wChimeCfgClesonVolGet(const U1 u1_a_REQ_SEL)
 /*  BEV-2     11/28/2025 HL       Add parameter of MET-S_TMBZR-CSTD-0-01-A-C0                                                        */
 /*  BEV-3     12/18/2025 ED       Change Macro name of MET-S_ADBZR-CSTD-0-06-A-C0                                                    */
 /*  BEV-4     02/05/2026 SN       Change B_PERMEM for BEV FF2. Change Mcst                                                           */
+/*  BEV-5     03/10/2026 YH       Change config for BEV Full_Function_2.                                                             */
+/*                                MET-P_BSTMOD-CSTD-0-00-A-C0                                                                        */
+/*                                Add BOOST MODE reject buzzer request                                                               */
+/*  BEV-6     03/17/2026 SN(K)    Change config for BEV Full_Function_2.                                                             */
+/*                                MET-B_OPTMON-CSTD-0-00-A-C0                                                                        */
+/*                                Add parameter of buzzer request for OPTMON                                                         */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * ToN  = Toshiharu Nagata, Denso Techno                                                                                          */
@@ -1273,5 +1282,7 @@ static U1   u1_s_wChimeCfgClesonVolGet(const U1 u1_a_REQ_SEL)
 /*  * HL   = Harry Lapiceros, DTPH                                                                                                   */
 /*  * ED   = Emoh Dagasdas, DTPH                                                                                                     */
 /*  * SN   = Shimon Nambu, DensoTechno                                                                                               */
+/*  * YH   = Yuki Hatakeyama, KSE                                                                                                    */
+/*  * SN(K)= Shizuka Nakajima, KSE                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -1,4 +1,4 @@
-/* 2.4.0 */
+/* 2.5.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define AVGEE_KMPKWH_C_MAJOR                      (2)
-#define AVGEE_KMPKWH_C_MINOR                      (4)
+#define AVGEE_KMPKWH_C_MINOR                      (5)
 #define AVGEE_KMPKWH_C_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -76,8 +76,6 @@ static  ST_AVGECON_VAR                            st_sp_avgee_var[AVGEE_NUM_CNTT
 static  U1                                        u1_s_avgee_applsts;
 static  U4                                        u4_s_avgee_econ_prev_rst;
 static  U1                                        u1_s_avgee_econ_init_bk;
-static  U4                                        u4_s_avgee_asevdt;
-static  S4                                        s4_s_avgee_astoec;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -192,8 +190,6 @@ void          vd_g_AvgEeInit(void)
     u1_s_avgee_applsts = (U1)TRIPCOM_STSBIT_UNKNOWN;
     u4_s_avgee_econ_prev_rst = (U4)0U;
     u1_s_avgee_econ_init_bk  = (U1)FALSE;
-    u4_s_avgee_asevdt        = (U4)0U;
-    s4_s_avgee_astoec        = (S4)0;
 }
 
 /*===================================================================================================================================*/
@@ -383,8 +379,8 @@ void          vd_g_AvgEeUpdt(const U1 u1_a_CNTTID)
         u4_t_odocnt = u4_g_TripcomMsGetAccmltVal(stp_t_CNTT->u1_ms_odocnt_id);
 
         if (u1_a_CNTTID == (U1)AVGEE_CNTT_DC) {
-            s4_s_avgee_astoec = (S4)u4_t_usd;
-            u4_s_avgee_asevdt = u4_t_odocnt;
+            vd_g_TripcomMsSetAccmltVal((U1)TRIPCOM_MS_ID_AVGEE_DC_ASTOEC, u4_t_usd);
+            vd_g_TripcomMsSetAccmltVal((U1)TRIPCOM_MS_ID_AVGEE_DC_ASEVDT, u4_t_odocnt);
         }
  
         
@@ -550,7 +546,7 @@ static U2     u2_s_AvgeeDtCalcTx(void)
     U1              u1_tp_unittype[TRIPCOM_NUM_CANTXUNIT];
 
     u2_t_txval  = (U2)TRIPCOM_CANTX_UNKNOWN;
-    u4_t_asevdt = u4_s_avgee_asevdt;
+    u4_t_asevdt = u4_g_TripcomMsGetAccmltVal((U1)TRIPCOM_MS_ID_AVGEE_DC_ASEVDT);
 
     vd_g_TripcomCfgGetUnit(&u1_tp_unittype[0]);
     u1_t_dt_unit = u1_tp_unittype[TRIPCOM_CANTXUNIT_DIST];
@@ -586,7 +582,7 @@ static U2     u2_s_AvgeeEcCalcTx(void)
     S4              s4_t_astoec;
 
     u2_t_txval  = (U2)TRIPCOM_CANTX_UNKNOWN;
-    s4_t_astoec = s4_s_avgee_astoec;
+    s4_t_astoec = (S4)u4_g_TripcomMsGetAccmltVal((U1)TRIPCOM_MS_ID_AVGEE_DC_ASTOEC);
 
     if ((u1_s_avgee_applsts & (U1)TRIPCOM_STSBIT_INVALID) != (U1)0U) {
         u2_t_txval = (U2)TRIPCOM_CANTX_TIMEOUT;
@@ -664,10 +660,11 @@ void            vd_g_AvgEePostTask(void)
 /*  2.2.1    04/22/2025  KM       Bug fix : Change update timing of u1_s_avgee_econ_init_bk                                          */
 /*  2.3.0    01/20/2026  DR       add AS_EVDT and AS_TOEC for BEV FF2                                                                */
 /*  2.4.0    02/13/2026  PG       Update for M_DM for BEV FF2                                                                        */
+/*  2.5.0    03/19/2026  KH       Bug fix : Change memory retention process of ASTOEC and ASEVDT.                                    */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  BEV-01   02/23/2026  DR       Update graph write flag in FF2                                                                    */
+/*  BEV-01   02/23/2026  DR       Update graph write flag in FF2                                                                     */
 /*                                                                                                                                   */
 /*  * YA   = Yuhei Aoyama, DensoTechno                                                                                               */
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
@@ -677,5 +674,6 @@ void            vd_g_AvgEePostTask(void)
 /*  * KM   = Kazuma Miyazawa, Denso Techno                                                                                           */
 /*  * DR   = Dyan Reyes, DTPH                                                                                                        */
 /*  * PG   = Patrick Garcia, DTPH                                                                                                    */
+/*  * KH   = Kiko Huerte, DTPH                                                                                                       */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

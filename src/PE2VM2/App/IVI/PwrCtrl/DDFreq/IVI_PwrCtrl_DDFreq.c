@@ -61,10 +61,7 @@
 #define     IVI_DDFREQ_DDREQ                (0U)
 #define     IVI_DDFREQ_ADCREQ               (1U)
 
-#if 0
 #define     IVI_DDFREQ_ADC_FREQ_SHIFT       (DIO_ID_APORT4_CH7)
-#endif
-#define     IVI_DDFREQ_ADC_FREQ_SHIFT       (0xFFFFU)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */

@@ -270,6 +270,7 @@ static U1    u1_s_gvif3rxerror10_step;
 static U1    u1_s_gvif3rxerrclr_step;
 static U1    u1_s_gvif3rxerrclrrls_step;
 static U1    u1_s_gvif3rxcamkind_step;
+static U1    u1_s_gvif3mipireset_step;
 static U1    u1_s_gvif3rxunl0set2_step;
 static U1    u1_s_gvif3rxunl1set2_step;
 static U1    u1_s_gvif3rxunl2set2_step;
@@ -323,6 +324,7 @@ static void   vd_s_Gvif3RxProcessChk(void);
 static void   vd_s_Gvif3RxCycChk(void);
 static void   vd_s_Gvif3RxCamKindGet(void);
 static U1     u1_s_Gvif3RxCamKindDat(void);
+static U1     u1_s_Gvif3MipiReset(void);
 static U1     u1_s_Gvif3RxUnl0Set2(void);
 static U1     u1_s_Gvif3RxUnl0Set2SetReq(void);
 static U1     u1_s_Gvif3RxUnl0Set2RegSet(void);
@@ -507,14 +509,14 @@ U1 u1_sp_GVIF3RX_REG_EERROR8CHK_RD_PDU2[GVIF3RX_REG_RWC_BYTE2];
 
 const U1 u1_sp_GVIF3RX_REG_EERROR9CHK_RD_PDU1[GVIF3RX_REG_RWC_BYTE2] = {
     (U1)GVIF3RX_SLAVEADR_WR,    /* Slave Address */
-    (U1)0xA0U     /* Write Address */
+    (U1)0xA9U     /* Write Address */
 };
 
 U1 u1_sp_GVIF3RX_REG_EERROR9CHK_RD_PDU2[GVIF3RX_REG_RWC_BYTE2];
 
 const U1 u1_sp_GVIF3RX_REG_EERROR10CHK_RD_PDU1[GVIF3RX_REG_RWC_BYTE2] = {
     (U1)GVIF3RX_SLAVEADR_WR,    /* Slave Address */
-    (U1)0xA9U     /* Write Address */
+    (U1)0xB2U     /* Write Address */
 };
 
 U1 u1_sp_GVIF3RX_REG_EERROR10CHK_RD_PDU2[GVIF3RX_REG_RWC_BYTE2];
@@ -969,6 +971,7 @@ static void    vd_s_Gvif3RxReset(void)
     u1_s_gvif3rxerrclr_step = (U1)GVIF3RX_ERRCLR_STEP1;
     u1_s_gvif3rxerrclrrls_step = (U1)GVIF3RX_ERRCLRRLS_STEP1;
     u1_s_gvif3rxcamkind_step = (U1)GVIF3RX_CAMKIND_STEP1;
+    u1_s_gvif3mipireset_step = (U1)GVIF3RX_MIPIRESET_STEP1;
     u1_s_gvif3rxunl0set2_step = (U1)GVIF3RX_UNL0SET2_STEP1;
     u1_s_gvif3rxunl1set2_step = (U1)GVIF3RX_UNL1SET2_STEP1;
     u1_s_gvif3rxunl2set2_step = (U1)GVIF3RX_UNL2SET2_STEP1;
@@ -1417,6 +1420,7 @@ static void    vd_s_Gvif3RxCycChk(void)
     u1_t_stasts = u1_g_Power_ModeState();
     u1_t_jdg = (U1)FALSE;
 
+    vd_s_Gvif3RxCamKindGet();
 
     switch (u1_s_gvif3perimoni_step)
     {
@@ -1587,14 +1591,18 @@ static void    vd_s_Gvif3RxCycChk(void)
 }
 
 /*===================================================================================================================================*/
-/*  void    vd_g_Gvif3RxCamKindPut(U1 u1_a_CAMEXSIT)                                                                                 */
+/*  static void    vd_s_Gvif3RxCamKindGet(void)                                                                                      */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_Gvif3RxCamKindPut(U1 u1_a_CAMEXSIT)
+static void    vd_s_Gvif3RxCamKindGet(void)
 {
-    if(u1_a_CAMEXSIT == (U1)PICT_KIND_DOMECON_EXIST){
+    U1 u1_t_camexist;
+
+    u1_t_camexist = u1_g_PictCtl_GvifCamKindSts();
+
+    if(u1_t_camexist == (U1)PICT_KIND_DOMECON_EXIST){
         u1_s_gvif3rxcamkind_now = (U1)GVIF3RX_KIND_DOMECON_EXIST;
     }
     else{
@@ -1619,62 +1627,69 @@ static U1     u1_s_Gvif3RxCamKindDat(void)
     switch (u1_s_gvif3rxcamkind_step)
     {
         case GVIF3RX_CAMKIND_STEP1:
-            u1_t_sts = u1_s_Gvif3RxUnl0Set2();
+            u1_t_sts = u1_s_Gvif3MipiReset();
             if(u1_t_sts == (U1)TRUE){
                 u1_s_gvif3rxcamkind_step = (U1)GVIF3RX_CAMKIND_STEP2;
             }
             break;
 
         case GVIF3RX_CAMKIND_STEP2:
-            u1_t_sts = u1_s_Gvif3RxUnl1Set2();
+            u1_t_sts = u1_s_Gvif3RxUnl0Set2();
             if(u1_t_sts == (U1)TRUE){
                 u1_s_gvif3rxcamkind_step = (U1)GVIF3RX_CAMKIND_STEP3;
             }
             break;
 
         case GVIF3RX_CAMKIND_STEP3:
-            u1_t_sts = u1_s_Gvif3RxUnl2Set2();
+            u1_t_sts = u1_s_Gvif3RxUnl1Set2();
             if(u1_t_sts == (U1)TRUE){
                 u1_s_gvif3rxcamkind_step = (U1)GVIF3RX_CAMKIND_STEP4;
             }
             break;
 
         case GVIF3RX_CAMKIND_STEP4:
-            u1_t_sts = u1_s_Gvif3RxUnl3Set2();
+            u1_t_sts = u1_s_Gvif3RxUnl2Set2();
             if(u1_t_sts == (U1)TRUE){
                 u1_s_gvif3rxcamkind_step = (U1)GVIF3RX_CAMKIND_STEP5;
             }
             break;
 
         case GVIF3RX_CAMKIND_STEP5:
-            u1_t_sts = u1_s_Gvif3RxUnl4Set2();
+            u1_t_sts = u1_s_Gvif3RxUnl3Set2();
             if(u1_t_sts == (U1)TRUE){
                 u1_s_gvif3rxcamkind_step = (U1)GVIF3RX_CAMKIND_STEP6;
             }
             break;
 
         case GVIF3RX_CAMKIND_STEP6:
-            u1_t_sts = u1_s_Gvif3RxUnl5Set2();
+            u1_t_sts = u1_s_Gvif3RxUnl4Set2();
             if(u1_t_sts == (U1)TRUE){
                 u1_s_gvif3rxcamkind_step = (U1)GVIF3RX_CAMKIND_STEP7;
             }
             break;
 
         case GVIF3RX_CAMKIND_STEP7:
-            u1_t_sts = u1_s_Gvif3RxGpioSet();
+            u1_t_sts = u1_s_Gvif3RxUnl5Set2();
             if(u1_t_sts == (U1)TRUE){
                 u1_s_gvif3rxcamkind_step = (U1)GVIF3RX_CAMKIND_STEP8;
             }
             break;
     
         case GVIF3RX_CAMKIND_STEP8:
-            u1_t_sts = u1_s_Gvif3RxErrClr();
+            u1_t_sts = u1_s_Gvif3RxGpioSet();
             if(u1_t_sts == (U1)TRUE){
                 u1_s_gvif3rxcamkind_step = (U1)GVIF3RX_CAMKIND_STEP9;
             }
             break;
     
         case GVIF3RX_CAMKIND_STEP9:
+            u1_t_sts = u1_s_Gvif3RxErrClr();
+            if(u1_t_sts == (U1)TRUE){
+                u1_s_gvif3rxcamkind_step = (U1)GVIF3RX_CAMKIND_STEP10;
+            }
+            break;
+    
+        case GVIF3RX_CAMKIND_STEP10:
             u1_t_sts = u1_s_Gvif3RxErrClrRls();
             if(u1_t_sts == (U1)TRUE){
                 u1_s_gvif3rxcamkind_step = (U1)GVIF3RX_CAMKIND_STEP1;
@@ -1685,6 +1700,49 @@ static U1     u1_s_Gvif3RxCamKindDat(void)
         default:
             u1_s_gvif3rxcamkind_step = (U1)GVIF3RX_CAMKIND_STEP1;
         
+            break;
+    }
+    return(u1_t_return);
+}
+
+/*===================================================================================================================================*/
+/*  static U1     u1_s_Gvif3MipiReset(void)                                                                                          */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static U1     u1_s_Gvif3MipiReset(void)
+{
+    U1 u1_t_return;
+    U1 u1_t_sts;
+
+    u1_t_return = (U1)FALSE;
+    u1_t_sts = (U1)FALSE;
+    
+    switch (u1_s_gvif3mipireset_step)
+    {
+        case GVIF3RX_MIPIRESET_STEP1:
+            vd_s_Gvif3RxBank0Chk();
+            if(u1_s_gvif3rxbank_last == (U1)GVIF3RX_BANK0){
+                u1_s_gvif3rxmipitx_date = (U1)GVIF3RX_VIDEO_OUTPUT_NON;
+                (void)u1_s_Gvif3RxMipitxSetReq();
+                u1_s_gvif3rxregacc_flg = (U1)TRUE;
+                u1_s_gvif3mipireset_step = (U1)GVIF3RX_MIPIRESET_STEP2;
+            }
+            break;
+
+        case GVIF3RX_MIPIRESET_STEP2:
+            u1_t_sts = u1_s_Gvif3RxMipitxSetReq();
+            if(u1_t_sts == (U1)TRUE){
+                vd_s_Gvif3RxMipiOutputJdg();
+                u1_t_return = (U1)TRUE;
+                u1_s_gvif3rxregacc_flg = (U1)FALSE;
+                u1_s_gvif3mipireset_step = (U1)GVIF3RX_MIPIRESET_STEP1;
+            }
+            break;
+
+        default:
+            u1_s_gvif3mipireset_step = (U1)GVIF3RX_MIPIRESET_STEP1;
             break;
     }
     return(u1_t_return);

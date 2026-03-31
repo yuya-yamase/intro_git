@@ -1,4 +1,4 @@
-/* 0.0.0 */
+/* 0.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO TECHNO Corporation                                                                                               */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define XSPI_IVI_SUB1_VERSION_C_MAJOR                   (0)
-#define XSPI_IVI_SUB1_VERSION_C_MINOR                   (0)
+#define XSPI_IVI_SUB1_VERSION_C_MINOR                   (1)
 #define XSPI_IVI_SUB1_VERSION_C_PATCH                   (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -26,11 +26,6 @@
      (XSPI_IVI_SUB1_VERSION_C_PATCH != XSPI_IVI_SUB1_VERSION_H_PATCH))
 #error "x_spi_ivi_sub1_version.c and x_spi_ivi_sub1.h : source and header files are inconsistent!"
 #endif
-#if ((XSPI_IVI_SUB1_VERSION_C_MAJOR != XSPI_IVI_SUB1_PRIVATE_H_MAJOR) || \
-     (XSPI_IVI_SUB1_VERSION_C_MINOR != XSPI_IVI_SUB1_PRIVATE_H_MINOR) || \
-     (XSPI_IVI_SUB1_VERSION_C_PATCH != XSPI_IVI_SUB1_PRIVATE_H_PATCH))
-#error "x_spi_ivi_sub1_version.c and x_spi_ivi_sub1_private.h : source and header files are inconsistent!"
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -39,29 +34,44 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define    XSPI_IVI_VERSION_ID    (0x24U)
-#define    XSPI_IVI_VERSION_RQST  (0x01U)
-#define    XSPI_IVI_VERSION_RES   (0x02U)
+#define    XSPI_IVI_VERSION_ID              (0x24U)
+#define    XSPI_IVI_VERSION_RQST            (0x01U)
+#define    XSPI_IVI_VERSION_RES             (0x02U)
 
-#define    XSPI_IVI_VERSION_SIZE  (34U)
-#define    XSPI_IVI_VERSION_DATA  (XSPI_IVI_VERSION_SIZE - 2U)
-#define    XSPI_IVI_VERSION_MAJOR (0x00U)
-#define    XSPI_IVI_VERSION_MINOR (0x01U)
-#define    XSPI_IVI_VERSION_GSEN  (0x10U)
+#define    XSPI_IVI_VERSION_SUBTYPE_BUF     (0U)
+#define    XSPI_IVI_VERSION_SFTTYPE_BUF     (1U)
+#define    XSPI_IVI_VERSION_VER_BUF         (2U)
+#define    XSPI_IVI_VERSION_PARTNUM_BUF     (18U)
 
-#define    XSPI_IVI_VERSION_MAJOR_DIG (0x04U)    /*メジャー品番桁数*/
-#define    XSPI_IVI_VERSION_MINOR_DIG (0x04U)    /*マイナー品番桁数*/
-#define    XSPI_IVI_VERSION_GSEN_DIG  (14U)      /*Gセンサバージョン桁数*/
+#define    XSPI_IVI_VERSION_SIZE            (34U)
+#define    XSPI_IVI_VERSION_DATA            (XSPI_IVI_VERSION_SIZE - 2U)
+#define    XSPI_IVI_VERSION_MCUAPP          (0x00U)
+#define    XSPI_IVI_VERSION_MCUPARA_MET     (0x01U)
+#define    XSPI_IVI_VERSION_MCUPARA_IVI     (0x02U)
+#define    XSPI_IVI_VERSION_MCUBOOT         (0x03U)
+#define    XSPI_IVI_VERSION_GSEN            (0x10U)
+
+#define    XSPI_IVI_VERSION_MCUAPPVER_DIG   (4U)       /*MCUアプリバージョン情報桁数*/
+#define    XSPI_IVI_VERSION_GSEN_DIG        (14U)      /*Gセンサバージョン桁数*/
+
+/* Provisional */
+#define    XSPI_IVI_VERSION_VERDATA_DIG     (14U)      /*バージョン情報桁数*/
+#define    XSPI_IVI_VERSION_PARTNUM_DIG     (12U)      /*ソフト品番桁数*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-volatile U4 * const    u4p_s_VERSION_MAJ = (volatile U4 *)0x007BFB00U;
-volatile U4 * const    u4p_s_VERSION_MIN = (volatile U4 *)0x007BFB00U;
+volatile U4 * const    u4p_s_VERSION_MCUAPP_VERDATA = (volatile U4 *)0x007BFB00U;
+volatile U1 * const    u1p_s_VERSION_METPARA_SOFTNUM = (volatile U1 *)0x0001C760U;
 
 static U1              u1_sp_xspi_ivi_version_gsensor_data[XSPI_IVI_VERSION_GSEN_DIG];
+
+/* Provisonal */
+static U1              u1_sp_xspi_ivi_version_verdata[XSPI_IVI_VERSION_VERDATA_DIG];
+static U1              u1_sp_xspi_ivi_version_softnum[XSPI_IVI_VERSION_PARTNUM_DIG];
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -84,6 +94,10 @@ static void            vd_s_XspiIviSub1_VersionChangeASCII(U1* u1_ap_XSPI_ADD, c
 void            vd_g_XspiIviSub1VersionInit(void)
 {
     vd_g_MemfillU1(&u1_sp_xspi_ivi_version_gsensor_data[0], (U1)0U, (U4)XSPI_IVI_VERSION_GSEN_DIG);
+
+    /* Provisional */
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_version_verdata[0], (U1)0x30U, (U4)XSPI_IVI_VERSION_VERDATA_DIG);
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_version_softnum[0], (U1)0x30U, (U4)XSPI_IVI_VERSION_PARTNUM_DIG);
 }
 
 /*===================================================================================================================================*/
@@ -110,7 +124,7 @@ void            vd_g_XspiIviSub1VersionAna(const U1 * u1_ap_XSPI_ADD, const U2 u
 {
     U1 u1_t_subtype;
 
-    u1_t_subtype = u1_ap_XSPI_ADD[0];
+    u1_t_subtype = u1_ap_XSPI_ADD[XSPI_IVI_VERSION_SUBTYPE_BUF];
 
     switch (u1_t_subtype)
     {
@@ -133,32 +147,48 @@ void            vd_g_XspiIviSub1VersionAna(const U1 * u1_ap_XSPI_ADD, const U2 u
 /*===================================================================================================================================*/
 static void            vd_s_XspiIviSub1_VersionReq(const U1 * u1_ap_XSPI_ADD, const U2 u2_a_DATA_SIZE)
 {
-    U1     u1_s_MAJORVERSIZE = (U1)6U;   /*サブタイプ+バージョン情報*/
-    U1     u1_s_MINORVERSIZE = (U1)6U;   /*サブタイプ+バージョン情報*/
-    U1     u1_s_GSENVERSIZE  = (U1)16U;   /*サブタイプ+バージョン情報*/
     U1     u1_t_verison_type;
     U1     u1_tp_data[XSPI_IVI_VERSION_SIZE];
     U4     u4_t_version;
 
-    /*[1]のデータをSend側に送る*/
-    u1_t_verison_type = u1_ap_XSPI_ADD[1];
-    u1_tp_data[0] = (U1)XSPI_IVI_VERSION_RES;
-    u1_tp_data[1] = u1_t_verison_type;
+    volatile U1* u1_tp_metpara_src;
+
+    U4 u4_t_lpcnt;
+
+
+    vd_g_MemfillU1(&u1_tp_data[0], (U1)0U, (U4)XSPI_IVI_VERSION_SIZE);
+
+    u1_t_verison_type = u1_ap_XSPI_ADD[XSPI_IVI_VERSION_SFTTYPE_BUF];
+    u1_tp_data[XSPI_IVI_VERSION_SUBTYPE_BUF] = (U1)XSPI_IVI_VERSION_RES;
+    u1_tp_data[XSPI_IVI_VERSION_SFTTYPE_BUF] = u1_t_verison_type;
     switch (u1_t_verison_type)
     {
-    case XSPI_IVI_VERSION_MAJOR:
-        u4_t_version = *u4p_s_VERSION_MAJ;
-        vd_s_XspiIviSub1_VersionChangeASCII(&u1_tp_data[2],u4_t_version,(U4)XSPI_IVI_VERSION_MAJOR_DIG);
-        vd_s_XspiIviSub1_VersionDataToQueue(&u1_tp_data[0],u1_s_MAJORVERSIZE);
+    case XSPI_IVI_VERSION_MCUAPP:
+        u4_t_version = *u4p_s_VERSION_MCUAPP_VERDATA;
+        vd_s_XspiIviSub1_VersionChangeASCII(&u1_tp_data[XSPI_IVI_VERSION_VER_BUF],u4_t_version,(U4)XSPI_IVI_VERSION_MCUAPPVER_DIG);
+        vd_g_MemcpyU1(&u1_tp_data[XSPI_IVI_VERSION_PARTNUM_BUF], &u1_sp_xspi_ivi_version_softnum[0], (U4)XSPI_IVI_VERSION_PARTNUM_DIG);  /* Provisional */
+        vd_s_XspiIviSub1_VersionDataToQueue(&u1_tp_data[0],(U1)XSPI_IVI_VERSION_SIZE);
         break;
-    case XSPI_IVI_VERSION_MINOR:
-        u4_t_version = *u4p_s_VERSION_MIN;
-        vd_s_XspiIviSub1_VersionChangeASCII(&u1_tp_data[2],u4_t_version,(U4)XSPI_IVI_VERSION_MINOR_DIG);
-        vd_s_XspiIviSub1_VersionDataToQueue(&u1_tp_data[0],u1_s_MINORVERSIZE);
+    case XSPI_IVI_VERSION_MCUPARA_MET:
+        u1_tp_metpara_src = u1p_s_VERSION_METPARA_SOFTNUM;
+        vd_g_MemcpyU1(&u1_tp_data[XSPI_IVI_VERSION_VER_BUF], &u1_sp_xspi_ivi_version_verdata[0], (U4)XSPI_IVI_VERSION_VERDATA_DIG);  /* Provisional */
+        for (u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)XSPI_IVI_VERSION_PARTNUM_DIG; u4_t_lpcnt++) {
+            u1_tp_data[XSPI_IVI_VERSION_PARTNUM_BUF + u4_t_lpcnt] = u1_tp_metpara_src[u4_t_lpcnt];
+        }
+        vd_s_XspiIviSub1_VersionDataToQueue(&u1_tp_data[0],(U1)XSPI_IVI_VERSION_SIZE);
+        break;
+    case XSPI_IVI_VERSION_MCUPARA_IVI:
+        vd_g_MemcpyU1(&u1_tp_data[XSPI_IVI_VERSION_VER_BUF], &u1_sp_xspi_ivi_version_verdata[0], (U4)XSPI_IVI_VERSION_VERDATA_DIG);  /* Provisional */
+        vd_g_MemcpyU1(&u1_tp_data[XSPI_IVI_VERSION_PARTNUM_BUF], &u1_sp_xspi_ivi_version_softnum[0], (U4)XSPI_IVI_VERSION_PARTNUM_DIG);  /* Provisional */
+        vd_s_XspiIviSub1_VersionDataToQueue(&u1_tp_data[0],(U1)XSPI_IVI_VERSION_SIZE);
+        break;
+    case XSPI_IVI_VERSION_MCUBOOT:
+        vd_g_MemcpyU1(&u1_tp_data[XSPI_IVI_VERSION_VER_BUF], &u1_sp_xspi_ivi_version_verdata[0], (U4)XSPI_IVI_VERSION_VERDATA_DIG);  /* Provisional */
+        vd_s_XspiIviSub1_VersionDataToQueue(&u1_tp_data[0],(U1)XSPI_IVI_VERSION_SIZE);
         break;
     case XSPI_IVI_VERSION_GSEN:
-        vd_g_MemcpyU1(&u1_tp_data[2], &u1_sp_xspi_ivi_version_gsensor_data[0], (U4)XSPI_IVI_VERSION_GSEN_DIG);
-        vd_s_XspiIviSub1_VersionDataToQueue(&u1_tp_data[0],u1_s_GSENVERSIZE);
+        vd_g_MemcpyU1(&u1_tp_data[XSPI_IVI_VERSION_VER_BUF], &u1_sp_xspi_ivi_version_gsensor_data[0], (U4)XSPI_IVI_VERSION_GSEN_DIG);
+        vd_s_XspiIviSub1_VersionDataToQueue(&u1_tp_data[0],(U1)XSPI_IVI_VERSION_SIZE);
         break;
     
     default:
@@ -273,7 +303,6 @@ static void            vd_s_XspiIviSub1_VersionDataToQueue(const U1* u1_ap_XSPI_
     U1     u1_t_id;
 
     u1_t_id = (U1)XSPI_IVI_VERSION_ID;
-    vd_g_MemfillU1(&u1_tp_data[0], (U1)0U, (U4)XSPI_IVI_VERSION_SIZE);
     vd_g_MemcpyU1(&u1_tp_data[0], &u1_ap_XSPI_ADD[0], (U4)u1_a_SIZE);
 
     /*キューの関数呼び出し*/
@@ -289,6 +318,7 @@ static void            vd_s_XspiIviSub1_VersionDataToQueue(const U1* u1_ap_XSPI_
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  0.0.0    01/31/2025  KT       New.                                                                                               */
+/*  0.1.0    03/25/2026  KT       Change for OS Command Spec. MCU Version Request/Response v1.1 support.                             */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */

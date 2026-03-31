@@ -115,6 +115,7 @@
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_GRISHU.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_LEDHEA.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_MLGT.c
+../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_OPTMON.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_PBD.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_PBDKS.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_PEDPRO.c
@@ -176,6 +177,7 @@
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_O_EIGCON.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_O_FNCLIM.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_O_PDSMAL.c
+../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_P_BSTMOD.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_ADBZR_ACC.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_ADBZR_APP.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_ADBZR_BSM.c
@@ -212,6 +214,7 @@
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/CanTxApp/config/cantxapp_met1s27.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/CanTxApp/config/cantxapp_met1s29.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/CanTxApp/config/cantxapp_met1s30.c
+../../src/PE1VM1/App/MET/IpcApplication/Vom/CanTxApp/config/cantxapp_met1s47.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/CanTxApp/config/cantxapp_met1s62.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/CanTxApp/config/cantxapp_met1s70.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/CanTxApp/scc/cantxapp.c
@@ -279,6 +282,7 @@
 ../../src/PE1VM1/App/MET/IpcApplication/Vsv/Illumi/scc/illumi.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vsv/Sbltsync/config/sbltsync_cfg.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vsv/Sbltsync/scc/sbltsync.c
+../../src/PE1VM1/App/MET/IpcApplication/Vsv/Sbltsync/scc/sbltsync_optmon.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vsv/Thblnkr/config/thblnkr_cfg.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vsv/Thblnkr/scc/thblnkr.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vsv/WChime/config/wchime_arb_cfg.c
