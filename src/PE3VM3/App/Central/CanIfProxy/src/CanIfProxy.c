@@ -461,12 +461,14 @@ static void CanIfProxy_ReceiveRequest( const CanMsgType* t_pstMsg )
 				{
 					CanIfProxy_InitMfRequest();
 				}
+
 				/* Memory received FF */
 				CanIfProxy_stMfReqStatus.u1IsRcvFf = (uint8)TRUE;
-				
+
 				/* Read N_PCI */
 				CanIfProxy_ReadFfNpci( t_pstMsg->ptData );
 			}
+
 			/* Set MF request buffer */
 			CanIfProxy_SetMfToReqBuff( t_pstMsg );
 		}
@@ -487,7 +489,8 @@ static void CanIfProxy_SetSfToReqBuff( const CanMsgType* t_pstMsg )
 	uint8 t_u1IsFull;
 	uint16 t_u2Tail;
 
-	/* todo: Suspend Interrupts */
+	/* Suspend Interrupts */
+	SuspendOSInterrupts();
 
 	t_u1IsFull = CanIfProxy_IsFullTxSfBuff();
 	if ( t_u1IsFull == (uint8)FALSE )
@@ -500,7 +503,8 @@ static void CanIfProxy_SetSfToReqBuff( const CanMsgType* t_pstMsg )
 		CanIfProxy_stSfReqStatus.u2Tail = t_u2Tail;
 	}
 
-	/* todo: Resume Interrupts */
+	/* Resume Interrupts */
+	ResumeOSInterrupts();
 
 	return;
 }
@@ -517,8 +521,6 @@ static void CanIfProxy_SetMfToReqBuff( const CanMsgType* t_pstMsg )
 	uint16 t_u2Tail;
 	uint16 t_u2TailPre;
 	uint16 t_u2TailNext;
-
-	/* todo: Suspend Interrupts */
 
 	t_u2Tail = CanIfProxy_stMfReqStatus.u2Tail;
 	t_u2TailPre = t_u2Tail;
@@ -540,8 +542,6 @@ static void CanIfProxy_SetMfToReqBuff( const CanMsgType* t_pstMsg )
 		/* Resume Interrupts */
 		ResumeOSInterrupts();
 	}
-
-	/* todo: Resume Interrupts */
 
 	return;
 }
@@ -996,9 +996,6 @@ static uint8 CanIfProxy_TransmitCF( void )
 					if ( CanIfProxy_stMfReqStatus.u1Bs == 0x00U )
 					{
 						/* Consecutively transmit CF */
-						
-						/* Clear Tx block */
-						t_u1TxBlock = 0x00U;
 					}
 					else
 					{
