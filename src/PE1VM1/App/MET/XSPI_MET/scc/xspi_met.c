@@ -151,10 +151,7 @@ void    vd_g_XSpiMETPduTx(void)
                                                     ((U4)XSPI_MET_DAE_STS        << 8);
 
     U1      u1_t_xspi_condition;
-    U1      u1_t_write_sts;
     U4      u4_t_lpcnt;
-
-    u1_t_write_sts = (U1)XSPI_NG;
 
     u1_t_xspi_condition = xspi_GetCondition((U1)XSPI_CH_02);
 
@@ -171,7 +168,7 @@ void    vd_g_XSpiMETPduTx(void)
     u4_sp_xspi_met_db_tra[2] = u4_s_XSPI_MET_READ_ACCESS_STS;
 
     if((u1_t_xspi_condition == (U1)XSPI_DCOND_IDLE) || (u1_t_xspi_condition == (U1)XSPI_DCOND_TRANSMIT)) {
-        u1_t_write_sts = xspi_Write((U1)XSPI_CH_02, &u4_sp_xspi_met_db_tra[0], (U4)XSPI_MET_PDU_NWORD);
+        (void)xspi_Write((U1)XSPI_CH_02, &u4_sp_xspi_met_db_tra[0], (U4)XSPI_MET_PDU_NWORD);
     }
 
 }
@@ -212,6 +209,7 @@ U1    u1_g_XSpiMETRxRdAccessSts(const U1 u1_a_KIND)
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  BEV-1    03/23/2026  SH       SCS1S11_IG_STATUS have been changed from using the aubist -> OXCAN                                 */
+/*  REV-2    03/31/2026  TN       Remove unused variable.(Warning Fix)                                                               */ 
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  * KT   = Kenta Takaji, Denso Techno                                                                                              */

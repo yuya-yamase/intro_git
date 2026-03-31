@@ -114,8 +114,6 @@ U4                           u4_gp_wchime_evtmsk[WCHIME_REQBIT_NUM_WORD]; /* Bit
                                                                           /* or lower-priority event (Single) buzzer.                */
 U2                           u2_gp_wchime_wt_tim[WCHIME_NUM_CH];          /* Result of wait time(silent duration) at last judgement. */
 
-static U1                    u1_s_wchime_rcta_vol;                        /* Last volume kind of RCTA.                               */
-
 U1                           u1_g_wchime_silencetime_flag;                /*  silencetime_flag                                       */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -553,7 +551,6 @@ static const U1              u1_sp2_WCHIME_REQ_VOL_INFO[WCHIME_NUM_REQ][WCHIME_V
 /*===================================================================================================================================*/
 void    vd_g_wChimeReqCfgInit(void)
 {
-    u1_s_wchime_rcta_vol = (U1)WCHIME_VOL_CSR_RCTA_5;
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_wChimeCfgOpemdchk(void)                                                                                             */
