@@ -920,12 +920,10 @@ static uint8 CanIfProxy_TransmitCF( void )
 	uint8 t_u1VcanRet;
 	CanMsgType t_stMsg;
 	uint32 t_u4FfDl;
-	uint8 t_u1FrameTransInt;
 	uint8 t_u1PeriodPwrOff;
 
 	t_u1Ret = u1CANIFPROXY_E_OK;
 	t_u1IsTx = (uint8)FALSE;
-	t_u1FrameTransInt = CanIfProxy_cu1FrameTransInt;
 
 	/* Get Cf period and Nunber of transmit */
 	t_u1IsPowerOn = CanIfProxy_IsPowerOn();
