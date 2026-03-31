@@ -40,6 +40,8 @@
 #define CANIFPROXY_CFG_CF_PERIOD_PWROFF				(1U)
 /* CF Period Default */
 #define CANIFPROXY_CFG_CF_PERIOD_DEF				(1U)
+/* Frame Transmission Interval (for STD_OFF mode) */
+#define CANIFPROXY_CFG_FRAME_TRANS_INT				(14U)
 /* Number of CF transmit per period in Power-On[time] */
 #define CANIFPROXY_CFG_CF_TX_NUM_PWRON				(1U)
 /* Number of CF transmit per period in Power-Off[time] */
@@ -106,6 +108,8 @@ extern const uint8 CanIfProxy_cu1CfPeriodPwrOnSelf;
 extern const uint8 CanIfProxy_cu1CfPeriodPwrOffSelf;
 /* CF Period Default */
 extern const uint8 CanIfProxy_cu1CfPeriodDef;
+/* Frame Transmission Interval (for STD_OFF mode) */
+extern const uint8 CanIfProxy_cu1FrameTransInt;
 /* Number of CF transmit per period in Power-On[time] */
 extern const uint8 CanIfProxy_cu1CfTxNumPwrOnSelf;
 /* Number of CF transmit per period in Power-Off[time] */
