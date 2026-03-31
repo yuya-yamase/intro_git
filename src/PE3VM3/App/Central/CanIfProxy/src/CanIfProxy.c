@@ -920,14 +920,18 @@ static uint8 CanIfProxy_TransmitCF( void )
 	uint8 t_u1VcanRet;
 	CanMsgType t_stMsg;
 	uint32 t_u4FfDl;
+	uint8 t_u1PeriodPwrOff;
 
 	t_u1Ret = u1CANIFPROXY_E_OK;
 	t_u1IsTx = (uint8)FALSE;
 
 	/* Get Cf period and Nunber of transmit */
 	t_u1IsPowerOn = CanIfProxy_IsPowerOn();
+	
+	/* Set Throughput */
+	CanIfProxy_CalcCfThroughput();
 
-	if ( t_u1IsPowerOn == (uint8)TRUE )
+	if ( t_u1IsPowerOn == (uint8)FALSE )
 	{
 		t_u1CfPeriod = CanIfProxy_stMfReqStatus.u1CfPeriodPwrOn;
 		t_u1CfTxNum = CanIfProxy_stMfReqStatus.u1CfTxNumPwrOn;
@@ -1261,8 +1265,10 @@ static void CanIfProxy_CalcCfThroughput( void )
 	uint8 t_u1PeriodPwrOff;
 	uint8 t_u1TxNumPwrOn;
 	uint8 t_u1TxNumPwrOff;
+	uint8 t_u1FrameTransInt;
 
 	t_u1StMin = CanIfProxy_stMfReqStatus.u1STMin;
+	t_u1FrameTransInt = CanIfProxy_cu1FrameTransInt;
 
 	if ( t_u1StMin == (uint8)CANIFPROXY_STMIN_MIN_MS )
 	{
@@ -1294,7 +1300,21 @@ static void CanIfProxy_CalcCfThroughput( void )
 		t_u1TxNumPwrOn = CanIfProxy_cu1CfTxNumDef;
 		t_u1TxNumPwrOff = CanIfProxy_cu1CfTxNumDef;
 	}
-
+	
+	/* Check Burst Mode */
+	if ( CanIfProxy_u1ObcTxMode == STD_OFF )
+	{
+		if ( t_u1StMin > t_u1FrameTransInt )
+		{
+			/* STmin > FrameTransInt: use STmin */
+		}
+		else
+		{
+			/* otherwise: use FrameTransInt */
+			t_u1PeriodPwrOn = t_u1FrameTransInt;
+		}
+	}
+	
 	CanIfProxy_stMfReqStatus.u1CfPeriodPwrOn = t_u1PeriodPwrOn;
 	CanIfProxy_stMfReqStatus.u1CfPeriodPwrOff = t_u1PeriodPwrOff;
 	CanIfProxy_stMfReqStatus.u1CfTxNumPwrOn = t_u1TxNumPwrOn;
