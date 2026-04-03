@@ -85,7 +85,6 @@ static void    vd_s_McstInitUser(void);
 static void    vd_s_McstUnknownUserInit(const U1 u1_a_USER_PRE);
 
 static U1      u1_s_McstCmpInit(U4 *u4_ap_rdata);
-static U1      u1_s_McstDtfCmnInit(const U2 u2_a_nvmid);
 static U1      u1_s_McstDtfUsrInit(const U2 u2_a_nvmid);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

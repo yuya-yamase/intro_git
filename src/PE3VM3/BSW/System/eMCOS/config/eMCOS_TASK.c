@@ -97,6 +97,7 @@ TASK(eMCOS_TASK_High)
 /* Task hook start */
 
     BswM_CS_MainFunctionHigh();
+    ChipCom_MainFunctionPostRx();
     VCanAck_MainFunction();
     CanIfProxy_MainFunction();
     EthSW_HighTask();
