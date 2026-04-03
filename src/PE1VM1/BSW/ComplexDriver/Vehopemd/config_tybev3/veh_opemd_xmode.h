@@ -31,6 +31,9 @@
 #define VEH_OPEMD_MDBIT_IG_P                     (0x00000004U)  /* BDC1S81.VPSINFOx =                                 0x1e           */
 #define VEH_OPEMD_MDBIT_PBA                      (0x00000008U)  /* BDC1S81.VPSINFOx = 0x02 or 0x06 or 0x16 or 0x1e                   */
 #define VEH_OPEMD_MDBIT_IG_R                     (0x00000010U)  /* BDC1S81.VPSINFOx =                         0x16 or 0x1e           */
+
+#define VEH_OPEMD_MDBIT_DIAG                     (0x00000080U)  /* BDC1S81.VPSINFOx =                                       0x1e     */
+                                                                /* BDC1S81.VPSINFOS = 0x00                                           */
 #warning "BEVCDCFD-2652"
 #if 0 /* BEVCDCFD-2652 */
 #define VEH_OPEMD_MDBIT_FIELDS                   (0x0000001eU)
