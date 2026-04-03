@@ -1,4 +1,4 @@
-/* 1.12.0 */
+/* 1.12.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO TECHNO Corporation                                                                                               */
 /*===================================================================================================================================*/
@@ -11,7 +11,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define XSPI_IVI_SUB4_C_MAJOR                   (1)
 #define XSPI_IVI_SUB4_C_MINOR                   (12)
-#define XSPI_IVI_SUB4_C_PATCH                   (0)
+#define XSPI_IVI_SUB4_C_PATCH                   (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -52,6 +52,8 @@
 
 #define XSPI_IVI_CAN_DATA_80                (  80U)
 #define XSPI_IVI_CAN_DATA_MAX               (3356U)     /* サブフレーム4領域(3500byte) - コマンド,メッセージヘッダ(8+8byte) - CMS領域(128byte) */
+
+#define XSPI_IVI_BS_ERR                     (0xFFFFFFFFU)
 
 #define XSPI_IVI_CANCOMMAND_ID              (0x434E4454U)
 #define XSPI_IVI_CANCOMMAND_BUS_REQ         (0x03U)
@@ -168,7 +170,7 @@ static void     vd_s_XspiIviSub4CanAna(const U1 * u1_ap_SUB4_ADD, const U2 u2_a_
 static U2       u2_s_XspiIviSub4SendCanCmd(U1 * u1_ap_buf);
 static U2       u2_s_XspiIviSub4SendCanMsg(U1 * u1_ap_buf, const U2 u2_a_COM_LEN);
 static void     vd_s_XspiIviCANGWStuckBuff(const U4 u4_a_TIME, const U4 u4_a_MSG, const U1 u1_a_DLC, const U1 * u1_a_SRC);
-static U4       u4_s_XspiIviBinarySearch(U4 canid);
+static U4       u4_s_XspiIviBinarySearch(const U4 u4_a_CANID);
 static void     vd_s_XspiIviCANCommandStuckBuff(const U1 u1_a_ID,const U2 u2_a_SIZE);
 static U1       u1_s_XspiIviClockUTCDataEventJdg(const U1* u1_ap_DATA,const U1* u1_ap_DATA_PRE,const U1 u1_a_SIZE);
 static void     vd_s_XspiIviClockUTCStuckBuff(const U1 u1_a_ID,const U2 u2_a_SIZE);
@@ -455,7 +457,7 @@ static void            vd_s_XspiIviSub4CanAna(const U1 * u1_ap_SUB4_ADD, const U
         /* CANID → AubistIDに変換する */
         u4_t_msg_aubistid = u4_s_XspiIviBinarySearch(u4_t_msg_canid);
         
-        if(u4_t_msg_aubistid != (U4)0xFFFFFFFFU){
+        if(u4_t_msg_aubistid != (U4)XSPI_IVI_BS_ERR){
         /* フレーム送信処理 */
             vd_g_CanCtlTx_SendHk(u4_t_msg_aubistid, &u1_tp_can_data[0]);
             (void)Com_SendIPDU((PduIdType)u4_t_msg_aubistid, &u1_tp_can_data[0] );
@@ -499,15 +501,15 @@ static void            vd_s_XspiIviSub4CanAna(const U1 * u1_ap_SUB4_ADD, const U
 }
 
 /*===================================================================================================================================*/
-/*  static U4              u4_s_XspiIviBinarySearch(U4 canid)                                                                        */
+/*  static U4              u4_s_XspiIviBinarySearch(const U4 u4_a_CANID)                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    CANID変換処理(受信ID⇒Aubist定義ID)                                                                                */
+/*  Description:    CANID Conversion Process (Received ID → Aubist-defined ID)                                                       */
 /*  Arguments:      u4_a_CANID   : CANID                                                                                             */
-/*  Return:         u4_t_ret     : Aubist定義のCANID(MSG_*******_TXCH*)                                                               */
+/*  Return:         u4_t_ret     : Aubist CANID(MSG_*******_TXCH*)                                                                   */
 /*===================================================================================================================================*/
-static U4              u4_s_XspiIviBinarySearch(U4 u4_a_CANID) {
-    // ソート済みのCANIDとAubist定義のマッピング
-    static const ST_XSPI_IVI_CANID_PAIR canid_aubist_map[] = {
+static U4              u4_s_XspiIviBinarySearch(const U4 u4_a_CANID) {
+    /* ソート済みのCANIDとAubist定義のマッピング */
+    static const ST_XSPI_IVI_CANID_PAIR st_sp_XSPISUB4_BSTBL[] = {
         {(U4)0x00000121U,    (U4)MSG_AVN1S38_TXCH0},
         {(U4)0x00000126U,    (U4)MSG_AVN1S34_TXCH0},
         {(U4)0x00000141U,    (U4)MSG_AVN1SG7_TXCH0},
@@ -620,23 +622,23 @@ static U4              u4_s_XspiIviBinarySearch(U4 u4_a_CANID) {
     U4  u4_t_right;
     U4  u4_t_mid;
 
-    u4_t_ret = (U4)0xFFFFFFFFU;
-    u4_t_size = sizeof(canid_aubist_map) / sizeof(ST_XSPI_IVI_CANID_PAIR);
-    u4_t_left = (U4)0U;
-    u4_t_right = u4_t_size - u4_s_XSPI_IVI_BS_SFT_1;
+    u4_t_ret    = (U4)XSPI_IVI_BS_ERR;
+    u4_t_size   = (U4)(sizeof(st_sp_XSPISUB4_BSTBL) / sizeof(ST_XSPI_IVI_CANID_PAIR));
+    u4_t_left   = (U4)0U;
+    u4_t_right  = u4_t_size;
 
-    while (u4_t_left <= u4_t_right) {
+    while (u4_t_left < u4_t_right) {
         u4_t_mid = u4_t_left + (u4_t_right - u4_t_left) / u4_s_XSPI_IVI_BS_HALF;
 
         /* CANIDが中央の要素と一致する場合 */
-        if (canid_aubist_map[u4_t_mid].u4_canid == u4_a_CANID) {
-            u4_t_ret = canid_aubist_map[u4_t_mid].u4_aubist;
+        if (st_sp_XSPISUB4_BSTBL[u4_t_mid].u4_canid == u4_a_CANID) {
+            u4_t_ret = st_sp_XSPISUB4_BSTBL[u4_t_mid].u4_aubist;
             break;
         }
 
         /* CANIDが中央の要素より小さい場合 */
-        if (canid_aubist_map[u4_t_mid].u4_canid > u4_a_CANID) {
-            u4_t_right = u4_t_mid - u4_s_XSPI_IVI_BS_SFT_1;
+        if (st_sp_XSPISUB4_BSTBL[u4_t_mid].u4_canid > u4_a_CANID) {
+            u4_t_right = u4_t_mid;
         } else {
             u4_t_left = u4_t_mid + u4_s_XSPI_IVI_BS_SFT_1;
         }
@@ -1872,6 +1874,7 @@ static void            vd_s_XspiIviClockUTCStuckBuff(const U1 u1_a_ID,const U2 u
 /*  1.10.0   10/06/2025  TN       Update Gateway Process: BEVstep3-Cockpit_CanVmRouting_v7.30.xlsx Revision 12104                    */
 /*  1.11.0   02/02/2025  KT       Fixed Gateway Process: BEVstep3-Cockpit_CanVmRouting_v7.30.xlsx BEVS3CDC-26407                     */
 /*  1.12.0   03/17/2025  KT       Update Gateway Process: BEVstep3-Cockpit_CanVmRouting_v26.02.13.0                                  */
+/*  1.12.1   03/31/2025  TN       Prevented underflow when a CANID smaller than the table minimum is specified.                      */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  * TN   = Tetsu Naruse, Denso Techno                                                                                              */
