@@ -18,10 +18,8 @@
 #include "VIS_Pwr.h"
 #include "VIS_Pwrcfg.h"
 #include "LIB.h"
-/* 26.2.16 doza Team-B edit sta */
 #include "ChipCom_Cfg.h"
 #include "ChipCom.h"
-/* 26.2.16 doza Team-B edit end */
 #include "iohw_adc_sh.h"
 
 /*==============================================================================================*/
@@ -46,6 +44,8 @@ static U2   u2_s_vispwr_tm_passive_on;              /* ƒpƒbƒVƒu‹N“®ğŒ¬—§•Ûƒ
 static U2   u2_s_vispwr_tm_ch_off;                  /* ƒ`ƒƒƒlƒ‹’ÊM‹N“®“dŒ¹ OFFƒ^ƒCƒ} */
 static U1   u1_s_vispwr_apofrq;                     /* Œ©‚½–ÚOFF§Œä—v‹ */
 static U1   u1_s_vispwr_socrst;                     /* SoCƒŠƒZƒbƒg‹N“®—vˆö */
+static U1   u1_s_vispwr_sailcompinitreq;            /* SAILŠ®‘S‰Šú‰»—v‹ */
+static U1   u1_s_vispwr_sailcompinitres;            /* SAILŠ®‘S‰Šú‰»‰“š */
 
 /* #define VIS_STOP_SEC_VAR */
 /* #include <VIS_MemMap.h> */
@@ -67,6 +67,8 @@ static U1 u1_s_VISPwrJudgeEthPassiveStartup(void);
 static void vd_s_VISPwrJudgeEthChComPwr(void);
 static void vd_s_VISPwrJudgeApofrq(const U1 u1_t_ipdu_st, const U1 u1_t_apofrq);
 static void vd_s_VISPwrTransSocRst(void);
+static void vd_s_VISPwrTransSailCompInitReq(void);
+static void vd_s_VISPwrTransSailCompInitRes(void);
 
 /************************************************************************************************/
 /* Function Name     : vd_g_VISPwrInit                                                          */
@@ -87,6 +89,8 @@ void vd_g_VISPwrInit(void)
     u2_s_vispwr_tm_ch_off = VIS_PWR_JUDGE_CH_POWEROFF_TM;
     u1_s_vispwr_apofrq = (U1)STD_OFF;
     u1_s_vispwr_socrst = VIS_SOCRST_NORESPONSE;
+    u1_s_vispwr_sailcompinitreq = (U1)STD_OFF;
+    u1_s_vispwr_sailcompinitres = VIS_SAILCOMPINIT_NORESPONSE;
     
     return;
 }
@@ -100,6 +104,8 @@ void vd_g_VISPwrCyc(void)
     vd_s_VISPwrRcvBDC1S81();
     vd_s_VISPwrJudgeEthChComPwr();
     vd_s_VISPwrTransSocRst();
+    vd_s_VISPwrTransSailCompInitReq();
+    vd_s_VISPwrTransSailCompInitRes();
 
     return;
 }
@@ -514,6 +520,64 @@ static void vd_s_VISPwrTransSocRst(void)
     /* ƒ`ƒbƒvŠÔ’ÊM_‘—M—v‹ */
     u1_tp_transreq_data[VIS_PWR_TRANSREQ_DATA_RECEIVEVAL] = u1_s_vispwr_socrst;
     (void)ChipCom_SetPeriodicTxData((U1)CHIPCOM_PERIODICID_VIS_SAILRESETST,VIS_PWR_TRANSREQ_DATA_LENGTH_1,u1_tp_transreq_data);
+
+    return;
+}
+
+/************************************************************************************************/
+/* Function Name     : vd_s_VISPwrTransSailCompInitReq                                          */
+/************************************************************************************************/
+static void vd_s_VISPwrTransSailCompInitReq(void)
+{
+    U1 u1_tp_transreq_data[VIS_PWR_TRANSREQ_DATA_LENGTH_1];
+    
+    /* ƒ`ƒbƒvŠÔ’ÊM_‘—M—v‹ */
+    u1_tp_transreq_data[VIS_PWR_TRANSREQ_DATA_RECEIVEVAL] = u1_s_vispwr_sailcompinitreq;
+    (void)ChipCom_SetPeriodicTxData((U1)CHIPCOM_PERIODICID_SAILDATARSTREQ,VIS_PWR_TRANSREQ_DATA_LENGTH_1,u1_tp_transreq_data);
+
+    return;
+}
+
+/************************************************************************************************/
+/* Function Name     : vd_s_VISPwrTransSailCompInitRes                                          */
+/************************************************************************************************/
+static void vd_s_VISPwrTransSailCompInitRes(void)
+{
+    U1 u1_t_ret = (U1)E_NOT_OK;
+    U2 u2_t_receive_length = VIS_PWR_TRANSREQ_LENGTH_INIT;
+    U1 u1_tp_receive_data = VIS_PWR_INIT;
+    U4 u4_t_receive_counter = VIS_PWR_TRANSREQ_RCVCNT_INIT;
+    U1 u1_t_sig_st = (U1)CHIPCOM_NO_RX;
+    
+    /* ƒ`ƒbƒvŠÔ’ÊM_ƒf[ƒ^ó‘Ôæ“¾ */
+    u1_t_sig_st = ChipCom_GetSignalStatus((U2)SIGNAL_CHIPCOM_BUS_CEN1S10_SAILDATARSTRES) & ((U1)CHIPCOM_TIMEOUT | (U1)CHIPCOM_NO_RX);
+    
+    if ((U1)CHIPCOM_STATUS_NONE == u1_t_sig_st){
+        /* ƒ`ƒbƒvŠÔ’ÊM_óM—v‹ */
+        u1_t_ret = ChipCom_GetPeriodicRxData((U1)CHIPCOM_PERIODICID_SAILDATARSTRES, &u2_t_receive_length, &u1_tp_receive_data ,&u4_t_receive_counter);
+
+        if(((U1)E_OK == u1_t_ret) && (VIS_PWR_TRANSREQ_DATA_LENGTH_1 == u2_t_receive_length)){
+            /* óMƒf[ƒ^æ“¾¬Œ÷‚Ìê‡ */
+            if ((VIS_SAILCOMPINIT_NORESPONSE == u1_tp_receive_data)
+            || (VIS_SAILCOMPINIT_OK == u1_tp_receive_data)
+            || (VIS_SAILCOMPINIT_NG == u1_tp_receive_data)) {
+                u1_s_vispwr_sailcompinitres = u1_tp_receive_data;
+            }
+            else{
+                /* óMƒf[ƒ^•s³ASAILŠ®‘S‰Šú‰»‰“š‚Í‘O‰ñ’l‚ğ•Û‚·‚é */
+            }
+        }
+        else{
+            /* óMƒf[ƒ^æ“¾¸”sASAILŠ®‘S‰Šú‰»‰“š‚Í‘O‰ñ’l‚ğ•Û‚·‚é */
+        }
+    }
+    else if ((U1)CHIPCOM_TIMEOUT == u1_t_sig_st){
+        /* ƒf[ƒ^ó‘Ô‚ª“râASAILŠ®‘S‰Šú‰»‰“š‚Í‘O‰ñ’l‚ğ•Û‚·‚é */
+    }
+    else{
+        /* ƒf[ƒ^ó‘Ô‚ª–¢óMASAILŠ®‘S‰Šú‰»‰“š‚Í–¢óM(‰Šú’l)‚ğ•Û‚·‚é */
+        u1_s_vispwr_sailcompinitres = VIS_SAILCOMPINIT_NORESPONSE;
+    }
 
     return;
 }
