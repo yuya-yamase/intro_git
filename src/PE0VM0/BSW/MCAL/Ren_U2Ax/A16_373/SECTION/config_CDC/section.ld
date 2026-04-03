@@ -29,15 +29,6 @@ SECTIONS {
     .bsw_cryif_code         align(16)                       : > .
     .bsw_secoc_code         align(16)                       : > .
     .bsw_secoc_cd_fv_code   align(16)                       : > .
-    .bsw_dcm_text           align(16)                       : > .
-    .bsw_dem_text           align(16)                       : > .
-    .bsw_fee_text           align(16)                       : > .
-    .bsw_fls_text           align(16)                       : > .
-    .bsw_memif_text         align(16)                       : > .
-    .bsw_mscd_text          align(16)                       : > .
-    .bsw_nvm_text           align(16)                       : > .
-    .bsw_memacc_text        align(16)                       : > .
-    .P_OTA_CODEFLS          align(16)                       : > .
     .BSW_LIB_CODE           align(4)                        : > .
     .bsw_e2e_text           align(16)                       : > .
 // Crypto, CycurHSM Code
@@ -54,15 +45,6 @@ SECTIONS {
     .bsw_can_const          align(4)                        : > .
     .bsw_csm_const_config   align(4)                        : > .
     .bsw_secoc_const_config align(4)                        : > .
-    .bsw_dcm_rodata         align(4)                        : > .
-    .bsw_dem_rodata         align(4)                        : > .
-    .bsw_fee_rodata         align(4)                        : > .
-    .bsw_fls_rodata         align(4)                        : > .
-    .bsw_memif_rodata       align(4)                        : > .
-    .bsw_mscd_rodata        align(4)                        : > .
-    .bsw_nvm_rodata         align(4)                        : > .
-    .bsw_memacc_rodata      align(4)                        : > .
-    .C_OTA_CODEFLS          align(4)                        : > .
     .BSW_LIB_CONST          align(4)                        : > .
     .bsw_csm_shared_const_config align(4)                   : > .
 // Crypto, CycurHSM Const Data
@@ -238,21 +220,9 @@ SECTIONS {
 
 // MS Data
     .MEM_SEC_STA_RAM_LOC_APPL    ALIGN(8)                             : > .
-    .MEM_SEC_ADDR_STA_BSS_MS     ALIGN(8)                             : > .
-    .bss_nvmc_ramblk             ALIGN(8)                             : > .
-    .MEM_SEC_ADDR_END_BSS_MS     ALIGN(8)                             : > .
-    _NVMC_RAM_SIZE = . - ADDR(.MEM_SEC_ADDR_STA_BSS_MS);
     .bss_RIM1                    ALIGN(8)                             : > .
     .bss_RIM2                    ALIGN(8)                             : > .
     .bss_RIM3                    ALIGN(8)                             : > .
-    .bsw_fee_bss            align(4)                        : > .
-    .bsw_fls_bss            align(4)                        : > .
-    .bsw_memif_bss          align(4)                        : > .
-    .bsw_mscd_bss           align(4)                        : > .
-    .bsw_nvm_bss            align(4)                        : > .
-    .bsw_nvm_bss_saved_zone align(4)                        : > .
-    .bsw_memacc_bss         align(4)                        : > .
-    .B_OTA_CODEFLS          align(4)                        : > .
     .MEM_SEC_END_RAM_LOC_APPL    ALIGN(8)                             : > .
     _LOC_RAM_SIZE = . - ADDR(.MEM_SEC_STA_RAM_LOC_APPL);
 
@@ -317,8 +287,6 @@ SECTIONS {
     .ecu_nvar_sw            align(4)                        : > .
     .bsw_cs_data            align(4)                        : > .
     .bsw_can_data           align(4)                        : > .
-    .bsw_dcm_bss            align(4)                        : > .
-    .bsw_dem_bss            align(4)                        : > .
     .os_var_top             align(4)                        : > .
     .osVarCleared ALIGN(4):
     {

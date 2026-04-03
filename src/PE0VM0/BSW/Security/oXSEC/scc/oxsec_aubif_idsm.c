@@ -31,6 +31,7 @@
 
 #include <IdsM_Connector.h>
 
+#include "oxsec_cfg_private.h"
 #include "oxsec_aubif_idsm.h"
 #include "oxcan.h"
 
@@ -67,24 +68,14 @@
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  Std_ReturnType vd_g_oXSECAubIfIdsMIdsRTxAck( const uint8* ptData, uint16 u2DataSize )                                            */
+/*  Std_ReturnType u1_g_oXSECAubIfIdsMIdsRTxAck( const uint8* ptData, uint16 u2DataSize )                                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-Std_ReturnType vd_g_oXSECAubIfIdsMIdsRTxAck( const uint8* ptData, uint16 u2DataSize )
+Std_ReturnType u1_g_oXSECAubIfIdsMIdsRTxAck( const uint8* ptData, uint16 u2DataSize )
 {
-    
-    U4               u4_t_sys_act;
-    Std_ReturnType   u1_t_ret;
-    
-    u1_t_ret = (U1)E_NOT_OK;
-    u4_t_sys_act = u4_g_oXCANSysActvtd();
-    if((u4_t_sys_act & (U4)OXCAN_SYS_VIR_0) == (U4)OXCAN_SYS_VIR_0){
-        u1_t_ret = (U1)E_OK;
-    }
-    
-    return(u1_t_ret);
+    return(u1_g_oXSECCfgQsevTxEnabled());
 }
 /*===================================================================================================================================*/
 /*  void vd_g_oXSECAubIfIdsMQSEvErrAck( const uint8* ptEventFrame, const IdsM_TimestampType* ptTimestamp,                            */

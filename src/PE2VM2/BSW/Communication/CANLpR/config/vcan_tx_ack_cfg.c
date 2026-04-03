@@ -36,6 +36,7 @@
 #define CAN_LPR_UDS_RD_TEST                      (0U) /* 0:Product configuration  1:Remote Diag Communication Test configuration     */
                                                       /* If this configuration is modified, you must also update the following file: */  
                                                       /*   PE0VM0/BSW/Communication/CANLpR/config/can_lpr_cfg_uds_trx.h              */  
+                                                      /*   PE1VM1\BSW\Communication\CANLpR\config\vcan_tx_ack_cfg.c                  */
                                                       /* to maintain configuration consistency.                                      */  
 #if (CAN_LPR_UDS_RD_TEST == 1U)
 #warning "vcan_tx_ack_cfg.c : This build uses a configuration for the Remote Diagnostics Communication Test. Do not use for production."

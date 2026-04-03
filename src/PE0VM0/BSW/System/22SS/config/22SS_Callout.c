@@ -19,13 +19,12 @@
 
 #include "veh_opemd.h"
 #include "oxcan.h"
-#include "oxdocan.h"
 #include "oxsec.h"
 #include "ivdsh.h"
+#include "vCryPx.h"
 
 /* Memory               */
 #include "rim_ctl.h"
-/* #include "nvmc_mgr.h" */
 
 #include "ivcbsh.h"
 
@@ -58,23 +57,20 @@ void vd_g_22SSCallout_StaBonInit(void)
 /*    U1    u1_t_rslt;     */
 
     /*****************************************************/
-    /* Rim, Nvmc Init Function should be called at first */
+    /* Rim Init Function should be called at first       */
     /*****************************************************/
     vd_g_Rim_BonInit();
 
-/*    vd_g_Nvmc_BonInit(); */
-/*    do{  */
-/*        u1_t_rslt = u1_g_Nvmc_BonRead(); */
-/*    }while(u1_t_rslt != (U1)FALSE); */
-
-    vd_g_oXDoCANPreInit();      /* vd_g_oXDoCANPreInit shall be called before vd_g_oXCANRstInit */
     vd_g_oXSECInit();
     vd_g_oXSECBonKeyInit();
     vd_g_oXCANRstInit();
-    vd_g_oXDoCANBonInit();
     vd_g_VehopemdRstInit();
     vd_g_iVDshInit();
+#warning "BEVCDCFD-2652"
+#if 1 /* BEVCDCFD-2652 */ /* vd_g_iVCBshInitのコール箇所がvd_g_iVDshInit直後のコールでなくても問題ないか確認してください */
+    vd_g_vCryPx_Init();
     vd_g_iVCBshInit();
+#endif /* BEVCDCFD-2652 */
 
     /* vv User Hook start vv */
     /* ^^ User Hook end   ^^ */
@@ -95,22 +91,19 @@ void vd_g_22SSCallout_StaRstInit(void)
 /*    U1    u1_t_rslt;     */
 
     /*****************************************************/
-    /* Rim, Nvmc Init Function should be called at first */
+    /* Rim Init Function should be called at first       */
     /*****************************************************/
     vd_g_Rim_WkupInit();
 
-/*    vd_g_Nvmc_WkupInit(); */
-/*    do{  */
-/*        u1_t_rslt = u1_g_Nvmc_WkupRead(); */
-/*    }while(u1_t_rslt != (U1)FALSE); */
-
-    vd_g_oXDoCANPreInit();      /* vd_g_oXDoCANPreInit shall be called before vd_g_oXCANRstInit */
     vd_g_oXSECInit();
     vd_g_oXCANRstInit();
-    vd_g_oXDoCANRstInit();
     vd_g_VehopemdRstInit();
     vd_g_iVDshInit();
+#warning "BEVCDCFD-2652"
+#if 1 /* BEVCDCFD-2652 */ /* vd_g_iVCBshInitのコール箇所がvd_g_iVDshInit直後のコールでなくても問題ないか確認してください */
+    vd_g_vCryPx_Init();
     vd_g_iVCBshInit();
+#endif /* BEVCDCFD-2652 */
 
     /* vv User Hook start vv */
     /* ^^ User Hook end   ^^ */
@@ -131,22 +124,19 @@ void vd_g_22SSCallout_StaWkupInit(void)
 /*    U1    u1_t_rslt;     */
 
     /*****************************************************/
-    /* Rim, Nvmc Init Function should be called at first */
+    /* Rim Init Function should be called at first       */
     /*****************************************************/
     vd_g_Rim_WkupInit();
 
-/*    vd_g_Nvmc_WkupInit(); */
-/*    do{  */
-/*        u1_t_rslt = u1_g_Nvmc_WkupRead(); */
-/*    }while(u1_t_rslt != (U1)FALSE); */
-
-    vd_g_oXDoCANPreInit();      /* vd_g_oXDoCANPreInit shall be called before vd_g_oXCANWkupInit */
     vd_g_oXSECInit();
     vd_g_oXCANWkupInit();
-    vd_g_oXDoCANWkupInit();
     vd_g_VehopemdWkupInit();
     vd_g_iVDshInit();
+#warning "BEVCDCFD-2652"
+#if 1 /* BEVCDCFD-2652 */ /* vd_g_iVCBshInitのコール箇所がvd_g_iVDshInit直後のコールでなくても問題ないか確認してください */
+    vd_g_vCryPx_Init();
     vd_g_iVCBshInit();
+#endif /* BEVCDCFD-2652 */
 
     /* vv User Hook start vv */
     /* ^^ User Hook end   ^^ */

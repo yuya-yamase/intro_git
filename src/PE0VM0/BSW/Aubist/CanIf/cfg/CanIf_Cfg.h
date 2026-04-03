@@ -109,8 +109,14 @@
 /******************************************/
 /******************************************/
 /* Receive-HOH Channel Number */
+#warning "BEVCDCFD-2652"
+#if 0 /* BEVCDCFD-2652 */
+#define BSW_CANIF_CFG_0_HRHNUM                  (145U)
+#define BSW_CANIF_CFG_1_HRHNUM                  (2U)
+#else /* BEVCDCFD-2652 */
 #define BSW_CANIF_CFG_0_HRHNUM                  (143U)
 #define BSW_CANIF_CFG_1_HRHNUM                  (3U)
+#endif /* BEVCDCFD-2652 */
 #define BSW_CANIF_CFG_2_HRHNUM                  (0U)
 #define BSW_CANIF_CFG_3_HRHNUM                  (3U)
 #define BSW_CANIF_CFG_4_HRHNUM                  (84U)
@@ -292,7 +298,12 @@
 #define BSW_CANIF_CFG_CH_HOH143                 (BSW_CANIF_CH0)
 #define BSW_CANIF_CFG_CH_HOH144                 (BSW_CANIF_CH0)
 #define BSW_CANIF_CFG_CH_HOH145                 (BSW_CANIF_CH0)
+#warning "BEVCDCFD-2652"
+#if 0 /* BEVCDCFD-2652 */
+#define BSW_CANIF_CFG_CH_HOH146                 (BSW_CANIF_CH0)
+#else /* BEVCDCFD-2652 */
 #define BSW_CANIF_CFG_CH_HOH146                 (BSW_CANIF_CH4)
+#endif /* BEVCDCFD-2652 */
 #define BSW_CANIF_CFG_CH_HOH147                 (BSW_CANIF_CH4)
 #define BSW_CANIF_CFG_CH_HOH148                 (BSW_CANIF_CH4)
 #define BSW_CANIF_CFG_CH_HOH149                 (BSW_CANIF_CH4)
@@ -376,6 +387,24 @@
 #define BSW_CANIF_CFG_CH_HOH227                 (BSW_CANIF_CH4)
 #define BSW_CANIF_CFG_CH_HOH228                 (BSW_CANIF_CH4)
 #define BSW_CANIF_CFG_CH_HOH229                 (BSW_CANIF_CH4)
+#warning "BEVCDCFD-2652"
+#if 0 /* BEVCDCFD-2652 */
+#define BSW_CANIF_CFG_CH_HOH230                 (BSW_CANIF_CH4)
+#define BSW_CANIF_CFG_CH_HOH231                 (BSW_CANIF_CH4)
+#define BSW_CANIF_CFG_CH_HOH232                 (BSW_CANIF_CH4)
+#define BSW_CANIF_CFG_CH_HOH233                 (BSW_CANIF_CH4)
+#define BSW_CANIF_CFG_CH_HOH234                 (BSW_CANIF_CH4)
+#define BSW_CANIF_CFG_CH_HOH235                 (BSW_CANIF_CH4)
+#define BSW_CANIF_CFG_CH_HOH236                 (BSW_CANIF_CH4)
+#define BSW_CANIF_CFG_CH_HOH237                 (BSW_CANIF_CH4)
+#define BSW_CANIF_CFG_CH_HOH238                 (BSW_CANIF_CH4)
+#define BSW_CANIF_CFG_CH_HOH239                 (BSW_CANIF_CH4)
+#define BSW_CANIF_CFG_CH_HOH240                 (BSW_CANIF_CH4)
+#define BSW_CANIF_CFG_CH_HOH241                 (BSW_CANIF_CH4)
+#define BSW_CANIF_CFG_CH_HOH242                 (BSW_CANIF_CH3)
+#define BSW_CANIF_CFG_CH_HOH243                 (BSW_CANIF_CH3)
+#define BSW_CANIF_CFG_CH_HOH244                 (BSW_CANIF_CH3)
+#else /* BEVCDCFD-2652 */
 #define BSW_CANIF_CFG_CH_HOH230                 (BSW_CANIF_CH3)
 #define BSW_CANIF_CFG_CH_HOH231                 (BSW_CANIF_CH3)
 #define BSW_CANIF_CFG_CH_HOH232                 (BSW_CANIF_CH3)
@@ -391,6 +420,7 @@
 #define BSW_CANIF_CFG_CH_HOH242                 (BSW_CANIF_NOUSE)
 #define BSW_CANIF_CFG_CH_HOH243                 (BSW_CANIF_NOUSE)
 #define BSW_CANIF_CFG_CH_HOH244                 (BSW_CANIF_NOUSE)
+#endif /* BEVCDCFD-2652 */
 #define BSW_CANIF_CFG_CH_HOH245                 (BSW_CANIF_NOUSE)
 #define BSW_CANIF_CFG_CH_HOH246                 (BSW_CANIF_NOUSE)
 #define BSW_CANIF_CFG_CH_HOH247                 (BSW_CANIF_NOUSE)
@@ -902,7 +932,7 @@
 #define BSW_CANIF_CFG_COMP_HOH239               (BSW_CANIF_COMP_BIT_NONE )
 #define BSW_CANIF_CFG_COMP_HOH240               (BSW_CANIF_COMP_BIT_NONE )
 #define BSW_CANIF_CFG_COMP_HOH241               (BSW_CANIF_COMP_BIT_NONE )
-#define BSW_CANIF_CFG_COMP_HOH242               (BSW_CANIF_COMP_BIT_NONE )
+#define BSW_CANIF_CFG_COMP_HOH242               (BSW_CANIF_COMP_BIT_CANNM)
 #define BSW_CANIF_CFG_COMP_HOH243               (BSW_CANIF_COMP_BIT_NONE )
 #define BSW_CANIF_CFG_COMP_HOH244               (BSW_CANIF_COMP_BIT_NONE )
 #define BSW_CANIF_CFG_COMP_HOH245               (BSW_CANIF_COMP_BIT_NONE )
@@ -1174,7 +1204,7 @@
 #define BSW_CANIF_CFG_COMP_HOH511               (BSW_CANIF_COMP_BIT_NONE )
 
 /* Send-HOH Channel Number */
-#define BSW_CANIF_CFG_0_HTHNUM                  (2U)
+#define BSW_CANIF_CFG_0_HTHNUM                  (1U)
 #define BSW_CANIF_CFG_1_HTHNUM                  (1U)
 #define BSW_CANIF_CFG_2_HTHNUM                  (1U)
 #define BSW_CANIF_CFG_3_HTHNUM                  (1U)
@@ -1217,7 +1247,7 @@
 /* Receive-VHOH Channel Number */
 #define BSW_CANIF_CFG_0_VHRHNUM                 (0U)
 #define BSW_CANIF_CFG_1_VHRHNUM                 (0U)
-#define BSW_CANIF_CFG_2_VHRHNUM                 (7U)
+#define BSW_CANIF_CFG_2_VHRHNUM                 (6U)
 #define BSW_CANIF_CFG_3_VHRHNUM                 (0U)
 #define BSW_CANIF_CFG_4_VHRHNUM                 (0U)
 #define BSW_CANIF_CFG_5_VHRHNUM                 (0U)
@@ -1255,7 +1285,7 @@
 #define BSW_CANIF_CFG_CH_VHOH003                (BSW_CANIF_CH2)
 #define BSW_CANIF_CFG_CH_VHOH004                (BSW_CANIF_CH2)
 #define BSW_CANIF_CFG_CH_VHOH005                (BSW_CANIF_CH2)
-#define BSW_CANIF_CFG_CH_VHOH006                (BSW_CANIF_CH2)
+#define BSW_CANIF_CFG_CH_VHOH006                (BSW_CANIF_NOUSE)
 #define BSW_CANIF_CFG_CH_VHOH007                (BSW_CANIF_NOUSE)
 #define BSW_CANIF_CFG_CH_VHOH008                (BSW_CANIF_NOUSE)
 #define BSW_CANIF_CFG_CH_VHOH009                (BSW_CANIF_NOUSE)
@@ -2354,7 +2384,7 @@
 #define BSW_CANIF_CFG_30_TXCANNMPDUNUM          (0U)
 #define BSW_CANIF_CFG_31_TXCANNMPDUNUM          (0U)
 
-#define BSW_CANIF_CFG_0_TXCANTPPDUNUM           (4U)
+#define BSW_CANIF_CFG_0_TXCANTPPDUNUM           (0U)
 #define BSW_CANIF_CFG_1_TXCANTPPDUNUM           (0U)
 #define BSW_CANIF_CFG_2_TXCANTPPDUNUM           (0U)
 #define BSW_CANIF_CFG_3_TXCANTPPDUNUM           (0U)
@@ -2487,7 +2517,7 @@
 #define BSW_CANIF_CFG_31_TXXCPPDUNUM            (0U)
 
 /* Reception */
-#define BSW_CANIF_CFG_0_RXPDURPDUNUM            (3U)
+#define BSW_CANIF_CFG_0_RXPDURPDUNUM            (1U)
 #define BSW_CANIF_CFG_1_RXPDURPDUNUM            (1U)
 #define BSW_CANIF_CFG_2_RXPDURPDUNUM            (0U)
 #define BSW_CANIF_CFG_3_RXPDURPDUNUM            (0U)
@@ -2553,7 +2583,7 @@
 #define BSW_CANIF_CFG_30_RXCANNMPDUNUM          (0U)
 #define BSW_CANIF_CFG_31_RXCANNMPDUNUM          (0U)
 
-#define BSW_CANIF_CFG_0_RXCANTPPDUNUM           (6U)
+#define BSW_CANIF_CFG_0_RXCANTPPDUNUM           (0U)
 #define BSW_CANIF_CFG_1_RXCANTPPDUNUM           (0U)
 #define BSW_CANIF_CFG_2_RXCANTPPDUNUM           (0U)
 #define BSW_CANIF_CFG_3_RXCANTPPDUNUM           (0U)
@@ -3062,26 +3092,14 @@
 #define BSW_CANIF_CFG_METADATA_USE              (BSW_CANIF_NOUSE)
 
 /* PDU ID for Tx L-PDU */
-#define PDUID_Nsdu_TX_TxNPdu_Diag_Physical_Service (BSW_PDUR_LOCOMP_CANTP | 0x0000U)
-#define PDUID_Nsdu_TX_TxNPdu_Diag_Physical_Remote (BSW_PDUR_LOCOMP_CANTP | 0x0001U)
-#define PDUID_Nsdu_TX_TxNPdu_Diag_Physical_FD_Service (BSW_PDUR_LOCOMP_CANTP | 0x0002U)
-#define PDUID_Nsdu_TX_TxNPdu_Diag_Physical_FD_Remote (BSW_PDUR_LOCOMP_CANTP | 0x0003U)
 #define PDUID_CDC1N01_Tx_CANFD_G2M_1_BUS        (BSW_PDUR_LOCOMP_CANNM | 0x0000U)
 #define PDUID_CDC1N01_Tx_CANFD_G2M_2_BUS        (BSW_PDUR_LOCOMP_CANNM | 0x0001U)
 #define PDUID_CDC1N01_Tx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANNM | 0x0002U)
 #define PDUID_CDCMN01_Tx_MM_SUB_BUS             (BSW_PDUR_LOCOMP_CANNM | 0x0003U)
 
 /* PDU ID for Rx L-PDU */
-#define PDUID_BDC1S52_Rx_CANFD_G2M_1_BUS        (BSW_PDUR_LOCOMP_CANIF | 0x0000U)
-#define PDUID_BDC1S60_Rx_CANFD_G2M_1_BUS        (BSW_PDUR_LOCOMP_CANIF | 0x0001U)
-#define PDUID_BDC1S81_Rx_CANFD_G2M_1_BUS        (BSW_PDUR_LOCOMP_CANIF | 0x0002U)
-#define PDUID_BDC1S91_Rx_CANFD_G2M_2_BUS        (BSW_PDUR_LOCOMP_CANIF | 0x0003U)
-#define PDUID_Nsdu_RX_RxNPdu_Diag_Physical_Service (BSW_PDUR_LOCOMP_CANTP | 0x0004U)
-#define PDUID_Nsdu_RX_RxNPdu_Diag_Functional_Service (BSW_PDUR_LOCOMP_CANTP | 0x0005U)
-#define PDUID_Nsdu_RX_RxNPdu_Diag_Physical_Remote (BSW_PDUR_LOCOMP_CANTP | 0x0006U)
-#define PDUID_Nsdu_RX_RxNPdu_Diag_Physical_FD_Service (BSW_PDUR_LOCOMP_CANTP | 0x0007U)
-#define PDUID_Nsdu_RX_RxNPdu_Diag_Functional_FD_Service (BSW_PDUR_LOCOMP_CANTP | 0x0008U)
-#define PDUID_Nsdu_RX_RxNPdu_Diag_Physical_FD_Remote (BSW_PDUR_LOCOMP_CANTP | 0x0009U)
+#define PDUID_BDC1S81_Rx_CANFD_G2M_1_BUS        (BSW_PDUR_LOCOMP_CANIF | 0x0000U)
+#define PDUID_BDC1S91_Rx_CANFD_G2M_2_BUS        (BSW_PDUR_LOCOMP_CANIF | 0x0001U)
 #define PDUID_NM_Rx_CANFD_G2M_1_BUS             (BSW_PDUR_LOCOMP_CANNM | 0x0004U)
 #define PDUID_NM_Rx_CANFD_G2M_2_BUS             (BSW_PDUR_LOCOMP_CANNM | 0x0005U)
 #define PDUID_VME1N99_Rx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANNM | 0x0006U)
@@ -3090,6 +3108,18 @@
 #define PDUID_MCDMN01_Rx_MM_SUB_BUS             (BSW_PDUR_LOCOMP_CANNM | 0x0009U)
 
 /* HOH Number for Tx L-PDU */
+#warning "BEVCDCFD-2652"
+#if 0 /* BEVCDCFD-2652 */
+#define HOH_CDC1N01_Tx_CANFD_G2M_1_BUS          (0x00F6U)
+#define HOH_CDC1N01_Tx_CANFD_G2M_2_BUS          (0x00F5U)
+#define HOH_CDC1N01_Tx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0006U)
+#define HOH_CDCMN01_Tx_MM_SUB_BUS               (0x00F7U)
+
+/* HOH Number for Rx L-PDU */
+#define HOH_BDC1S81_Rx_CANFD_G2M_1_BUS          (0x0034U)
+#define HOH_BDC1S91_Rx_CANFD_G2M_2_BUS          (0x0001U)
+#define HOH_NM_Rx_CANFD_G2M_1_BUS               (0x0002U)
+#else /* BEVCDCFD-2652 */
 #define HOH_Nsdu_TX_TxNPdu_Diag_Physical_Service (0x00EBU)
 #define HOH_Nsdu_TX_TxNPdu_Diag_Physical_Remote (0x00EBU)
 #define HOH_Nsdu_TX_TxNPdu_Diag_Physical_FD_Service (0x00EBU)
@@ -3111,11 +3141,17 @@
 #define HOH_Nsdu_RX_RxNPdu_Diag_Functional_FD_Service (0x008EU)
 #define HOH_Nsdu_RX_RxNPdu_Diag_Physical_FD_Remote (0x008EU)
 #define HOH_NM_Rx_CANFD_G2M_1_BUS               (0x0003U)
+#endif /* BEVCDCFD-2652 */
 #define HOH_NM_Rx_CANFD_G2M_2_BUS               (0x0000U)
 #define HOH_VME1N99_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0002U)
 #define HOH_VIV1N99_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0002U)
 #define HOH_VCE1N99_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0002U)
+#warning "BEVCDCFD-2652"
+#if 0 /* BEVCDCFD-2652 */
+#define HOH_MCDMN01_Rx_MM_SUB_BUS               (0x00F2U)
+#else /* BEVCDCFD-2652 */
 #define HOH_MCDMN01_Rx_MM_SUB_BUS               (0x00E6U)
+#endif /* BEVCDCFD-2652 */
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */

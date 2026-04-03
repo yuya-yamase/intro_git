@@ -79,6 +79,17 @@ static const U2                u2_sp_CAN_LPR_EPDU_G2M_1[] = {
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static const ST_CAN_LPR_RR     st_sp_CAN_LPR_RR_G2M_1[] = {
+#warning "BEVCDCFD-2652"
+#if 0 /* BEVCDCFD-2652 */
+    {(U4)0x00000200U, (U4)0x40000013U, (U4)0x4000001bU, (U2)64U, (U2)87U},    /*   0 : BDC1S52     = 0x40000013 */
+/*  {(U4)0x00000200U, (U4)0x40000013U, (U4)0x4000001bU, (U2)64U, (U2)87U}, */ /*     : BDC1S60     = 0x4000001b */
+    {(U4)0x00000200U, (U4)0x40000062U, (U4)0x40000062U, (U2)64U, (U2)87U},    /*   1 : EPS1S11     = 0x40000062 */
+    {(U4)0x00000200U, (U4)0x4000006aU, (U4)0x4000006aU, (U2)32U, (U2)87U},    /*   2 : VSC1F01     = 0x4000006a */
+    {(U4)0x00000200U, (U4)0x40000069U, (U4)0x40000186U, (U2)32U, (U2)87U},    /*   3 : VSC1G12     = 0x40000069 */
+/*  {(U4)0x00000200U, (U4)0x40000069U, (U4)0x40000186U, (U2)32U, (U2)87U}, */ /*     : ZN11S08     = 0x40000086 */
+/*  {(U4)0x00000200U, (U4)0x40000069U, (U4)0x40000186U, (U2)32U, (U2)87U}, */ /*     : BDC1S30     = 0x40000186 */
+    {(U4)0x00000200U, (U4)0x4000009cU, (U4)0x400000b7U, (U2)32U, (U2)87U},    /*   4 : BDC1S40     = 0x4000009c */
+#else /* BEVCDCFD-2652 */
 	{(U4)0x00000a00U, (U4)0x40000013U, (U4)0x4000001bU, (U2)64U, (U2)87U},    /*   0 : BDC1S52     = 0x40000013 */
 /*  {(U4)0x00000a00U, (U4)0x40000013U, (U4)0x4000001bU, (U2)64U, (U2)87U}, */ /*     : BDC1S60     = 0x4000001b */
 	{(U4)0x00000200U, (U4)0x40000062U, (U4)0x40000062U, (U2)64U, (U2)87U},    /*   1 : EPS1S11     = 0x40000062 */
@@ -87,6 +98,7 @@ static const ST_CAN_LPR_RR     st_sp_CAN_LPR_RR_G2M_1[] = {
 	{(U4)0x00000200U, (U4)0x40000086U, (U4)0x40000086U,	(U2)8U,	 (U2)87U},    /*   4 : ZN11S08     = 0x40000086 */
 	{(U4)0x00000200U, (U4)0x40000186U, (U4)0x40000186U,	(U2)32U, (U2)87U},    /*   5 : BDC1S30     = 0x40000186 */
 	{(U4)0x00000200U, (U4)0x4000009cU, (U4)0x400000b7U,	(U2)32U, (U2)87U},    /*   6 : BDC1S40     = 0x4000009c */
+#endif /* BEVCDCFD-2652 */
 /*  {(U4)0x00000200U, (U4)0x4000009cU, (U4)0x400000b7U, (U2)32U, (U2)87U}, */ /*     : VSC1G13     = 0x4000009e */
 /*  {(U4)0x00000200U, (U4)0x4000009cU, (U4)0x400000b7U, (U2)32U, (U2)87U}, */ /*     : ENG1G03     = 0x400000a4 */
 /*  {(U4)0x00000200U, (U4)0x4000009cU, (U4)0x400000b7U, (U2)32U, (U2)87U}, */ /*     : VSC1G14     = 0x400000b7 */
@@ -168,9 +180,17 @@ static const ST_CAN_LPR_RR     st_sp_CAN_LPR_RR_G2M_1[] = {
 	{(U4)0x00000200U, (U4)0x400002fdU, (U4)0x400002fdU,	(U2)32U, (U2)87U},    /*  53 : SCS1S11     = 0x400002fd */
 	{(U4)0x00000200U, (U4)0x40000305U, (U4)0x40000325U,	(U2)8U,	 (U2)87U},    /*  54 : BDB1S26     = 0x40000305 */
 /*  {(U4)0x00000200U, (U4)0x40000305U, (U4)0x40000325U, (U2)8U,  (U2)87U}, */ /*     : EHV1S31     = 0x40000325 */
+#warning "BEVCDCFD-2652"
+#if 0 /* BEVCDCFD-2652 */
+    {(U4)0x00000200U, (U4)0x40000306U, (U4)0x40000306U, (U2)8U,  (U2)87U},    /*  56 : BDB1S25     = 0x40000306 */
+    {(U4)0x00000002U, (U4)0x40000312U, (U4)0x40000312U, (U2)32U,  (U2)6U},    /*  57 : BDC1S13     = 0x40000312 */
+    {(U4)0x00000200U, (U4)0x40000352U, (U4)0x40000352U, (U2)32U, (U2)87U},    /*  58 : ZN11SF7     = 0x40000352 */
+    {(U4)0x00000200U, (U4)0x40000314U, (U4)0x40000317U, (U2)8U,  (U2)87U},    /*  59 : ITS1S05     = 0x40000314 */
+#else /* BEVCDCFD-2652 */
 	{(U4)0x00000200U, (U4)0x40000306U, (U4)0x40000306U,	(U2)8U,	 (U2)87U},    /*  55 : BDB1S25     = 0x40000306 */
 	{(U4)0x00000002U, (U4)0x40000312U, (U4)0x40000312U,	(U2)32U, (U2)6U},     /*  56 : BDC1S13     = 0x40000312 */
 	{(U4)0x00000200U, (U4)0x40000314U, (U4)0x40000317U,	(U2)8U,	 (U2)87U},    /*  57 : ITS1S05     = 0x40000314 */
+#endif /* BEVCDCFD-2652 */
 /*  {(U4)0x00000200U, (U4)0x40000314U, (U4)0x40000317U, (U2)8U,  (U2)87U}, */ /*     : DS11S37     = 0x40000317 */
 	{(U4)0x00000200U, (U4)0x4000031fU, (U4)0x4000031fU,	(U2)64U, (U2)87U},    /*  58 : BDC1SI5     = 0x4000031f */
 	{(U4)0x00000200U, (U4)0x40000337U, (U4)0x4000033fU,	(U2)32U, (U2)87U},    /*  59 : BDC1S48     = 0x40000337 */
@@ -352,6 +372,16 @@ static const ST_CAN_LPR_RR     st_sp_CAN_LPR_RR_G2M_1[] = {
 	{(U4)0x00000200U, (U4)0x40000629U, (U4)0x40000633U,	(U2)8U,	 (U2)87U},    /* 173 : BDB1S27     = 0x40000629 */
 /*  {(U4)0x00000200U, (U4)0x40000629U, (U4)0x40000633U, (U2)8U,  (U2)87U}, */ /*     : BDB1S28     = 0x4000062a */
 /*  {(U4)0x00000200U, (U4)0x40000629U, (U4)0x40000633U, (U2)8U,  (U2)87U}, */ /*     : IDT1S02     = 0x40000633 */
+#warning "BEVCDCFD-2652"
+#if 0 /* BEVCDCFD-2652 */
+    {(U4)0x00000200U, (U4)0x98000000U, (U4)0x980003ffU, (U2)0U,  (U2)87U},    /* 177 : QSEv/CAN    = 0x98000000 */
+/*  {(U4)0x00000200U, (U4)0x98000000U, (U4)0x980003ffU, (U2)0U,  (U2)87U}, */ /*     : QSEv/CAN    = 0x980003ff */
+    {(U4)0x00000200U, (U4)0xd8000000U, (U4)0xd80003ffU, (U2)0U,  (U2)87U},    /* 178 : QSEv/CAN-FD = 0xd8000000 */
+/*  {(U4)0x00000200U, (U4)0xd8000000U, (U4)0xd80003ffU, (U2)0U,  (U2)87U}, */ /*     : QSEv/CAN-FD = 0xd80003ff */
+    {(U4)0x00000400U, (U4)0x98da0000U, (U4)0x98dbffffU, (U2)8U,  (U2)90U},    /* 179 : UDS/CAN     = 0x98da0000 */
+/*  {(U4)0x00000400U, (U4)0x98da0000U, (U4)0x98dbffffU, (U2)8U,  (U2)90U}, */ /*     : UDS/CAN     = 0x98dbffff */
+    {(U4)0x00000400U, (U4)0xd8da0000U, (U4)0xd8dbffffU, (U2)8U,  (U2)90U}     /* 180 : UDS/CAN-FD  = 0xd8da0000 */
+#else /* BEVCDCFD-2652 */
 	{(U4)0x00000200U, (U4)0x00000708U, (U4)0x0000070fU,	(U2)8U,	 (U2)87U},    /* 174 : UDS/CAN     = 0x00000708 */
 /*  {(U4)0x00000200U, (U4)0x00000708U, (U4)0x0000070fU, (U2)8U,  (U2)87U}, */ /*     : UDS/CAN     = 0x0000070f */
 	{(U4)0x00000200U, (U4)0x40000708U, (U4)0x4000070fU,	(U2)32U, (U2)87U},    /* 175 : UDS/CAN-FD  = 0x40000708 */
@@ -365,12 +395,160 @@ static const ST_CAN_LPR_RR     st_sp_CAN_LPR_RR_G2M_1[] = {
 	{(U4)0x00000400U, (U4)0x98da0000U, (U4)0x98dbffffU,	(U2)8U,	 (U2)90U},    /* 180 : UDS/CAN     = 0x98da0000 */
 /*  {(U4)0x00000400U, (U4)0x98da0000U, (U4)0x98dbffffU, (U2)8U,  (U2)90U}, */ /*     : UDS/CAN     = 0x98dbffff */
 	{(U4)0x00000400U, (U4)0xd8da0000U, (U4)0xd8dbffffU,	(U2)8U,	 (U2)90U}     /* 181 : UDS/CAN-FD  = 0xd8da0000 */
+#endif /* BEVCDCFD-2652 */
 /*  {(U4)0x00000400U, (U4)0xd8da0000U, (U4)0xd8dbffffU, (U2)8U,  (U2)90U}, */ /*     : UDS/CAN-FD  = 0xd8dbffff */
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static const ST_CAN_LPR_RRMB   st_sp_CAN_LPR_RRMB_G2M_1[] = {
     /*   u2_rr_begin,     u2_num_rr                          */
+#warning "BEVCDCFD-2652"
+#if 0 /* BEVCDCFD-2652 */
+    {(U2)146U,        (U2)3U},    /* MBOX =  10 / 0x0000042c : Rx Mask = 0x00000090 */
+    {(U2)114U,        (U2)3U},    /* MBOX =  11 / 0x000003b0 : Rx Mask = 0x00000003 */
+    {(U2)154U,        (U2)2U},    /* MBOX =  12 / 0x00000438 : Rx Mask = 0x00000081 */
+    {(U2)102U,        (U2)4U},    /* MBOX =  13 / 0x000003a1 : Rx Mask = 0x00000044 */
+    {(U2)86U,         (U2)2U},    /* MBOX =  14 / 0x00000380 : Rx Mask = 0x00000001 */
+    {(U2)42U,         (U2)2U},    /* MBOX =  15 / 0x00000282 : Rx Mask = 0x00000100 */
+    {(U2)137U,        (U2)1U},    /* MBOX =  16 / 0x00000401 : Rx Mask = 0x00000006 */
+    {(U2)135U,        (U2)2U},    /* MBOX =  17 / 0x00000400 : Rx Mask = 0x0000000C */
+    {(U2)78U,         (U2)1U},    /* MBOX =  18 / 0x00000354 : Rx Mask = 0x00000001 */
+    {(U2)37U,         (U2)2U},    /* MBOX =  19 / 0x00000251 : Rx Mask = 0x00000004 */
+    {(U2)161U,        (U2)2U},    /* MBOX =  20 / 0x00000506 : Rx Mask = 0x00000001 */
+    {(U2)17U,         (U2)1U},    /* MBOX =  21 / 0x0000016e : Rx Mask = 0x00000010 */
+    {(U2)36U,         (U2)1U},    /* MBOX =  22 / 0x00000207 : Rx Mask = NOUSE      */
+    {(U2)36U,         (U2)1U},    /* MBOX =  23 / 0x0000020b : Rx Mask = NOUSE      */
+    {(U2)74U,         (U2)1U},    /* MBOX =  24 / 0x00000348 : Rx Mask = 0x00000005 */
+    {(U2)11U,         (U2)3U},    /* MBOX =  25 / 0x00000140 : Rx Mask = 0x00000090 */
+    {(U2)36U,         (U2)1U},    /* MBOX =  26 / 0x0000020e : Rx Mask = NOUSE      */
+    {(U2)29U,         (U2)1U},    /* MBOX =  27 / 0x000001d9 : Rx Mask = 0x00000004 */
+    {(U2)35U,         (U2)1U},    /* MBOX =  28 / 0x00000204 : Rx Mask = 0x00000010 */
+    {(U2)9U,          (U2)2U},    /* MBOX =  29 / 0x00000124 : Rx Mask = 0x00000080 */
+    {(U2)16U,         (U2)1U},    /* MBOX =  30 / 0x00000155 : Rx Mask = NOUSE      */
+    {(U2)83U,         (U2)3U},    /* MBOX =  31 / 0x00000379 : Rx Mask = 0x00000082 */
+    {(U2)88U,         (U2)3U},    /* MBOX =  32 / 0x0000038a : Rx Mask = 0x00000011 */
+    {(U2)91U,         (U2)4U},    /* MBOX =  33 / 0x0000038d : Rx Mask = 0x00000050 */
+    {(U2)33U,         (U2)1U},    /* MBOX =  34 / 0x000001f4 : Rx Mask = NOUSE      */
+    {(U2)23U,         (U2)2U},    /* MBOX =  35 / 0x000001ce : Rx Mask = 0x00000011 */
+    {(U2)139U,        (U2)3U},    /* MBOX =  36 / 0x00000421 : Rx Mask = 0x00000202 */
+    {(U2)142U,        (U2)1U},    /* MBOX =  37 / 0x00000422 : Rx Mask = 0x00000204 */
+    {(U2)174U,        (U2)2U},    /* MBOX =  38 / 0x00000624 : Rx Mask = 0x00000008 */
+    {(U2)134U,        (U2)1U},    /* MBOX =  39 / 0x000003fc : Rx Mask = NOUSE      */
+    {(U2)56U,         (U2)1U},    /* MBOX =  40 / 0x00000306 : Rx Mask = NOUSE      */
+    {(U2)55U,         (U2)1U},    /* MBOX =  41 / 0x00000305 : Rx Mask = 0x00000020 */
+    {(U2)176U,        (U2)1U},    /* MBOX =  42 / 0x00000629 : Rx Mask = NOUSE      */
+    {(U2)176U,        (U2)1U},    /* MBOX =  43 / 0x0000062a : Rx Mask = NOUSE      */
+    {(U2)97U,         (U2)4U},    /* MBOX =  44 / 0x00000396 : Rx Mask = 0x00000009 */
+    {(U2)69U,         (U2)2U},    /* MBOX =  45 / 0x00000335 : Rx Mask = 0x000000C0 */
+    {(U2)117U,        (U2)4U},    /* MBOX =  46 / 0x000003b8 : Rx Mask = 0x00000005 */
+    {(U2)161U,        (U2)1U},    /* MBOX =  47 / 0x000004ba : Rx Mask = NOUSE      */
+    {(U2)57U,         (U2)2U},    /* MBOX =  48 / 0x00000312 : Rx Mask = 0x00000040 */
+    {(U2)65U,         (U2)2U},    /* MBOX =  49 / 0x00000320 : Rx Mask = 0x00000001 */
+    {(U2)67U,         (U2)2U},    /* MBOX =  50 / 0x00000328 : Rx Mask = 0x00000042 */
+    {(U2)3U,          (U2)1U},    /* MBOX =  51 / 0x00000086 : Rx Mask = 0x00000100 */
+    {(U2)25U,         (U2)3U},    /* MBOX =  52 / 0x000001d2 : Rx Mask = 0x00000201 */
+    {(U2)4U,          (U2)1U},    /* MBOX =  53 / 0x0000009c : Rx Mask = 0x00000002 */
+    {(U2)14U,         (U2)1U},    /* MBOX =  54 / 0x00000148 : Rx Mask = 0x00000010 */
+    {(U2)80U,         (U2)1U},    /* MBOX =  55 / 0x00000364 : Rx Mask = 0x00000008 */
+    {(U2)59U,         (U2)3U},    /* MBOX =  56 / 0x00000317 : Rx Mask = 0x00000028 */
+    {(U2)0U,          (U2)1U},    /* MBOX =  57 / 0x00000013 : Rx Mask = 0x00000008 */
+    {(U2)72U,         (U2)2U},    /* MBOX =  58 / 0x00000341 : Rx Mask = 0x00000020 */
+    {(U2)30U,         (U2)2U},    /* MBOX =  59 / 0x000001e1 : Rx Mask = 0x00000002 */
+    {(U2)78U,         (U2)2U},    /* MBOX =  60 / 0x00000363 : Rx Mask = 0x0000000C */
+    {(U2)18U,         (U2)1U},    /* MBOX =  61 / 0x000001a0 : Rx Mask = NOUSE      */
+    {(U2)77U,         (U2)1U},    /* MBOX =  62 / 0x00000350 : Rx Mask = 0x00000008 */
+    {(U2)78U,         (U2)1U},    /* MBOX =  63 / 0x0000035d : Rx Mask = 0x00000002 */
+    {(U2)96U,         (U2)1U},    /* MBOX =  64 / 0x00000393 : Rx Mask = NOUSE      */
+    {(U2)45U,         (U2)2U},    /* MBOX =  65 / 0x00000295 : Rx Mask = 0x00000100 */
+    {(U2)110U,        (U2)1U},    /* MBOX =  66 / 0x000003ac : Rx Mask = NOUSE      */
+    {(U2)111U,        (U2)3U},    /* MBOX =  67 / 0x000003ae : Rx Mask = 0x00000011 */
+    {(U2)123U,        (U2)4U},    /* MBOX =  68 / 0x000003c6 : Rx Mask = 0x00000018 */
+    {(U2)121U,        (U2)2U},    /* MBOX =  69 / 0x000003c3 : Rx Mask = 0x00000004 */
+    {(U2)106U,        (U2)4U},    /* MBOX =  70 / 0x000003a9 : Rx Mask = 0x00000042 */
+    {(U2)130U,        (U2)2U},    /* MBOX =  71 / 0x000003e7 : Rx Mask = 0x00000008 */
+    {(U2)143U,        (U2)3U},    /* MBOX =  72 / 0x00000428 : Rx Mask = 0x00000003 */
+    {(U2)150U,        (U2)4U},    /* MBOX =  73 / 0x00000430 : Rx Mask = 0x00000102 */
+    {(U2)157U,        (U2)1U},    /* MBOX =  74 / 0x00000480 : Rx Mask = 0x00000004 */
+    {(U2)157U,        (U2)2U},    /* MBOX =  75 / 0x00000491 : Rx Mask = 0x00000004 */
+    {(U2)75U,         (U2)2U},    /* MBOX =  76 / 0x0000034e : Rx Mask = 0x00000001 */
+    {(U2)159U,        (U2)2U},    /* MBOX =  77 / 0x00000496 : Rx Mask = 0x00000001 */
+    {(U2)169U,        (U2)1U},    /* MBOX =  78 / 0x00000526 : Rx Mask = NOUSE      */
+    {(U2)166U,        (U2)1U},    /* MBOX =  79 / 0x0000050b : Rx Mask = 0x00000020 */
+    {(U2)163U,        (U2)3U},    /* MBOX =  80 / 0x00000508 : Rx Mask = 0x00000024 */
+    {(U2)169U,        (U2)1U},    /* MBOX =  81 / 0x00000531 : Rx Mask = NOUSE      */
+    {(U2)170U,        (U2)2U},    /* MBOX =  82 / 0x00000534 : Rx Mask = 0x00000003 */
+    {(U2)171U,        (U2)1U},    /* MBOX =  83 / 0x00000538 : Rx Mask = NOUSE      */
+    {(U2)49U,         (U2)1U},    /* MBOX =  84 / 0x000002b3 : Rx Mask = 0x00000040 */
+    {(U2)127U,        (U2)2U},    /* MBOX =  85 / 0x000003c8 : Rx Mask = 0x00000020 */
+    {(U2)132U,        (U2)3U},    /* MBOX =  86 / 0x000003f0 : Rx Mask = 0x00000006 */
+    {(U2)64U,         (U2)1U},    /* MBOX =  87 / 0x0000031e : Rx Mask = NOUSE      */
+    {(U2)167U,        (U2)2U},    /* MBOX =  88 / 0x0000050e : Rx Mask = 0x00000010 */
+    {(U2)157U,        (U2)1U},    /* MBOX =  89 / 0x00000485 : Rx Mask = NOUSE      */
+    {(U2)137U,        (U2)2U},    /* MBOX =  90 / 0x0000040d : Rx Mask = 0x00000100 */
+    {(U2)82U,         (U2)1U},    /* MBOX =  91 / 0x00000378 : Rx Mask = NOUSE      */
+    {(U2)174U,        (U2)1U},    /* MBOX =  92 / 0x00000610 : Rx Mask = NOUSE      */
+    {(U2)34U,         (U2)1U},    /* MBOX =  93 / 0x00000202 : Rx Mask = 0x00000400 */
+    {(U2)17U,         (U2)1U},    /* MBOX =  94 / 0x0000018d : Rx Mask = NOUSE      */
+    {(U2)17U,         (U2)1U},    /* MBOX =  95 / 0x0000019a : Rx Mask = NOUSE      */
+    {(U2)129U,        (U2)1U},    /* MBOX =  96 / 0x000003ca : Rx Mask = 0x00000001 */
+    {(U2)37U,         (U2)1U},    /* MBOX =  97 / 0x00000235 : Rx Mask = NOUSE      */
+    {(U2)49U,         (U2)1U},    /* MBOX =  98 / 0x000002af : Rx Mask = NOUSE      */
+    {(U2)5U,          (U2)1U},    /* MBOX =  99 / 0x000000b8 : Rx Mask = NOUSE      */
+    {(U2)52U,         (U2)1U},    /* MBOX = 100 / 0x000002ee : Rx Mask = NOUSE      */
+    {(U2)28U,         (U2)1U},    /* MBOX = 101 / 0x000001d7 : Rx Mask = NOUSE      */
+    {(U2)39U,         (U2)2U},    /* MBOX = 102 / 0x0000025a : Rx Mask = 0x00000080 */
+    {(U2)50U,         (U2)1U},    /* MBOX = 103 / 0x000002e5 : Rx Mask = NOUSE      */
+    {(U2)8U,          (U2)1U},    /* MBOX = 104 / 0x00000122 : Rx Mask = NOUSE      */
+    {(U2)44U,         (U2)1U},    /* MBOX = 105 / 0x00000285 : Rx Mask = NOUSE      */
+    {(U2)173U,        (U2)1U},    /* MBOX = 106 / 0x00000608 : Rx Mask = NOUSE      */
+    {(U2)139U,        (U2)1U},    /* MBOX = 107 / 0x00000411 : Rx Mask = NOUSE      */
+    {(U2)139U,        (U2)1U},    /* MBOX = 108 / 0x00000412 : Rx Mask = NOUSE      */
+    {(U2)161U,        (U2)1U},    /* MBOX = 109 / 0x000004a0 : Rx Mask = NOUSE      */
+    {(U2)22U,         (U2)1U},    /* MBOX = 110 / 0x000001bc : Rx Mask = 0x00000002 */
+    {(U2)11U,         (U2)1U},    /* MBOX = 111 / 0x00000128 : Rx Mask = NOUSE      */
+    {(U2)149U,        (U2)1U},    /* MBOX = 112 / 0x0000042f : Rx Mask = NOUSE      */
+    {(U2)71U,         (U2)1U},    /* MBOX = 113 / 0x00000336 : Rx Mask = 0x00000080 */
+    {(U2)137U,        (U2)1U},    /* MBOX = 114 / 0x0000040b : Rx Mask = NOUSE      */
+    {(U2)32U,         (U2)1U},    /* MBOX = 115 / 0x000001ea : Rx Mask = 0x00000010 */
+    {(U2)51U,         (U2)1U},    /* MBOX = 116 / 0x000002eb : Rx Mask = NOUSE      */
+    {(U2)4U,          (U2)1U},    /* MBOX = 117 / 0x000000a4 : Rx Mask = NOUSE      */
+    {(U2)6U,          (U2)1U},    /* MBOX = 118 / 0x000000fc : Rx Mask = NOUSE      */
+    {(U2)172U,        (U2)1U},    /* MBOX = 119 / 0x00000592 : Rx Mask = NOUSE      */
+    {(U2)1U,          (U2)2U},    /* MBOX = 120 / 0x00000062 : Rx Mask = 0x00000008 */
+    {(U2)23U,         (U2)1U},    /* MBOX = 121 / 0x000001ca : Rx Mask = NOUSE      */
+    {(U2)16U,         (U2)1U},    /* MBOX = 122 / 0x0000015a : Rx Mask = NOUSE      */
+    {(U2)6U,          (U2)2U},    /* MBOX = 123 / 0x00000100 : Rx Mask = 0x00000400 */
+    {(U2)19U,         (U2)1U},    /* MBOX = 124 / 0x000001b2 : Rx Mask = NOUSE      */
+    {(U2)176U,        (U2)1U},    /* MBOX = 125 / 0x00000633 : Rx Mask = NOUSE      */
+    {(U2)15U,         (U2)1U},    /* MBOX = 126 / 0x0000014b : Rx Mask = 0x00000004 */
+    {(U2)173U,        (U2)1U},    /* MBOX = 127 / 0x000005ad : Rx Mask = NOUSE      */
+    {(U2)156U,        (U2)1U},    /* MBOX = 128 / 0x0000043b : Rx Mask = NOUSE      */
+    {(U2)59U,         (U2)1U},    /* MBOX = 129 / 0x00000314 : Rx Mask = NOUSE      */
+    {(U2)41U,         (U2)1U},    /* MBOX = 130 / 0x0000027b : Rx Mask = NOUSE      */
+    {(U2)23U,         (U2)1U},    /* MBOX = 131 / 0x000001cc : Rx Mask = NOUSE      */
+    {(U2)47U,         (U2)1U},    /* MBOX = 132 / 0x00000296 : Rx Mask = NOUSE      */
+    {(U2)48U,         (U2)1U},    /* MBOX = 133 / 0x000002a6 : Rx Mask = NOUSE      */
+    {(U2)25U,         (U2)1U},    /* MBOX = 134 / 0x000001d1 : Rx Mask = NOUSE      */
+    {(U2)16U,         (U2)1U},    /* MBOX = 135 / 0x0000014d : Rx Mask = NOUSE      */
+    {(U2)69U,         (U2)1U},    /* MBOX = 136 / 0x0000032f : Rx Mask = NOUSE      */
+    {(U2)53U,         (U2)2U},    /* MBOX = 137 / 0x000002f9 : Rx Mask = 0x00000004 */
+    {(U2)33U,         (U2)1U},    /* MBOX = 138 / 0x000001eb : Rx Mask = NOUSE      */
+    {(U2)20U,         (U2)2U},    /* MBOX = 139 / 0x000001bb : Rx Mask = 0x00000200 */
+    {(U2)74U,         (U2)1U},    /* MBOX = 140 / 0x00000347 : Rx Mask = NOUSE      */
+    {(U2)139U,        (U2)1U},    /* MBOX = 141 / 0x00000417 : Rx Mask = NOUSE      */
+    {(U2)139U,        (U2)1U},    /* MBOX = 142 / 0x00000418 : Rx Mask = NOUSE      */
+    {(U2)62U,         (U2)2U},    /* MBOX = 143 / 0x00000318 : Rx Mask = 0x00000080 */
+    {(U2)3U,          (U2)1U},    /* MBOX = 144 / 0x00000069 : Rx Mask = NOUSE      */
+    {(U2)4U,          (U2)1U},    /* MBOX = 145 / 0x000000b7 : Rx Mask = NOUSE      */
+    {(U2)173U,        (U2)1U},    /* MBOX = 146 / 0x00000601 : Rx Mask = NOUSE      */
+    {(U2)86U,         (U2)1U},    /* MBOX = 147 / 0x0000037f : Rx Mask = NOUSE      */
+    {(U2)101U,        (U2)1U},    /* MBOX = 148 / 0x0000039c : Rx Mask = NOUSE      */
+    {(U2)81U,         (U2)1U},    /* MBOX = 149 / 0x0000036e : Rx Mask = NOUSE      */
+    {(U2)78U,         (U2)1U},    /* MBOX = 150 / 0x00000353 : Rx Mask = NOUSE      */
+    {(U2)95U,         (U2)1U},    /* MBOX = 151 / 0x00000390 : Rx Mask = NOUSE      */
+    {(U2)179U,        (U2)2U},    /* MBOX = 152 / 0x18da0000 : Rx Mask = 0x8001FFFF */
+    {(U2)177U,        (U2)2U}     /* MBOX = 153 / 0x18000000 : Rx Mask = 0x800003FF */
+#else /* BEVCDCFD-2652 */
 	{(U2)142U,	      (U2)3U},    /* MBOX =  11 / 0x0000042c : Rx Mask = 0x00000090 */
 	{(U2)110U,	      (U2)3U},    /* MBOX =  12 / 0x000003b0 : Rx Mask = 0x00000003 */
 	{(U2)150U,	      (U2)2U},    /* MBOX =  13 / 0x00000438 : Rx Mask = 0x00000081 */
@@ -513,6 +691,7 @@ static const ST_CAN_LPR_RRMB   st_sp_CAN_LPR_RRMB_G2M_1[] = {
 	{(U2)178U,	      (U2)2U},    /* MBOX = 150 / 0x18000000 : Rx Mask = 0x800003FF */
 	{(U2)174U,	      (U2)2U},    /* MBOX = 151 / 0x00000708 : Rx Mask = 0x00000007 */
 	{(U2)176U,	      (U2)2U} 	  /* MBOX = 152 / 0x000007df : Rx Mask = NOUSE 		*/
+#endif /* BEVCDCFD-2652 */
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -541,9 +720,16 @@ static const ST_CAN_LPR_ING    st_s_CAN_LPR_ING_G2M_1 = {
     &st_sp_CAN_LPR_EGR_G2M_1[0U],                                          /* stp_EGR     */
     &u2_sp_CAN_LPR_EPDU_G2M_1[0U],                                         /* u2p_EPDU_ID */
     (U4)CAN_LPR_REGR_EN_PHY_RX_G2M1,                                       /* u4_ifrx_en  */
+#warning "BEVCDCFD-2652"
+#if 0 /* BEVCDCFD-2652 */
+    (U2)181,                                                               /* u2_num_rr   */
+    (U2)10U,                                                               /* u2_mb_min   */
+    (U2)153U,                                                              /* u2_mb_max   */
+#else /* BEVCDCFD-2652 */
     (U2)182U,                                                              /* u2_num_rr   */
     (U2)11U,                                                               /* u2_mb_min   */
     (U2)152U,                                                              /* u2_mb_max   */
+#endif /* BEVCDCFD-2652 */
     (U2)3U                                                                 /* u2_num_egr  */
 };
 

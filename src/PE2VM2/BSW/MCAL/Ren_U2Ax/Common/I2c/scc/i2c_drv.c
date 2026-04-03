@@ -1,4 +1,4 @@
-/* 1.3.0 */
+/* 1.4.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define I2C_DRV_C_MAJOR                          (1)
-#define I2C_DRV_C_MINOR                          (3)
+#define I2C_DRV_C_MINOR                          (4)
 #define I2C_DRV_C_PATCH                          (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -72,12 +72,11 @@
 #define I2C_CR1_EN_RST_INA                       (0x90U)       /* ICE = 1b and IICRST = 0b and SOWP = 1b               */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define I2C_CR1_SDA_CHK                          (0xc1U)       /* ICE = 1b and IICRST = 1b               and SDAI = 1b */
-#define I2C_CR1_SDAI_LO                          (0x80U)       /* ICE = 1b and IICRST = 0b               and SDAI = 0b */
 #define I2C_CR1_CLO_RUN                          (0xb0U)       /* ICE = 1b and CLO    = 1b and SOWP = 1b               */
-#define I2C_CR1_SDAO_LO                          (0x80U)       /* ICE = 1b and SOWP   = 0b and SCLO = 0b and SDAO = 0b */
-#define I2C_CR1_SCLO_HI                          (0x88U)       /* ICE = 1b and SOWP   = 0b and SCLO = 1b and SDAO = 0b */
-#define I2C_CR1_SDAO_HI                          (0x8cU)       /* ICE = 1b and SOWP   = 0b and SCLO = 1b and SDAO = 1b */
+#define I2C_CR1_CL_LO_DA_LO                      (0x80U)       /* ICE = 1b and SOWP   = 0b and SCLO = 0b and SDAO = 0b */
+#define I2C_CR1_CL_HI_DA_HI                      (0x8cU)       /* ICE = 1b and SOWP   = 0b and SCLO = 1b and SDAO = 1b */
+#define I2C_CR1_CL_LO_DA_HI                      (0x84U)       /* ICE = 1b and SOWP   = 0b and SCLO = 0b and SDAO = 1b */
+#define I2C_CR1_CL_HI_DA_LO                      (0x88U)       /* ICE = 1b and SOWP   = 0b and SCLO = 1b and SDAO = 0b */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define I2C_CR2_BIT_ST                           (0x02U)
@@ -94,6 +93,7 @@
 #define I2C_CR2_SLA_TX                           (0xa0U)      /* CR2.bit.BBSY = 1, CR2.bit.MST = 0, CR2.bit.TRS = 1  */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define I2C_MR1_BIT_MTWP                         (0x80U)
 #define I2C_MR1_BIT_BCWP                         (0x08U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -113,6 +113,7 @@
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define I2C_FER_BIT_NACKE                        (0x10U)
+#define I2C_FER_BIT_AL_DI                        (0x70U)  /* Master/Slave Arbitration Lost are disabled    */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define I2C_CR2_BIT_IRQST                        (0xe0U)
@@ -156,6 +157,8 @@
 #define RH850_G4MH_SYNCP_BYTE  /* static inline void  vd_s_SYNCP_B(const volatile U1 * const u1_ap_RDBK) */
 #define RH850_G4MH_RDBK_BYTE   /* static inline void  vd_s_RDBK_B(const volatile U1 * const u1_ap_RDBK)  */
 #include "rh850_g4mh.h"
+
+static void    vd_s_I2cMasResSla(volatile U1 * u1_ap_cr1, const U2 u2_a_BW_SCL);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -267,15 +270,15 @@ void    vd_g_I2cStart(const U1 u1_a_I2C_CH, const U4 u4_a_CTRL)
 
         vd_REG_U1_WRITE(u1_tp_byte[I2C_RO_BYTE_MR2],  st_tp_CH->u1_mr2 & (U1)I2C_MR2_BIT_CONST);
 
-        u1_t_cfg  = (st_tp_CH->u1_mr3 & (U1)I2C_MR3_BIT_CONST) | ((U1)I2C_MR3_BIT_ACKWP | (U1)I2C_MR3_BIT_WAIT);
-        u1_t_cfg |= ((U1)u4_a_CTRL & (U1)I2C_CTRL_BIT_RXA);
-        vd_REG_U1_WRITE(u1_tp_byte[I2C_RO_BYTE_MR3],  u1_t_cfg);
         /* ------------------------------------------------------------------------------------*/
         /* Attention :                                                                         */
         /* ------------------------------------------------------------------------------------*/
         /* If it is attempted to write 1 to both ACKWP and ACKBT bits, the ACKBT bit cannot be */
         /* set to 1. Therefore, MR3 is written twice.                                          */
         /* ------------------------------------------------------------------------------------*/
+        u1_t_cfg  = (st_tp_CH->u1_mr3 & (U1)I2C_MR3_BIT_CONST) | ((U1)I2C_MR3_BIT_ACKWP | (U1)I2C_MR3_BIT_WAIT);
+        u1_t_cfg |= ((U1)u4_a_CTRL & (U1)I2C_CTRL_BIT_RXA);
+        vd_REG_U1_WRITE(u1_tp_byte[I2C_RO_BYTE_MR3],  u1_t_cfg);
         vd_REG_U1_WRITE(u1_tp_byte[I2C_RO_BYTE_MR3],  u1_t_cfg);
 
         u1_t_cfg  = (st_tp_CH->u1_fer & (U1)I2C_FER_BIT_CONST) | (U1)I2C_FER_BIT_NACKE;
@@ -656,8 +659,8 @@ U1      u1_g_I2cMasReqSrscTx(const U1 u1_a_I2C_CH, const U1 u1_a_REQ)
             /* ------------------------------------------------------------------------------------*/
             /* Attention :                                                                         */
             /* ------------------------------------------------------------------------------------*/
-            /* RH850/U2A-EVA Group UserÅfs Manual: Hardware Renesas microcontroller RH850 Family    */
-            /* 22.3.3 RIICnCR2 Å\ I2C Bus Control Register 2                                        */
+            /* RH850/U2A-EVA Group User's Manual: Hardware Renesas microcontroller RH850 Family    */
+            /* 22.3.3 RIICnCR2 - I2C Bus Control Register 2                                        */
             /*                                                                                     */
             /* BBSY Flag (Bus Busy Detection)                                                      */
             /* [Clearing conditions]                                                               */
@@ -694,91 +697,130 @@ U1      u1_g_I2cMasReqSrscTx(const U1 u1_a_I2C_CH, const U1 u1_a_REQ)
     return(u1_t_accpt);
 }
 /*===================================================================================================================================*/
-/*  U1      u1_g_I2cMasSynLost(const U1 u1_a_I2C_CH, const U1 u1_a_CLO_MAX)                                                          */
+/*  void    vd_g_I2cMasReset(const U1 u1_a_I2C_CH)                                                                                   */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U1      u1_g_I2cMasSynLost(const U1 u1_a_I2C_CH, const U1 u1_a_CLO_MAX)
+void    vd_g_I2cMasReset(const U1 u1_a_I2C_CH)
 {
     const ST_I2C_CH *          st_tp_CH;
     volatile U1 *              u1_tp_byte;
 
     volatile U4                u4_t_gli;
-    U4                         u4_t_clocnt;
+    U4                         u4_t_clo_cnt;
+    U4                         u4_t_clo_max;
     U2                         u2_t_bw_scl;
 
-    U1                         u1_t_los;
     U1                         u1_t_sda;
-    U1                         u1_t_mst;
+    U1                         u1_t_cfg;
 
-    u1_t_los = (U1)FALSE;
     if(u1_a_I2C_CH < u1_g_I2C_NUM_CH){
 
         st_tp_CH   = &st_gp_I2C_CH_CFG[u1_a_I2C_CH];
         u1_tp_byte = (volatile U1 *)st_tp_CH->u4p_rbase;
 
-        u1_t_sda   = u1_REG_READ(u1_tp_byte[I2C_RO_BYTE_CR1]) & (U1)I2C_CR1_SDA_CHK;
-        u1_t_mst   = u1_REG_READ(u1_tp_byte[I2C_RO_BYTE_CR2]) & (U1)I2C_CR2_BIT_MST;
-        if((u1_t_sda == (U1)I2C_CR1_SDAI_LO) &&
-           (u1_t_mst == (U1)I2C_CR2_BIT_MST)){
+        u4_t_gli = u4_g_IRQ_DI();
 
-            vd_REG_U1_WRITE(u1_tp_byte[I2C_RO_BYTE_IER],  (U1)0U             );
-            vd_REG_U1_WRITE(u1_tp_byte[I2C_RO_BYTE_CR1],  (U1)I2C_CR1_CLO_RUN);
-            vd_s_SYNCP_B(&u1_tp_byte[I2C_RO_BYTE_CR1]);
+        vd_REG_U1_WRITE(u1_tp_byte[I2C_RO_BYTE_CR1], (U1)I2C_CR1_DI_RST_ACT);
+        vd_s_SYNCP_B(&u1_tp_byte[I2C_RO_BYTE_CR1]);
 
-            u2_t_bw_scl = st_tp_CH->u2_bw_scl;
-            u4_t_clocnt = (U4)0U;
+        /* ------------------------------------------------------------------------------------*/
+        /* Attention :                                                                         */
+        /* ------------------------------------------------------------------------------------*/
+        /* The interrupt requests INTRIICnTI and INTRIICnRI could not be synchronously and     */
+        /* immidiately disabled with RIICnIER - I2C Bus Interrupt Enable Register = 0x00.      */
+        /* Thus INTRIICnTI and INTRIICnRI are disabld with global DI/EI.                       */
+        /* ------------------------------------------------------------------------------------*/
+        vd_g_IntHndlrIRQCtrlCh(st_tp_CH->u2_irq_rx,  (U1)INT_HNDLR_IRQ_CTRL_RQ_CLR);
+        vd_g_IntHndlrIRQCtrlCh(st_tp_CH->u2_irq_tx,  (U1)INT_HNDLR_IRQ_CTRL_RQ_CLR);
+
+        vd_g_IRQ_EI(u4_t_gli);                                    /* syncp insruction is performed at here           */
+
+        vd_REG_U1_WRITE(u1_tp_byte[I2C_RO_BYTE_CR1], (U1)I2C_CR1_EN_RST_ACT);
+        vd_s_SYNCP_B(&u1_tp_byte[I2C_RO_BYTE_CR1]);
+
+     /* vd_REG_U2_WRITE(u2_tp_half[I2C_RO_HALF_SAR0], st_tp_CH->u2_sar0 & (U2)I2C_SAR_BIT_CONST);  sar0 = 0x00 */
+     /* vd_REG_U2_WRITE(u2_tp_half[I2C_RO_HALF_SAR1], st_tp_CH->u2_sar1 & (U2)I2C_SAR_BIT_CONST);  sar1 = 0x00 */
+     /* vd_REG_U2_WRITE(u2_tp_half[I2C_RO_HALF_SAR2], st_tp_CH->u2_sar2 & (U2)I2C_SAR_BIT_CONST);  sar2 = 0x00 */
+     /* vd_REG_U1_WRITE(u1_tp_byte[I2C_RO_BYTE_SER],  st_tp_CH->u1_ser  & (U1)I2C_SER_BIT_CONST);  ser  = 0x09 */
+
+        u1_t_cfg  = (st_tp_CH->u1_mr1 & (U1)I2C_MR1_BIT_CONST) | ((U1)I2C_MR1_BIT_BCWP | (U1)I2C_MR1_BIT_MTWP);
+        vd_REG_U1_WRITE(u1_tp_byte[I2C_RO_BYTE_MR1],  u1_t_cfg);
+
+        u1_t_cfg  = (st_tp_CH->u1_brl & (U1)I2C_BRL_BIT_CONST) | (U1)I2C_BRL_BIT_W1;
+        vd_REG_U1_WRITE(u1_tp_byte[I2C_RO_BYTE_BRL],  u1_t_cfg);
+
+        u1_t_cfg  = (st_tp_CH->u1_brh & (U1)I2C_BRH_BIT_CONST) | (U1)I2C_BRH_BIT_W1;
+        vd_REG_U1_WRITE(u1_tp_byte[I2C_RO_BYTE_BRH],  u1_t_cfg);
+
+        vd_REG_U1_WRITE(u1_tp_byte[I2C_RO_BYTE_MR2],  st_tp_CH->u1_mr2 & (U1)I2C_MR2_BIT_CONST);
+
+        u1_t_cfg  = st_tp_CH->u1_mr3 & (U1)I2C_MR3_BIT_CONST;
+        vd_REG_U1_WRITE(u1_tp_byte[I2C_RO_BYTE_MR3],  u1_t_cfg);
+
+     /* u1_t_cfg  = (st_tp_CH->u1_fer & (U1)I2C_FER_BIT_CONST) | (U1)I2C_FER_BIT_NACKE; */
+     /* vd_REG_U1_WRITE(u1_tp_byte[I2C_RO_BYTE_FER],  u1_t_cfg); fer = 0x72             */
+        vd_REG_U1_WRITE(u1_tp_byte[I2C_RO_BYTE_FER],  (U1)I2C_FER_BIT_AL_DI);
+
+     /* u1_t_cfg  = (U1)(u4_a_CTRL >> I2C_IRQEN_LSB_IER); */
+     /* vd_REG_U1_WRITE(u1_tp_byte[I2C_RO_BYTE_IER],  u1_t_cfg); ier = 0x00             */
+
+        vd_REG_U1_WRITE(u1_tp_byte[I2C_RO_BYTE_CR1],  (U1)I2C_CR1_EN_RST_INA);
+        vd_REG_U1_WRITE(u1_tp_byte[I2C_RO_BYTE_CR2],  (U1)I2C_CR2_BIT_MST);
+        vd_s_SYNCP_B(&u1_tp_byte[I2C_RO_BYTE_CR1]);
+
+        u2_t_bw_scl = st_tp_CH->u2_bw_scl;
+        u1_t_sda    = u1_REG_READ(u1_tp_byte[I2C_RO_BYTE_CR1]) & (U1)I2C_CR1_BIT_SDAI;
+        if(u1_t_sda == (U1)I2C_CR1_BIT_SDAI){
+            /* SCL = High/Low, SDA = High */
+            /* If SCL is held low by a slave device, the master can do nothing to   */
+            /* recover the bus. It must be considered to issue a reset or turn off  */
+            /* then turn on the device by a physical pin.                           */ 
+            /* If SCL is high, there is a possibility that a slave device is still  */
+            /* in the process of sending data to the master. Such a condition will  */
+            /* be reset by the next start condition, therefore no action is         */
+            /* required at here.                                                    */
+        }
+        else{
+            /* SCL = High/Low, SDA = Low */
+            /* A slave device might be holding the SDA line low.    */
+            /* Try to get a slave release SDA.                      */
+            /* Note that this bus clear mechanism DOES NOT support  */
+            /* the clock stretching.                                */
+            u4_t_clo_cnt = (U4)0U;
+            u4_t_clo_max = (U4)st_tp_CH->u1_clo_max;
             do{
+                u4_t_clo_cnt++;
 
+                /* SCL high -> low */
+                /* Note: CR1.bit.CLO is NOT used intentionally.                     */
+                /* It's because stop condition might NOT be generated since SCL     */
+                /* is released and becomes high once BBSY becomes idle state(=0b).  */
+                vd_REG_U1_WRITE(u1_tp_byte[I2C_RO_BYTE_CR1],  (U1)I2C_CR1_CL_LO_DA_HI);
+                vd_s_SYNCP_B(&u1_tp_byte[I2C_RO_BYTE_CR1]);
                 vd_g_Gpt_BusyWait(u2_t_bw_scl);
-                vd_g_Gpt_BusyWait(u2_t_bw_scl);
-                u4_t_clocnt++;
 
-                u1_t_sda = u1_REG_READ(u1_tp_byte[I2C_RO_BYTE_CR1]) & ((U1)I2C_CR1_BIT_SDAI | (U1)I2C_CR1_BIT_CLO);
-                if(u1_t_sda == (U1)I2C_CR1_BIT_SDAI){                                  /* SDA = 1b/High and CLO = 0b       */
-
-                    u4_t_gli    = u4_g_IRQ_DI();
-
-                    /* Stop Condition Tx */
-                    vd_REG_U1_WRITE(u1_tp_byte[I2C_RO_BYTE_CR1],  (U1)I2C_CR1_SDAO_LO);
-                    vd_s_SYNCP_B(&u1_tp_byte[I2C_RO_BYTE_CR1]);
-
-                    vd_g_Gpt_BusyWait(u2_t_bw_scl);
-
-                    vd_REG_U1_WRITE(u1_tp_byte[I2C_RO_BYTE_CR1],  (U1)I2C_CR1_SCLO_HI);
-                    vd_s_SYNCP_B(&u1_tp_byte[I2C_RO_BYTE_CR1]);
-
-                    vd_g_Gpt_BusyWait(u2_t_bw_scl);
-
-                    vd_REG_U1_WRITE(u1_tp_byte[I2C_RO_BYTE_CR1],  (U1)I2C_CR1_SDAO_HI);
-                    vd_s_SYNCP_B(&u1_tp_byte[I2C_RO_BYTE_CR1]);
-
-                    vd_g_Gpt_BusyWait(u2_t_bw_scl);
-
-                    vd_g_IRQ_EI(u4_t_gli);
-
-                    u4_t_clocnt = (U4)u1_a_CLO_MAX;                                    /* do - while terminator            */
-                }
-                else if(u1_t_sda == (U1)0U){                                           /* SDA = 0b/Low and CLO = 0b        */
-
-                    vd_REG_U1_WRITE(u1_tp_byte[I2C_RO_BYTE_CR1],  (U1)I2C_CR1_CLO_RUN);
-                    vd_s_SYNCP_B(&u1_tp_byte[I2C_RO_BYTE_CR1]);
+                /* Check whether SDA has been released (high) */
+                u1_t_sda = u1_REG_READ(u1_tp_byte[I2C_RO_BYTE_CR1]) & (U1)I2C_CR1_BIT_SDAI;
+                if(u1_t_sda == (U1)I2C_CR1_BIT_SDAI){
+                    vd_s_I2cMasResSla(&u1_tp_byte[I2C_RO_BYTE_CR1], u2_t_bw_scl);
+                    break;
                 }
                 else{
-                    /* do nothing */
-                } 
-           }
-            while(u4_t_clocnt < (U4)u1_a_CLO_MAX);
+                    /* SCL low -> high */
+                    vd_REG_U1_WRITE(u1_tp_byte[I2C_RO_BYTE_CR1],  (U1)I2C_CR1_CL_HI_DA_HI);
+                    vd_s_SYNCP_B(&u1_tp_byte[I2C_RO_BYTE_CR1]);
+                    vd_g_Gpt_BusyWait(u2_t_bw_scl);
+                }
+            }
+            while(u4_t_clo_cnt < u4_t_clo_max);
+        }
 
-            vd_REG_U1_WRITE(u1_tp_byte[I2C_RO_BYTE_CR1], (U1)I2C_CR1_DI_RST_ACT);
-            vd_s_SYNCP_B(&u1_tp_byte[I2C_RO_BYTE_CR1]);
+        vd_REG_U1_WRITE(u1_tp_byte[I2C_RO_BYTE_CR1], (U1)I2C_CR1_DI_RST_ACT);
+        vd_s_SYNCP_B(&u1_tp_byte[I2C_RO_BYTE_CR1]);
 
-            u1_t_los = (U1)TRUE;
-        } /* if(u1_t_sda == (U1)I2C_CR2_BIT_MST){ */
-    }     /* if(u1_a_I2C_CH < u1_g_I2C_NUM_CH){   */
-
-    return(u1_t_los);
+    } /* if(u1_a_I2C_CH < u1_g_I2C_NUM_CH){ */
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_I2cSlaFinTx(const U1 u1_a_I2C_CH)                                                                                   */
@@ -800,6 +842,37 @@ void    vd_g_I2cSlaFinTx(const U1 u1_a_I2C_CH)
         }
     }
 }
+/*===================================================================================================================================*/
+/*  static void    vd_s_I2cMasResSla(volatile U1 * u1_ap_cr1, const U2 u2_a_BW_SCL)                                                  */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_I2cMasResSla(volatile U1 * u1_ap_cr1, const U2 u2_a_BW_SCL)
+{
+    volatile U4                u4_t_gli;
+
+    u4_t_gli = u4_g_IRQ_DI();
+
+    /* Here SDA/SCL must be SDA=high, SCL=low */
+    /* Stop Condition Tx */
+    vd_REG_U1_WRITE((*u1_ap_cr1),  (U1)I2C_CR1_CL_LO_DA_LO);
+    vd_s_SYNCP_B(u1_ap_cr1);
+
+    vd_g_Gpt_BusyWait(u2_a_BW_SCL);
+
+    vd_REG_U1_WRITE((*u1_ap_cr1),  (U1)I2C_CR1_CL_HI_DA_LO);
+    vd_s_SYNCP_B(u1_ap_cr1);
+
+    vd_g_Gpt_BusyWait(u2_a_BW_SCL);
+
+    vd_REG_U1_WRITE((*u1_ap_cr1),  (U1)I2C_CR1_CL_HI_DA_HI);
+    vd_s_SYNCP_B(u1_ap_cr1);
+
+    vd_g_Gpt_BusyWait(u2_a_BW_SCL);
+
+    vd_g_IRQ_EI(u4_t_gli);
+}
 
 #pragma ghs section rodata=default
 #pragma ghs section text=default
@@ -819,6 +892,7 @@ void    vd_g_I2cSlaFinTx(const U1 u1_a_I2C_CH)
 /*                                u1_g_SpiI2cCloCheck was implemented.                                                               */
 /*  1.3.0    10/11/2024  TN       vd_g_SpiI2cStart, vd_g_SpiI2cEI/DI was modified in order that IER can be configured.               */
 /*                                The component name was changed from spi_i2c to i2c.                                                */
+/*  1.4.0     2/ 5/2026  TN       u1_g_I2cMasSynLost -> vd_g_I2cMasReset.                                                            */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, DENSO                                                                                                    */
 /*  * KM   = Kazuyuki Makino, DENSO                                                                                                  */

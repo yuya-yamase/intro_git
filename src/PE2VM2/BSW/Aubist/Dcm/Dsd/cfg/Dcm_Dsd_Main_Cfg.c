@@ -1,7 +1,7 @@
-/* Dcm_Dsd_Main_Cfg_c(v5-4-0)                                               */
+/* Dcm_Dsd_Main_Cfg_c(v5-10-0)                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -385,6 +385,7 @@ CONST( AB_83_ConstV uint8, DCM_CONFIG_DATA ) Dcm_Dsd_u1Splrconfnotify_Num = (uin
 CONST( AB_83_ConstV uint8, DCM_CONFIG_DATA ) Dcm_Dsd_u1Servicetable_Num = (uint8)DCM_D_SERVICETABLE_NUM;
 CONST( AB_83_ConstV uint8, DCM_CONFIG_DATA ) Dcm_Dsd_u1SupportObdSystem = DCM_DSD_OBDSYS_NONOBD;
 CONST( AB_83_ConstV boolean, DCM_CONFIG_DATA ) Dcm_Dsd_bNoSuppressNegResIMLOIFToOBDClient = (boolean)FALSE;
+CONST( AB_83_ConstV boolean, DCM_CONFIG_DATA ) Dcm_Dsd_bNoSuppressNegResToUDSClient = (boolean)FALSE;
 
 #define DCM_STOP_SEC_CONST_CONFIG
 #include <Dcm_MemMap.h>
@@ -398,12 +399,13 @@ CONST( AB_83_ConstV boolean, DCM_CONFIG_DATA ) Dcm_Dsd_bNoSuppressNegResIMLOIFTo
 /*  v4-0-0         :2020-12-23                                              */
 /*  v5-0-0         :2021-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
-/*  v5-4-0         :2023-06-28                                              */
+/*  v5-5-0         :2023-10-27                                              */
+/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v5-5-1                                              */
+/*  BSW plug-in        :v5-10-0                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

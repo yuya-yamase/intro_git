@@ -65,9 +65,9 @@ BswConst BswU1 bsw_vcan_stVirtualHohTbl[ BSW_VCAN_VHOHNUM ] =
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [1] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [2] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [3] */
-  /*--- VM Transmission(VHTH) -----------------------------*/
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [4] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [5] */
+  /*--- VM Transmission(VHTH) -----------------------------*/
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [6] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [7] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [8] */
@@ -79,6 +79,21 @@ BswConst BswU1 bsw_vcan_stVirtualHohTbl[ BSW_VCAN_VHOHNUM ] =
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [14] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [15] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [16] */
+#warning "BEVCDCFD-2652"
+#if 0 /* BEVCDCFD-2652 */
+    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [17] */
+    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [18] */
+    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [19] */
+    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [20] */
+    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [21] */
+    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [22] */
+    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [23] */
+    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [24] */
+    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [25] */
+    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [26] */
+    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [27] */
+#else /* BEVCDCFD-2652 */
+#endif /* BEVCDCFD-2652 */
 };
 
 /************************************************/
@@ -93,6 +108,8 @@ BswConst Bsw_VCan_RxTblType bsw_vcan_stRxMessageTbl[ BSW_VCAN_VHRHNUM ] =
     ,{ 0x00000400UL, 0xBFFFFF00UL }   /* [1] */
     ,{ 0x40000500UL, 0xFFFFFF00UL }   /* [2] */
     ,{ 0x40000600UL, 0xFFFFFF00UL }   /* [3] */
+    ,{ 0x98DA17E0UL, 0xBFFFFFFEUL }   /* [4] */
+    ,{ 0x98DBEFE0UL, 0xBFFFFFFEUL }   /* [5] */
 };
 #endif /* ( BSW_VCAN_VHRHNUM != 0U ) */
 
@@ -239,6 +256,19 @@ BswConst BswU1 bsw_vcan_u1TxMBoxTbl_VControl0[ BSW_VCAN_TX_VMBOXNUM_0 ] =
    ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [10] */
    ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [11] */
    ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [12] */
+#warning "BEVCDCFD-2652"
+#if 0 /* BEVCDCFD-2652 */
+   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [13] */
+   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [14] */
+   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [15] */
+   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [16] */
+   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [17] */
+   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [18] */
+   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [19] */
+   ,(BswU1)(BSW_VCAN_INTERRUPT | BSW_VCAN_KIND_TRANSMIT )   /* [20] */
+   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [21] */
+#else /* BEVCDCFD-2652 */
+#endif /* BEVCDCFD-2652 */
 };
 
 #endif /* ( BSW_VCAN_TX_VMBOXNUM_0 != 0U ) */

@@ -1215,7 +1215,7 @@
 /******************************************/
 /******************************************/
 /* Receive-VHOH Channel Number */
-#define BSW_CANIF_CFG_0_VHRHNUM                 (6U)
+#define BSW_CANIF_CFG_0_VHRHNUM                 (5U)
 #define BSW_CANIF_CFG_1_VHRHNUM                 (0U)
 #define BSW_CANIF_CFG_2_VHRHNUM                 (0U)
 #define BSW_CANIF_CFG_3_VHRHNUM                 (0U)
@@ -1254,7 +1254,7 @@
 #define BSW_CANIF_CFG_CH_VHOH002                (BSW_CANIF_CH0)
 #define BSW_CANIF_CFG_CH_VHOH003                (BSW_CANIF_CH0)
 #define BSW_CANIF_CFG_CH_VHOH004                (BSW_CANIF_CH0)
-#define BSW_CANIF_CFG_CH_VHOH005                (BSW_CANIF_CH0)
+#define BSW_CANIF_CFG_CH_VHOH005                (BSW_CANIF_NOUSE)
 #define BSW_CANIF_CFG_CH_VHOH006                (BSW_CANIF_NOUSE)
 #define BSW_CANIF_CFG_CH_VHOH007                (BSW_CANIF_NOUSE)
 #define BSW_CANIF_CFG_CH_VHOH008                (BSW_CANIF_NOUSE)
@@ -3171,7 +3171,7 @@
 #define PDUID_VIV1N99_Rx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANNM | 0x0003U)
 
 /* HOH Number for Tx L-PDU */
-#define HOH_VCE1N99_Tx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0006U)
+#define HOH_VCE1N99_Tx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0005U)
 
 /* HOH Number for Rx L-PDU */
 #define HOH_ABG1D50_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0001U)

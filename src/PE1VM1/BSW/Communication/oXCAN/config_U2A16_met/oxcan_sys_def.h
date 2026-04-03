@@ -24,16 +24,16 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define OXCAN_SYS_BAT                            (0x00000001U)    /* Battery-ON                                                   */
-#define OXCAN_SYS_ACC                            (0x00000002U)    /* Accesory-ON                                                  */
-#define OXCAN_SYS_IGP                            (0x00000004U)    /* Ignition"P"-ON                                               */
-#define OXCAN_SYS_PBA                            (0x00000008U)    /* +BA-ON                                                       */
-#define OXCAN_SYS_IGR                            (0x00000010U)    /* Ignition"R"-ON                                               */
+#define OXCAN_SYS_BAT                            (0x00000001U)    /* Battery-ON                                                      */
+#define OXCAN_SYS_ACC                            (0x00000002U)    /* Accesory-ON                                                     */
+#define OXCAN_SYS_IGP                            (0x00000004U)    /* Ignition"P"-ON                                                  */
+#define OXCAN_SYS_PBA                            (0x00000008U)    /* +BA-ON                                                          */
+#define OXCAN_SYS_IGR                            (0x00000010U)    /* Ignition"R"-ON                                                  */
 
-#define OXCAN_SYS_VDC                            (0x00000020U)    /* Vehicle Drive Control-ON  IG voltage >= 10.5 volt and IGR-ON */
-#define OXCAN_SYS_PTC                            (0x00000040U)    /* Power-train Control-ON    IG voltage >= 10.5 volt and IGP-ON */
+#define OXCAN_SYS_DIC                            (0x00000020U)    /* DTC detection inhibiton conditions                              */
+                                                                  /* Redundant Power Supply >= 10.5 volt and Diag power supply-ON    */
 
-#define OXCAN_SYS_VOM                            (0x0000007fU)    /* Vehicle Operational Mode                                     */
+#define OXCAN_SYS_VOM                            (0x0000003fU)    /* Vehicle Operational Mode                                        */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define OXCAN_SYS_G2M_1                          (0x01000000U)

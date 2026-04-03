@@ -27,25 +27,36 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VEH_OPEMD_MDBIT_ACC                      (0x00000002U)  /* BDC1S81.VPSINFOx =         0x06 or 0x16 or 0x1e */
-#define VEH_OPEMD_MDBIT_IG_P                     (0x00000004U)  /* BDC1S81.VPSINFOx =                         0x1e */
-#define VEH_OPEMD_MDBIT_PBA                      (0x00000008U)  /* BDC1S81.VPSINFOx = 0x02 or 0x06 or 0x16 or 0x1e */
-#define VEH_OPEMD_MDBIT_IG_R                     (0x00000010U)  /* BDC1S81.VPSINFOx =                 0x16 or 0x1e */
-
+#define VEH_OPEMD_MDBIT_ACC                      (0x00000002U)  /* BDC1S81.VPSINFOx =                 0x06 or 0x16 or 0x1e           */
+#define VEH_OPEMD_MDBIT_IG_P                     (0x00000004U)  /* BDC1S81.VPSINFOx =                                 0x1e           */
+#define VEH_OPEMD_MDBIT_PBA                      (0x00000008U)  /* BDC1S81.VPSINFOx = 0x02 or 0x06 or 0x16 or 0x1e                   */
+#define VEH_OPEMD_MDBIT_IG_R                     (0x00000010U)  /* BDC1S81.VPSINFOx =                         0x16 or 0x1e           */
+#warning "BEVCDCFD-2652"
+#if 0 /* BEVCDCFD-2652 */
 #define VEH_OPEMD_MDBIT_FIELDS                   (0x0000001eU)
+#else /* BEVCDCFD-2652 */
+#define VEH_OPEMD_MDBIT_FIELDS                   (0x000000feU)
+#endif /* BEVCDCFD-2652 */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VEH_OPEMD_EVBIT_ACC_TO_ON                (0x00000002U)
 #define VEH_OPEMD_EVBIT_IG_P_TO_ON               (0x00000004U)
 #define VEH_OPEMD_EVBIT_PBA_TO_ON                (0x00000008U)
 #define VEH_OPEMD_EVBIT_IG_R_TO_ON               (0x00000010U)
+#define VEH_OPEMD_EVBIT_DIAG_TO_ON               (0x00000080U)
 
 #define VEH_OPEMD_EVBIT_ACC_TO_OFF               (0x00020000U)
 #define VEH_OPEMD_EVBIT_IG_P_TO_OFF              (0x00040000U)
 #define VEH_OPEMD_EVBIT_PBA_TO_OFF               (0x00080000U)
 #define VEH_OPEMD_EVBIT_IG_R_TO_OFF              (0x00100000U)
+#define VEH_OPEMD_EVBIT_DIAG_TO_OFF              (0x00800000U)
 
+#warning "BEVCDCFD-2652"
+#if 0 /* BEVCDCFD-2652 */
 #define VEH_OPEMD_EVBIT_FIELDS                   (0x001e001eU)
+#else /* BEVCDCFD-2652 */
+#define VEH_OPEMD_EVBIT_FIELDS                   (0x00fe00feU)
+#endif /* BEVCDCFD-2652 */
 
 #define VEH_OPEMD_PTS_INV_OFF                    (0U)
 #define VEH_OPEMD_PTS_INV_ON                     (1U)
@@ -57,6 +68,7 @@
 #define u1_g_VehopemdBaOn()                      (u1_g_VehopemdMdchk((U4)VEH_OPEMD_MDBIT_PBA,  (U4)VEH_OPEMD_MDBIT_PBA ))
 #define u1_g_VehopemdAccOn()                     (u1_g_VehopemdMdchk((U4)VEH_OPEMD_MDBIT_ACC,  (U4)VEH_OPEMD_MDBIT_ACC ))
 #define u1_g_VehopemdIgnOn()                     (u1_g_VehopemdMdchk((U4)VEH_OPEMD_MDBIT_IG_R, (U4)VEH_OPEMD_MDBIT_IG_R))
+#define u1_g_VehopemdDiagOn()                    (u1_g_VehopemdMdchk((U4)VEH_OPEMD_MDBIT_DIAG, (U4)VEH_OPEMD_MDBIT_DIAG))
 #define u1_g_VehopemdIgnpOn()                    (u1_g_VehopemdMdchk((U4)VEH_OPEMD_MDBIT_IG_P, (U4)VEH_OPEMD_MDBIT_IG_P))
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

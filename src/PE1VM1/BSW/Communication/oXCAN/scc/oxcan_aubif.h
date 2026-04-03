@@ -43,10 +43,6 @@ void    Aubist_UsrSetWakeupEvent(const uint32 u4_a_SRC);
 void    vd_g_oXCANAubIfE2eInit(void);
 #endif /* #if ((OXCAN_E2E_NUM_REC > 0U) || (OXCAN_E2E_NUM_REC > 0U)) */
 
-#if (OXCAN_OMA_SEV_GEN == 1U)
-void    vd_g_oXCANAubIfOMAInit(void);
-#endif /* #if (OXCAN_OMA_SEV_GEN == 1U) */
-
 #if (BSW_BSWM_CS_FUNC_UPPERCDD1 == BSW_USE)
 void               BswM_CS_Cdd1UpTxConfirmation(PduIdType TxPduId, Std_ReturnType result);
 Std_ReturnType     BswM_CS_Cdd1UpTriggerTx(PduIdType TxPduId, PduInfoType* PduInfoPtr);

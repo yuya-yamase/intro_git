@@ -159,7 +159,7 @@
 #define BSW_VCAN_CFG_VHTHNUM_15                 (0U)
 
 /* First Virtual MBOX Number for VHTH */
-#define BSW_VCAN_CFG_VMBOX_TXOFFSET_0           (7U)
+#define BSW_VCAN_CFG_VMBOX_TXOFFSET_0           (6U)
 #define BSW_VCAN_CFG_VMBOX_TXOFFSET_1           (0U)
 #define BSW_VCAN_CFG_VMBOX_TXOFFSET_2           (0U)
 #define BSW_VCAN_CFG_VMBOX_TXOFFSET_3           (0U)
@@ -199,7 +199,7 @@
 #define BSW_VCAN_CFG_USERTX_VMBOXNUM_15        (0U)
 
 /* First Virtual MBOX Number fot UserTx */
-#define BSW_VCAN_CFG_VMBOX_UTXOFFSET_0         (6U)
+#define BSW_VCAN_CFG_VMBOX_UTXOFFSET_0         (5U)
 #define BSW_VCAN_CFG_VMBOX_UTXOFFSET_1         (0U)
 #define BSW_VCAN_CFG_VMBOX_UTXOFFSET_2         (0U)
 #define BSW_VCAN_CFG_VMBOX_UTXOFFSET_3         (0U)
@@ -221,7 +221,7 @@
 /*  (Each Virtual Controller)             */
 /******************************************/
 /* Rx VHOH(VHRH) Number */
-#define BSW_VCAN_CFG_VHRHNUM_0                  (6U)
+#define BSW_VCAN_CFG_VHRHNUM_0                  (5U)
 #define BSW_VCAN_CFG_VHRHNUM_1                  (0U)
 #define BSW_VCAN_CFG_VHRHNUM_2                  (0U)
 #define BSW_VCAN_CFG_VHRHNUM_3                  (0U)

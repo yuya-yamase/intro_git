@@ -21,11 +21,13 @@
 
 #include "Os.h"
 
-#include "oxsec_aub_cfg.h"
-
+#ifdef OXSEC_AUB_CFG_H
 #if (OXSEC_AUB_EN_IDSM == 1U)
+
 #include "IdsM_Cbk.h"
+
 #endif /* (OXSEC_AUB_EN_IDSM == 1U) */
+#endif /* #ifdef OXSEC_AUB_CFG_H    */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #if ((defined(BSW_BSWM_CS_CFG_FUNC_CS   )  ) && \
@@ -109,10 +111,6 @@ void    vd_g_oXCANAubIfInit(void)
 #if ((OXCAN_E2E_NUM_TRA > 0U) || (OXCAN_E2E_NUM_REC > 0U))
     vd_g_oXCANAubIfE2eInit();
 #endif /* #if ((OXCAN_E2E_NUM_REC > 0U) || (OXCAN_E2E_NUM_REC > 0U)) */
-
-#if (OXCAN_OMA_SEV_GEN == 1U)
-    vd_g_oXCANAubIfOMAInit();
-#endif /* #if (OXCAN_OMA_SEV_GEN == 1U) */
 
 }
 /*===================================================================================================================================*/
