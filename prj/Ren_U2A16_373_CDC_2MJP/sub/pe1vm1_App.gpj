@@ -14,7 +14,7 @@
 ../../src/PE1VM1/App/MET/EcuLib/Common/scc/date.c
 ../../src/PE1VM1/App/MET/EcuLib/Common/scc/fpcall_vd_fvd.c
 ../../src/PE1VM1/App/MET/EcuLib/Common/scc/lerp_u2.c
-../../src/PE1VM1/App/MET/EcuLib/Common/scc/mtrxsrch.c
+#../../src/PE1VM1/App/MET/EcuLib/Common/scc/mtrxsrch.c
 ../../src/PE1VM1/App/MET/EcuLib/Common/scc/rngcmpr_u2.c
 ../../src/PE1VM1/App/MET/EcuLib/Common/scc/rtime.c
 ../../src/PE1VM1/App/MET/EcuLib/Common/scc/unitconvrt.c
