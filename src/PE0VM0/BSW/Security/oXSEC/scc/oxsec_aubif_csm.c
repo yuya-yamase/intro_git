@@ -17,7 +17,11 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "oxsec_aubif_csm.h"
-#include "oxdocan_aubif_ma.h"
+#include "oxsec_aub_cfg.h"
+
+#if (OXSEC_AUB_EN_VCRYPX == 1U)
+#include "vCryPx.h"
+#endif /* #if (OXSEC_AUB_EN_VCRYPX == 1U) */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -59,7 +63,9 @@
 /*===================================================================================================================================*/
 void vd_g_oXSECAubIfCsmKeySetAck( uint32 jobId, Crypto_ResultType result )
 {
-    vd_g_TyDoCANAubIfCsmKeyAck(jobId, result);
+#if (OXSEC_AUB_EN_VCRYPX == 1U)
+    vd_g_vCryPx_CsmCallback_KeySetValid(jobId,result);
+#endif /* #if (OXSEC_AUB_EN_VCRYPX == 1U) */
 }
 /*===================================================================================================================================*/
 /*  void vd_g_oXSECAubIfCsmAck( uint32 jobId, Crypto_ResultType result )                                                             */
@@ -69,7 +75,9 @@ void vd_g_oXSECAubIfCsmKeySetAck( uint32 jobId, Crypto_ResultType result )
 /*===================================================================================================================================*/
 void vd_g_oXSECAubIfCsmAck( uint32 jobId, Crypto_ResultType result )
 {
-    vd_g_TyDoCANAubIfCsmAck(jobId, result);
+#if (OXSEC_AUB_EN_VCRYPX == 1U)
+    vd_g_vCryPx_CsmCallback_General(jobId,result);
+#endif /* #if (OXSEC_AUB_EN_VCRYPX == 1U) */
 }
 /*===================================================================================================================================*/
 /*  void vd_g_oXSECAubIfCsmErrAck( Csm_Ab_ErrorStatusType udErrorStatus )                                                            */

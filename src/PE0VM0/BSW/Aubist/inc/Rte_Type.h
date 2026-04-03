@@ -1,40 +1,24 @@
-/****************************************************************************/
-/* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
-/****************************************************************************/
+/*
+    Copyright(C) 2019 eSOL Co., Ltd. All rights reserved.
+
+    This software is protected by the law and the agreement concerning
+    a Japanese country copyright method, an international agreement,
+    and other intellectual property right and may be used and copied
+    only in accordance with the terms of such license and with the inclusion
+    of the above copyright notice.
+
+    This software or any other copies thereof may not be provided
+    or otherwise made available to any other person.  No title to
+    and ownership of the software is hereby transferred.
+
+    The information in this software is subject to change without
+    notice and should not be construed as a commitment by eSOL Co.,Ltd.
+*/
+/****************************************************************************
+ [ Rte_Type.h ] - Rte type header file
+****************************************************************************/
 
 #ifndef RTE_TYPE_H
 #define RTE_TYPE_H
 
-/*--------------------------------------------------------------------------*/
-/* Include Files                                                            */
-/*--------------------------------------------------------------------------*/
-#include <Std_Types.h>
-
-/*--------------------------------------------------------------------------*/
-/* Types                                                                    */
-/*--------------------------------------------------------------------------*/
-typedef struct {
-    uint32 u4ErrorFactor;
-    uint32 u4ErrorState;
-} Mscd_ErrorInfo_ErrorFactorInfoType;
-
-typedef struct {
-    uint16 u2BlockId;
-    uint32 u4ErrorResult;
-} Mscd_ErrorInfo_ErrorResultInfoType;
-
-typedef uint8 Mscd_MsStatusType;
-
-typedef uint16 NvM_BlockIdType;
-
-typedef uint8 NvM_BlockRequestType;
-
-typedef uint8 NvM_InitBlockRequestType;
-
-typedef uint8 NvM_MultiBlockRequestType;
-
-typedef uint8 NvM_RequestResultType;
-
-#endif /* RTE_TYPE_H */
-/**** End of File ***********************************************************/
+#endif /* RTE_H */

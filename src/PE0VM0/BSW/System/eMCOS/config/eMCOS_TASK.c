@@ -23,8 +23,8 @@
 #include "run_m.h"
 
 #include "oxcan.h"
-#include "oxdocan.h"
 #include "oxsec.h"
+#include "vCryPx.h"
 
 #if ((defined(__AIP_THROUGHPUT__)) && (__AIP_THROUGHPUT__ == 1))
 #include "throughput.h"
@@ -98,6 +98,7 @@ TASK(eMCOS_TASK_High)
 #if (OXSEC_MAIN_HIGH == 1U)
     vd_g_oXSECMainPreHigh();
     BswM_CS_MainFunctionHigh();
+    vd_g_vCryPx_MainFunction();
     vd_g_oXSECMainPosHigh();
 #else
     BswM_CS_MainFunctionHigh();

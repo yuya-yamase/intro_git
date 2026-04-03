@@ -45,13 +45,13 @@
 /*  Defines                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* START : ##TOOL_OUT#RIM_MOD_1B_SIZE## */
-#define RIM_MOD_1BRAM_U1_ID_NUM                  (409U)
+#define RIM_MOD_1BRAM_U1_ID_NUM                  (512U)
 #define RIM_MOD_1BRAM_U2_ID_NUM                  (0U)
-#define RIM_MOD_1BRAM_U4_ID_NUM                  (65U)
-#define RIM_MOD_1BRAM_OTHER_ID_NUM               (341U)
+#define RIM_MOD_1BRAM_U4_ID_NUM                  (85U)
+#define RIM_MOD_1BRAM_OTHER_ID_NUM               (424U)
 /* END : ##TOOL_OUT#RIM_MOD_1B_SIZE## */
 /* START : ##TOOL_OUT#RIM_MOD_1B_OTR_TBL_SIZE## */
-#define RIM_MOD_1BRAM_OTHER_BUF_NUM              (1509U)
+#define RIM_MOD_1BRAM_OTHER_BUF_NUM              (2053U)
 /* END : ##TOOL_OUT#RIM_MOD_1B_OTR_TBL_SIZE## */
 
 /* Set st_d_RIM_MOD_1BRAM_OTR_SZ_CFG's max size */
@@ -450,7 +450,90 @@ const ST_RIM_MOD_1BRAM_SIZE st_d_RIM_MOD_1BRAM_OTR_SZ_CFG[RIM_MOD_1BRAM_OTHER_ID
     {(U2)1493U,     (U2)8U      },      /* 337  : RIMID_OTR_NVMC_DA_DTF_WRI_448 */
     {(U2)1495U,     (U2)8U      },      /* 338  : RIMID_OTR_NVMC_DA_DTF_WRI_449 */
     {(U2)1497U,     (U2)24U     },      /* 339  : RIMID_OTR_NVMC_DA_DTF_WRI_458 */
-    {(U2)1503U,     (U2)24U     }       /* 340  : RIMID_OTR_NVMC_DA_DTF_WRI_459 */
+    {(U2)1503U,     (U2)24U     },      /* 340  : RIMID_OTR_NVMC_DA_DTF_WRI_459 */
+    {(U2)1509U,     (U2)8U      },      /* 341  : RIMID_OTR_NVMC_DA_DTF_WRI_645 */
+    {(U2)1511U,     (U2)8U      },      /* 342  : RIMID_OTR_NVMC_DA_DTF_WRI_646 */
+    {(U2)1513U,     (U2)8U      },      /* 343  : RIMID_OTR_NVMC_DA_DTF_WRI_647 */
+    {(U2)1515U,     (U2)8U      },      /* 344  : RIMID_OTR_NVMC_DA_DTF_WRI_648 */
+    {(U2)1517U,     (U2)8U      },      /* 345  : RIMID_OTR_NVMC_DA_DTF_WRI_649 */
+    {(U2)1519U,     (U2)8U      },      /* 346  : RIMID_OTR_NVMC_DA_DTF_WRI_650 */
+    {(U2)1521U,     (U2)8U      },      /* 347  : RIMID_OTR_NVMC_DA_DTF_WRI_651 */
+    {(U2)1523U,     (U2)8U      },      /* 348  : RIMID_OTR_NVMC_DA_DTF_WRI_652 */
+    {(U2)1525U,     (U2)8U      },      /* 349  : RIMID_OTR_NVMC_DA_DTF_WRI_653 */
+    {(U2)1527U,     (U2)8U      },      /* 350  : RIMID_OTR_NVMC_DA_DTF_WRI_654 */
+    {(U2)1529U,     (U2)8U      },      /* 351  : RIMID_OTR_NVMC_DA_DTF_WRI_655 */
+    {(U2)1531U,     (U2)8U      },      /* 352  : RIMID_OTR_NVMC_DA_DTF_WRI_656 */
+    {(U2)1533U,     (U2)8U      },      /* 353  : RIMID_OTR_NVMC_DA_DTF_WRI_657 */
+    {(U2)1535U,     (U2)8U      },      /* 354  : RIMID_OTR_NVMC_DA_DTF_WRI_658 */
+    {(U2)1537U,     (U2)8U      },      /* 355  : RIMID_OTR_NVMC_DA_DTF_WRI_659 */
+    {(U2)1539U,     (U2)8U      },      /* 356  : RIMID_OTR_NVMC_DA_DTF_WRI_660 */
+    {(U2)1541U,     (U2)8U      },      /* 357  : RIMID_OTR_NVMC_DA_DTF_WRI_661 */
+    {(U2)1543U,     (U2)8U      },      /* 358  : RIMID_OTR_NVMC_DA_DTF_WRI_662 */
+    {(U2)1545U,     (U2)8U      },      /* 359  : RIMID_OTR_NVMC_DA_DTF_WRI_663 */
+    {(U2)1547U,     (U2)8U      },      /* 360  : RIMID_OTR_NVMC_DA_DTF_WRI_664 */
+    {(U2)1549U,     (U2)32U     },      /* 361  : RIMID_OTR_NVMC_DA_DTF_WRI_665 */
+    {(U2)1557U,     (U2)32U     },      /* 362  : RIMID_OTR_NVMC_DA_DTF_WRI_666 */
+    {(U2)1565U,     (U2)32U     },      /* 363  : RIMID_OTR_NVMC_DA_DTF_WRI_667 */
+    {(U2)1573U,     (U2)32U     },      /* 364  : RIMID_OTR_NVMC_DA_DTF_WRI_668 */
+    {(U2)1581U,     (U2)32U     },      /* 365  : RIMID_OTR_NVMC_DA_DTF_WRI_669 */
+    {(U2)1589U,     (U2)32U     },      /* 366  : RIMID_OTR_NVMC_DA_DTF_WRI_670 */
+    {(U2)1597U,     (U2)32U     },      /* 367  : RIMID_OTR_NVMC_DA_DTF_WRI_671 */
+    {(U2)1605U,     (U2)32U     },      /* 368  : RIMID_OTR_NVMC_DA_DTF_WRI_672 */
+    {(U2)1613U,     (U2)32U     },      /* 369  : RIMID_OTR_NVMC_DA_DTF_WRI_673 */
+    {(U2)1621U,     (U2)32U     },      /* 370  : RIMID_OTR_NVMC_DA_DTF_WRI_674 */
+    {(U2)1629U,     (U2)32U     },      /* 371  : RIMID_OTR_NVMC_DA_DTF_WRI_675 */
+    {(U2)1637U,     (U2)32U     },      /* 372  : RIMID_OTR_NVMC_DA_DTF_WRI_676 */
+    {(U2)1645U,     (U2)32U     },      /* 373  : RIMID_OTR_NVMC_DA_DTF_WRI_677 */
+    {(U2)1653U,     (U2)32U     },      /* 374  : RIMID_OTR_NVMC_DA_DTF_WRI_678 */
+    {(U2)1661U,     (U2)32U     },      /* 375  : RIMID_OTR_NVMC_DA_DTF_WRI_679 */
+    {(U2)1669U,     (U2)32U     },      /* 376  : RIMID_OTR_NVMC_DA_DTF_WRI_680 */
+    {(U2)1677U,     (U2)32U     },      /* 377  : RIMID_OTR_NVMC_DA_DTF_WRI_681 */
+    {(U2)1685U,     (U2)32U     },      /* 378  : RIMID_OTR_NVMC_DA_DTF_WRI_682 */
+    {(U2)1693U,     (U2)32U     },      /* 379  : RIMID_OTR_NVMC_DA_DTF_WRI_683 */
+    {(U2)1701U,     (U2)32U     },      /* 380  : RIMID_OTR_NVMC_DA_DTF_WRI_684 */
+    {(U2)1709U,     (U2)32U     },      /* 381  : RIMID_OTR_NVMC_DA_DTF_WRI_685 */
+    {(U2)1717U,     (U2)32U     },      /* 382  : RIMID_OTR_NVMC_DA_DTF_WRI_686 */
+    {(U2)1725U,     (U2)32U     },      /* 383  : RIMID_OTR_NVMC_DA_DTF_WRI_687 */
+    {(U2)1733U,     (U2)32U     },      /* 384  : RIMID_OTR_NVMC_DA_DTF_WRI_688 */
+    {(U2)1741U,     (U2)32U     },      /* 385  : RIMID_OTR_NVMC_DA_DTF_WRI_689 */
+    {(U2)1749U,     (U2)32U     },      /* 386  : RIMID_OTR_NVMC_DA_DTF_WRI_690 */
+    {(U2)1757U,     (U2)32U     },      /* 387  : RIMID_OTR_NVMC_DA_DTF_WRI_691 */
+    {(U2)1765U,     (U2)32U     },      /* 388  : RIMID_OTR_NVMC_DA_DTF_WRI_692 */
+    {(U2)1773U,     (U2)32U     },      /* 389  : RIMID_OTR_NVMC_DA_DTF_WRI_693 */
+    {(U2)1781U,     (U2)32U     },      /* 390  : RIMID_OTR_NVMC_DA_DTF_WRI_694 */
+    {(U2)1789U,     (U2)32U     },      /* 391  : RIMID_OTR_NVMC_DA_DTF_WRI_695 */
+    {(U2)1797U,     (U2)32U     },      /* 392  : RIMID_OTR_NVMC_DA_DTF_WRI_696 */
+    {(U2)1805U,     (U2)32U     },      /* 393  : RIMID_OTR_NVMC_DA_DTF_WRI_697 */
+    {(U2)1813U,     (U2)32U     },      /* 394  : RIMID_OTR_NVMC_DA_DTF_WRI_698 */
+    {(U2)1821U,     (U2)32U     },      /* 395  : RIMID_OTR_NVMC_DA_DTF_WRI_699 */
+    {(U2)1829U,     (U2)32U     },      /* 396  : RIMID_OTR_NVMC_DA_DTF_WRI_700 */
+    {(U2)1837U,     (U2)32U     },      /* 397  : RIMID_OTR_NVMC_DA_DTF_WRI_701 */
+    {(U2)1845U,     (U2)32U     },      /* 398  : RIMID_OTR_NVMC_DA_DTF_WRI_702 */
+    {(U2)1853U,     (U2)32U     },      /* 399  : RIMID_OTR_NVMC_DA_DTF_WRI_703 */
+    {(U2)1861U,     (U2)32U     },      /* 400  : RIMID_OTR_NVMC_DA_DTF_WRI_704 */
+    {(U2)1869U,     (U2)32U     },      /* 401  : RIMID_OTR_NVMC_DA_DTF_WRI_705 */
+    {(U2)1877U,     (U2)32U     },      /* 402  : RIMID_OTR_NVMC_DA_DTF_WRI_706 */
+    {(U2)1885U,     (U2)32U     },      /* 403  : RIMID_OTR_NVMC_DA_DTF_WRI_707 */
+    {(U2)1893U,     (U2)32U     },      /* 404  : RIMID_OTR_NVMC_DA_DTF_WRI_708 */
+    {(U2)1901U,     (U2)32U     },      /* 405  : RIMID_OTR_NVMC_DA_DTF_WRI_709 */
+    {(U2)1909U,     (U2)32U     },      /* 406  : RIMID_OTR_NVMC_DA_DTF_WRI_710 */
+    {(U2)1917U,     (U2)32U     },      /* 407  : RIMID_OTR_NVMC_DA_DTF_WRI_711 */
+    {(U2)1925U,     (U2)32U     },      /* 408  : RIMID_OTR_NVMC_DA_DTF_WRI_712 */
+    {(U2)1933U,     (U2)32U     },      /* 409  : RIMID_OTR_NVMC_DA_DTF_WRI_713 */
+    {(U2)1941U,     (U2)32U     },      /* 410  : RIMID_OTR_NVMC_DA_DTF_WRI_714 */
+    {(U2)1949U,     (U2)32U     },      /* 411  : RIMID_OTR_NVMC_DA_DTF_WRI_715 */
+    {(U2)1957U,     (U2)32U     },      /* 412  : RIMID_OTR_NVMC_DA_DTF_WRI_716 */
+    {(U2)1965U,     (U2)32U     },      /* 413  : RIMID_OTR_NVMC_DA_DTF_WRI_717 */
+    {(U2)1973U,     (U2)32U     },      /* 414  : RIMID_OTR_NVMC_DA_DTF_WRI_718 */
+    {(U2)1981U,     (U2)32U     },      /* 415  : RIMID_OTR_NVMC_DA_DTF_WRI_719 */
+    {(U2)1989U,     (U2)32U     },      /* 416  : RIMID_OTR_NVMC_DA_DTF_WRI_720 */
+    {(U2)1997U,     (U2)32U     },      /* 417  : RIMID_OTR_NVMC_DA_DTF_WRI_721 */
+    {(U2)2005U,     (U2)32U     },      /* 418  : RIMID_OTR_NVMC_DA_DTF_WRI_722 */
+    {(U2)2013U,     (U2)32U     },      /* 419  : RIMID_OTR_NVMC_DA_DTF_WRI_723 */
+    {(U2)2021U,     (U2)32U     },      /* 420  : RIMID_OTR_NVMC_DA_DTF_WRI_724 */
+    {(U2)2029U,     (U2)32U     },      /* 421  : RIMID_OTR_NVMC_DA_DTF_WRI_725 */
+    {(U2)2037U,     (U2)32U     },      /* 422  : RIMID_OTR_NVMC_DA_DTF_WRI_726 */
+    {(U2)2045U,     (U2)32U     }       /* 423  : RIMID_OTR_NVMC_DA_DTF_WRI_727 */
 /* END : ##TOOL_OUT#RIM_MOD_1B_OTR_TABLE## */
 };
 

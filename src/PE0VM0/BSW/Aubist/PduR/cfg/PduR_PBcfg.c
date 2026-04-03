@@ -61,10 +61,8 @@
 BswConst PduIdType bsw_pdur_u2ComRoutingTbl[BSW_PDUR_CFG_MSGCOM_NUM] =
 {
     /* PDU ID (Lower Component | ID)   */
-    ((BswU2)BSW_PDUR_LOCOMP_CANIF  | (BswU2)0x0000U)  /* [0] up:BDC1S52_Rx_CANFD_G2M_1_BUS, low:BDC1S52_Rx_CANFD_G2M_1_BUS */
-   ,((BswU2)BSW_PDUR_LOCOMP_CANIF  | (BswU2)0x0001U)  /* [1] up:BDC1S60_Rx_CANFD_G2M_1_BUS, low:BDC1S60_Rx_CANFD_G2M_1_BUS */
-   ,((BswU2)BSW_PDUR_LOCOMP_CANIF  | (BswU2)0x0002U)  /* [2] up:BDC1S81_Rx_CANFD_G2M_1_BUS, low:BDC1S81_Rx_CANFD_G2M_1_BUS */
-   ,((BswU2)BSW_PDUR_LOCOMP_CANIF  | (BswU2)0x0003U)  /* [3] up:BDC1S91_Rx_CANFD_G2M_2_BUS, low:BDC1S91_Rx_CANFD_G2M_2_BUS */
+    ((BswU2)BSW_PDUR_LOCOMP_CANIF  | (BswU2)0x0000U)  /* [0] up:BDC1S81_Rx_CANFD_G2M_1_BUS, low:BDC1S81_Rx_CANFD_G2M_1_BUS */
+   ,((BswU2)BSW_PDUR_LOCOMP_CANIF  | (BswU2)0x0001U)  /* [1] up:BDC1S91_Rx_CANFD_G2M_2_BUS, low:BDC1S91_Rx_CANFD_G2M_2_BUS */
 };
 #endif
 
@@ -72,16 +70,6 @@ BswConst PduIdType bsw_pdur_u2ComRoutingTbl[BSW_PDUR_CFG_MSGCOM_NUM] =
 BswConst PduIdType bsw_pdur_u2DcmRoutingTbl[BSW_PDUR_CFG_MSGDCM_NUM] =
 {
     /* PDU ID (Lower Component | ID)   */
-    ((BswU2)BSW_PDUR_LOCOMP_CANTP  | (BswU2)0x0000U)  /* [0] up:Nsdu_TX_TxNSdu_Diag_Physical_Service, low:Nsdu_TX_TxNSdu_Diag_Physical_Service */
-   ,((BswU2)BSW_PDUR_LOCOMP_CANTP  | (BswU2)0x0001U)  /* [1] up:Nsdu_TX_TxNSdu_Diag_Physical_Remote, low:Nsdu_TX_TxNSdu_Diag_Physical_Remote */
-   ,((BswU2)BSW_PDUR_LOCOMP_CANTP  | (BswU2)0x0002U)  /* [2] up:Nsdu_TX_TxNSdu_Diag_Physical_FD_Service, low:Nsdu_TX_TxNSdu_Diag_Physical_FD_Service */
-   ,((BswU2)BSW_PDUR_LOCOMP_CANTP  | (BswU2)0x0003U)  /* [3] up:Nsdu_TX_TxNSdu_Diag_Physical_FD_Remote, low:Nsdu_TX_TxNSdu_Diag_Physical_FD_Remote */
-   ,((BswU2)BSW_PDUR_LOCOMP_CANTP  | (BswU2)0x0004U)  /* [4] up:Nsdu_RX_RxNSdu_Diag_Physical_Service, low:Nsdu_RX_RxNSdu_Diag_Physical_Service */
-   ,((BswU2)BSW_PDUR_LOCOMP_CANTP  | (BswU2)0x0005U)  /* [5] up:Nsdu_RX_RxNSdu_Diag_Functional_Service, low:Nsdu_RX_RxNSdu_Diag_Functional_Service */
-   ,((BswU2)BSW_PDUR_LOCOMP_CANTP  | (BswU2)0x0006U)  /* [6] up:Nsdu_RX_RxNSdu_Diag_Physical_Remote, low:Nsdu_RX_RxNSdu_Diag_Physical_Remote */
-   ,((BswU2)BSW_PDUR_LOCOMP_CANTP  | (BswU2)0x0007U)  /* [7] up:Nsdu_RX_RxNSdu_Diag_Physical_FD_Service, low:Nsdu_RX_RxNSdu_Diag_Physical_FD_Service */
-   ,((BswU2)BSW_PDUR_LOCOMP_CANTP  | (BswU2)0x0008U)  /* [8] up:Nsdu_RX_RxNSdu_Diag_Functional_FD_Service, low:Nsdu_RX_RxNSdu_Diag_Functional_FD_Service */
-   ,((BswU2)BSW_PDUR_LOCOMP_CANTP  | (BswU2)0x0009U)  /* [9] up:Nsdu_RX_RxNSdu_Diag_Physical_FD_Remote, low:Nsdu_RX_RxNSdu_Diag_Physical_FD_Remote */
 };
 #endif
 
@@ -127,10 +115,8 @@ BswConst PduIdType bsw_pdur_u2J1939TpUpRoutingTbl[BSW_PDUR_CFG_MSGJ1939TPUP_NUM]
 BswConst Bsw_PduR_RoutingType bsw_pdur_stCanIfRoutingTbl[BSW_PDUR_CFG_MSGCANIF_NUM] =
 {
     /* I-PDU ID (Upper Component | ID)           ,    SecOC ID                      */
-    { ((BswU2)BSW_PDUR_UPCOMP_COM      | (BswU2)0x0000U),    (BswU2)BSW_PDUR_INVALID_PDUID }                      /* [0] up:BDC1S52_Rx_CANFD_G2M_1_BUS, low:BDC1S52_Rx_CANFD_G2M_1_BUS */
-   ,{ ((BswU2)BSW_PDUR_UPCOMP_COM      | (BswU2)0x0001U),    (BswU2)BSW_PDUR_INVALID_PDUID }                      /* [1] up:BDC1S60_Rx_CANFD_G2M_1_BUS, low:BDC1S60_Rx_CANFD_G2M_1_BUS */
-   ,{ ((BswU2)BSW_PDUR_UPCOMP_COM      | (BswU2)0x0002U),    (BswU2)BSW_PDUR_INVALID_PDUID }                      /* [2] up:BDC1S81_Rx_CANFD_G2M_1_BUS, low:BDC1S81_Rx_CANFD_G2M_1_BUS */
-   ,{ ((BswU2)BSW_PDUR_UPCOMP_COM      | (BswU2)0x0003U),    (BswU2)BSW_PDUR_INVALID_PDUID }                      /* [3] up:BDC1S91_Rx_CANFD_G2M_2_BUS, low:BDC1S91_Rx_CANFD_G2M_2_BUS */
+    { ((BswU2)BSW_PDUR_UPCOMP_COM      | (BswU2)0x0000U),    (BswU2)BSW_PDUR_INVALID_PDUID }                      /* [0] up:BDC1S81_Rx_CANFD_G2M_1_BUS, low:BDC1S81_Rx_CANFD_G2M_1_BUS */
+   ,{ ((BswU2)BSW_PDUR_UPCOMP_COM      | (BswU2)0x0001U),    (BswU2)BSW_PDUR_INVALID_PDUID }                      /* [1] up:BDC1S91_Rx_CANFD_G2M_2_BUS, low:BDC1S91_Rx_CANFD_G2M_2_BUS */
 };
 #endif /* ( (BSW_BSWM_CS_FUNC_CANIF == BSW_USE) && (BSW_PDUR_CFG_MSGCANIF_NUM != 0U) ) */
 
@@ -159,16 +145,6 @@ BswConst Bsw_PduR_RoutingType bsw_pdur_stDoIPIfRoutingTbl[BSW_PDUR_CFG_MSGDOIPIF
 BswConst Bsw_PduR_RoutingType bsw_pdur_stCanTpRoutingTbl[BSW_PDUR_CFG_MSGCANTP_NUM] =
 {
     /* I-PDU ID (Upper Component | ID)           ,    SecOC ID                      */
-    { ((BswU2)BSW_PDUR_UPCOMP_DCM      | (BswU2)0x0000U),    (BswU2)BSW_PDUR_INVALID_PDUID }                      /* [0] up:Nsdu_TX_TxNSdu_Diag_Physical_Service, low:Nsdu_TX_TxNSdu_Diag_Physical_Service */
-   ,{ ((BswU2)BSW_PDUR_UPCOMP_DCM      | (BswU2)0x0001U),    (BswU2)BSW_PDUR_INVALID_PDUID }                      /* [1] up:Nsdu_TX_TxNSdu_Diag_Physical_Remote, low:Nsdu_TX_TxNSdu_Diag_Physical_Remote */
-   ,{ ((BswU2)BSW_PDUR_UPCOMP_DCM      | (BswU2)0x0002U),    (BswU2)BSW_PDUR_INVALID_PDUID }                      /* [2] up:Nsdu_TX_TxNSdu_Diag_Physical_FD_Service, low:Nsdu_TX_TxNSdu_Diag_Physical_FD_Service */
-   ,{ ((BswU2)BSW_PDUR_UPCOMP_DCM      | (BswU2)0x0003U),    (BswU2)BSW_PDUR_INVALID_PDUID }                      /* [3] up:Nsdu_TX_TxNSdu_Diag_Physical_FD_Remote, low:Nsdu_TX_TxNSdu_Diag_Physical_FD_Remote */
-   ,{ ((BswU2)BSW_PDUR_UPCOMP_DCM      | (BswU2)0x0004U),    (BswU2)BSW_PDUR_INVALID_PDUID }                      /* [4] up:Nsdu_RX_RxNSdu_Diag_Physical_Service, low:Nsdu_RX_RxNSdu_Diag_Physical_Service */
-   ,{ ((BswU2)BSW_PDUR_UPCOMP_DCM      | (BswU2)0x0005U),    (BswU2)BSW_PDUR_INVALID_PDUID }                      /* [5] up:Nsdu_RX_RxNSdu_Diag_Functional_Service, low:Nsdu_RX_RxNSdu_Diag_Functional_Service */
-   ,{ ((BswU2)BSW_PDUR_UPCOMP_DCM      | (BswU2)0x0006U),    (BswU2)BSW_PDUR_INVALID_PDUID }                      /* [6] up:Nsdu_RX_RxNSdu_Diag_Physical_Remote, low:Nsdu_RX_RxNSdu_Diag_Physical_Remote */
-   ,{ ((BswU2)BSW_PDUR_UPCOMP_DCM      | (BswU2)0x0007U),    (BswU2)BSW_PDUR_INVALID_PDUID }                      /* [7] up:Nsdu_RX_RxNSdu_Diag_Physical_FD_Service, low:Nsdu_RX_RxNSdu_Diag_Physical_FD_Service */
-   ,{ ((BswU2)BSW_PDUR_UPCOMP_DCM      | (BswU2)0x0008U),    (BswU2)BSW_PDUR_INVALID_PDUID }                      /* [8] up:Nsdu_RX_RxNSdu_Diag_Functional_FD_Service, low:Nsdu_RX_RxNSdu_Diag_Functional_FD_Service */
-   ,{ ((BswU2)BSW_PDUR_UPCOMP_DCM      | (BswU2)0x0009U),    (BswU2)BSW_PDUR_INVALID_PDUID }                      /* [9] up:Nsdu_RX_RxNSdu_Diag_Physical_FD_Remote, low:Nsdu_RX_RxNSdu_Diag_Physical_FD_Remote */
 };
 #endif /* ( (BSW_BSWM_CS_FUNC_CANTP == BSW_USE) && (BSW_PDUR_CFG_MSGCANTP_NUM != 0U) ) */
 

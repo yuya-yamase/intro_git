@@ -57,8 +57,8 @@ extern ST_IVDSH_FQ_REA             st_gp_ivdsh_fq_rea[];
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 void    vd_g_iVDshFqIfInit(void);
-void    vd_g_iVDshFqIfWriCh(const U2 u2_a_CH, const U4 * const u4_ap_WRI, const U2 u2_a_NWORD);
-U1      u1_g_iVDshFqIfReaCh(const U2 u2_a_CH, U4 * const u4_ap_rea, const U2 u2_a_NWORD);
+void    vd_g_iVDshFqIfWriCh(const U2 u2_a_FQ_CH, const U4 * const u4_ap_WRI, const U2 u2_a_NWORD);
+U1      u1_g_iVDshFqIfReaCh(const U2 u2_a_FQ_CH, U4 * const u4_ap_rea, const U2 u2_a_NWORD);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

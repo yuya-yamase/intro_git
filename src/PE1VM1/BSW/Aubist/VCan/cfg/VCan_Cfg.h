@@ -141,7 +141,12 @@
 /*  (Each Virtual Controller)             */
 /******************************************/
 /* Tx VHOH(VHTH) Number */
+#warning "BEVCDCFD-2652"
+#if 0 /* BEVCDCFD-2652 */
+#define BSW_VCAN_CFG_VHTHNUM_0                  (22U)
+#else /* BEVCDCFD-2652 */
 #define BSW_VCAN_CFG_VHTHNUM_0                  (13U)
+#endif /* BEVCDCFD-2652 */
 #define BSW_VCAN_CFG_VHTHNUM_1                  (0U)
 #define BSW_VCAN_CFG_VHTHNUM_2                  (0U)
 #define BSW_VCAN_CFG_VHTHNUM_3                  (0U)
@@ -159,7 +164,7 @@
 #define BSW_VCAN_CFG_VHTHNUM_15                 (0U)
 
 /* First Virtual MBOX Number for VHTH */
-#define BSW_VCAN_CFG_VMBOX_TXOFFSET_0           (4U)
+#define BSW_VCAN_CFG_VMBOX_TXOFFSET_0           (6U)
 #define BSW_VCAN_CFG_VMBOX_TXOFFSET_1           (0U)
 #define BSW_VCAN_CFG_VMBOX_TXOFFSET_2           (0U)
 #define BSW_VCAN_CFG_VMBOX_TXOFFSET_3           (0U)
@@ -221,7 +226,7 @@
 /*  (Each Virtual Controller)             */
 /******************************************/
 /* Rx VHOH(VHRH) Number */
-#define BSW_VCAN_CFG_VHRHNUM_0                  (4U)
+#define BSW_VCAN_CFG_VHRHNUM_0                  (6U)
 #define BSW_VCAN_CFG_VHRHNUM_1                  (0U)
 #define BSW_VCAN_CFG_VHRHNUM_2                  (0U)
 #define BSW_VCAN_CFG_VHRHNUM_3                  (0U)

@@ -69,10 +69,17 @@ CanConst CanHohCfgType Can_stHohCfgTbl[ CAN_TB_HOHNUM ] =
   /*   u1ControllerID         , u1MboxNo          */
   /*========== User define Area [Start] ==========*/
   /*--- Reception --------------------------------*/
+#warning "BEVCDCFD-2652"
+#if 0 /* BEVCDCFD-2652 */
+     { (uint8)CAN_CONTROLLER_3,  (uint8)CAN_MB001 }   /* [0] HOH000 */
+    ,{ (uint8)CAN_CONTROLLER_3,  (uint8)CAN_MB002 }   /* [1] HOH001 */
+    ,{ (uint8)CAN_CONTROLLER_5,  (uint8)CAN_MB009 }   /* [2] HOH002 */
+#else /* BEVCDCFD-2652 */
      { (uint8)CAN_CONTROLLER_3,  (uint8)CAN_MB002 }   /* [0] HOH000 */
     ,{ (uint8)CAN_CONTROLLER_3,  (uint8)CAN_MB003 }   /* [1] HOH001 */
     ,{ (uint8)CAN_CONTROLLER_3,  (uint8)CAN_MB004 }   /* [2] HOH002 */
-    ,{ (uint8)CAN_CONTROLLER_5,  (uint8)CAN_MB010 }   /* [3] HOH003 */
+#endif /* BEVCDCFD-2652 */
+	,{ (uint8)CAN_CONTROLLER_5,  (uint8)CAN_MB010 }   /* [3] HOH003 */
     ,{ (uint8)CAN_CONTROLLER_5,  (uint8)CAN_MB011 }   /* [4] HOH004 */
     ,{ (uint8)CAN_CONTROLLER_5,  (uint8)CAN_MB012 }   /* [5] HOH005 */
     ,{ (uint8)CAN_CONTROLLER_5,  (uint8)CAN_MB013 }   /* [6] HOH006 */
@@ -215,6 +222,108 @@ CanConst CanHohCfgType Can_stHohCfgTbl[ CAN_TB_HOHNUM ] =
     ,{ (uint8)CAN_CONTROLLER_5,  (uint8)CAN_MB150 }   /* [143] HOH143 */
     ,{ (uint8)CAN_CONTROLLER_5,  (uint8)CAN_MB151 }   /* [144] HOH144 */
     ,{ (uint8)CAN_CONTROLLER_5,  (uint8)CAN_MB152 }   /* [145] HOH145 */
+#warning "BEVCDCFD-2652"
+#if 0 /* BEVCDCFD-2652 */
+    ,{ (uint8)CAN_CONTROLLER_5,  (uint8)CAN_MB153 }   /* [146] HOH146 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB004 }   /* [147] HOH147 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB005 }   /* [148] HOH148 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB006 }   /* [149] HOH149 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB007 }   /* [150] HOH150 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB008 }   /* [151] HOH151 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB009 }   /* [152] HOH152 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB010 }   /* [153] HOH153 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB011 }   /* [154] HOH154 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB012 }   /* [155] HOH155 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB013 }   /* [156] HOH156 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB014 }   /* [157] HOH157 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB015 }   /* [158] HOH158 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB016 }   /* [159] HOH159 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB017 }   /* [160] HOH160 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB018 }   /* [161] HOH161 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB019 }   /* [162] HOH162 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB020 }   /* [163] HOH163 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB021 }   /* [164] HOH164 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB022 }   /* [165] HOH165 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB023 }   /* [166] HOH166 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB024 }   /* [167] HOH167 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB025 }   /* [168] HOH168 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB026 }   /* [169] HOH169 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB027 }   /* [170] HOH170 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB028 }   /* [171] HOH171 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB029 }   /* [172] HOH172 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB030 }   /* [173] HOH173 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB031 }   /* [174] HOH174 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB032 }   /* [175] HOH175 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB033 }   /* [176] HOH176 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB034 }   /* [177] HOH177 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB035 }   /* [178] HOH178 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB036 }   /* [179] HOH179 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB037 }   /* [180] HOH180 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB038 }   /* [181] HOH181 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB039 }   /* [182] HOH182 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB040 }   /* [183] HOH183 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB041 }   /* [184] HOH184 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB042 }   /* [185] HOH185 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB043 }   /* [186] HOH186 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB044 }   /* [187] HOH187 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB045 }   /* [188] HOH188 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB046 }   /* [189] HOH189 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB047 }   /* [190] HOH190 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB048 }   /* [191] HOH191 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB049 }   /* [192] HOH192 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB050 }   /* [193] HOH193 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB051 }   /* [194] HOH194 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB052 }   /* [195] HOH195 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB053 }   /* [196] HOH196 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB054 }   /* [197] HOH197 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB055 }   /* [198] HOH198 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB056 }   /* [199] HOH199 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB057 }   /* [200] HOH200 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB058 }   /* [201] HOH201 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB059 }   /* [202] HOH202 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB060 }   /* [203] HOH203 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB061 }   /* [204] HOH204 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB062 }   /* [205] HOH205 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB063 }   /* [206] HOH206 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB064 }   /* [207] HOH207 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB065 }   /* [208] HOH208 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB066 }   /* [209] HOH209 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB067 }   /* [210] HOH210 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB068 }   /* [211] HOH211 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB069 }   /* [212] HOH212 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB070 }   /* [213] HOH213 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB071 }   /* [214] HOH214 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB072 }   /* [215] HOH215 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB073 }   /* [216] HOH216 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB074 }   /* [217] HOH217 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB075 }   /* [218] HOH218 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB076 }   /* [219] HOH219 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB077 }   /* [220] HOH220 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB078 }   /* [221] HOH221 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB079 }   /* [222] HOH222 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB080 }   /* [223] HOH223 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB081 }   /* [224] HOH224 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB082 }   /* [225] HOH225 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB083 }   /* [226] HOH226 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB084 }   /* [227] HOH227 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB085 }   /* [228] HOH228 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB086 }   /* [229] HOH229 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB087 }   /* [230] HOH230 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB088 }   /* [231] HOH231 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB089 }   /* [232] HOH232 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB090 }   /* [233] HOH233 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB091 }   /* [234] HOH234 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB092 }   /* [235] HOH235 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB093 }   /* [236] HOH236 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB094 }   /* [237] HOH237 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB095 }   /* [238] HOH238 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB096 }   /* [239] HOH239 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB097 }   /* [240] HOH240 */
+    ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB098 }   /* [241] HOH241 */
+  /*--- Transmission -----------------------------*/
+    ,{ (uint8)CAN_CONTROLLER_3,  (uint8)CAN_MB000 }   /* [242] HOH245 */
+    ,{ (uint8)CAN_CONTROLLER_5,  (uint8)CAN_MB008 }   /* [243] HOH246 */
+#else /* BEVCDCFD-2652 */
     ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB004 }   /* [146] HOH146 */
     ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB005 }   /* [147] HOH147 */
     ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB006 }   /* [148] HOH148 */
@@ -303,6 +412,7 @@ CanConst CanHohCfgType Can_stHohCfgTbl[ CAN_TB_HOHNUM ] =
     ,{ (uint8)CAN_CONTROLLER_3,  (uint8)CAN_MB001 }   /* [230] HOH233 */
     ,{ (uint8)CAN_CONTROLLER_5,  (uint8)CAN_MB008 }   /* [231] HOH234 */
     ,{ (uint8)CAN_CONTROLLER_5,  (uint8)CAN_MB009 }   /* [232] HOH235 */
+#endif /* BEVCDCFD-2652 */
   /*========== User define Area [End] ============*/
 };
 #endif /* (CAN_CFG_TRANSMIT == CAN_USE) */

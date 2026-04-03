@@ -36,12 +36,8 @@
 /* Communication         */
 #include "oxcan.h"
 
-/* Diagnosis             */
-#include "oxdocan.h"
-
 /* Memory               */
 #include "rim_ctl.h"
-/* #include "nvmc_mgr.h" */
 
 /* aubist */
 #include <bswa_com.h>
@@ -388,9 +384,7 @@ void SS_Pm_shutdownCallout(void)
     vd_g_22SSCallout_PrepShtdwn();
 
     /* TPcsw_SS_Pm_shutdownCallout_if0 */
-    vd_g_oXDoCANShutdown();
     vd_g_oXCANShtdwn();
-    /* vd_g_Nvmc_DeInit(); */
     vd_g_Rim_DeInit();
 
     Adc_StopGroupConversion(ADC_GR_0);

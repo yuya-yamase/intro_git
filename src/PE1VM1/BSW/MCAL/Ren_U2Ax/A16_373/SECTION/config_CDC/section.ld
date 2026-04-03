@@ -40,6 +40,8 @@ SECTIONS {
     .P_OTA_CODEFLS          align(16)                       : > .
     .bsw_cs_text            align(16)                       : > .
     .bsw_can_text           align(16)                       : > .
+    .bsw_dcm_text           align(16)                       : > .
+    .bsw_dem_text           align(16)                       : > .
     .bsw_e2e_text           align(16)                       : > .
     .bsw_code_bottom        align(4)                        : > .
 
@@ -58,6 +60,8 @@ SECTIONS {
     .C_OTA_CODEFLS          align(4)                        : > .
     .bsw_cs_const           align(4)                        : > .
     .bsw_can_const          align(4)                        : > .
+    .bsw_dcm_rodata         align(4)                        : > .
+    .bsw_dem_rodata         align(4)                        : > .
     .bsw_const_bottom       align(4)                        : > .
 
     .bsw_e_nvar_ival_top    align(4)  ROM(.bsw_e_nvar_withval_top)     : > .
@@ -265,8 +269,11 @@ SECTIONS {
     .ecu_nvar_sw            align(4)                        : > .
     .bsw_cs_data            align(4)                        : > .
     .bsw_can_data           align(4)                        : > .
+    .bsw_dcm_bss            align(4)                        : > .
+    .bsw_dem_bss            align(4)                        : > .
     .bsw_idsm_var_no_init         align(4)                  : > .
     .bsw_idsm_var_cleared_wakeup  align(4)                  : > .
+    .SHARE_TYDC_VCRY_VAR_NO_INIT   align(4)                 : > .
     .os_var_top             align(4)                        : > .
     .osVarCleared ALIGN(4):
     {

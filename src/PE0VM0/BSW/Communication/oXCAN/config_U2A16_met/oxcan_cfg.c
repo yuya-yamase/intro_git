@@ -172,33 +172,33 @@ void    vd_g_oXCANCfgWkupInit(void)
 #endif /* (OXCAN_CFG_NUM_IRQ_EN != 0U) */
 }
 /*===================================================================================================================================*/
-/*  void    vd_g_oXCANCfgVomEvhk(const U4 u4_a_SYSBIT_LAST, const U4 u4_a_SYSBIT_NEXT)                                               */
+/*  void    vd_g_oXCANCfgVomEvhk(const U4 u4_a_SYS_LAST, const U4 u4_a_SYS_NEXT)                                                     */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_oXCANCfgVomEvhk(const U4 u4_a_SYSBIT_LAST, const U4 u4_a_SYSBIT_NEXT)
+void    vd_g_oXCANCfgVomEvhk(const U4 u4_a_SYS_LAST, const U4 u4_a_SYS_NEXT)
 {
 }
 /*===================================================================================================================================*/
-/*  void    vd_g_oXCANCfgPreTask(const U4 u4_a_SYSBIT)                                                                               */
+/*  void    vd_g_oXCANCfgPreTask(const U4 u4_a_SYS_ACT)                                                                              */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_oXCANCfgPreTask(const U4 u4_a_SYSBIT)
+void    vd_g_oXCANCfgPreTask(const U4 u4_a_SYS_ACT)
 {
 #ifdef CAN_LPR_H
     vd_g_CANLpRMainTask();
 #endif /* #ifdef CAN_LPR_H */
 }
 /*===================================================================================================================================*/
-/*  void    vd_g_oXCANCfgPosTask(const U4 u4_a_SYSBIT, const U2 u2_a_FATAL)                                                          */
+/*  void    vd_g_oXCANCfgPosTask(const U4 u4_a_SYS_ACT, const U2 u2_a_FATAL)                                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_oXCANCfgPosTask(const U4 u4_a_SYSBIT, const U2 u2_a_FATAL)
+void    vd_g_oXCANCfgPosTask(const U4 u4_a_SYS_ACT, const U2 u2_a_FATAL)
 {
     /* ------------------------------------------------------------------------------------------------- */
     /* Attention :                                                                                       */
