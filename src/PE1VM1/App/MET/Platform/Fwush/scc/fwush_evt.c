@@ -400,6 +400,9 @@ static U1 u1_g_FwushMapMemAccErrorToAckForRollback(void)
     };
     U1 u1_t_error;
     u1_t_error = u1_g_FwuMemAccGetError();
+    if (u1_t_error >= FWUMEMACC_ERROR_MAX) {
+        u1_t_error = (U1)0U;
+    }
     return(u1_sp_FWUMEMACC_ERROR_TO_ACK_RB[u1_t_error]);
 }
 /*===================================================================================================================================*/
@@ -418,10 +421,14 @@ static U1 u1_g_FwushMapMemAccErrorToAckForOth(void)
         (U1)FWUSH_ACK_OFFSET_UNCHANGED,   /* FWUMEMACC_ERROR_OFFSET_UNCHANGED (3U) */
         (U1)FWUSH_ACK_OFFSET_SUBTRACT,    /* FWUMEMACC_ERROR_OFFSET_SUBTRACT  (4U) */
         (U1)FWUSH_ACK_PROC_NG,            /* FWUMEMACC_ERROR_MEMACC_FAILED    (5U) */
-        (U1)FWUSH_ACK_PROC_START_ERR      /* FWUMEMACC_ERROR_START_ERR        (6U) */
+        (U1)FWUSH_ACK_PROC_START_ERR,     /* FWUMEMACC_ERROR_START_ERR        (6U) */
+        (U1)FWUSH_ACK_LB_ERR              /* FWUMEMACC_ERROR_LB_INFO_ERR      (7U) */
     };
     U1 u1_t_error;
     u1_t_error = u1_g_FwuMemAccGetError();
+    if (u1_t_error >= FWUMEMACC_ERROR_MAX) {
+        u1_t_error = (U1)0U;
+    }
     return(u1_sp_FWUMEMACC_ERROR_TO_ACK[u1_t_error]);
 }
 /*===================================================================================================================================*/
