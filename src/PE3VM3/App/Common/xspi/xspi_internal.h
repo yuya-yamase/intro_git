@@ -75,11 +75,11 @@ enum {
 #define XSPI_OST_CNT_INIT	((uint32)( 1000UL * GPT_OST_1US ))	/* 初期化用（1.0ms） */
 #define XSPI_OST_CNT_COMEND	((uint32)( 400UL * GPT_OST_1US ))	/* 通信終了用（0.4ms） */
 
-#if ( XSPI_COMM_CYCLE == XSPI_COMM_CYCLE_5ms )
+#if ( XSPI_COMM_CYCLE == XSPI_COMM_CYCLE_4ms )
 
-#define XSPI_OST_CNT_NORMAL	((uint32)( 1600UL * GPT_OST_1US ))	/* 通常動作用（1.6ms） */
+#define XSPI_OST_CNT_NORMAL	((uint32)( 3600UL * GPT_OST_1US ))	/* 通常動作用（3.6ms） */
 #define XSPI_OST_CNT_ENMONI	((uint32)( 5000UL * GPT_OST_1US ))	/* EN信号監視用（5.0ms） */
-#define XSPI_OST_CNT_N_NEXT	((uint32)( 2000UL * GPT_OST_1US ))	/* 通信継続用（2.0ms） */
+#define XSPI_OST_CNT_N_NEXT	((uint32)( 4000UL * GPT_OST_1US ))	/* 通信継続用（4.0ms） */
 
 #else	/* (XSPI_COMM_CYCLE == XSPI_COMM_CYCLE_10ms) */
 
@@ -122,7 +122,7 @@ enum {
 #ifdef XSPI_CHECK_SUM_CENTRAL
 	#define	XSPI_PAYLOAD_NUM		(1)						/* Payload数 */
 	#define	XSPI_HEADER_SIZE		(8)						/* header size */
-	#define	XSPI_PAYLOAD1_SIZE		(1200)					/* payload1 size */
+	#define	XSPI_PAYLOAD1_SIZE		(2000)					/* payload1 size */
 #else
 	#define	XSPI_PAYLOAD_NUM		(3)						/* Payload数 */
 	#define	XSPI_HEADER_SIZE		(8)						/* header size */

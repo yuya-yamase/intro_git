@@ -37,6 +37,9 @@ Std_ReturnType EthSwt_SWIC_Reg_SetTbl(const swic_reg_data_t tbl[], const uint32 
 		case ((uint16)REG_CTRL_READ << 8) | SURVEILLANCE_OFF:									/* レジスタ読出し(監視なし)*/
 			result = swic_Reg_SetTblReadOFF(tbl, cnt, idx, dat, errFactor);
 			break;
+		case ((uint16)REG_CTRL_WAIT << 8) | SURVEILLANCE_OFF:									/* WAIT処理 */
+			EthSwt_SWIC_Cfg_WaitUS(tbl[idx].value);
+			break;
 		default:
 			result = E_NOT_OK;										/* レジスタアクセス制御にない要求場合 */
 			*errFactor = D_ETHSWT_SWIC_ERR_NOPROC;
@@ -146,8 +149,10 @@ static Std_ReturnType swic_Reg_SetTblReadOFF(const swic_reg_data_t tbl[], const 
 		}
 	}
 
-	if (result == E_NOT_OK && checkPwr == E_OK) {
-		*errFactor = D_ETHSWT_SWIC_ERR_CRC;	/* CRCエラーが連続INIT_SEQ_RETRY_CNT続いたとき */
+	if (result == E_NOT_OK &&
+		*errFactor != D_ETHSWT_SWIC_ERR_WRONGVALUE &&
+		*errFactor != D_ETHSWT_SWIC_ERR_POWEROFF) {
+		*errFactor = D_ETHSWT_SWIC_ERR_CRC;					/* 異常値が読み出しでもなく、電源状態が正常な場合で失敗した場合は、CRC異常で確定 */
 	}
 
 	return result;

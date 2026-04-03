@@ -1,4 +1,4 @@
-/* 1.10.0 */
+/* 1.12.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO TECHNO Corporation                                                                                               */
 /*===================================================================================================================================*/
@@ -13,8 +13,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define XSPI_IVI_SUB4_H_MAJOR           (1)
-#define XSPI_IVI_SUB4_H_MINOR           (11)
-#define XSPI_IVI_SUB4_H_PATCH           (0)
+#define XSPI_IVI_SUB4_H_MINOR           (12)
+#define XSPI_IVI_SUB4_H_PATCH           (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -38,6 +38,7 @@
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 void            vd_g_XspiIviCANGWPushPDU(const U2 u2_a_MSG);
+void            vd_g_XspiIviCANSendFrmGWPushPDU(const U2 u2_a_MSG);
 void            vd_g_XspiIviQSEvGWPushPDU(const U4 * const u4_ap_QSEV_RX);
 void            vd_g_XspiIviSub4VMResetInit(void);
 void            vd_g_XspiIviSub4SoCResetInit(void);

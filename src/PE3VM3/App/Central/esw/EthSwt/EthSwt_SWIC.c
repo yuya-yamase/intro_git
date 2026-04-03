@@ -64,9 +64,11 @@ void EthSwt_SWIC_PowerOff(void)
 	return;
 }
 /* -------------------------------------------------------------------------- */
-EthSwt_StateType EthSwt_SWIC_GetEthSwtState(const uint8 SwitchIdx)
+Std_ReturnType EthSwt_SWIC_GetEthSwtState(const uint8 SwitchIdx, EthSwt_StateType * const State)
 {
-	return EthSwt_SWIC_STM_GetStatus();
+	if (SwitchIdx != ETHSWT_SWIC_IDX)	{ return E_NOT_OK; }
+	*State = EthSwt_SWIC_STM_GetStatus();
+	return E_OK;
 }
 
 #define	ETHSWT_STOP_SEC_CODE

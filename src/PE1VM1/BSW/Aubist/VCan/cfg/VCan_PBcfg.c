@@ -79,14 +79,6 @@ BswConst BswU1 bsw_vcan_stVirtualHohTbl[ BSW_VCAN_VHOHNUM ] =
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [14] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [15] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [16] */
-    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [17] */
-    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [18] */
-    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [19] */
-    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [20] */
-    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [21] */
-    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [22] */
-    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [23] */
-    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [24] */
 };
 
 /************************************************/
@@ -247,14 +239,6 @@ BswConst BswU1 bsw_vcan_u1TxMBoxTbl_VControl0[ BSW_VCAN_TX_VMBOXNUM_0 ] =
    ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [10] */
    ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [11] */
    ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [12] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [13] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [14] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [15] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [16] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [17] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [18] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [19] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [20] */
 };
 
 #endif /* ( BSW_VCAN_TX_VMBOXNUM_0 != 0U ) */

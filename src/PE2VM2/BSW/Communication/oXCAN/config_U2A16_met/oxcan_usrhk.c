@@ -838,6 +838,7 @@ void    vd_g_oXCANUsrhkIPduTraAck(const U2 u2_a_IPDU_TX)
     /* ------------------------------------------------------------------------------------------------------ */
 
     /* Users Configuration */
+    vd_g_XspiIviCANSendFrmGWPushPDU(u2_a_IPDU_TX);
 
     /* Sample Code */
 /*  switch(u2_a_IPDU_TX)                    */

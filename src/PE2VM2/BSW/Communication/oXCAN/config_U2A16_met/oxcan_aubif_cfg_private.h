@@ -39,12 +39,12 @@
 #define OXCAN_E2E_TRA_MIN                        (0U)
 #define OXCAN_E2E_TRA_MAX                        (0U)
 
-#define OXCAN_E2E_NUM_REC                        (2U)
-#define OXCAN_E2E_REC_MIN                        (MSG_BDC1S81_RXCH0)
-#define OXCAN_E2E_REC_MAX                        (MSG_BDC1S91_RXCH0)
+#define OXCAN_E2E_NUM_REC                        (1U)
+#define OXCAN_E2E_REC_MIN                        (MSG_ADC1S14_RXCH0)
+#define OXCAN_E2E_REC_MAX                        (MSG_ADC1S14_RXCH0)
 
 /* #define OXCAN_OMA_NUM_REC                      */  /* It is defined in oxcan_acex_def.h."  */
-#define OXCAN_OMA_REC_MIN                        (MSG_BDC1S13_RXCH0)
+#define OXCAN_OMA_REC_MIN                        (MSG_BDC1SC1_RXCH0)
 #define OXCAN_OMA_REC_MAX                        (MSG_BDC1SJ5_RXCH0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

@@ -140,8 +140,8 @@ extern ar_osapcb_t* const ar_osapcb_ptr_table[];
   Return    :   none
   Note      :
  ---------------------------------------------------------------------------*/
-LOCAL_INLINE void ar_check_osap_isr_stack_size(const ar_osap_config_t *p_osapconfig, uint32 size);
-LOCAL_INLINE void ar_check_osap_isr_stack_size(const ar_osap_config_t *p_osapconfig, uint32 size)
+AR_LOCAL_FORCE_INLINE void ar_check_osap_isr_stack_size(const ar_osap_config_t *p_osapconfig, uint32 size);
+AR_LOCAL_FORCE_INLINE void ar_check_osap_isr_stack_size(const ar_osap_config_t *p_osapconfig, uint32 size)
 {
     uint32          stack_top;
     uint32          stack_bottom;
@@ -179,8 +179,8 @@ LOCAL_INLINE void ar_check_osap_isr_stack_size(const ar_osap_config_t *p_osapcon
   Return    :   none
   Note      :
  ---------------------------------------------------------------------------*/
-LOCAL_INLINE void ar_check_osap_hook_stack_size(const ar_osap_config_t *p_osapconfig);
-LOCAL_INLINE void ar_check_osap_hook_stack_size(const ar_osap_config_t *p_osapconfig)
+AR_LOCAL_FORCE_INLINE void ar_check_osap_hook_stack_size(const ar_osap_config_t *p_osapconfig);
+AR_LOCAL_FORCE_INLINE void ar_check_osap_hook_stack_size(const ar_osap_config_t *p_osapconfig)
 {
     uint32          stack_top;
     uint32          stack_bottom;
@@ -218,8 +218,8 @@ LOCAL_INLINE void ar_check_osap_hook_stack_size(const ar_osap_config_t *p_osapco
   Return    :   none
   Note      :
  ---------------------------------------------------------------------------*/
-LOCAL_INLINE void ar_check_osap_stack_magic_number(const ar_osap_config_t *p_osapconfig);
-LOCAL_INLINE void ar_check_osap_stack_magic_number(const ar_osap_config_t *p_osapconfig)
+AR_LOCAL_FORCE_INLINE void ar_check_osap_stack_magic_number(const ar_osap_config_t *p_osapconfig);
+AR_LOCAL_FORCE_INLINE void ar_check_osap_stack_magic_number(const ar_osap_config_t *p_osapconfig)
 {
     uint32          stack_top;
     ApplicationType osapid;

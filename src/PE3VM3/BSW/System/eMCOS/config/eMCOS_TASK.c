@@ -31,7 +31,6 @@
 #include <Ecu_Memmap_SdaDisableE_env.h>
 
 #include "EthSW_Task.h"
-#include "ChipCom.h"
 #include "VCanAck.h"
 #include "CanIfProxy.h"
 
@@ -45,10 +44,6 @@
 /*----------------------------------------------------------------------------
  *		ProtoTypes
  *--------------------------------------------------------------------------*/
-TASK(eMCOS_TASK_Idle);
-TASK(eMCOS_TASK_High);
-TASK(eMCOS_TASK_Medium);
-TASK(eMCOS_TASK_Low);
 
 /*----------------------------------------------------------------------------
  *		Symbols
@@ -102,12 +97,10 @@ TASK(eMCOS_TASK_High)
 /* Task hook start */
 
     BswM_CS_MainFunctionHigh();
+    ChipCom_MainFunctionPostRx();
     VCanAck_MainFunction();
     CanIfProxy_MainFunction();
-    ChipCom_MainFunctionPostRx();
     EthSW_HighTask();
-    ChipCom_MainFunction();
-    ChipCom_MainFunctionPreTx();
 
 /* Task hook end */
 #if (PROCESSING_LOAD_MEASURE_TIME > 0)

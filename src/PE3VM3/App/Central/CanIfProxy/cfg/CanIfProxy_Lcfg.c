@@ -70,6 +70,8 @@ const uint8 CanIfProxy_cu1CfPeriodPwrOnSelf = (uint8)CANIFPROXY_CFG_CF_PERIOD_PW
 const uint8 CanIfProxy_cu1CfPeriodPwrOffSelf = (uint8)CANIFPROXY_CFG_CF_PERIOD_PWROFF;
 /* CF Period Default */
 const uint8 CanIfProxy_cu1CfPeriodDef = (uint8)CANIFPROXY_CFG_CF_PERIOD_DEF;
+/* Frame Transmission Interval (for STD_OFF mode) */
+const uint8 CanIfProxy_cu1FrameTransInt = (uint8)CANIFPROXY_CFG_FRAME_TRANS_INT;
 /* Number of CF transmit per period in Power-On[time] */
 const uint8 CanIfProxy_cu1CfTxNumPwrOnSelf = (uint8)CANIFPROXY_CFG_CF_TX_NUM_PWRON;
 /* Number of CF transmit per period in Power-Off[time] */
@@ -84,11 +86,9 @@ const uint16 CanIfProxy_cu2ResCanIdRangeNum = (uint16)CANIFPROXY_CFG_RES_CANID_R
 /* Response CAN ID table */
 const CanIfProxy_U4RangeType CanIfProxy_cu4ResCanIdTble[CANIFPROXY_CFG_RES_CANID_RANGE_NUM] = {
 	{ (uint32)0xD8DAE100, (uint32)0xD8DAE1FF },
-	{ (uint32)0x58DAE100, (uint32)0x58DAE1FF },
+	{ (uint32)0x98DAE100, (uint32)0x98DAE1FF },
 	{ (uint32)0xD8DB33F1, (uint32)0xD8DB33F1 },
-	{ (uint32)0x58DB33F1, (uint32)0x58DB33F1 },
-	{ (uint32)0x00000708, (uint32)0x0000070F },
-	{ (uint32)0x000007DF, (uint32)0x000007DF }
+	{ (uint32)0x98DB33F1, (uint32)0x98DB33F1 }
 };
 
 #define CANIFPROXY_STOP_SEC_CONFIG_DATA_32

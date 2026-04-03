@@ -68,6 +68,7 @@ void    vd_g_CanTxAppCfgInit(void)
     vd_g_CanTxAppMET1S27_Init();
     vd_g_CanTxAppMET1S29_Init();
     vd_g_CanTxAppMET1S30_Init();
+    vd_g_CanTxAppMET1S47_Init();
     vd_g_CanTxAppMET1S62_Init();
     vd_g_CanTxAppMET1S70_Init();
 }
@@ -84,6 +85,7 @@ void    vd_g_CanTxAppCfgMainTask(void)
     vd_g_CanTxAppMET1S27_Send();
     vd_g_CanTxAppMET1S29_Send();
     vd_g_CanTxAppMET1S30_Send();
+    vd_g_CanTxAppMET1S47_Send();
     vd_g_CanTxAppMET1S62_Send();
     vd_g_CanTxAppMET1S70_Send();
 }
@@ -102,7 +104,11 @@ void    vd_g_CanTxAppCfgMainTask(void)
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  BEV-1    12/12/2025  YN       Add AVN1S03 transmission process and initialization process.                                       */
+/*  BEV-2    03/11/2026  SN       Change config for BEV Full_Function_2.                                                             */
+/*                                MET-B_OPTMON-CSTD-0-00-A-C0                                                                        */
+/*                                Add MET1S47 transmission process and initialization process.                                       */
 /*                                                                                                                                   */
 /*  * YN   = Yujiro Nagaya, Denso Techno                                                                                             */
+/*  * SN   = Shizuka Nakajima, KSE                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

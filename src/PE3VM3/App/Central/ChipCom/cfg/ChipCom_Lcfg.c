@@ -123,7 +123,7 @@ const uint16 ChipCom_cu2TxBuffVlaSize = (uint16)CHIPCOM_CFG_TX_BUFF_VLA_SIZE;
 const uint16 ChipCom_cu2XspiHeaderSize = (uint16)CHIPCOM_CFG_XSPI_HEADER_SIZE;
 
 /* Division ratio of the communication cycle */
-const uint8 ChipCom_cu1ComTickDivRatio = (uint8)2U;
+const uint8 ChipCom_cu1ComTickDivRatio = (uint8)1U;
 /* XSPI Channel for ChipCom */
 const uint8 ChipCom_cu1XspiCh = (uint8)XSPI_CH_03;
 /* XSPI data initial value */
@@ -165,13 +165,13 @@ const uint16 ChipCom_cu2Pkt06MsgTbl[CHIPCOM_CFG_PKT06_MSG_NUM] = {
 /* Packet information table */
 const ChipCom_PktInfoType ChipCom_cstPktInfoTbl[CHIPCOM_CFG_PKT_NUM] = {
 	/* u1TxCoreId, u1StlId,   pu2MsgTbl,                   u2Period,            u2MsgNum,      u2TotalDataLen, u2MsgBuffOffs, u2SeqMax,      u2Payload,     u2LastTxLen,   u2TxRxBuffOffs */
-	{ (uint8)1U,   (uint8)0U, &ChipCom_cu2Pkt00MsgTbl[0U], (uint16)(    5U/5U), (uint16)   2U, (uint16)    5U, (uint16)   0U, (uint16)   1U, (uint16)   3U, (uint16)   2U, (uint16)    0U }, /* [PKT00] */
-	{ (uint8)2U,   (uint8)0U, &ChipCom_cu2Pkt01MsgTbl[0U], (uint16)(    5U/5U), (uint16)   2U, (uint16)    5U, (uint16)   5U, (uint16)   1U, (uint16)   3U, (uint16)   2U, (uint16)    5U }, /* [PKT01] */
-	{ (uint8)1U,   (uint8)0U, &ChipCom_cu2Pkt02MsgTbl[0U], (uint16)(  100U/5U), (uint16)   2U, (uint16)    5U, (uint16)  10U, (uint16)   1U, (uint16)   3U, (uint16)   2U, (uint16)   10U }, /* [PKT02] */
-	{ (uint8)3U,   (uint8)0U, &ChipCom_cu2Pkt03MsgTbl[0U], (uint16)(    5U/5U), (uint16)   2U, (uint16)    5U, (uint16)  15U, (uint16)   1U, (uint16)   3U, (uint16)   2U, (uint16)    0U }, /* [PKT03] */
-	{ (uint8)3U,   (uint8)0U, &ChipCom_cu2Pkt04MsgTbl[0U], (uint16)(    5U/5U), (uint16)   4U, (uint16)  368U, (uint16)  20U, (uint16)   1U, (uint16) 184U, (uint16) 184U, (uint16)    5U }, /* [PKT04] */
-	{ (uint8)3U,   (uint8)0U, &ChipCom_cu2Pkt05MsgTbl[0U], (uint16)(   20U/5U), (uint16)   2U, (uint16)    8U, (uint16) 388U, (uint16)   1U, (uint16)   4U, (uint16)   4U, (uint16)  191U }, /* [PKT05] */
-	{ (uint8)3U,   (uint8)0U, &ChipCom_cu2Pkt06MsgTbl[0U], (uint16)(  100U/5U), (uint16)   2U, (uint16)    5U, (uint16) 396U, (uint16)   1U, (uint16)   3U, (uint16)   2U, (uint16)  197U }  /* [PKT06] */
+	{ (uint8)1U,   (uint8)0U, &ChipCom_cu2Pkt00MsgTbl[0U], (uint16)(    5U/5U), (uint16)   2U, (uint16)    5U, (uint16)   0U, (uint16)   0U, (uint16)   5U, (uint16)   5U, (uint16)    2U }, /* [PKT00] */
+	{ (uint8)2U,   (uint8)0U, &ChipCom_cu2Pkt01MsgTbl[0U], (uint16)(    5U/5U), (uint16)   2U, (uint16)    5U, (uint16)   5U, (uint16)   0U, (uint16)   5U, (uint16)   5U, (uint16)    9U }, /* [PKT01] */
+	{ (uint8)1U,   (uint8)0U, &ChipCom_cu2Pkt02MsgTbl[0U], (uint16)(  100U/5U), (uint16)   2U, (uint16)    5U, (uint16)  10U, (uint16)   0U, (uint16)   5U, (uint16)   5U, (uint16)   16U }, /* [PKT02] */
+	{ (uint8)3U,   (uint8)0U, &ChipCom_cu2Pkt03MsgTbl[0U], (uint16)(    5U/5U), (uint16)   2U, (uint16)    5U, (uint16)  15U, (uint16)   0U, (uint16)   5U, (uint16)   5U, (uint16)    2U }, /* [PKT03] */
+	{ (uint8)3U,   (uint8)0U, &ChipCom_cu2Pkt04MsgTbl[0U], (uint16)(    5U/5U), (uint16)   4U, (uint16)  368U, (uint16)  20U, (uint16)   0U, (uint16) 368U, (uint16) 368U, (uint16)    9U }, /* [PKT04] */
+	{ (uint8)3U,   (uint8)0U, &ChipCom_cu2Pkt05MsgTbl[0U], (uint16)(   20U/5U), (uint16)   2U, (uint16)    8U, (uint16) 388U, (uint16)   0U, (uint16)   8U, (uint16)   8U, (uint16)  379U }, /* [PKT05] */
+	{ (uint8)3U,   (uint8)0U, &ChipCom_cu2Pkt06MsgTbl[0U], (uint16)(  100U/5U), (uint16)   2U, (uint16)    5U, (uint16) 396U, (uint16)   0U, (uint16)   5U, (uint16)   5U, (uint16)  389U }  /* [PKT06] */
 };
 
 /* Packet ID to Packet index table */
@@ -334,44 +334,44 @@ const uint8 ChipCom_cu1MsgBuffInit[CHIPCOM_CFG_MSG_BUFF_SIZE] = {
 
 /* Data information table */
 const ChipCom_DataInfoType ChipCom_cstDataInfoTbl[CHIPCOM_CFG_HANDLE_NUM] = {
-	/* u2DataLen,    u2MsgBuffOffs, u1DataType */
-	{ (uint16)   4U, (uint16)   0U, (uint8)CHIPCOM_DATA_TYPE_PRIMITIVE4 }, /* [0] */
-	{ (uint16)   1U, (uint16)   4U, (uint8)CHIPCOM_DATA_TYPE_PRIMITIVE1 }, /* [1] */
-	{ (uint16)   4U, (uint16)   5U, (uint8)CHIPCOM_DATA_TYPE_PRIMITIVE4 }, /* [2] */
-	{ (uint16)   1U, (uint16)   9U, (uint8)CHIPCOM_DATA_TYPE_PRIMITIVE1 }, /* [3] */
-	{ (uint16)   4U, (uint16)  10U, (uint8)CHIPCOM_DATA_TYPE_PRIMITIVE4 }, /* [4] */
-	{ (uint16)   1U, (uint16)  14U, (uint8)CHIPCOM_DATA_TYPE_PRIMITIVE1 }, /* [5] */
-	{ (uint16)   4U, (uint16)  15U, (uint8)CHIPCOM_DATA_TYPE_PRIMITIVE4 }, /* [6] */
-	{ (uint16)   1U, (uint16)  19U, (uint8)CHIPCOM_DATA_TYPE_ARRAY      }, /* [7] */
-	{ (uint16)   4U, (uint16)  20U, (uint8)CHIPCOM_DATA_TYPE_PRIMITIVE4 }, /* [8] */
-	{ (uint16)   1U, (uint16)  24U, (uint8)CHIPCOM_DATA_TYPE_ARRAY      }, /* [9] */
-	{ (uint16)   1U, (uint16)  25U, (uint8)CHIPCOM_DATA_TYPE_PRIMITIVE1 }, /* [10] */
-	{ (uint16)   8U, (uint16)  26U, (uint8)CHIPCOM_DATA_TYPE_ARRAY      }, /* [11] */
-	{ (uint16)   6U, (uint16)  34U, (uint8)CHIPCOM_DATA_TYPE_ARRAY      }, /* [12] */
-	{ (uint16)  16U, (uint16)  40U, (uint8)CHIPCOM_DATA_TYPE_ARRAY      }, /* [13] */
-	{ (uint16) 244U, (uint16)  56U, (uint8)CHIPCOM_DATA_TYPE_ARRAY      }, /* [14] */
-	{ (uint16)   8U, (uint16) 300U, (uint8)CHIPCOM_DATA_TYPE_ARRAY      }, /* [15] */
-	{ (uint16)  24U, (uint16) 308U, (uint8)CHIPCOM_DATA_TYPE_ARRAY      }, /* [16] */
-	{ (uint16)   8U, (uint16) 332U, (uint8)CHIPCOM_DATA_TYPE_ARRAY      }, /* [17] */
-	{ (uint16)   6U, (uint16) 340U, (uint8)CHIPCOM_DATA_TYPE_ARRAY      }, /* [18] */
-	{ (uint16)   4U, (uint16) 346U, (uint8)CHIPCOM_DATA_TYPE_ARRAY      }, /* [19] */
-	{ (uint16)   1U, (uint16) 350U, (uint8)CHIPCOM_DATA_TYPE_ARRAY      }, /* [20] */
-	{ (uint16)   3U, (uint16) 351U, (uint8)CHIPCOM_DATA_TYPE_ARRAY      }, /* [21] */
-	{ (uint16)   1U, (uint16) 354U, (uint8)CHIPCOM_DATA_TYPE_ARRAY      }, /* [22] */
-	{ (uint16)   1U, (uint16) 355U, (uint8)CHIPCOM_DATA_TYPE_ARRAY      }, /* [23] */
-	{ (uint16)   2U, (uint16) 356U, (uint8)CHIPCOM_DATA_TYPE_ARRAY      }, /* [24] */
-	{ (uint16)   2U, (uint16) 358U, (uint8)CHIPCOM_DATA_TYPE_ARRAY      }, /* [25] */
-	{ (uint16)   2U, (uint16) 360U, (uint8)CHIPCOM_DATA_TYPE_ARRAY      }, /* [26] */
-	{ (uint16)   2U, (uint16) 362U, (uint8)CHIPCOM_DATA_TYPE_ARRAY      }, /* [27] */
-	{ (uint16)   2U, (uint16) 364U, (uint8)CHIPCOM_DATA_TYPE_ARRAY      }, /* [28] */
-	{ (uint16)   2U, (uint16) 366U, (uint8)CHIPCOM_DATA_TYPE_ARRAY      }, /* [29] */
-	{ (uint16)  18U, (uint16) 368U, (uint8)CHIPCOM_DATA_TYPE_ARRAY      }, /* [30] */
-	{ (uint16)   1U, (uint16) 386U, (uint8)CHIPCOM_DATA_TYPE_ARRAY      }, /* [31] */
-	{ (uint16)   1U, (uint16) 387U, (uint8)CHIPCOM_DATA_TYPE_ARRAY      }, /* [32] */
-	{ (uint16)   4U, (uint16) 388U, (uint8)CHIPCOM_DATA_TYPE_PRIMITIVE4 }, /* [33] */
-	{ (uint16)   4U, (uint16) 392U, (uint8)CHIPCOM_DATA_TYPE_ARRAY      }, /* [34] */
-	{ (uint16)   4U, (uint16) 396U, (uint8)CHIPCOM_DATA_TYPE_PRIMITIVE4 }, /* [35] */
-	{ (uint16)   1U, (uint16) 400U, (uint8)CHIPCOM_DATA_TYPE_PRIMITIVE1 }  /* [36] */
+	/* u2DataLen,    u2MsgBuffOffs, u1DataType,                          u1StlId  */
+	{ (uint16)   4U, (uint16)   0U, (uint8)CHIPCOM_DATA_TYPE_PRIMITIVE4, (uint8)0U }, /* [0] */
+	{ (uint16)   1U, (uint16)   4U, (uint8)CHIPCOM_DATA_TYPE_PRIMITIVE1, (uint8)0U }, /* [1] */
+	{ (uint16)   4U, (uint16)   5U, (uint8)CHIPCOM_DATA_TYPE_PRIMITIVE4, (uint8)0U }, /* [2] */
+	{ (uint16)   1U, (uint16)   9U, (uint8)CHIPCOM_DATA_TYPE_PRIMITIVE1, (uint8)0U }, /* [3] */
+	{ (uint16)   4U, (uint16)  10U, (uint8)CHIPCOM_DATA_TYPE_PRIMITIVE4, (uint8)0U }, /* [4] */
+	{ (uint16)   1U, (uint16)  14U, (uint8)CHIPCOM_DATA_TYPE_PRIMITIVE1, (uint8)0U }, /* [5] */
+	{ (uint16)   4U, (uint16)  15U, (uint8)CHIPCOM_DATA_TYPE_PRIMITIVE4, (uint8)0U }, /* [6] */
+	{ (uint16)   1U, (uint16)  19U, (uint8)CHIPCOM_DATA_TYPE_ARRAY     , (uint8)0U }, /* [7] */
+	{ (uint16)   4U, (uint16)  20U, (uint8)CHIPCOM_DATA_TYPE_PRIMITIVE4, (uint8)0U }, /* [8] */
+	{ (uint16)   1U, (uint16)  24U, (uint8)CHIPCOM_DATA_TYPE_ARRAY     , (uint8)0U }, /* [9] */
+	{ (uint16)   1U, (uint16)  25U, (uint8)CHIPCOM_DATA_TYPE_PRIMITIVE1, (uint8)0U }, /* [10] */
+	{ (uint16)   8U, (uint16)  26U, (uint8)CHIPCOM_DATA_TYPE_ARRAY     , (uint8)0U }, /* [11] */
+	{ (uint16)   6U, (uint16)  34U, (uint8)CHIPCOM_DATA_TYPE_ARRAY     , (uint8)0U }, /* [12] */
+	{ (uint16)  16U, (uint16)  40U, (uint8)CHIPCOM_DATA_TYPE_ARRAY     , (uint8)0U }, /* [13] */
+	{ (uint16) 244U, (uint16)  56U, (uint8)CHIPCOM_DATA_TYPE_ARRAY     , (uint8)0U }, /* [14] */
+	{ (uint16)   8U, (uint16) 300U, (uint8)CHIPCOM_DATA_TYPE_ARRAY     , (uint8)0U }, /* [15] */
+	{ (uint16)  24U, (uint16) 308U, (uint8)CHIPCOM_DATA_TYPE_ARRAY     , (uint8)0U }, /* [16] */
+	{ (uint16)   8U, (uint16) 332U, (uint8)CHIPCOM_DATA_TYPE_ARRAY     , (uint8)0U }, /* [17] */
+	{ (uint16)   6U, (uint16) 340U, (uint8)CHIPCOM_DATA_TYPE_ARRAY     , (uint8)0U }, /* [18] */
+	{ (uint16)   4U, (uint16) 346U, (uint8)CHIPCOM_DATA_TYPE_ARRAY     , (uint8)0U }, /* [19] */
+	{ (uint16)   1U, (uint16) 350U, (uint8)CHIPCOM_DATA_TYPE_ARRAY     , (uint8)0U }, /* [20] */
+	{ (uint16)   3U, (uint16) 351U, (uint8)CHIPCOM_DATA_TYPE_ARRAY     , (uint8)0U }, /* [21] */
+	{ (uint16)   1U, (uint16) 354U, (uint8)CHIPCOM_DATA_TYPE_ARRAY     , (uint8)0U }, /* [22] */
+	{ (uint16)   1U, (uint16) 355U, (uint8)CHIPCOM_DATA_TYPE_ARRAY     , (uint8)0U }, /* [23] */
+	{ (uint16)   2U, (uint16) 356U, (uint8)CHIPCOM_DATA_TYPE_ARRAY     , (uint8)0U }, /* [24] */
+	{ (uint16)   2U, (uint16) 358U, (uint8)CHIPCOM_DATA_TYPE_ARRAY     , (uint8)0U }, /* [25] */
+	{ (uint16)   2U, (uint16) 360U, (uint8)CHIPCOM_DATA_TYPE_ARRAY     , (uint8)0U }, /* [26] */
+	{ (uint16)   2U, (uint16) 362U, (uint8)CHIPCOM_DATA_TYPE_ARRAY     , (uint8)0U }, /* [27] */
+	{ (uint16)   2U, (uint16) 364U, (uint8)CHIPCOM_DATA_TYPE_ARRAY     , (uint8)0U }, /* [28] */
+	{ (uint16)   2U, (uint16) 366U, (uint8)CHIPCOM_DATA_TYPE_ARRAY     , (uint8)0U }, /* [29] */
+	{ (uint16)  18U, (uint16) 368U, (uint8)CHIPCOM_DATA_TYPE_ARRAY     , (uint8)0U }, /* [30] */
+	{ (uint16)   1U, (uint16) 386U, (uint8)CHIPCOM_DATA_TYPE_ARRAY     , (uint8)0U }, /* [31] */
+	{ (uint16)   1U, (uint16) 387U, (uint8)CHIPCOM_DATA_TYPE_ARRAY     , (uint8)0U }, /* [32] */
+	{ (uint16)   4U, (uint16) 388U, (uint8)CHIPCOM_DATA_TYPE_PRIMITIVE4, (uint8)0U }, /* [33] */
+	{ (uint16)   4U, (uint16) 392U, (uint8)CHIPCOM_DATA_TYPE_ARRAY     , (uint8)0U }, /* [34] */
+	{ (uint16)   4U, (uint16) 396U, (uint8)CHIPCOM_DATA_TYPE_PRIMITIVE4, (uint8)0U }, /* [35] */
+	{ (uint16)   1U, (uint16) 400U, (uint8)CHIPCOM_DATA_TYPE_PRIMITIVE1, (uint8)0U }  /* [36] */
 };
 
 /* Data handle to Message handle table */

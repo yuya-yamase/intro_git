@@ -42,6 +42,7 @@ void ChipCom_TestSts( void );
 #include <ChipCom_MemMap.h>
 /* Tick */
 uint8 u1TestTick;
+uint8 u1TestLogTick;
 /* Phase */
 uint8 u1TestPhase;
 /* SPI status */
@@ -75,11 +76,14 @@ uint8 u1TextTxRetCOMPWRSTATUS;
 uint8 u1TextTxRetSAILRESET;
 uint8 u1TextTxRetETHSWTRESET;
 uint8 u1TextTxRetSAILDATARSTREQ;
+
+uint8 u1TextTxRetUTC_get;
 #else /* CHIPCOM_BSW == CHIPCOM_BSW_MICROSAR */
 uint8 u1TextTxRetMCUSLEEPINFO;
 uint8 u1TextTxRetOBCTXMODEREQ;
 uint8 u1TextTxRetSAILDATARSTRES;
 
+uint8 u1TextTxRetMCUSLEEPINFO_get;
 #endif
 /* Rx Return */
 uint8 u1TextRxRetSEQCDT1S01;
@@ -119,6 +123,10 @@ uint8 u1TextRxRetSEQCDT1M03;
 uint8 u1TextRxRetETHSWTRESET;
 uint8 u1TextRxRetSEQCDT1M10;
 uint8 u1TextRxRetSAILDATARSTREQ;
+
+uint8 u1TextRxRetUTC_get;
+uint8 u1TextRxRetMCUSLEEPINFO_get;
+
 
 /* Data Status */
 uint8 u1TestDatStsSEQCDT1S01;
@@ -199,11 +207,14 @@ uint8 u1TestTxDatSAILRESET[1] = { (uint8)0x00 };
 uint8 u1TestTxDatETHSWTRESET[4] = { (uint8)0x00, (uint8)0x00, (uint8)0x00, (uint8)0x00 };
 uint8 u1TestTxDatSAILDATARSTREQ[1] = { (uint8)0x00 };
 
+uint8 u1TestTxDatUTC_get[6] = { (uint8)0x00, (uint8)0x00, (uint8)0x00, (uint8)0x00, (uint8)0x00, (uint8)0x00 };
+
 #else /* CHIPCOM_BSW == CHIPCOM_BSW_MICROSAR */
 uint8 u1TestTxDatMCUSLEEPINFO[1] = { (uint8)0x00 };
 uint8 u1TestTxDatOBCTXMODEREQ[1] = { (uint8)0x00 };
 uint8 u1TestTxDatSAILDATARSTRES[1] = { (uint8)0x00 };
 
+uint8 u1TestTxDatMCUSLEEPINFO_get[1] = { (uint8)0x00 };
 #endif
 
 /* Data Max */
@@ -237,6 +248,9 @@ uint8 u1TestDatMaxCOMPWRSTATUS[1] = { (uint8)0xFF };
 uint8 u1TestDatMaxSAILRESET[1] = { (uint8)0xFF };
 uint8 u1TestDatMaxETHSWTRESET[4] = { (uint8)0xFF, (uint8)0xFF, (uint8)0xFF, (uint8)0xFF };
 uint8 u1TestDatMaxSAILDATARSTREQ[1] = { (uint8)0xFF };
+
+uint8 u1TestDatMaxUTC_get[6] = { (uint8)0xFF, (uint8)0xFF, (uint8)0xFF, (uint8)0xFF, (uint8)0xFF, (uint8)0xFF };
+uint8 u1TestDatMaxMCUSLEEPINFO_get[1] = { (uint8)0xFF };
 
 /* Rx Data */
 uint8 u1TestRxDatSEQCDT1S01[4] = { (uint8)0x00, (uint8)0x00, (uint8)0x00, (uint8)0x00 };
@@ -277,6 +291,13 @@ uint8 u1TestRxDatETHSWTRESET[4] = { (uint8)0x00, (uint8)0x00, (uint8)0x00, (uint
 uint8 u1TestRxDatSEQCDT1M10[4] = { (uint8)0x00, (uint8)0x00, (uint8)0x00, (uint8)0x00 };
 uint8 u1TestRxDatSAILDATARSTREQ[1] = { (uint8)0x00 };
 
+uint8 u1TestRxDatUTC_get[6] = { (uint8)0x00, (uint8)0x00, (uint8)0x00, (uint8)0x00, (uint8)0x00, (uint8)0x00 };
+uint8 u1TestRxDatMCUSLEEPINFO_get[1] = { (uint8)0x00 };
+uint16 u2TestRxDatUTC_get_len;
+uint16 u2TestDatMCUSLEEPINFO_get_len;
+uint32 u4TestRxDatUTC_get_receive_cnt;
+uint32 u4TestDatMCUSLEEPINFO_get_receive_cnt;
+
 #define CHIPCOM_STOP_SEC_VAR_INIT_32
 #include <ChipCom_MemMap.h>
 
@@ -304,9 +325,16 @@ void ChipCom_MainFunctionTest( void )
 	ChipCom_TestRx();
 	ChipCom_TestSts();
 	ChipCom_TestTx();
-
+	
+	/* Clear Logtick */
+	if(u1TestLogTick == (uint8)0xC8)
+	{
+		u1TestLogTick = (uint8)0x00;
+	}
 	/* Count-up tick */
 	u1TestTick++;
+	u1TestLogTick++;
+
 
 	/* Transit Phase */
 	if ( u1TestTick == (uint8)0U )
@@ -409,12 +437,16 @@ u1TestTxDatSAILRESET[0U] = u1TestTick + (uint8)32U;
 u1TestTxDatETHSWTRESET[0U] = u1TestTick + (uint8)34U;
 u1TestTxDatSAILDATARSTREQ[0U] = u1TestTick + (uint8)36U;
 
+u1TestTxDatUTC_get[0U] = u1TestTick + (uint8)37U;
+
 #else /* CHIPCOM_BSW == CHIPCOM_BSW_MICROSAR */
 
 	if ( t_u4CoreId == (uint32)1U )
 	{
 u1TestTxDatMCUSLEEPINFO[0U] = u1TestTick + (uint8)1U;
 u1TestTxDatSAILDATARSTRES[0U] = u1TestTick + (uint8)5U;
+
+u1TestTxDatMCUSLEEPINFO_get[0U] = u1TestTick + (uint8)9U;
 	}
 	else if ( t_u4CoreId == (uint32)2U )
 	{
@@ -462,12 +494,16 @@ u1TestTxDatSAILRESET[0U] = (uint8)32U;
 u1TestTxDatETHSWTRESET[0U] = (uint8)34U;
 u1TestTxDatSAILDATARSTREQ[0U] = (uint8)36U;
 
+u1TestTxDatUTC_get[0U] = (uint8)37U;
+
 #else /* CHIPCOM_BSW == CHIPCOM_BSW_MICROSAR */
 
 	if ( t_u4CoreId == (uint32)1U )
 	{
 u1TestTxDatMCUSLEEPINFO[0U] = (uint8)1U;
 u1TestTxDatSAILDATARSTRES[0U] = (uint8)5U;
+
+u1TestTxDatMCUSLEEPINFO_get[0U] = u1TestTick + (uint8)9U;
 	}
 	else if ( t_u4CoreId == (uint32)2U )
 	{
@@ -516,6 +552,7 @@ u1TextTxRetSAILRESET = ChipCom_SendSignal( SIGNAL_CHIPCOM_BUS_VIS1M01_SAILRESET,
 u1TextTxRetETHSWTRESET = ChipCom_SendSignal( SIGNAL_CHIPCOM_BUS_ETH1M03_ETHSWTRESET, &u1TestTxDatETHSWTRESET[0U] );
 u1TextTxRetSAILDATARSTREQ = ChipCom_SendSignal( SIGNAL_CHIPCOM_BUS_CEN1M10_SAILDATARSTREQ, &u1TestTxDatSAILDATARSTREQ[0U] );
 
+u1TextTxRetUTC_get = ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_VIS_UTC, CHIPCOM_LENGTH_VIS_UTC, &u1TestTxDatUTC_get[0U]);
 
 #else /* CHIPCOM_BSW == CHIPCOM_BSW_MICROSAR */
 
@@ -567,6 +604,8 @@ u1TextTxRetSAILRESET = ChipCom_SendSignal( SIGNAL_CHIPCOM_BUS_VIS1M01_SAILRESET,
 u1TextTxRetETHSWTRESET = ChipCom_SendSignal( SIGNAL_CHIPCOM_BUS_ETH1M03_ETHSWTRESET, &u1TestDatMaxETHSWTRESET[0U] );
 u1TextTxRetSAILDATARSTREQ = ChipCom_SendSignal( SIGNAL_CHIPCOM_BUS_CEN1M10_SAILDATARSTREQ, &u1TestDatMaxSAILDATARSTREQ[0U] );
 
+u1TextTxRetUTC_get = ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_VIS_UTC, CHIPCOM_LENGTH_VIS_UTC, &u1TestTxDatUTC_get[0U]);
+
 #else /* CHIPCOM_BSW == CHIPCOM_BSW_MICROSAR */
 
 		if ( t_u4CoreId == (uint32)1U )
@@ -574,6 +613,11 @@ u1TextTxRetSAILDATARSTREQ = ChipCom_SendSignal( SIGNAL_CHIPCOM_BUS_CEN1M10_SAILD
 u1TextTxRetMCUSLEEPINFO = ChipCom_SendSignal( SIGNAL_CHIPCOM_BUS_CSS1S01_MCUSLEEPINFO, &u1TestDatMaxMCUSLEEPINFO[0U] );
 u1TextTxRetSAILDATARSTRES = ChipCom_SendSignal( SIGNAL_CHIPCOM_BUS_CEN1S10_SAILDATARSTRES, &u1TestDatMaxSAILDATARSTRES[0U] );
 
+u1TextTxRetMCUSLEEPINFO_get = ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_VSM_SLEEPNG, CHIPCOM_LENGTH_VSM_SLEEPNG, &u1TestTxDatMCUSLEEPINFO_get[0U]);
+			if(u1TestLogTick == (uint8)0xC8U)
+			{
+//				CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipComTxData VSMSLEEPNG:Data =[%u]\r\n", u1TestTxDatMCUSLEEPINFO_get[0U]);
+			}
 		}
 		else if ( t_u4CoreId == (uint32)2U )
 		{
@@ -605,6 +649,8 @@ u1TextRxRetSEQCDT1S02 = ChipCom_ReceiveSignal( SIGNAL_CHIPCOM_BUS_CDT1S02_SEQCDT
 u1TextRxRetOBCTXMODEREQ = ChipCom_ReceiveSignal( SIGNAL_CHIPCOM_BUS_OBC1S01_OBCTXMODEREQ, &u1TestRxDatOBCTXMODEREQ[0U] );
 u1TextRxRetSEQCDT1S10 = ChipCom_ReceiveSignal( SIGNAL_CHIPCOM_BUS_CDT1S10_SEQCDT1S10, &u1TestRxDatSEQCDT1S10[0U] );
 u1TextRxRetSAILDATARSTRES = ChipCom_ReceiveSignal( SIGNAL_CHIPCOM_BUS_CEN1S10_SAILDATARSTRES, &u1TestRxDatSAILDATARSTRES[0U] );
+
+u1TextRxRetMCUSLEEPINFO_get = ChipCom_GetPeriodicRxData( CHIPCOM_PERIODICID_VSM_SLEEPNG, &u2TestDatMCUSLEEPINFO_get_len, &u1TestRxDatMCUSLEEPINFO_get[0U], &u4TestDatMCUSLEEPINFO_get_receive_cnt );
 
 #else /* CHIPCOM_BSW == CHIPCOM_BSW_MICROSAR */
 		if ( t_u4CoreId == (uint32)1U )
@@ -640,6 +686,15 @@ u1TextRxRetETHSWTRESET = ChipCom_ReceiveSignal( SIGNAL_CHIPCOM_BUS_ETH1M03_ETHSW
 u1TextRxRetSEQCDT1M10 = ChipCom_ReceiveSignal( SIGNAL_CHIPCOM_BUS_CDT1M10_SEQCDT1M10, &u1TestRxDatSEQCDT1M10[0U] );
 u1TextRxRetSAILDATARSTREQ = ChipCom_ReceiveSignal( SIGNAL_CHIPCOM_BUS_CEN1M10_SAILDATARSTREQ, &u1TestRxDatSAILDATARSTREQ[0U] );
 
+u1TextRxRetUTC_get = ChipCom_GetPeriodicRxData( CHIPCOM_PERIODICID_VIS_UTC, &u2TestRxDatUTC_get_len, &u1TestRxDatUTC_get[0U], &u4TestRxDatUTC_get_receive_cnt );
+			if(u1TestLogTick == (uint8)0xC8U)
+			{
+//				CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipComRxData CANWKUPSLP: Data =[%u]]\r\n", u1TestRxDatCANWKUPSLP[0U]);
+//				CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipComRxData SEQCDT1M10: Data =[%u]]\r\n", u1TestRxDatSEQCDT1M10[0U]);
+				
+//				CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipComRxData UTC:Length=[%u], Data =[%u], RxCnt = [%u]\r\n", u2TestRxDatUTC_get_len, u1TestRxDatUTC_get[0U], u4TestRxDatUTC_get_receive_cnt);
+//				CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipComRxData ETHSWRESET:Data = [%u]\r\n",u1TestRxDatETHSWTRESET[0U]);
+			}
 		}
 		else if ( t_u4CoreId == (uint32)2U )
 		{
@@ -647,6 +702,11 @@ u1TextRxRetSAILDATARSTREQ = ChipCom_ReceiveSignal( SIGNAL_CHIPCOM_BUS_CEN1M10_SA
 u1TextRxRetSEQCDT1M01 = ChipCom_ReceiveSignal( SIGNAL_CHIPCOM_BUS_CDT1M01_SEQCDT1M01, &u1TestRxDatSEQCDT1M01[0U] );
 u1TextRxRetOBCTXMODENOTIF = ChipCom_ReceiveSignal( SIGNAL_CHIPCOM_BUS_OBC1M01_OBCTXMODENOTIF, &u1TestRxDatOBCTXMODENOTIF[0U] );
 
+			if(u1TestLogTick == (uint8)0xC8U)
+			{
+//				CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipComRxData SEQCDT1M01: Data =[%u]]\r\n", u1TestRxDatSEQCDT1M01[0U]);
+//				CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipComRxData OBCTXMODENOTIF: Data =[%u]]\r\n", u1TestRxDatOBCTXMODENOTIF[0U]);
+			}
 		}
 		else
 		{

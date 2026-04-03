@@ -944,10 +944,10 @@ void            vd_g_XspiIviSub1PowerAna(const U1 * u1_ap_XSPI_ADD, const U2 u2_
         break;
     case XSPI_IVI_POWER_OPESTS_REC:
         vd_s_XspiIviSub1PowerOperationStsRec(&u1_ap_XSPI_ADD[0]);
+        vd_g_PictMute_SoCResetReq(u1_ap_XSPI_ADD[1]);
         break;
     case XSPI_IVI_POWER_VMRST_REC:
         vd_s_XspiIviSub1PowerVMResetRec();
-        vd_g_PictMute_SoCResetReq(u1_ap_XSPI_ADD[1]);
         break;
     case XSPI_IVI_POWER_STRMODE_REC:
         vd_s_XspiIviSub1PowerSTRmodeRec(&u1_ap_XSPI_ADD[0]);

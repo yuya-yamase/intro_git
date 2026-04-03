@@ -28,8 +28,8 @@
 #define CANIFPROXY_CFG_CAN_DATA_LEN_MAX				(32U)
 /* Number of single frames in the request buffer (10 frame + 1) */
 #define CANIFPROXY_CFG_REQ_BUFF_SF_NUM				(11U)
-/* Number of frames in the multi frame to request ( 64KB/32byte + 5 frame + 1) */
-#define CANIFPROXY_CFG_MF_REQ_FRAME_NUM				(2054U)
+/* Number of frames in the multi frame to request ( 65650byte/31byte + 5 frame + 1) */
+#define CANIFPROXY_CFG_MF_REQ_FRAME_NUM				(2124U)
 /* N_As [ms] */
 #define CANIFPROXY_CFG_N_AS							(1000U)
 /* N_Bs [ms] */
@@ -40,6 +40,8 @@
 #define CANIFPROXY_CFG_CF_PERIOD_PWROFF				(1U)
 /* CF Period Default */
 #define CANIFPROXY_CFG_CF_PERIOD_DEF				(1U)
+/* Frame Transmission Interval (for STD_OFF mode) */
+#define CANIFPROXY_CFG_FRAME_TRANS_INT				(14U)
 /* Number of CF transmit per period in Power-On[time] */
 #define CANIFPROXY_CFG_CF_TX_NUM_PWRON				(1U)
 /* Number of CF transmit per period in Power-Off[time] */
@@ -49,7 +51,7 @@
 /* Limit number of messages in transit */
 #define CANIFPROXY_CFG_TX_LIMIT						(8U)
 /* Number of Response CAN ID range */
-#define CANIFPROXY_CFG_RES_CANID_RANGE_NUM			(6U)
+#define CANIFPROXY_CFG_RES_CANID_RANGE_NUM			(4U)
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -106,6 +108,8 @@ extern const uint8 CanIfProxy_cu1CfPeriodPwrOnSelf;
 extern const uint8 CanIfProxy_cu1CfPeriodPwrOffSelf;
 /* CF Period Default */
 extern const uint8 CanIfProxy_cu1CfPeriodDef;
+/* Frame Transmission Interval (for STD_OFF mode) */
+extern const uint8 CanIfProxy_cu1FrameTransInt;
 /* Number of CF transmit per period in Power-On[time] */
 extern const uint8 CanIfProxy_cu1CfTxNumPwrOnSelf;
 /* Number of CF transmit per period in Power-Off[time] */
