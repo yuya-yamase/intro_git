@@ -79,7 +79,7 @@ CanConst CanHohCfgType Can_stHohCfgTbl[ CAN_TB_HOHNUM ] =
     ,{ (uint8)CAN_CONTROLLER_3,  (uint8)CAN_MB003 }   /* [1] HOH001 */
     ,{ (uint8)CAN_CONTROLLER_3,  (uint8)CAN_MB004 }   /* [2] HOH002 */
 #endif /* BEVCDCFD-2652 */
-	,{ (uint8)CAN_CONTROLLER_5,  (uint8)CAN_MB010 }   /* [3] HOH003 */
+    ,{ (uint8)CAN_CONTROLLER_5,  (uint8)CAN_MB010 }   /* [3] HOH003 */
     ,{ (uint8)CAN_CONTROLLER_5,  (uint8)CAN_MB011 }   /* [4] HOH004 */
     ,{ (uint8)CAN_CONTROLLER_5,  (uint8)CAN_MB012 }   /* [5] HOH005 */
     ,{ (uint8)CAN_CONTROLLER_5,  (uint8)CAN_MB013 }   /* [6] HOH006 */
