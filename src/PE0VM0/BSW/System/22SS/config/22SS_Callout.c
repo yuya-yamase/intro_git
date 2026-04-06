@@ -66,11 +66,8 @@ void vd_g_22SSCallout_StaBonInit(void)
     vd_g_oXCANRstInit();
     vd_g_VehopemdRstInit();
     vd_g_iVDshInit();
-#warning "BEVCDCFD-2652"
-#if 1 /* BEVCDCFD-2652 */ /* vd_g_iVCBshInitのコール箇所がvd_g_iVDshInit直後のコールでなくても問題ないか確認してください */
     vd_g_vCryPx_Init();
     vd_g_iVCBshInit();
-#endif /* BEVCDCFD-2652 */
 
     /* vv User Hook start vv */
     /* ^^ User Hook end   ^^ */
@@ -99,11 +96,8 @@ void vd_g_22SSCallout_StaRstInit(void)
     vd_g_oXCANRstInit();
     vd_g_VehopemdRstInit();
     vd_g_iVDshInit();
-#warning "BEVCDCFD-2652"
-#if 1 /* BEVCDCFD-2652 */ /* vd_g_iVCBshInitのコール箇所がvd_g_iVDshInit直後のコールでなくても問題ないか確認してください */
     vd_g_vCryPx_Init();
     vd_g_iVCBshInit();
-#endif /* BEVCDCFD-2652 */
 
     /* vv User Hook start vv */
     /* ^^ User Hook end   ^^ */
@@ -132,11 +126,8 @@ void vd_g_22SSCallout_StaWkupInit(void)
     vd_g_oXCANWkupInit();
     vd_g_VehopemdWkupInit();
     vd_g_iVDshInit();
-#warning "BEVCDCFD-2652"
-#if 1 /* BEVCDCFD-2652 */ /* vd_g_iVCBshInitのコール箇所がvd_g_iVDshInit直後のコールでなくても問題ないか確認してください */
     vd_g_vCryPx_Init();
     vd_g_iVCBshInit();
-#endif /* BEVCDCFD-2652 */
 
     /* vv User Hook start vv */
     /* ^^ User Hook end   ^^ */
