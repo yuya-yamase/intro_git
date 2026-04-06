@@ -195,7 +195,7 @@ void vd_g_FwushMakeResData(U1 u1_a_subtype, U1 u1_a_response)
     }
     vd_g_MemfillU4(&u4_tp_res_data[0], (U4)0U, (U4)FWUSH_RES_WORDS);
 
-    u4_tp_res_data[0] = (U4)(u1_a_subtype | ((U4)u1_a_response << (U1)8U) | ((U4)0x01U << (U1)16U)
+    u4_tp_res_data[0] = (U4)(u1_a_subtype | ((U4)u1_a_response << (U1)8U) | ((U4)u1_g_fwush_veri_target << (U1)16U)
                       | (U4)((u2_g_fwush_run_ofst & (U2)0xFF00U) << (U1)16U));
     u4_tp_res_data[1] = (U4)((u2_g_fwush_run_ofst & (U2)0x00FFU)) | ((U4)0x04U << (U1)8U) | ((U4)0x00U << (U1)16U)
                       | ((U4)u1_g_fwupx_res_seqcnt << (U1)24U);
