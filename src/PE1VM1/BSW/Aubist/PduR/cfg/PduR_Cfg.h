@@ -28,14 +28,8 @@
 /*--------------------------------------------------------------------------*/
 /* Message Number */
 /* Upper Component */
-#warning "BEVCDCFD-2652"
-#if 0 /* BEVCDCFD-2652 */
-#define BSW_PDUR_CFG_MSGCOM_NUM            (302U)
-#define BSW_PDUR_CFG_MSGDCM_NUM            (12U)
-#else /* BEVCDCFD-2652 */
 #define BSW_PDUR_CFG_MSGCOM_NUM            (291U)
-#define BSW_PDUR_CFG_MSGDCM_NUM            (0U)
-#endif /* BEVCDCFD-2652 */
+#define BSW_PDUR_CFG_MSGDCM_NUM            (12U)
 #define BSW_PDUR_CFG_MSGLDCOM_NUM          (0U)
 #define BSW_PDUR_CFG_MSGCDD1_NUM           (1U)
 #define BSW_PDUR_CFG_MSGCDD2_NUM           (0U)

@@ -301,14 +301,8 @@
 #define BSW_CANIF_CFG_0_SIZE_SNDQUE249          (0U)
 
 /* Send-Queue HOH */
-#warning "BEVCDCFD-2652"
-#if 0 /* BEVCDCFD-2652 */
-#define BSW_CANIF_CFG_0_HOH_SNDQUE000           (0x00F6U)
+#define BSW_CANIF_CFG_0_HOH_SNDQUE000           (0x00E8U)
 #define BSW_CANIF_CFG_0_HOH_SNDQUE001           (BSW_CANIF_HOH_NOUSE)
-#else /* BEVCDCFD-2652 */
-#define BSW_CANIF_CFG_0_HOH_SNDQUE000           (0x00EAU)
-#define BSW_CANIF_CFG_0_HOH_SNDQUE001           (0x00EBU)
-#endif /* BEVCDCFD-2652 */
 #define BSW_CANIF_CFG_0_HOH_SNDQUE002           (BSW_CANIF_HOH_NOUSE)
 #define BSW_CANIF_CFG_0_HOH_SNDQUE003           (BSW_CANIF_HOH_NOUSE)
 #define BSW_CANIF_CFG_0_HOH_SNDQUE004           (BSW_CANIF_HOH_NOUSE)
@@ -1071,12 +1065,7 @@
 /******************************************/
 /******************************************/
 /* Receive-Queue Size */
-#warning "BEVCDCFD-2652"
-#if 0 /* BEVCDCFD-2652 */
-#define BSW_CANIF_CFG_0_SIZE_RCVQUE             (2200U)
-#else /* BEVCDCFD-2652 */
 #define BSW_CANIF_CFG_0_SIZE_RCVQUE             (2640U)
-#endif /* BEVCDCFD-2652 */
 
 
 /******************************************/

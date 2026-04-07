@@ -99,12 +99,6 @@ const U4                    u4_gp_OXCAN_RXD_SYS_BY_PDU[] = {
 /* #define OXCAN_SYS_PNC_43                         (0x00040000U) */
 /* #define OXCAN_SYS_PNC_44                         (0x00080000U) */
 
-#warning "BEVCDCFD-2652"
-#if 0 /* BEVCDCFD-2652 */
-#else /* BEVCDCFD-2652 */
-    (U4)0x00000014U, /* IGR, IGP,                                     */       /* OXCAN_RXD_PDU_CAN_BDC1S52_CH0 */
-    (U4)0x00000014U, /* IGR, IGP,                                     */       /* OXCAN_RXD_PDU_CAN_BDC1S60_CH0 */
-#endif /* BEVCDCFD-2652 */
     (U4)0x00090016U, /* IGR, IGP, ACC, PNC_16,                 PNC_44 */       /* OXCAN_RXD_PDU_CAN_BDC1S81_CH0 */
     (U4)0x00090016U  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */       /* OXCAN_RXD_PDU_CAN_BDC1S91_CH1 */
 };
