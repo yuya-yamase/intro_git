@@ -84,7 +84,8 @@ U1 u1_g_FwushDetectEvent(void)
 /*===================================================================================================================================*/
 static U1 u1_s_FwushDetectResumeEvent(void)
 {
-    static const U1 u1_s_FWUSH_PROG_MASK = (U1)(FWUSH_PROGRESS_ACT_DONE | FWUSH_PROGRESS_VALIDATE_DONE | FWUSH_PROGRESS_ROLLBACK_DONE);
+    static const U1 u1_s_FWUSH_PROG_MASK = (U1)(FWUSH_PROGRESS_ACT_DONE | FWUSH_PROGRESS_VALIDATE_DONE | 
+                                                FWUSH_PROGRESS_FINALIZE_DONE | FWUSH_PROGRESS_ROLLBACK_DONE);
     static const U1 u1_s_FWUSH_PROG_ACT_CRIT = (U1)FWUSH_PROGRESS_ACT_DONE;
     static const U1 u1_s_FWUSH_PROG_VALID_CRIT = (U1)(FWUSH_PROGRESS_ACT_DONE | FWUSH_PROGRESS_VALIDATE_DONE);
     U1 u1_t_event;
