@@ -258,7 +258,6 @@ static  void    vd_s_TripcomCfgCanTxInit(void)
     U4                                          u4_t_loop;
     U1                                          u1_t_unit;
     U1                                          u1_t_sndval;
-    U1                                          u1_t_unitsndval;
     U2                                          u2_t_range_sndval;
 
 

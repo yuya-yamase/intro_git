@@ -108,7 +108,7 @@ typedef struct {
 } ST_SBLTWRN_CHMTYP;
 
 typedef struct {
-    const SBLTWRN_TTSTM *       fp_u4_STM;     /* State Transition Judgement */
+    SBLTWRN_TTSTM * const       fp_u4_STM;      /* State Transition Judgement */
     const U1                    u1_TYPMSK;      /* Seattype Mask              */
 } ST_SBLTWRN_TT_STM;
 
