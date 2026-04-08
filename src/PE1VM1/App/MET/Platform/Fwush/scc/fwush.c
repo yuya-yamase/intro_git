@@ -28,6 +28,8 @@ U1 u1_g_fwupx_res_seqcnt;
 U1 u1_g_fwush_abort;
 U1 u1_g_fwush_error_log;
 
+U1 u1_g_fwush_before_reset;
+
 U1 u1_g_fwush_seq_progress;
 U4 u4_g_fwush_fswa_stat;
 U2 u2_g_fwush_veri_stat;
@@ -60,6 +62,7 @@ void vd_g_FwushInit(void)
     u1_g_fwupx_res_seqcnt       = (U1)0x00U;
     u1_g_fwush_abort            = (U1)FALSE;
     u1_g_fwush_error_log        = (U1)FWUSH_ACK_OK;
+    u1_g_fwush_before_reset     = (U1)FALSE;
     u4_g_fwush_prep_data_crc    = (U4)0U;
     u2_g_fwush_run_ofst         = (U2)0xFFFFU;
     u1_g_fwush_veri_target      = (U1)FWUSH_VERI_LB_NONE;
@@ -231,6 +234,7 @@ void vd_g_FwushAbort(void)
     u1_g_fwush_state_sub        = (U1)FWUSH_SUB_STATE_WAITING;
     u1_g_fwush_abort            = (U1)FALSE;
     u1_g_fwush_error_log        = (U1)0x00U;
+    u1_g_fwush_before_reset     = (U1)FALSE;
     u4_g_fwush_prep_data_crc    = (U4)0U;
     u2_g_fwush_run_ofst         = (U2)0xFFFFU;
 

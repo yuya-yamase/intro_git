@@ -40,6 +40,8 @@ extern U1 u1_g_fwupx_res_seqcnt;
 extern U1 u1_g_fwush_abort;
 extern U1 u1_g_fwush_error_log;
 
+extern U1 u1_g_fwush_before_reset;
+
 extern U1 u1_g_fwush_seq_progress;
 extern U4 u4_g_fwush_fswa_stat;
 extern U2 u2_g_fwush_veri_stat;

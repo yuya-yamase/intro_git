@@ -476,7 +476,7 @@ static void vd_s_FwushHandleRollbackReq(void)
         }
         break;
     default:
-        vd_g_FwushMakeResData((U1)FWUSH_RESP_SUBTYPE_CANCEL, (U1)FWUSH_ACK_ROLLBACK_DONE);
+        vd_g_FwushMakeResData((U1)FWUSH_RESP_SUBTYPE_CANCEL, (U1)FWUSH_ACK_OK);
         break;
     }
 }
@@ -683,7 +683,14 @@ static void vd_s_FwushHandleRollbackSuccess(void)
     /* State transition already applied by table */
     vd_g_FwushUpdateSeqProgress((U1)FWUSH_PROGRESS_ROLLBACK_DONE);
     /* Send ACK */
-    vd_g_FwushMakeResData((U1)FWUSH_RESP_SUBTYPE_CANCEL, (U1)FWUSH_ACK_ROLLBACK_DONE);
+    if (u1_g_fwush_before_reset == (U1)TRUE)
+    {
+        vd_g_FwushMakeResData((U1)FWUSH_RESP_SUBTYPE_CANCEL, (U1)FWUSH_ACK_OK);
+    }
+    else
+    {
+        vd_g_FwushMakeResData((U1)FWUSH_RESP_SUBTYPE_CANCEL, (U1)FWUSH_ACK_ROLLBACK_DONE);
+    }
 
     vd_g_FwushAbort();
 }
