@@ -8,6 +8,7 @@
 #include "EthDLC.h"
 #include <EthSwt_Data.h>
 #include <EthDebugLog.h>
+#include <EthVS.h>
 /* -------------------------------------------------------------------------- */
 void EthSW_StaBonInit(void)
 {
@@ -15,6 +16,7 @@ void EthSW_StaBonInit(void)
 	EthSwt_Data_Init();
 	EthDLC_Init();
 	EthDebugLog_Init();
+	EthVS_Init();
 
 	return;
 }
@@ -24,6 +26,7 @@ void EthSW_StaRstInit(void)
 	EthSwt_SWIC_Init(NULL_PTR);
 	EthSwt_Data_Init();
 	EthDLC_Init();
+	EthVS_Init();
 
 	return;
 }
@@ -33,6 +36,7 @@ void EthSW_StaWkupInit(void)
 	EthSwt_SWIC_Init(NULL_PTR);
 	EthSwt_Data_Init();
 	EthDLC_Init();
+	EthVS_Init();
 
 	return;
 }
@@ -42,6 +46,8 @@ void EthSW_MediumTask (void)
 	EthDLC_LoProc();
 	EthSwt_SWIC_LoProc();
 	EthSwt_Data_LoProc();
+	EthVS_LoProc();
+
 	return;
 }
 /* -------------------------------------------------------------------------- */
@@ -55,5 +61,6 @@ void EthSW_HighTask (void)
 void EthSW_BackgroundTask (void)
 {
 	EthSwt_SWIC_BackgroundTask();
+	
 	return;
 }

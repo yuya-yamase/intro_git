@@ -11,7 +11,6 @@
 #include <ChipCom_Cfg.h>
 #include <EthSwt.h>
 #include <EthSwt_SWIC_MIB.h>
-#include <ivdsh.h>
 /* -------------------------------------------------------------------------- */
 #define D_ETHSWT_DATA_FAILED                        (0xFF)                      /* 未使用ポート用 */
 
@@ -39,12 +38,6 @@
 
 /* Qci取得対象は、QciID = 0, 1, 2, 3, 4 */
 #define D_ETHSWT_DATA_QCI_TARGET                    (D_ETHSWT_DATA_UPDATE_QCI0 | D_ETHSWT_DATA_UPDATE_QCI1 | D_ETHSWT_DATA_UPDATE_QCI2 | D_ETHSWT_DATA_UPDATE_QCI3 | D_ETHSWT_DATA_UPDATE_QCI4)
-
-/* MACアドレスをiVDshから読み出す際のNWORD */
-#define D_ETHSWT_SWIC_DATA_MAC_NWORD         (2)
-
-/* MACアドレスをChipComに渡すときのデータサイズ */
-#define D_ETHSWT_SWIC_DATA_MAC_SIZE          (6)
 /* -------------------------------------------------------------------------- */
 typedef struct {
     uint8 arrayID;                                                              /* 送信用データIndex        */
@@ -119,7 +112,6 @@ static void ethswt_data_checkSQIUpdate(void);
 static void ethswt_data_checkQciUpdate(void);
 static void ethswt_data_checkRegAccessUpdate(void);
 static void ethswt_data_checkSWICReset(void);
-static void ethswt_data_checkMACAddress(void);
 static void ethswt_data_incrementID(uint32 * const id);
 /* -------------------------------------------------------------------------- */
 void EthSwt_Data_Init(void)
@@ -257,7 +249,6 @@ void EthSwt_Data_LoProc(void)
     ethswt_data_checkQciUpdate();
     ethswt_data_checkRegAccessUpdate();
     ethswt_data_checkSWICReset();
-    ethswt_data_checkMACAddress();
     
     return;
 }
@@ -319,21 +310,6 @@ static void ethswt_data_checkRegAccessUpdate(void)
 static void ethswt_data_checkSWICReset(void)
 {
     (void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_ETHERSWT_SWIC_RESETRESTART, sizeof(G_ETHSWT_DATA_SWICRESET_COUNT), (uint8*)&G_ETHSWT_DATA_SWICRESET_COUNT);
-
-    return;
-}
-/* -------------------------------------------------------------------------- */
-static void ethswt_data_checkMACAddress(void)
-{
-    uint32  macaddress[D_ETHSWT_SWIC_DATA_MAC_NWORD];           /* MACアドレスは6byteだが、iVDshが4byte単位で読み出すため8byteにしておく */
-    uint8   readResult;
-    
-    LIB_memset((uint8*)&macaddress, 0, sizeof(macaddress));
-    readResult = u1_g_iVDshReabyDid(IVDSH_DID_REA_VM1TO3_MAC_ADDRESS, macaddress, (uint16)D_ETHSWT_SWIC_DATA_MAC_NWORD);
-
-    if(readResult != IVDSH_NO_REA) {
-        (void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_ETHERMGR_MACADDR, sizeof(D_ETHSWT_SWIC_DATA_MAC_SIZE), (uint8*)&macaddress); /* 8byteのうち先頭6byteを渡す */
-    }
 
     return;
 }
