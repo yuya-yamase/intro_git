@@ -683,7 +683,7 @@ static void vd_s_FwushHandleRollbackSuccess(void)
     /* State transition already applied by table */
     vd_g_FwushUpdateSeqProgress((U1)FWUSH_PROGRESS_ROLLBACK_DONE);
     /* Send ACK */
-    if (u1_g_fwush_before_reset == (U1)TRUE)
+    if (u1_g_fwush_act_cancel_ok == (U1)TRUE)
     {
         vd_g_FwushMakeResData((U1)FWUSH_RESP_SUBTYPE_CANCEL, (U1)FWUSH_ACK_OK);
     }

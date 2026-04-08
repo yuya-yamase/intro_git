@@ -332,7 +332,7 @@ static U1 u1_s_FwushCheckMemAccJobEvent(void)
             break;
         case (U1)FWUSH_MAIN_STATE_ACT:
             if(u1_t_event == (U1)FWUSH_EVENT_MEMACC_SUCCESS){
-                u1_g_fwush_before_reset = (U1)TRUE;
+                u1_g_fwush_act_cancel_ok = (U1)TRUE;
             }
             break;
         case (U1)FWUSH_MAIN_STATE_FIN:  /* for Rollback Memacc */
