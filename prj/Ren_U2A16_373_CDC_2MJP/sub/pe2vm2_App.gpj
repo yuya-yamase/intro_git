@@ -13,7 +13,6 @@
 ../../src/PE2VM2/App/IVI/CanCtrl/CanCtlTx.c
 ../../src/PE2VM2/App/IVI/CanCtrl/IVI_CanCtrl_Main.c
 ../../src/PE2VM2/App/IVI/CanCtrl/PncreqCtl.c
-#../../src/PE2VM2/App/IVI/ClkCtrl/Common/scc/bcd.c
 ../../src/PE2VM2/App/IVI/ClkCtrl/Common/scc/date.c
 ../../src/PE2VM2/App/IVI/ClkCtrl/Common/scc/rtime.c
 ../../src/PE2VM2/App/IVI/ClkCtrl/Dateclk/config/date_clk_cfg.c
