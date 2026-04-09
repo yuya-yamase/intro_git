@@ -158,6 +158,7 @@ void            vd_g_XspiIviSub0VMResetInit(void)
 void            vd_g_XspiIviSub0SoCResetInit(void)
 {
     vd_s_XspiIviSub0ResetInit();
+    u1_s_XspiIviSub0OsComBridgeChk = (U1)FALSE;
 }
 
 /*===================================================================================================================================*/
@@ -187,7 +188,6 @@ static void            vd_s_XspiIviSub0ResetInit(void)
     vd_g_DiagAppSID10SoCResetInit();
 
     u2_s_XspiIviSub0DiagResSize = (U2)0U;
-    u1_s_XspiIviSub0OsComBridgeChk = (U1)FALSE;
     u1_s_XspiIviSub0SendFlg = (U1)FALSE;
     u1_s_XspiIviSub0ResponseFlg = (U1)XSPI_IVI_DIAG_RES_COMP;
     u1_s_XspiIviSub0ResponseDeleteFlg = (U1)XSPI_IVI_DIAG_RES_NODEL;
