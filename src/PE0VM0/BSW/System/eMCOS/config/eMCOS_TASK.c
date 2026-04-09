@@ -111,6 +111,7 @@ TASK(eMCOS_TASK_High)
 #if (OXSEC_MAIN_HIGH == 1U)
     vd_g_oXSECMainPreHigh();
     BswM_CS_MainFunctionHigh();
+    vd_g_vCryPx_MainFunction();
     vd_g_oXSECMainPosHigh();
 #else
     BswM_CS_MainFunctionHigh();

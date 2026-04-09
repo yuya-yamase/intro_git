@@ -1007,9 +1007,8 @@
 ../../src/PE1VM1/BSW/Security/oXSEC/scc/oxsec_fv.c
 ../../src/PE1VM1/BSW/Security/oXSEC/scc/oxsec_ied.c
 ###../../src/PE1VM1/BSW/Security/oXSEC/scc/oxsec_rh850u2a.c
-###../../src/PE1VM1/BSW/Security/vCryCl/config/vCryCl_cfg.c
-###../../src/PE1VM1/BSW/Security/vCryCl/scc/vCryCl.c
-../../src/PE1VM1/BSW/Security/vCryCl/scc/vCryCl_stub.c
+../../src/PE1VM1/BSW/Security/vCryCl/config/vCryCl_cfg.c
+../../src/PE1VM1/BSW/Security/vCryCl/scc/vCryCl.c
 ../../src/PE1VM1/BSW/System/22SS/config/22SS_Callout.c
 ../../src/PE1VM1/BSW/System/22SS/scc/Ecu_Arb.c
 ../../src/PE1VM1/BSW/System/22SS/scc/Ecu_Arb_Callout.c
@@ -1100,6 +1099,6 @@
 
 # ----------------------------------------------------------------------------------------------------------------------------------
 # ghsprj version 1-1-0
-# Date generated: 2026/02/26 15:33:34
+# Date generated: 2026/04/09 08:34:58
 # ----------------------------------------------------------------------------------------------------------------------------------
 

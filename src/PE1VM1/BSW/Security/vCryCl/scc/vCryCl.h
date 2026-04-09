@@ -19,6 +19,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#include "vCryCl_def.h"
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -34,8 +36,8 @@
 void    vd_g_vCryCl_Init(void);
 void    vd_g_vCryCl_MainFunction(void);
 
-void  vd_g_vCryCl_KeyUpdate(U4 u4_a_keyId, const U1* u1_ap_keyPtr, U4 u4_a_keyLength,
-                            U4 u4_a_jobId, U1* u1_ap_resultPtr, U4* u4_ap_resultLengthPtr);
+void  vd_g_vCryCl_KeyUpdate(U4 u4_a_keyId, U4 u4_a_keyElementId, const U1* u1_ap_keyPtr, U4 u4_a_keyLength, U4 u4_a_jobId);
+void  vd_g_vCryCl_KeyElementGet(U4 u4_a_keyId, U4 u4_a_keyElementId, U1* u1_ap_keyPtr, U4* u4_ap_keyLengthPtr, U4 u4_a_jobId);
 void  vd_g_vCryCl_Encrypt(U4 u4_a_jobId, U1 u1_a_mode, const U1* u1_ap_dataPtr, U4 u4_a_dataLength,
                           U1* u1_ap_resultPtr, U4* u4_ap_resultLengthPtr);
 void  vd_g_vCryCl_MacGenerate(U4 u4_a_jobId, U1 u1_a_mode, const U1* u1_ap_dataPtr, U4 u4_a_dataLength,

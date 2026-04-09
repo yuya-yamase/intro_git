@@ -750,7 +750,7 @@ static CONST(AB_83_ConstV Csm_Cfg_QueueConfigType, CSM_CONFIG_DATA) Csm_Cfg_stQu
       CSM_CFG_QUEUE_PRIORITY_SIZE_000,                             /* u4ConfigNum */
       &Csm_Cfg_stQueuePriorityConfig_000[0],/* ptPriorityConfig */
       &Csm_Cfg_Ram_stQueueChannelData[0],    /* ptChannelData */
-      10U,                         /* u2ChannelTimeOut */
+      0U,                         /* u2ChannelTimeOut */
       0U                                    /* u2Dummy */
     },
     {
@@ -759,7 +759,7 @@ static CONST(AB_83_ConstV Csm_Cfg_QueueConfigType, CSM_CONFIG_DATA) Csm_Cfg_stQu
       CSM_CFG_QUEUE_PRIORITY_SIZE_001,                             /* u4ConfigNum */
       &Csm_Cfg_stQueuePriorityConfig_001[0],/* ptPriorityConfig */
       &Csm_Cfg_Ram_stQueueChannelData[1],    /* ptChannelData */
-      10U,                         /* u2ChannelTimeOut */
+      0U,                         /* u2ChannelTimeOut */
       0U                                    /* u2Dummy */
     },
     {
@@ -768,7 +768,7 @@ static CONST(AB_83_ConstV Csm_Cfg_QueueConfigType, CSM_CONFIG_DATA) Csm_Cfg_stQu
       CSM_CFG_QUEUE_PRIORITY_SIZE_002,                             /* u4ConfigNum */
       &Csm_Cfg_stQueuePriorityConfig_002[0],/* ptPriorityConfig */
       &Csm_Cfg_Ram_stQueueChannelData[2],    /* ptChannelData */
-      10U,                         /* u2ChannelTimeOut */
+      0U,                         /* u2ChannelTimeOut */
       0U                                    /* u2Dummy */
     }
 };

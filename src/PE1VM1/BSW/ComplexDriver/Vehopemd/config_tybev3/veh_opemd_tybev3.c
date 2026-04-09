@@ -168,13 +168,9 @@ U4      u4_g_VehopemdCfgMdupdt(const U4 u4_a_MDBIT, U4 * u4_ap_evbit)
         u2_s_veh_opemd_unk_tocnt = (U2)U2_MAX;
     }
 
-    u1_t_diag_pon = (U1)FALSE;
-    u1_t_ipdu_st = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BDC1S81_CH0,(U4)0x00090016U,u2_OXCAN_RXTO_THRSH((U2)2000U));
-    if((u1_t_ipdu_st & (U1)(~OXCAN_RXD_TOM_EN)) == (U1)0U){
-        u1_t_diag_pon = u1_s_VehopemdDiagPowOn();
-        if(u1_t_diag_pon == (U1)TRUE){
-            u4_t_mdbit = u4_t_mdbit | (U4)VEH_OPEMD_MDBIT_DIAG;
-        }
+    u1_t_diag_pon = u1_s_VehopemdDiagPowOn();
+    if(u1_t_diag_pon == (U1)TRUE){
+        u4_t_mdbit = u4_t_mdbit | (U4)VEH_OPEMD_MDBIT_DIAG;
     }
 
     u4_t_evbit  = u4_a_MDBIT ^ u4_t_mdbit;
@@ -279,26 +275,29 @@ static U1      u1_s_VehopemdDiagPowOn(void)
     U1                             u1_t_vps_rx;
     U1                             u1_t_vps_inf;
     U1                             u1_t_pow_sts;
+    U1                             u1_t_ipdu_st;
  
     u1_t_vps_inf = (U1)0U;   
     u1_t_pow_sts = (U1)FALSE;
- 
-    Com_ReceiveSignal(ComConf_ComSignal_VPSINFO1, &u1_t_vps_inf);
-    u1_t_vps_rx  = (U1)u1_t_vps_inf;
-    Com_ReceiveSignal(ComConf_ComSignal_VPSINFO2, &u1_t_vps_inf);
-    u1_t_vps_rx |= (U1)u1_t_vps_inf << 1U;
-    Com_ReceiveSignal(ComConf_ComSignal_VPSINFO3, &u1_t_vps_inf);
-    u1_t_vps_rx |= (U1)u1_t_vps_inf << 2U;
-    Com_ReceiveSignal(ComConf_ComSignal_VPSINFO4, &u1_t_vps_inf);
-    u1_t_vps_rx |= (U1)u1_t_vps_inf << 3U;
-    Com_ReceiveSignal(ComConf_ComSignal_VPSINFO5, &u1_t_vps_inf);
-    u1_t_vps_rx |= (U1)u1_t_vps_inf << 4U;
 
-    Com_ReceiveSignal(ComConf_ComSignal_VPSINFOS, &u1_t_vps_inf);
+    u1_t_ipdu_st = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BDC1S81_CH0,(U4)0x00090016U,u2_OXCAN_RXTO_THRSH((U2)2000U));
+    if((u1_t_ipdu_st & (U1)(~OXCAN_RXD_TOM_EN)) == (U1)0U){
+        Com_ReceiveSignal(ComConf_ComSignal_VPSINFO1, &u1_t_vps_inf);
+        u1_t_vps_rx  = (U1)u1_t_vps_inf;
+        Com_ReceiveSignal(ComConf_ComSignal_VPSINFO2, &u1_t_vps_inf);
+        u1_t_vps_rx |= (U1)u1_t_vps_inf << 1U;
+        Com_ReceiveSignal(ComConf_ComSignal_VPSINFO3, &u1_t_vps_inf);
+        u1_t_vps_rx |= (U1)u1_t_vps_inf << 2U;
+        Com_ReceiveSignal(ComConf_ComSignal_VPSINFO4, &u1_t_vps_inf);
+        u1_t_vps_rx |= (U1)u1_t_vps_inf << 3U;
+        Com_ReceiveSignal(ComConf_ComSignal_VPSINFO5, &u1_t_vps_inf);
+        u1_t_vps_rx |= (U1)u1_t_vps_inf << 4U;
+
+        Com_ReceiveSignal(ComConf_ComSignal_VPSINFOS, &u1_t_vps_inf);
     
-    if((u1_t_vps_rx == (U1)0x1eU) &&
-       (u1_t_vps_inf == (U1)0x00U)){
-        u1_t_pow_sts = (U1)TRUE;
+        if((u1_t_vps_rx == (U1)0x1eU) && (u1_t_vps_inf == (U1)0x00U)){
+            u1_t_pow_sts = (U1)TRUE;
+        }
     }
 
     return(u1_t_pow_sts);

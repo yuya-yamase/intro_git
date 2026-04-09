@@ -30,7 +30,6 @@
 
 #include <Ecu_Memmap_SdaDisableE_env.h>
 
-#include "vCryCl.h"
 /*----------------------------------------------------------------------------
  *		ProtoTypes
  *--------------------------------------------------------------------------*/
@@ -71,7 +70,6 @@ TASK(eMCOS_TASK_Idle)
 TASK(eMCOS_TASK_High)
 {
     BswM_CS_MainFunctionHigh();
-    vd_g_vCryCl_MainFunction();
     (void)TerminateTask();
 }
 
