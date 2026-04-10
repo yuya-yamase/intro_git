@@ -888,16 +888,12 @@ static inline void    vd_s_XSpiCfgRxWchime(     const U4 * u4_ap_PDU_RX) {
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgRxLocale(     const U4 * u4_ap_PDU_RX) {
     U1  u1_t_sts;
-    ST_HMILOCALE st_t_hmilocale;
+    U1  u1_t_unit_eleco;
 
     u1_t_sts = u1_g_XSpiMETRxRdAccessSts((U1)XSPI_MET_XSPI_RX_AGLBE);
     if(u1_t_sts == (U1)XSPI_MET_XSPI_RX_READ_VALID){
-        st_t_hmilocale.u1_unit_dist   = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1) 0U , (U1)2U);
-        st_t_hmilocale.u1_unit_speed  = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1) 2U , (U1)2U);
-        st_t_hmilocale.u1_unit_eleco  = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1) 8U , (U1)4U);
-        st_t_hmilocale.u1_unit_ambtmp = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1)12U , (U1)2U);
-        st_t_hmilocale.u1_timeformat  = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1)14U , (U1)2U);
-        vd_g_HmiLocalePut(&st_t_hmilocale);
+        u1_t_unit_eleco = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1)8U , (U1)4U);
+        vd_g_HmiLocalePut(u1_t_unit_eleco);
     }
 }
 
@@ -1193,7 +1189,8 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-41    03/17/2026 RS       Change for BEV Full_Function_2.                                                                    */
 /*                                MET-D_4WDSYS-CSTD-2-02-A-C1                                                                        */
 /*                                Remove process that sets SYS_4WDSYS_DISCON to TRUE                                                 */
-/*  BEV-41    03/17/2026 SH       Change for BEV Full_Function_2. (Add SYS_CPBBSW_CUSTOM_P and DISTEMPTY_EV_KM_DIFF)                 */
+/*  BEV-42    03/17/2026 SH       Change for BEV Full_Function_2. (Add SYS_CPBBSW_CUSTOM_P and DISTEMPTY_EV_KM_DIFF)                 */
+/*  BEV-43    04/06/2026 TB       Change for BEV FF2.(Remove switching information for time and unit)                                */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
@@ -1226,5 +1223,6 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  * HH   = Hiroki Hara, Denso Techno                                                                                               */
 /*  * YH   = Yuki Hatakeyama, KSE                                                                                                    */
 /*  * SH   = Sae Hirose, Denso Techno                                                                                                */
+/*  * TB   = Trisha Bernardo, DTPH                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
