@@ -141,12 +141,7 @@
 /*  (Each Virtual Controller)             */
 /******************************************/
 /* Tx VHOH(VHTH) Number */
-#warning "BEVCDCFD-2652"
-#if 0 /* BEVCDCFD-2652 */
-#define BSW_VCAN_CFG_VHTHNUM_0                  (22U)
-#else /* BEVCDCFD-2652 */
-#define BSW_VCAN_CFG_VHTHNUM_0                  (13U)
-#endif /* BEVCDCFD-2652 */
+#define BSW_VCAN_CFG_VHTHNUM_0                  (14U)
 #define BSW_VCAN_CFG_VHTHNUM_1                  (0U)
 #define BSW_VCAN_CFG_VHTHNUM_2                  (0U)
 #define BSW_VCAN_CFG_VHTHNUM_3                  (0U)

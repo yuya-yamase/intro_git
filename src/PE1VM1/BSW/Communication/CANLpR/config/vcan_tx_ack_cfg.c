@@ -56,12 +56,12 @@
 #if (CAN_LPR_UDS_RD_TEST == 1U)
 static const ST_VCAN_TXA_HTH    st_sp_VCAN_TXA_HTH[] = {
     {
-        &bsw_vcan_tx_stConfirmedPdu[20U],                /* u2p_log_tx */
+        &bsw_vcan_tx_stConfirmedPdu[12U],                /* u2p_log_tx */
         (U4)0x18dae017U,                                /* u4_cid     */ /* UDS/CAN MET->DLC Diag Tool    */
         (U4)0x1ffffeffU                                 /* u4_mask    */
     },
     {
-        &bsw_vcan_tx_stConfirmedPdu[20U],                /* u2p_log_tx */
+        &bsw_vcan_tx_stConfirmedPdu[12U],                /* u2p_log_tx */
         (U4)0x18dae117U,                                /* u4_cid     */ /* UDS/CAN MET->Remote Diag Tool */
         (U4)0x1fffffffU                                 /* u4_mask    */
     }
@@ -69,12 +69,12 @@ static const ST_VCAN_TXA_HTH    st_sp_VCAN_TXA_HTH[] = {
 #else
 static const ST_VCAN_TXA_HTH    st_sp_VCAN_TXA_HTH[] = {
     {
-        &bsw_vcan_tx_stConfirmedPdu[20U],                /* u2p_log_tx */
+        &bsw_vcan_tx_stConfirmedPdu[12U],                /* u2p_log_tx */
         (U4)0x18dae017U,                                /* u4_cid     */ /* UDS/CAN MET->DLC Diag Tool    */
         (U4)0x1fffffffU                                 /* u4_mask    */
     },
     {
-        &bsw_vcan_tx_stConfirmedPdu[20U],                /* u2p_log_tx */
+        &bsw_vcan_tx_stConfirmedPdu[12U],                /* u2p_log_tx */
         (U4)0x18dae117U,                                /* u4_cid     */ /* UDS/CAN MET->Remote Diag Tool */
         (U4)0x1fffffffU                                 /* u4_mask    */
     }

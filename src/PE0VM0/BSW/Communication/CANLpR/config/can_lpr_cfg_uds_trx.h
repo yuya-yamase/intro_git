@@ -215,7 +215,7 @@ const ST_CAN_LPR_UDS_TRX    st_gp_CAN_LPR_UDS_TRX[] = {
         &u4_sp_CAN_LPR_UDS_REC_SO_G2M_1[0U],     /* u4p_REC_SO */
         (U4)0x00000a5aU,                         /* u4_type_en */
         (U2)0x8000U,                             /* u2_epdu_id */
-        (U2)0x008EU                              /* u2_hrh     */
+        (U2)0xffffU                              /* u2_hrh     */
     },
     /* VIR_0 -> G2M_1 */
     {
