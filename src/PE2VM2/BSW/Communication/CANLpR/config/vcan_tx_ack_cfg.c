@@ -68,12 +68,12 @@ static const ST_VCAN_TXA_HTH    st_sp_VCAN_TXA_HTH[] = {
 #else
 static const ST_VCAN_TXA_HTH    st_sp_VCAN_TXA_HTH[] = {
     {
-        &bsw_vcan_tx_stConfirmedPdu[42U],                /* u2p_log_tx */
+        &bsw_vcan_tx_stConfirmedPdu[16U],                /* u2p_log_tx */
         (U4)0x18dae01CU,                                /* u4_cid     */ /* UDS/CAN IVI->DLC Diag Tool    */
         (U4)0x1fffffffU                                 /* u4_mask    */
     },
     {
-        &bsw_vcan_tx_stConfirmedPdu[42U],                /* u2p_log_tx */
+        &bsw_vcan_tx_stConfirmedPdu[16U],                /* u2p_log_tx */
         (U4)0x18dae11CU,                                /* u4_cid     */ /* UDS/CAN IVI->Remote Diag Tool */
         (U4)0x1fffffffU                                 /* u4_mask    */
     }
