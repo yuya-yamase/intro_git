@@ -121,12 +121,12 @@ const U4                    u4_gp_OXCAN_RXD_SYS_BY_PDU[] = {
     (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [  44] MSG_ADU1S03_RXCH0 */
     (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [  45] MSG_ADU1S05_RXCH0 */
     (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [  46] MSG_ADU1S06_RXCH0 */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [  47] MSG_ADU1S07_RXCH0 */
+    (U4)0x00000034U,  /* IGR, IGP,                             , DIC   */    /*  [  47] MSG_ADU1S07_RXCH0 */
     (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [  48] MSG_ARS1S01_RXCH0 */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [  49] MSG_ARS1S90_RXCH0 */
+    (U4)0x00000034U,  /* IGR, IGP,                             , DIC   */    /*  [  49] MSG_ARS1S90_RXCH0 */
     (U4)0x00000004U,  /*      IGP,                                     */    /*  [  50] MSG_BAT1E45_RXCH0 */
     (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /*  [  51] MSG_BAT1EDA_RXCH0 */
-    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /*  [  52] MSG_BAT1S01_RXCH0 */
+    (U4)0x00000036U,  /* IGR, IGP, ACC,                        , DIC   */    /*  [  52] MSG_BAT1S01_RXCH0 */
     (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /*  [  53] MSG_BAT1S08_RXCH0 */
     (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /*  [  54] MSG_BAT2ED2_RXCH0 */
     (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [  55] MSG_BCC1S06_RXCH0 */
@@ -158,8 +158,8 @@ const U4                    u4_gp_OXCAN_RXD_SYS_BY_PDU[] = {
     (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,              PNC_44    */    /*  [  81] MSG_BDC1S74_RXCH0 */
     (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,              PNC_44    */    /*  [  82] MSG_BDC1S81_RXCH0 */
     (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,              PNC_44    */    /*  [  83] MSG_BDC1S91_RXCH0 */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,              PNC_44    */    /*  [  84] MSG_BDC1S97_RXCH0 */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,              PNC_44    */    /*  [  85] MSG_BDC1S98_RXCH0 */
+    (U4)0x00090036U,  /* IGR, IGP, ACC, PNC_16,         PNC_44 , DIC   */    /*  [  84] MSG_BDC1S97_RXCH0 */
+    (U4)0x00090036U,  /* IGR, IGP, ACC, PNC_16,         PNC_44 , DIC   */    /*  [  85] MSG_BDC1S98_RXCH0 */
     (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,              PNC_44    */    /*  [  86] MSG_BDC1S99_RXCH0 */
     (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,              PNC_44    */    /*  [  87] MSG_BDC1SC1_RXCH0 */
     (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,              PNC_44    */    /*  [  88] MSG_BDC1SC2_RXCH0 */
@@ -250,7 +250,7 @@ const U4                    u4_gp_OXCAN_RXD_SYS_BY_PDU[] = {
     (U4)0x00030016U,  /* IGR, IGP, ACC, PNC_16,    PNC_40,             */    /*  [ 173] MSG_EHV1S95_RXCH0 */
     (U4)0x00000004U,  /*      IGP,                                     */    /*  [ 174] MSG_EHV1S96_RXCH0 */
     (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /*  [ 175] MSG_EHV1S97_RXCH0 */
-    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /*  [ 176] MSG_EHV1S99_RXCH0 */
+    (U4)0x00000036U,  /* IGR, IGP, ACC,                        , DIC   */    /*  [ 176] MSG_EHV1S99_RXCH0 */
     (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [ 177] MSG_EHV2G02_RXCH0 */
     (U4)0x00000004U,  /*      IGP,                                     */    /*  [ 178] MSG_EHV2G10_RXCH0 */
     (U4)0x00000004U,  /*      IGP,                                     */    /*  [ 179] MSG_EHV2G20_RXCH0 */
@@ -267,13 +267,13 @@ const U4                    u4_gp_OXCAN_RXD_SYS_BY_PDU[] = {
     (U4)0x00000004U,  /*      IGP,                                     */    /*  [ 190] MSG_ENG1D60_RXCH0 */
     (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /*  [ 191] MSG_ENG1G03_RXCH0 */
     (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [ 192] MSG_ENG1G17_RXCH0 */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [ 193] MSG_ENG1G90_RXCH0 */
+    (U4)0x00000034U,  /* IGR, IGP,                             , DIC   */    /*  [ 193] MSG_ENG1G90_RXCH0 */
     (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [ 194] MSG_ENG1G92_RXCH0 */
     (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [ 195] MSG_ENG1S60_RXCH0 */
     (U4)0x00000004U,  /*      IGP,                                     */    /*  [ 196] MSG_ENG1S99_RXCH0 */
     (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [ 197] MSG_EPS1D50_RXCH0 */
     (U4)0x00030016U,  /* IGR, IGP, ACC, PNC_16, PNC_40,                */    /*  [ 198] MSG_EPS1S11_RXCH0 */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [ 199] MSG_EPS1S90_RXCH0 */
+    (U4)0x00000034U,  /* IGR, IGP,                             , DIC   */    /*  [ 199] MSG_EPS1S90_RXCH0 */
     (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [ 200] MSG_FCM1C01_RXCH0 */
     (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [ 201] MSG_FCM1S10_RXCH0 */
     (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [ 202] MSG_FCM1S12_RXCH0 */
@@ -282,7 +282,7 @@ const U4                    u4_gp_OXCAN_RXD_SYS_BY_PDU[] = {
     (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [ 205] MSG_FCM1S41_RXCH0 */
     (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [ 206] MSG_FCM1S49_RXCH0 */
     (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [ 207] MSG_FCM1S51_RXCH0 */
-    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /*  [ 208] MSG_FCM1S52_RXCH0 */
+    (U4)0x00000036U,  /* IGR, IGP, ACC,                        , DIC   */    /*  [ 208] MSG_FCM1S52_RXCH0 */
     (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [ 209] MSG_FCM1S58_RXCH0 */
     (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [ 210] MSG_FCM1S70_RXCH0 */
     (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [ 211] MSG_FCM1S76_RXCH0 */
@@ -297,7 +297,7 @@ const U4                    u4_gp_OXCAN_RXD_SYS_BY_PDU[] = {
     (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,               PNC_44   */    /*  [ 220] MSG_IDT1S15_RXCH0 */
     (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /*  [ 221] MSG_IMS1S01_RXCH0 */
     (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [ 222] MSG_IPA1S05_RXCH0 */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [ 223] MSG_ITS1S01_RXCH0 */
+    (U4)0x00000034U,  /* IGR, IGP,                             , DIC   */    /*  [ 223] MSG_ITS1S01_RXCH0 */
     (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [ 224] MSG_ITS1S04_RXCH0 */
     (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [ 225] MSG_ITS1S05_RXCH0 */
     (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [ 226] MSG_LVN1S01_RXCH0 */
@@ -306,7 +306,7 @@ const U4                    u4_gp_OXCAN_RXD_SYS_BY_PDU[] = {
     (U4)0x00030016U,  /* IGR, IGP, ACC, PNC_16, PNC_40,                */    /*  [ 229] MSG_PCN1S01_RXCH0 */
     (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,               PNC_44   */    /*  [ 230] MSG_PDC1G01_RXCH0 */
     (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,               PNC_44   */    /*  [ 231] MSG_PDC1G02_RXCH0 */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [ 232] MSG_PDS1S01_RXCH0 */
+    (U4)0x00000034U,  /* IGR, IGP,                             , DIC   */    /*  [ 232] MSG_PDS1S01_RXCH0 */
     (U4)0x00030016U,  /* IGR, IGP, ACC, PNC_16, PNC_40,                */    /*  [ 233] MSG_PLG1G15_RXCH0 */
     (U4)0x00030016U,  /* IGR, IGP, ACC, PNC_16, PNC_40,                */    /*  [ 234] MSG_PLG1G16_RXCH0 */
     (U4)0x00030016U,  /* IGR, IGP, ACC, PNC_16, PNC_40,                */    /*  [ 235] MSG_PLG1S01_RXCH0 */
@@ -334,11 +334,11 @@ const U4                    u4_gp_OXCAN_RXD_SYS_BY_PDU[] = {
     (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /*  [ 251] MSG_SBW1G02_RXCH0 */
     (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,               PNC_44   */    /*  [ 252] MSG_SCN1S01_RXCH0 */
     (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,               PNC_44   */    /*  [ 253] MSG_SCN1S02_RXCH0 */
-    (U4)0x00030016U,  /* IGR, IGP, ACC, PNC_16, PNC_40,                */    /*  [ 254] MSG_SCS1S11_RXCH0 */
+    (U4)0x00030036U,  /* IGR, IGP, ACC, PNC_16, PNC_40,        , DIC   */    /*  [ 254] MSG_SCS1S11_RXCH0 */
     (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [ 255] MSG_SCS1S14_RXCH0 */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,               PNC_44   */    /*  [ 256] MSG_SOL1S02_RXCH0 */
+    (U4)0x00090036U,  /* IGR, IGP, ACC, PNC_16,         PNC_44 , DIC   */    /*  [ 256] MSG_SOL1S02_RXCH0 */
     (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,               PNC_44   */    /*  [ 257] MSG_SOL1S06_RXCH0 */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [ 258] MSG_TPM1S02_RXCH0 */
+    (U4)0x00000034U,  /* IGR, IGP,                             , DIC   */    /*  [ 258] MSG_TPM1S02_RXCH0 */
     (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [ 259] MSG_TPM1S03_RXCH0 */
     (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [ 260] MSG_TPM1S04_RXCH0 */
     (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [ 261] MSG_TPM1S05_RXCH0 */
@@ -350,7 +350,7 @@ const U4                    u4_gp_OXCAN_RXD_SYS_BY_PDU[] = {
     (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [ 267] MSG_VSC1D51_RXCH0 */
     (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [ 268] MSG_VSC1F01_RXCH0 */
     (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [ 269] MSG_VSC1G12_RXCH0 */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [ 270] MSG_VSC1G13_RXCH0 */
+    (U4)0x00000034U,  /* IGR, IGP,                             , DIC   */    /*  [ 270] MSG_VSC1G13_RXCH0 */
     (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [ 271] MSG_VSC1G14_RXCH0 */
     (U4)0x00000014U,  /* IGR, IGP,                                     */    /*  [ 272] MSG_VSC1G96_RXCH0 */
     (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                PNC_44  */    /*  [ 273] MSG_VUM1S01_RXCH0 */
