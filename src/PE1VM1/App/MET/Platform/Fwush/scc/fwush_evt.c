@@ -93,7 +93,8 @@ static U1 u1_s_FwushDetectResumeEvent(void)
     U1 u1_t_veri_comp;
 
     u1_t_event = (U1)FWUSH_EVENT_NONE;
-    if(u1_g_fwush_state_main == (U1)FWUSH_MAIN_STATE_PREP){
+    if((u1_g_fwush_state_main == (U1)FWUSH_MAIN_STATE_PREP) &&
+       (u1_g_fwush_state_sub == (U1)FWUSH_SUB_STATE_WAITING)){
         u1_t_veri_target = (U1)((u2_g_fwush_veri_stat >> (U2)8U) & (U2)0xFFU);
         u1_t_veri_comp = (U1)(u2_g_fwush_veri_stat & (U2)0xFFU);
         if((u1_g_fwush_seq_progress & u1_s_FWUSH_PROG_MASK) == u1_s_FWUSH_PROG_ACT_CRIT){
