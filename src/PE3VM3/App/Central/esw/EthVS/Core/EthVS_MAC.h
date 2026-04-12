@@ -10,6 +10,6 @@
 /* -------------------------------------------------------------------------- */
 void EthVS_MAC_Init(void);
 void EthVS_MAC_Update(void);
-Std_ReturnType EthVS_MAC_Get(uint8 * const data, const uint32 size, uint8 * const status);
+Std_ReturnType EthVS_MAC_Get(uint8 * const data, const uint32 size, uint32 * const status);
 /* -------------------------------------------------------------------------- */
 #endif/* ETHVS_MAC_H */

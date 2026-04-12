@@ -31,7 +31,7 @@ void EthVS_LoProc(void)
     return;
 }
 /* -------------------------------------------------------------------------- */
-Std_ReturnType EthVS_Get(const uint32 id, uint8 * const data, const uint32 size, uint8 * const status)
+Std_ReturnType EthVS_Get(const uint32 id, uint8 * const data, const uint32 size, uint32 * const status)
 {
     Std_ReturnType  result = E_NOT_OK;
 
