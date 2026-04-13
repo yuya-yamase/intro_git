@@ -127,6 +127,8 @@
 #define SOUND_ACTIVE_TIME_RDN_3RD              (2U)
 #define SOUND_ACTIVE_TIME_DEF                  (0U)
 
+#define SOUND_DRV_INC_VAL                      (1U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -249,6 +251,7 @@ static        void    vd_s_SoundCriMgrStartup(void);
 static        U1      u1_s_SoundDiagnosis(void);
 static        U1      u1_s_SoundGetActiveTime(void);
 static        U1      u1_s_SoundCriMgr_InitialCheck(void);
+static        U1      u1_s_SoundCriMgr_MatchCount(const CriSint32 s4_a_VAL1, const CriSint32 s4_a_VAL2);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -653,10 +656,6 @@ void    vd_g_SoundCriMgrMainTask(void)
             u1_t_errsts |= (U1)Dma_CheckDmaError((U1)DMA_CH_DATA_ID_4);
 
             if(u1_t_errsts == (U1)DMA_DTSER_DTSER_ERR){
-                Dma_ClearDmaError((U1)DMA_CH_DATA_ID_2);
-                Dma_ClearDmaError((U1)DMA_CH_DATA_ID_3);
-                Dma_ClearDmaError((U1)DMA_CH_DATA_ID_4);
-
                 vd_g_SoundCriMgrFinalize();
                 vd_s_SoundCriMgrStartup();
             }
@@ -2258,31 +2257,13 @@ static U1      u1_s_SoundCriMgr_InitialCheck(void)
     U1      u1_t_match_count;
     U1      u1_t_ret;
 
-    u1_t_match_count = (U1)0U;
-
-    if (s4_s_initialize_size == (CriSint32)SOUND_CRI_INIT_WORK_SIZE) {
-        u1_t_match_count++;
-    }
-
-    if (s4_s_acfdata_size == (CriSint32)SOUND_ACFDATA_SIZE) {
-        u1_t_match_count++;
-    }
-
-    if (s4_s_awbdata_size == (CriSint32)SOUND_AWBDATA_SIZE) {
-        u1_t_match_count++;
-    }
-
-    if (s4_s_acbdata_size == (CriSint32)SOUND_ACBDATA_SIZE) {
-        u1_t_match_count++;
-    }
-
-    if (s4_s_voicepooladxdata_size == (CriSint32)SOUND_VOICEPOOLADXDATA_SIZE) {
-        u1_t_match_count++;
-    }
-
-    if (s4_s_player_size == (CriSint32)SOUND_PLAYER_SIZE) {
-        u1_t_match_count++;
-    }
+    u1_t_match_count  = (U1)0U;
+    u1_t_match_count += u1_s_SoundCriMgr_MatchCount(s4_s_initialize_size,       (CriSint32)SOUND_CRI_INIT_WORK_SIZE);
+    u1_t_match_count += u1_s_SoundCriMgr_MatchCount(s4_s_acfdata_size,          (CriSint32)SOUND_ACFDATA_SIZE);
+    u1_t_match_count += u1_s_SoundCriMgr_MatchCount(s4_s_awbdata_size,          (CriSint32)SOUND_AWBDATA_SIZE);
+    u1_t_match_count += u1_s_SoundCriMgr_MatchCount(s4_s_acbdata_size,          (CriSint32)SOUND_ACBDATA_SIZE);
+    u1_t_match_count += u1_s_SoundCriMgr_MatchCount(s4_s_voicepooladxdata_size, (CriSint32)SOUND_VOICEPOOLADXDATA_SIZE);
+    u1_t_match_count += u1_s_SoundCriMgr_MatchCount(s4_s_player_size,           (CriSint32)SOUND_PLAYER_SIZE);
 
     if (u1_t_match_count >= (U1)SOUND_DRV_INITIAL_MATCH_NUM) {
         u1_t_ret = (U1)SOUND_DRV_INITIAL_END;
@@ -2302,6 +2283,24 @@ static U1      u1_s_SoundCriMgr_InitialCheck(void)
     return((U1)SOUND_DRV_INITIAL_END); /* vd_s_SoundCriMgrStartup is processed in u1_s_SoundDiagnosis */
 #endif /* SOUND_CRI_DEBUGMODE */
 }
+/*===================================================================================================================================*/
+/*  u1      u1_s_SoundCriMgr_MatchCount(const CriSint32 s4_a_VAL1, const CriSint32 s4_a_VAL2)                                        */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static U1      u1_s_SoundCriMgr_MatchCount(const CriSint32 s4_a_VAL1, const CriSint32 s4_a_VAL2)
+{
+    U1      u1_t_ret;
+
+    u1_t_ret = (U1)0U;
+    if (s4_a_VAL1 == s4_a_VAL2) {
+        u1_t_ret = (U1)SOUND_DRV_INC_VAL;
+    }
+
+    return(u1_t_ret);
+}
+
 
 /*===================================================================================================================================*/
 /*  U1  u1_g_SoundIcErrorStatus(void)                                                                                                */
