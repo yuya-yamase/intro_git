@@ -48,13 +48,11 @@
 #define VEH_OPEMD_EVBIT_IG_P_TO_ON               (0x00000004U)
 #define VEH_OPEMD_EVBIT_PBA_TO_ON                (0x00000008U)
 #define VEH_OPEMD_EVBIT_IG_R_TO_ON               (0x00000010U)
-#define VEH_OPEMD_EVBIT_DIAG_TO_ON               (0x00000080U)
 
 #define VEH_OPEMD_EVBIT_ACC_TO_OFF               (0x00020000U)
 #define VEH_OPEMD_EVBIT_IG_P_TO_OFF              (0x00040000U)
 #define VEH_OPEMD_EVBIT_PBA_TO_OFF               (0x00080000U)
 #define VEH_OPEMD_EVBIT_IG_R_TO_OFF              (0x00100000U)
-#define VEH_OPEMD_EVBIT_DIAG_TO_OFF              (0x00800000U)
 
 #warning "BEVCDCFD-2619"
 #if 0 /* BEVCDCFD-2619 */
