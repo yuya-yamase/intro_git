@@ -88,9 +88,9 @@ uint8 ChipCom_SendSignalDummy( Com_SignalIdType t_u2SignalId, const void* t_pvdS
 #define CHIPCOM_CFG_PKT06_MSG_NUM               (2U)        /* PKT06 */
 
 /* Size of received buffer */
-#define CHIPCOM_CFG_RX_BUFF_SIZE                (2012U)
+#define CHIPCOM_CFG_RX_BUFF_SIZE                (1512U)
 /* Size of transmit buffer */
-#define CHIPCOM_CFG_TX_BUFF_SIZE                (2012U)
+#define CHIPCOM_CFG_TX_BUFF_SIZE                (1512U)
 /* Size of received buffer for interger array (lsb=4byte) */
 #define CHIPCOM_CFG_RX_BUFF_SIZE_INT            (CHIPCOM_CFG_RX_BUFF_SIZE/4U)
 /* Size of transmit buffer for interger array (lsb=4byte) */
@@ -128,13 +128,13 @@ uint8 ChipCom_SendSignalDummy( Com_SignalIdType t_u2SignalId, const void* t_pvdS
 /* Size of received fixed-length area buffer */
 #define CHIPCOM_CFG_RX_BUFF_FLA_SIZE            (24U)
 /* Size of received Variable-length area buffer */
-#define CHIPCOM_CFG_RX_BUFF_VLA_SIZE            (1976U)
+#define CHIPCOM_CFG_RX_BUFF_VLA_SIZE            (1476U)
 /* Address offset of received Variable-length area buffer */
 #define CHIPCOM_CFG_RX_BUFF_VLA_OFFS            (32U)
 /* Size of transmit fixed-length area buffer */
 #define CHIPCOM_CFG_TX_BUFF_FLA_SIZE            (396U)
 /* Size of transmit Variable-length area buffer */
-#define CHIPCOM_CFG_TX_BUFF_VLA_SIZE            (1604U)
+#define CHIPCOM_CFG_TX_BUFF_VLA_SIZE            (1104U)
 /* Address offset of transmit Variable-length area buffer */
 #define CHIPCOM_CFG_TX_BUFF_VLA_OFFS            (404U)
 
@@ -142,8 +142,9 @@ uint8 ChipCom_SendSignalDummy( Com_SignalIdType t_u2SignalId, const void* t_pvdS
 
 /* Core ID */
 #define CHIPCOM_CORE_ID_MASTER                  (2U)
+#define CHIPCOM_CORE_ID_SATELLITE1              (1U)
 /* Number of satellite */
-#define CHIPCOM_SATELLITE_NUM                   (0U)
+#define CHIPCOM_SATELLITE_NUM                   (1U)
 
 /* Number of receive message */
 #define CHIPCOM_CFG_RX_MSG_NUM                  (10U)
@@ -166,13 +167,13 @@ uint8 ChipCom_SendSignalDummy( Com_SignalIdType t_u2SignalId, const void* t_pvdS
 /* Size of received fixed-length area buffer */
 #define CHIPCOM_CFG_RX_BUFF_FLA_SIZE            (396U)
 /* Size of received Variable-length area buffer */
-#define CHIPCOM_CFG_RX_BUFF_VLA_SIZE            (1604U)
+#define CHIPCOM_CFG_RX_BUFF_VLA_SIZE            (1104U)
 /* Address offset of received Variable-length area buffer */
 #define CHIPCOM_CFG_RX_BUFF_VLA_OFFS            (404U)
 /* Size of transmit fixed-length area buffer */
 #define CHIPCOM_CFG_TX_BUFF_FLA_SIZE            (24U)
 /* Size of transmit Variable-length area buffer */
-#define CHIPCOM_CFG_TX_BUFF_VLA_SIZE            (1976U)
+#define CHIPCOM_CFG_TX_BUFF_VLA_SIZE            (1476U)
 /* Address offset of transmit Variable-length area buffer */
 #define CHIPCOM_CFG_TX_BUFF_VLA_OFFS            (32U)
 

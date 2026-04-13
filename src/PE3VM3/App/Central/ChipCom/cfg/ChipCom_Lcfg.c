@@ -123,7 +123,7 @@ const uint16 ChipCom_cu2TxBuffVlaSize = (uint16)CHIPCOM_CFG_TX_BUFF_VLA_SIZE;
 const uint16 ChipCom_cu2XspiHeaderSize = (uint16)CHIPCOM_CFG_XSPI_HEADER_SIZE;
 
 /* Division ratio of the communication cycle */
-const uint8 ChipCom_cu1ComTickDivRatio = (uint8)1U;
+const uint8 ChipCom_cu1ComTickDivRatio = (uint8)3U;
 /* XSPI Channel for ChipCom */
 const uint8 ChipCom_cu1XspiCh = (uint8)XSPI_CH_03;
 /* XSPI data initial value */
