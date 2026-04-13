@@ -280,7 +280,7 @@ void    vd_g_oXSECFvRead(const U4 u4_a_BOOTCAUSE)
     u4_tp_word[0] = u4_s_oxsec_fv_tripcnt;
     u4_tp_word[1] = u4_s_oxsec_fv_read_status;
     
-    (void)ehvm_vcc_transmit((U4)OXSEC_FV_VCC_TX_CH, (U4 *)&u4_tp_word, (U4)OXSEC_FV_VCC_NBYTE);
+    (void)ehvm_vcc_transmit((U4)OXSEC_FV_VCC_TX_CH, (U4 *)&u4_tp_word[0], (U4)OXSEC_FV_VCC_NBYTE);
 
     return;
 }

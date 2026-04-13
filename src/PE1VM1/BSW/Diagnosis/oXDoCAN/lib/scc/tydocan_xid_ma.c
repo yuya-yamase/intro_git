@@ -22,6 +22,7 @@
 
 #include "vCryCl.h"
 #include "Rte_Csm_Type.h"
+#include "vCryCl_def.h"
 
 #include "oxdocan_aubif_ma.h"
 
@@ -48,26 +49,36 @@
 #define TYDC_MAK_UV_EAS_CHK_SES                  (0x01U)  /* Session Transition Event */
 #define TYDC_MAK_UV_EAS_CHK_TOUT                 (0x02U)
 
+/* Key Update/Verify Ack and Key Update/Verify vCry Info */
 #define TYDC_MAK_UV_ACK_INA                      (0x00U)
 #define TYDC_MAK_UV_ACK_SUC                      (0x04U)
 #define TYDC_MAK_UV_ACK_FAI                      (0x08U)
+/* Only Key Update/Verify vCry Info */
+#define TYDC_MAK_UV_ACK_BUSY                     (0x10U)
+#define TYDC_MAK_UV_ACK_ACT                      (0x20U)
 
-#define TYDC_MAK_UV_NUM_CTRL                     (4U)
+#define TYDC_MAK_UV_VCRYI_TO                     ((U2)30000U  / (U2)OXDC_MAIN_TICK)
+
+#define TYDC_MAK_UV_NUM_CTRL                     (5U)
 #define TYDC_MAK_UV_CTRL_STA                     (0U)
 #define TYDC_MAK_UV_CTRL_RUN                     (1U)
-#define TYDC_MAK_UV_CTRL_FIN                     (2U)
-#define TYDC_MAK_UV_CTRL_INA                     (3U)
+#define TYDC_MAK_UV_CTRL_GET                     (2U)
+#define TYDC_MAK_UV_CTRL_FIN                     (3U)
+#define TYDC_MAK_UV_CTRL_INA                     (4U)
 
 #define TYDC_MAK_UV_ACT_TO_ACT                   (0U)
 #define TYDC_MAK_UV_ACT_TO_FIN                   (1U)
 #define TYDC_MAK_UV_ACT_TO_SUC                   (2U)
 #define TYDC_MAK_UV_ACT_TO_FAI                   (3U)
-#define TYDC_MAK_UV_ACT_STA                      (4U)
-#define TYDC_MAK_UV_ACT_RUN                      (5U)
-#define TYDC_MAK_UV_ACT_FIN                      (6U)
+#define TYDC_MAK_UV_ACT_TO_GET                   (4U)
+#define TYDC_MAK_UV_ACT_STA                      (5U)
+#define TYDC_MAK_UV_ACT_RUN                      (6U)
+#define TYDC_MAK_UV_ACT_GET                      (7U)
+#define TYDC_MAK_UV_ACT_FIN                      (8U)
 
-#define TYDC_MAK_UV_NUM_STM                      (48U)  /* TYDC_MAK_UV_NUM_CTRL(4U) *         */
-                                                        /* TYDC_MAK_UV_EAS_CHK_MAX(12) = 48U  */
+
+#define TYDC_MAK_UV_NUM_STM                      (60U)  /* TYDC_MAK_UV_NUM_CTRL(5U) *         */
+                                                        /* TYDC_MAK_UV_EAS_CHK_MAX(12) = 60U  */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define TYDC_MAK_SU_FAC_MAX                      (5U)
@@ -95,8 +106,8 @@
 #define TYDC_RID_D903_US_BLO                     (0x00U)
 #define TYDC_RID_D903_US_MAC                     (0x01U)
 
-#define TYDC_SEC_MACGEN_JOBID                    (CsmConf_CsmJob_Job45_MacGenerate_UseByKeyVerify)
-#define TYDC_SEC_ENCRYPTO_JOBID                  (CsmConf_CsmJob_Job48_Encrypt_UseByKeyVerify)
+#define TYDC_SEC_MACGEN_JOBID                    (VCRYCL_JOBID_MACGENERATE_USEBYKEYVERIFY)
+#define TYDC_SEC_ENCRYPTO_JOBID                  (VCRYCL_JOBID_ENCRYPT_USEBYKEYVERIFY)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define TYDC_M1_KEY_ID_POS                       (15U)    /* The position of the KEYID(SHE-ID and Auth-ID) in the M1 data */
@@ -107,11 +118,16 @@
 #define TYDC_CSM_MASTER_ECU_KEY                  (CsmConf_CsmKey_MasterEcuKey)
 #define TYDC_CSM_MAC_KEY                         (CsmConf_CsmKey_MacKey)
 
+#define TYDC_SEC_ELEID_SET                       (CRYPTO_KE_MAC_KEY)
+#define TYDC_SEC_ELEID_PLOOF                     (CRYPTO_KE_MAC_PROOF)
+
 #define TYDC_KEY_DATASIZE                        (64U)
 #define TYDC_KEY_NUM                             (2U)
 
-#define TYDC_CSM_JOBID_MASTER_ECU_KEY            (CsmConf_CsmJob_Job46_KeySetValid_MasterEcuKey)
-#define TYDC_CSM_JOBID_MAC_KEY                   (CsmConf_CsmJob_Job47_KeySetValid_MacKey)
+#define TYDC_SEC_JOBID_MASTERECUKEY_SET          (VCRYCL_JOBID_KEYUPDATE_MASTERECUKEY)
+#define TYDC_SEC_JOBID_MACKEY_SET                (VCRYCL_JOBID_KEYUPDATE_MACKEY)
+#define TYDC_SEC_JOBID_MASTERECUKEY_GET          (VCRYCL_JOBID_KEYELEMENTGET_MASTERECUKEY)
+#define TYDC_SEC_JOBID_MACKEY_GET                (VCRYCL_JOBID_KEYELEMENTGET_MACKEY)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -134,6 +150,9 @@
 #define TYDC_VCRY_VE_BID_KEY_US                   (1U)
 #define TYDC_VCRY_VE_BID_RN                       (2U)     /* Random Number                   */
 #define TYDC_VCRY_VE_BID_VD                       (18U)    /* Verified Data                   */
+
+#define TYDC_VCRY_OP_SET                          (0U)
+#define TYDC_VCRY_OP_GET                          (1U)
 typedef struct{
     U4*        u4p_req;
     U4*        u4p_rsl;
@@ -154,7 +173,10 @@ typedef struct{
 typedef struct{
     U4                      u4_csm_keyid;
     U4                      u4_keylength;
-    U4                      u4_jobid;
+    U4                      u4_jobid_set;
+    U4                      u4_jobid_get;
+    U4                      u4_elementid_set;
+    U4                      u4_elementid_get; 
     U1                      u1_she_keyid;
 }ST_TYDC_KEY_IF;
 
@@ -169,15 +191,18 @@ U4                           u4_g_tydc_rsl_nbyte;
 
 static ST_TYDC_VCRY_IO        st_s_tydc_vcry_io; 
 
-static U2                    u2_s_tydc_mak_uv_tm_elpsd;                     /* Key Update/Verify Elapsed       */
-static U1                    u1_s_tydc_mak_uv_ctrl;                         /* Key Update/Verify Control       */
+static U2                    u2_s_tydc_mak_uv_tm_elpsd;                     /* Key Update/Verify Elapsed            */
+static U1                    u1_s_tydc_mak_uv_ctrl;                         /* Key Update/Verify Control            */
 static U1                    u1_s_tydc_mak_uv_rid;
 static U1                    u1_s_tydc_mak_uv_run;
 
-static U1                    u1_s_tydc_mak_uv_ack;                          /* Key Update/Verify Ack           */
-static U1                    u1_s_tydc_mak_su_ack;                          /* Key Single Update Result        */
-static U1                    u1_s_tydc_mak_su_facnt;                        /* Key Single Update Failure Count */
-static U1                    u1_s_tydc_mak_kvf_chk;                         /* Key Verification Failure DTC    */
+static U1                    u1_s_tydc_mak_uv_ack;                          /* Key Update/Verify Ack                */
+static U1                    u1_s_tydc_mak_uv_vcryinfo;                     /* Key Update/Verify vCry Info          */
+static U2                    u2_s_tydc_mak_uv_vcinf_tm_elpsd;               /* Key Update/Verify vCry Info Elapsed  */
+static U1                    u1_s_tydc_mak_su_ack;                          /* Key Single Update Result             */
+static U1                    u1_s_tydc_mak_su_facnt;                        /* Key Single Update Failure Count      */
+static U1                    u1_s_tydc_mak_kvf_chk;                         /* Key Verification Failure DTC         */
+static U1                    u1_s_tydc_mak_uv_vcryinfo_mrr;                 /* Key Update/Verify vCry Info Mirror   */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -185,22 +210,25 @@ static void    vd_s_TydcMakUvAct_ToAct(void);
 static void    vd_s_TydcMakUvAct_ToFin(void);
 static void    vd_s_TydcMakUvAct_ToSuc(void);
 static void    vd_s_TydcMakUvAct_ToFai(void);
+static void    vd_s_TydcMakUvAct_ToGet(void);
 static void    vd_s_TydcMakUvAct_Sta(void);
 
 static void    vd_s_TydcXidMaKzkRxCnt(const U1 u1_a_KZK_RX);
-static void    vd_s_TydcXidMaUpdtStart(void);
+static void    vd_s_TydcXidMaUpdtStart(const U1 u1_a_VCRY_OP);
 static void    vd_s_TydcXidMaVerifStart(void);
 static U1      u1_s_TydcXidMaVerifChk(void);
 
 static void    vd_s_TydcXidMaKzkRx(const U2 u2_a_PDU, const ST_TYDC_KZK_RX * st_tp_RX);
 
+static void    vd_s_TydcXidMaVcryInfoProc(void);
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const ST_TYDC_KEY_IF            st_sp_TYDC_KEY_IF_CFG[] = {
-/*  u4_csm_keyid                  u4_keylength          u4_jobid                        u1_she_keyid*/
-    {TYDC_CSM_MASTER_ECU_KEY,     TYDC_KEY_DATASIZE,    TYDC_CSM_JOBID_MASTER_ECU_KEY,  TYDC_SHE_MASTER_ECU_KEY},
-    {TYDC_CSM_MAC_KEY,            TYDC_KEY_DATASIZE,    TYDC_CSM_JOBID_MAC_KEY,         TYDC_SHE_MAC_KEY}
+/*  u4_csm_keyid                  u4_keylength           u4_jobid_set                         u4_jobid_get                         u4_elementid_set        u4_elementid_get          u1_she_keyid*/
+    {(U4)TYDC_CSM_MASTER_ECU_KEY, (U4)TYDC_KEY_DATASIZE, (U4)TYDC_SEC_JOBID_MASTERECUKEY_SET, (U4)TYDC_SEC_JOBID_MASTERECUKEY_GET, (U4)TYDC_SEC_ELEID_SET, (U4)TYDC_SEC_ELEID_PLOOF, (U1)TYDC_SHE_MASTER_ECU_KEY},
+    {(U4)TYDC_CSM_MAC_KEY,        (U4)TYDC_KEY_DATASIZE, (U4)TYDC_SEC_JOBID_MACKEY_SET,       (U4)TYDC_SEC_JOBID_MACKEY_GET,       (U4)TYDC_SEC_ELEID_SET, (U4)TYDC_SEC_ELEID_PLOOF, (U1)TYDC_SHE_MAC_KEY}
 };
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
@@ -231,6 +259,9 @@ void    vd_g_TyDoCANXidMaInit(void)
     u1_s_tydc_mak_uv_run          = (U1)0U;
 
     u1_s_tydc_mak_uv_ack          = (U1)TYDC_MAK_UV_ACK_INA;
+    u1_s_tydc_mak_uv_vcryinfo     = (U1)TYDC_MAK_UV_ACK_INA;
+    u1_s_tydc_mak_uv_vcryinfo_mrr = (U1)TYDC_MAK_UV_ACK_INA;
+    u2_s_tydc_mak_uv_vcinf_tm_elpsd = (U2)0U;
     u1_s_tydc_mak_su_ack          = (U1)TYDC_MAK_UV_ACK_INA;
     u1_s_tydc_mak_su_facnt        = (U1)0U;
     u1_s_tydc_mak_kvf_chk         = (U1)OXDC_DTC_TR_UNK;
@@ -247,64 +278,68 @@ void    vd_g_TyDoCANXidMaMainTask(const ST_OXDC_REQ * st_ap_REQ)
         /* TYDC_MAK_UV_RID_D904 (0U) */
         (U2)600U  / (U2)OXDC_MAIN_TICK,   /* TYDC_MAK_UV_CTRL_STA (0U) */
         (U2)600U  / (U2)OXDC_MAIN_TICK,   /* TYDC_MAK_UV_CTRL_RUN (1U) */
-        (U2)0U,                           /* TYDC_MAK_UV_CTRL_FIN (2U) */
-        (U2)0U,                           /* TYDC_MAK_UV_CTRL_INA (3U) */
+        (U2)600U  / (U2)OXDC_MAIN_TICK,   /* TYDC_MAK_UV_CTRL_GET (2U) */
+        (U2)0U,                           /* TYDC_MAK_UV_CTRL_FIN (3U) */
+        (U2)0U,                           /* TYDC_MAK_UV_CTRL_INA (4U) */
 
         /* TYDC_MAK_UV_RID_D902 (1U) */
         (U2)6000U / (U2)OXDC_MAIN_TICK,   /* TYDC_MAK_UV_CTRL_STA (0U) */
         (U2)6000U / (U2)OXDC_MAIN_TICK,   /* TYDC_MAK_UV_CTRL_RUN (1U) */
-        (U2)0U,                           /* TYDC_MAK_UV_CTRL_FIN (2U) */
-        (U2)0U,                           /* TYDC_MAK_UV_CTRL_INA (3U) */
+        (U2)6000U / (U2)OXDC_MAIN_TICK,   /* TYDC_MAK_UV_CTRL_GET (2U) */
+        (U2)0U,                           /* TYDC_MAK_UV_CTRL_FIN (3U) */
+        (U2)0U,                           /* TYDC_MAK_UV_CTRL_INA (4U) */
 
         /* TYDC_MAK_UV_RID_D903 (2U) */
         (U2)5800U / (U2)OXDC_MAIN_TICK,   /* TYDC_MAK_UV_CTRL_STA (0U) */
         (U2)5800U / (U2)OXDC_MAIN_TICK,   /* TYDC_MAK_UV_CTRL_RUN (1U) */
-        (U2)0U,                           /* TYDC_MAK_UV_CTRL_FIN (2U) */
-        (U2)0U                            /* TYDC_MAK_UV_CTRL_INA (3U) */
+        (U2)5800U / (U2)OXDC_MAIN_TICK,   /* TYDC_MAK_UV_CTRL_GET (2U) */
+        (U2)0U,                           /* TYDC_MAK_UV_CTRL_FIN (3U) */
+        (U2)0U                            /* TYDC_MAK_UV_CTRL_INA (4U) */
     };
 
     static const U1               u1_sp_TYDC_MAK_UV_STM[] = {
+        /*STA                       RUN                         GET                         FIN                      INA                      */
         /* TYDC_MAK_UV_RID_D904 (0U) */
-        (U1)TYDC_MAK_UV_ACT_STA,    (U1)TYDC_MAK_UV_ACT_RUN,    (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
-        (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
-        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
-        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
-        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_SUC, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
-        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_SUC, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
-        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_SUC, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
-        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_SUC, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
-        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
-        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
-        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
-        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
+        (U1)TYDC_MAK_UV_ACT_STA,    (U1)TYDC_MAK_UV_ACT_RUN,    (U1)TYDC_MAK_UV_ACT_GET,    (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
+        (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
+        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
+        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
+        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_GET, (U1)TYDC_MAK_UV_ACT_TO_SUC, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
+        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_SUC, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
+        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_SUC, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
+        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_SUC, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
+        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
+        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
+        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
+        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
 
         /* TYDC_MAK_UV_RID_D902 (1U) */
-        (U1)TYDC_MAK_UV_ACT_STA,    (U1)TYDC_MAK_UV_ACT_RUN,    (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
-        (U1)TYDC_MAK_UV_ACT_STA,    (U1)TYDC_MAK_UV_ACT_RUN,    (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
-        (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
-        (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
-        (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
-        (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
-        (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
-        (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
-        (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
-        (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
-        (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
-        (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
+        (U1)TYDC_MAK_UV_ACT_STA,    (U1)TYDC_MAK_UV_ACT_RUN,    (U1)TYDC_MAK_UV_ACT_GET,    (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
+        (U1)TYDC_MAK_UV_ACT_STA,    (U1)TYDC_MAK_UV_ACT_RUN,    (U1)TYDC_MAK_UV_ACT_GET,    (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
+        (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
+        (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
+        (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_TO_GET, (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
+        (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
+        (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
+        (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
+        (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
+        (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
+        (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
+        (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_TO_FIN, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
 
         /* TYDC_MAK_UV_RID_D903 (2U) */
-        (U1)TYDC_MAK_UV_ACT_STA,    (U1)TYDC_MAK_UV_ACT_RUN,    (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
-        (U1)TYDC_MAK_UV_ACT_STA,    (U1)TYDC_MAK_UV_ACT_RUN,    (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
-        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
-        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
-        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_SUC, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
-        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_SUC, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
-        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_SUC, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
-        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_SUC, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
-        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
-        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
-        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
-        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT
+        (U1)TYDC_MAK_UV_ACT_STA,    (U1)TYDC_MAK_UV_ACT_RUN   , (U1)TYDC_MAK_UV_ACT_GET,    (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
+        (U1)TYDC_MAK_UV_ACT_STA,    (U1)TYDC_MAK_UV_ACT_RUN   , (U1)TYDC_MAK_UV_ACT_GET,    (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
+        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
+        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
+        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_SUC, (U1)TYDC_MAK_UV_ACT_TO_SUC, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
+        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_SUC, (U1)TYDC_MAK_UV_ACT_TO_SUC, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
+        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_SUC, (U1)TYDC_MAK_UV_ACT_TO_SUC, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
+        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_SUC, (U1)TYDC_MAK_UV_ACT_TO_SUC, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
+        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
+        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
+        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT,
+        (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_TO_FAI, (U1)TYDC_MAK_UV_ACT_FIN, (U1)TYDC_MAK_UV_ACT_TO_ACT
     };
 
     static void ( * const         fp_sp_vd_TYDC_MAK_UV_ACT[])(void) = {
@@ -312,15 +347,19 @@ void    vd_g_TyDoCANXidMaMainTask(const ST_OXDC_REQ * st_ap_REQ)
         &vd_s_TydcMakUvAct_ToFin,     /* TYDC_MAK_UV_ACT_TO_FIN (1U) */
         &vd_s_TydcMakUvAct_ToSuc,     /* TYDC_MAK_UV_ACT_TO_SUC (2U) */
         &vd_s_TydcMakUvAct_ToFai,     /* TYDC_MAK_UV_ACT_TO_FAI (3U) */
-        &vd_s_TydcMakUvAct_Sta,       /* TYDC_MAK_UV_ACT_STA    (4U) */
-                                      /* TYDC_MAK_UV_ACT_RUN    (5U) */
-                                      /* TYDC_MAK_UV_ACT_FIN    (6U) */
+        &vd_s_TydcMakUvAct_ToGet,     /* TYDC_MAK_UV_ACT_TO_GET (4U) */
+        &vd_s_TydcMakUvAct_Sta,       /* TYDC_MAK_UV_ACT_STA    (5U) */
+                                      /* TYDC_MAK_UV_ACT_RUN    (6U) */
+                                      /* TYDC_MAK_UV_ACT_GET    (7U) */
+                                      /* TYDC_MAK_UV_ACT_FIN    (8U) */
     };
 
     U2                            u2_t_tout;
     U2                            u2_t_act;
     U1                            u1_t_ign_on;
     U1                            u1_t_eas_chk;
+
+    vd_s_TydcXidMaVcryInfoProc();
 
     u1_t_ign_on = st_ap_REQ->u1_eom_aft & (U1)OXDC_EOM_IGN_ON;
     if((u1_t_ign_on           != (U1)OXDC_EOM_IGN_ON     ) ||
@@ -462,7 +501,7 @@ U1      u1_g_oXDoCANRoutStart_D904(U1 * u1_ap_ans, const U2 u2_a_ELPSD, U2 * u2_
         u1_s_tydc_mak_uv_ack        = (U1)TYDC_MAK_UV_ACK_INA;
         u1_s_tydc_mak_su_ack        = (U1)TYDC_MAK_UV_ACK_INA;
 
-        vd_s_TydcXidMaUpdtStart();
+        vd_s_TydcXidMaUpdtStart((U1)TYDC_VCRY_OP_SET);
 
         u1_ap_ans[0] = (U1)TYDC_RID_D904_ANS_RINFO;
         u1_ap_ans[1] = (U1)TYDC_RID_D904_ANS_RUN;
@@ -618,7 +657,7 @@ U1      u1_g_oXDoCANRoutStart_D903(U1 * u1_ap_ans, const U2 u2_a_ELPSD, U2 * u2_
     return(u1_t_proc);
 }
 /*===================================================================================================================================*/
-/*  void    vd_g_TyDoCANAubIfComKzkRx(const U2 u2_a_PDU)                                                                         */
+/*  void    vd_g_TyDoCANAubIfComKzkRx(const U2 u2_a_PDU)                                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -646,11 +685,19 @@ void    vd_g_TyDoCANAubIfComKzkRx(const U2 u2_a_PDU)
 void   vd_g_TyDoCANAubIfKeyAck(U4 u4_a_jobId, Crypto_ResultType u1_a_rslt)
 {
     if(u1_a_rslt == (U1)E_OK){
-        u1_s_tydc_mak_uv_ack = (U1)TYDC_MAK_UV_ACK_SUC;
+        u1_s_tydc_mak_uv_vcryinfo     = (U1)TYDC_MAK_UV_ACK_SUC;
+        u1_s_tydc_mak_uv_vcryinfo_mrr = (U1)TYDC_MAK_UV_ACK_SUC;
+    }
+    else if (u1_a_rslt == (U1)CRYPTO_E_BUSY){
+        u1_s_tydc_mak_uv_vcryinfo     = (U1)TYDC_MAK_UV_ACK_BUSY;
+        u1_s_tydc_mak_uv_vcryinfo_mrr = (U1)TYDC_MAK_UV_ACK_BUSY;
     }
     else{
-        u1_s_tydc_mak_uv_ack = (U1)TYDC_MAK_UV_ACK_FAI;
+        u1_s_tydc_mak_uv_vcryinfo     = (U1)TYDC_MAK_UV_ACK_FAI;
+        u1_s_tydc_mak_uv_vcryinfo_mrr = (U1)TYDC_MAK_UV_ACK_FAI;
     }
+
+    u2_s_tydc_mak_uv_vcinf_tm_elpsd = (U2)0U;
 }
 
 /*===================================================================================================================================*/
@@ -767,6 +814,16 @@ static void    vd_s_TydcMakUvAct_ToFai(void)
     u1_s_tydc_mak_uv_ack        = (U1)TYDC_MAK_UV_ACK_INA;
 }
 /*===================================================================================================================================*/
+/*  static void    vd_s_TydcMakUvAct_ToGet(void)                                                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_TydcMakUvAct_ToGet(void)
+{
+    vd_s_TydcXidMaUpdtStart((U1)TYDC_VCRY_OP_GET);
+}
+/*===================================================================================================================================*/
 /*  static void    vd_s_TydcMakUvAct_Sta(void)                                                                                       */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -777,7 +834,7 @@ static void    vd_s_TydcMakUvAct_Sta(void)
     if(u1_s_tydc_mak_uv_rid > (U1)TYDC_MAK_UV_RID_D903){
     }
     else if(u1_s_tydc_mak_uv_rid == (U1)TYDC_MAK_UV_RID_D904){
-        vd_s_TydcXidMaUpdtStart();
+        vd_s_TydcXidMaUpdtStart((U1)TYDC_VCRY_OP_SET);
     }
     else if(u1_s_tydc_mak_uv_rid == (U1)TYDC_MAK_UV_RID_D902){
 
@@ -785,7 +842,7 @@ static void    vd_s_TydcMakUvAct_Sta(void)
             vd_s_TydcXidMaKzkRxCnt((U1)TYDC_KZK_RX_D902);
         }
         else{
-            vd_s_TydcXidMaUpdtStart();
+            vd_s_TydcXidMaUpdtStart((U1)TYDC_VCRY_OP_SET);
         }
     }
     else{
@@ -857,12 +914,12 @@ static void    vd_s_TydcXidMaKzkRxCnt(const U1 u1_a_KZK_RX)
     }
 }
 /*===================================================================================================================================*/
-/*  static void    vd_s_TydcXidMaUpdtStart(void)                                                                                     */
+/*  static void    vd_s_TydcXidMaUpdtStart(const U1 u1_a_VCRY_OP)                                                                    */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static void    vd_s_TydcXidMaUpdtStart(void)
+static void    vd_s_TydcXidMaUpdtStart(const U1 u1_a_VCRY_OP)
 {
     const U1 *                    u1_tp_MX;
 
@@ -870,30 +927,55 @@ static void    vd_s_TydcXidMaUpdtStart(void)
     U1                            u1_t_keyid;
     U4                            u4_t_loop_cnt;
 
-    if(st_s_tydc_vcry_io.u1_req_sel == (U1)0U){
-        u1_tp_MX = (const U1 *)&(st_s_tydc_vcry_io.u4p_req[TYDC_VCRY_REQ_0]);
-    }
-    else{
-        u1_tp_MX = (const U1 *)&(st_s_tydc_vcry_io.u4p_req[TYDC_VCRY_REQ_1]);
-    }
+    if(u1_s_tydc_mak_uv_vcryinfo == (U1)TYDC_MAK_UV_ACK_INA){
 
-    *(st_s_tydc_vcry_io.u4p_rsl_nbyte) = (U4)TYDC_VCRY_UP_RSL_NBYTE;
+        if(st_s_tydc_vcry_io.u1_req_sel == (U1)0U){
+            u1_tp_MX = (const U1 *)&(st_s_tydc_vcry_io.u4p_req[TYDC_VCRY_REQ_0]);
+        }
+        else{
+            u1_tp_MX = (const U1 *)&(st_s_tydc_vcry_io.u4p_req[TYDC_VCRY_REQ_1]);
+        }
 
-    u1_t_m1keyid  = u1_tp_MX[TYDC_M1_KEY_ID_POS];
-    u1_t_keyid = (U1)((u1_t_m1keyid >> 4) & (U1)TYDC_VCRY_UP_KEY_SHE_FIELD);
+        *(st_s_tydc_vcry_io.u4p_rsl_nbyte) = (U4)TYDC_VCRY_UP_RSL_NBYTE;
 
-    for(u4_t_loop_cnt = (U4)0U; u4_t_loop_cnt < (U4)TYDC_KEY_NUM; u4_t_loop_cnt++){
+        u1_t_m1keyid  = u1_tp_MX[TYDC_M1_KEY_ID_POS];
+        u1_t_keyid = (U1)((u1_t_m1keyid >> 4) & (U1)TYDC_VCRY_UP_KEY_SHE_FIELD);
 
-        if(u1_t_keyid == st_sp_TYDC_KEY_IF_CFG[u4_t_loop_cnt].u1_she_keyid){
-            if((u1_s_tydc_mak_uv_rid == (U1)TYDC_MAK_UV_RID_D904) || ((u1_s_tydc_mak_uv_rid == (U1)TYDC_MAK_UV_RID_D902) && (u1_t_keyid == (U1)TYDC_SHE_MAC_KEY))){
-                vd_g_vCryCl_KeyUpdate(st_sp_TYDC_KEY_IF_CFG[u4_t_loop_cnt].u4_csm_keyid,
-                                        u1_tp_MX,
-                                        st_sp_TYDC_KEY_IF_CFG[u4_t_loop_cnt].u4_keylength,
-                                        st_sp_TYDC_KEY_IF_CFG[u4_t_loop_cnt].u4_jobid,
-                                            (U1 *)&(st_s_tydc_vcry_io.u4p_rsl[0]),
-                                            st_s_tydc_vcry_io.u4p_rsl_nbyte);
-                u1_s_tydc_mak_uv_ctrl = (U1)TYDC_MAK_UV_CTRL_RUN;
-                break;
+        for(u4_t_loop_cnt = (U4)0U; u4_t_loop_cnt < (U4)TYDC_KEY_NUM; u4_t_loop_cnt++){
+
+            if(u1_t_keyid == st_sp_TYDC_KEY_IF_CFG[u4_t_loop_cnt].u1_she_keyid){
+                if(u1_a_VCRY_OP == (U1)TYDC_VCRY_OP_SET){
+                    if((u1_s_tydc_mak_uv_rid == (U1)TYDC_MAK_UV_RID_D904) ||
+                       ((u1_s_tydc_mak_uv_rid == (U1)TYDC_MAK_UV_RID_D902) && (u1_t_keyid == (U1)TYDC_SHE_MAC_KEY))){
+                        
+                        u1_s_tydc_mak_uv_vcryinfo = (U1)TYDC_MAK_UV_ACK_ACT;
+                        u1_s_tydc_mak_uv_vcryinfo_mrr = (U1)TYDC_MAK_UV_ACK_ACT;
+                        u2_s_tydc_mak_uv_vcinf_tm_elpsd = (U2)0U;
+                        
+                        vd_g_vCryCl_KeyUpdate(st_sp_TYDC_KEY_IF_CFG[u4_t_loop_cnt].u4_csm_keyid,
+                                                st_sp_TYDC_KEY_IF_CFG[u4_t_loop_cnt].u4_elementid_set,
+                                                u1_tp_MX,
+                                                st_sp_TYDC_KEY_IF_CFG[u4_t_loop_cnt].u4_keylength,
+                                                st_sp_TYDC_KEY_IF_CFG[u4_t_loop_cnt].u4_jobid_set);
+
+                        u1_s_tydc_mak_uv_ctrl = (U1)TYDC_MAK_UV_CTRL_RUN;
+                        break;
+                    }
+                }
+                else{
+                    u1_s_tydc_mak_uv_vcryinfo = (U1)TYDC_MAK_UV_ACK_ACT;
+                    u1_s_tydc_mak_uv_vcryinfo_mrr = (U1)TYDC_MAK_UV_ACK_ACT;
+                    u2_s_tydc_mak_uv_vcinf_tm_elpsd = (U2)0U;
+
+                    vd_g_vCryCl_KeyElementGet(st_sp_TYDC_KEY_IF_CFG[u4_t_loop_cnt].u4_csm_keyid,
+                                                st_sp_TYDC_KEY_IF_CFG[u4_t_loop_cnt].u4_elementid_get,
+                                                (U1 *)&(st_s_tydc_vcry_io.u4p_rsl[0]),
+                                                st_s_tydc_vcry_io.u4p_rsl_nbyte,
+                                                st_sp_TYDC_KEY_IF_CFG[u4_t_loop_cnt].u4_jobid_get);
+
+                    u1_s_tydc_mak_uv_ctrl = (U1)TYDC_MAK_UV_CTRL_GET;
+                    break;
+                }
             }
         }
     }
@@ -908,43 +990,55 @@ static void    vd_s_TydcXidMaVerifStart(void)
 {
     const U1 *                    u1_tp_KZK;
 
-    if(st_s_tydc_vcry_io.u1_req_sel == (U1)0U){
-        u1_tp_KZK = (const U1 *)&(st_s_tydc_vcry_io.u4p_req[TYDC_VCRY_REQ_0]);
+
+
+    if(u1_s_tydc_mak_uv_vcryinfo == (U1)TYDC_MAK_UV_ACK_INA){
+        if(st_s_tydc_vcry_io.u1_req_sel == (U1)0U){
+            u1_tp_KZK = (const U1 *)&(st_s_tydc_vcry_io.u4p_req[TYDC_VCRY_REQ_0]);
+        }
+        else{
+            u1_tp_KZK = (const U1 *)&(st_s_tydc_vcry_io.u4p_req[TYDC_VCRY_REQ_1]);
+        }
+
+        if(u1_tp_KZK[TYDC_VCRY_VE_BID_KEY_US] == (U1)TYDC_RID_D903_US_MAC){
+
+            *(st_s_tydc_vcry_io.u4p_rsl_nbyte) = (U4)TYDC_VCRY_VE_IO_NBYTE;
+
+            u1_s_tydc_mak_uv_vcryinfo       = (U1)TYDC_MAK_UV_ACK_ACT;
+            u1_s_tydc_mak_uv_vcryinfo_mrr   = (U1)TYDC_MAK_UV_ACK_ACT;
+            u2_s_tydc_mak_uv_vcinf_tm_elpsd = (U2)0U;
+
+            vd_g_vCryCl_MacGenerate ( (U4)TYDC_SEC_MACGEN_JOBID, 
+                                            (U1)CRYPTO_OPERATIONMODE_SINGLECALL, 
+                                            &u1_tp_KZK[TYDC_VCRY_VE_BID_RN],                                /* const uint8 *          */
+                                            (U4)TYDC_VCRY_VE_IO_NBYTE,                                      /* uint32                 */
+                                            (U1 *)&(st_s_tydc_vcry_io.u4p_rsl[0]),                          /* uint8 *                */
+                                            st_s_tydc_vcry_io.u4p_rsl_nbyte);                             /* uint32 *               */
+
+
+        }
+        else if(u1_tp_KZK[TYDC_VCRY_VE_BID_KEY_US] == (U1)TYDC_RID_D903_US_BLO){
+
+            *(st_s_tydc_vcry_io.u4p_rsl_nbyte) = (U4)TYDC_VCRY_VE_IO_NBYTE;
+
+            u1_s_tydc_mak_uv_vcryinfo       = (U1)TYDC_MAK_UV_ACK_ACT;
+            u1_s_tydc_mak_uv_vcryinfo_mrr   = (U1)TYDC_MAK_UV_ACK_ACT;
+            u2_s_tydc_mak_uv_vcinf_tm_elpsd = (U2)0U;
+
+            vd_g_vCryCl_Encrypt ( (U4)TYDC_SEC_ENCRYPTO_JOBID,
+                                            (U1)CRYPTO_OPERATIONMODE_SINGLECALL, 
+                                            &u1_tp_KZK[TYDC_VCRY_VE_BID_RN],                          /* const uint8 *          */
+                                            (U4)TYDC_VCRY_VE_IO_NBYTE,                                /* uint32                 */
+                                            (U1 *)&(st_s_tydc_vcry_io.u4p_rsl[0]),                    /* uint8 *                */
+                                            st_s_tydc_vcry_io.u4p_rsl_nbyte);                       /* uint32 *               */
+
+        }
+        else{
+            u1_s_tydc_mak_uv_ack = (U1)TYDC_MAK_UV_ACK_FAI;
+        }
+
+        u1_s_tydc_mak_uv_ctrl = (U1)TYDC_MAK_UV_CTRL_RUN;
     }
-    else{
-        u1_tp_KZK = (const U1 *)&(st_s_tydc_vcry_io.u4p_req[TYDC_VCRY_REQ_1]);
-    }
-
-    if(u1_tp_KZK[TYDC_VCRY_VE_BID_KEY_US] == (U1)TYDC_RID_D903_US_MAC){
-
-        *(st_s_tydc_vcry_io.u4p_rsl_nbyte) = (U4)TYDC_VCRY_VE_IO_NBYTE;
-
-        vd_g_vCryCl_MacGenerate ( (U4)TYDC_SEC_MACGEN_JOBID, 
-                                        (U1)CRYPTO_OPERATIONMODE_SINGLECALL, 
-                                        &u1_tp_KZK[TYDC_VCRY_VE_BID_RN],                                /* const uint8 *          */
-                                        (U4)TYDC_VCRY_VE_IO_NBYTE,                                      /* uint32                 */
-                                        (U1 *)&(st_s_tydc_vcry_io.u4p_rsl[0]),                          /* uint8 *                */
-                                        st_s_tydc_vcry_io.u4p_rsl_nbyte);                             /* uint32 *               */
-
-    }
-    else if(u1_tp_KZK[TYDC_VCRY_VE_BID_KEY_US] == (U1)TYDC_RID_D903_US_BLO){
-
-        *(st_s_tydc_vcry_io.u4p_rsl_nbyte) = (U4)TYDC_VCRY_VE_IO_NBYTE;
-
-        vd_g_vCryCl_Encrypt ( (U4)TYDC_SEC_ENCRYPTO_JOBID,
-                                        (U1)CRYPTO_OPERATIONMODE_SINGLECALL, 
-                                        &u1_tp_KZK[TYDC_VCRY_VE_BID_RN],                          /* const uint8 *          */
-                                        (U4)TYDC_VCRY_VE_IO_NBYTE,                                /* uint32                 */
-                                        (U1 *)&(st_s_tydc_vcry_io.u4p_rsl[0]),                    /* uint8 *                */
-                                        st_s_tydc_vcry_io.u4p_rsl_nbyte);                       /* uint32 *               */
-
-    }
-    else{
-        u1_s_tydc_mak_uv_ack = (U1)TYDC_MAK_UV_ACK_FAI;
-    }
-
-    u1_s_tydc_mak_uv_ctrl = (U1)TYDC_MAK_UV_CTRL_RUN;
-
 }
 /*===================================================================================================================================*/
 /*  static U1      u1_s_TydcXidMaVerifChk(void)                                                                                      */
@@ -967,8 +1061,8 @@ static U1      u1_s_TydcXidMaVerifChk(void)
         u1_tp_BLO_CRI = (const U1 *)&(st_s_tydc_vcry_io.u4p_req[TYDC_VCRY_REQ_1]);
     }
 
-    if((u1_tp_BLO_CRI[TYDC_VCRY_VE_BID_KEY_US] == (U1)TYDC_RID_D903_US_MAC)
-       ||(u1_tp_BLO_CRI[TYDC_VCRY_VE_BID_KEY_US] == (U1)TYDC_RID_D903_US_BLO)){
+    if((u1_tp_BLO_CRI[TYDC_VCRY_VE_BID_KEY_US] == (U1)TYDC_RID_D903_US_MAC) ||
+       (u1_tp_BLO_CRI[TYDC_VCRY_VE_BID_KEY_US] == (U1)TYDC_RID_D903_US_BLO)){
 
         u1_t_dtc_act  = (U1)OXDC_DTC_TR_INA;
         u1_tp_BLO_CRI = &u1_tp_BLO_CRI[TYDC_VCRY_VE_BID_VD];
@@ -1022,6 +1116,59 @@ static void    vd_s_TydcXidMaKzkRx(const U2 u2_a_PDU, const ST_TYDC_KZK_RX * st_
         }
     }
 }
+/*===================================================================================================================================*/
+/*  static void    vd_s_TydcXidMaVcryInfoProc(void)                                                                                  */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void      vd_s_TydcXidMaVcryInfoProc(void)
+{
+    if(u1_s_tydc_mak_uv_vcryinfo != u1_s_tydc_mak_uv_vcryinfo_mrr){
+        u1_s_tydc_mak_uv_vcryinfo       = (U1)TYDC_MAK_UV_ACK_ACT;
+        u1_s_tydc_mak_uv_vcryinfo_mrr   = (U1)TYDC_MAK_UV_ACK_ACT;
+        u2_s_tydc_mak_uv_vcinf_tm_elpsd = (U2)0U; 
+    }
+
+    if(u1_s_tydc_mak_uv_vcryinfo == (U1)TYDC_MAK_UV_ACK_ACT){
+        if(u2_s_tydc_mak_uv_vcinf_tm_elpsd >= (U2)TYDC_MAK_UV_VCRYI_TO){
+            u1_s_tydc_mak_uv_vcryinfo       = (U1)TYDC_MAK_UV_ACK_INA;
+            u1_s_tydc_mak_uv_vcryinfo_mrr   = (U1)TYDC_MAK_UV_ACK_INA;
+            u2_s_tydc_mak_uv_vcinf_tm_elpsd = (U2)0U;
+        }
+        else{
+            u2_s_tydc_mak_uv_vcinf_tm_elpsd++; 
+        }
+    }
+    else if ((u1_s_tydc_mak_uv_vcryinfo == (U1)TYDC_MAK_UV_ACK_BUSY)) {
+        if(u1_s_tydc_mak_uv_ctrl == (U1)TYDC_MAK_UV_CTRL_RUN){
+            u1_s_tydc_mak_uv_ctrl = (U1)TYDC_MAK_UV_CTRL_STA;
+        }
+        else if(u1_s_tydc_mak_uv_ctrl == (U1)TYDC_MAK_UV_CTRL_GET){
+            u1_s_tydc_mak_uv_ctrl = (U1)TYDC_MAK_UV_CTRL_RUN;
+            u1_s_tydc_mak_uv_ack  = (U1)TYDC_MAK_UV_ACK_SUC;
+        }
+        else{
+            /* Do Nothing */
+        }
+
+        u1_s_tydc_mak_uv_vcryinfo     = (U1)TYDC_MAK_UV_ACK_INA;
+        u1_s_tydc_mak_uv_vcryinfo_mrr = (U1)TYDC_MAK_UV_ACK_INA;
+
+    }
+    else if ((u1_s_tydc_mak_uv_vcryinfo == (U1)TYDC_MAK_UV_ACK_SUC) ||
+             (u1_s_tydc_mak_uv_vcryinfo == (U1)TYDC_MAK_UV_ACK_FAI)){
+
+        u1_s_tydc_mak_uv_ack          = u1_s_tydc_mak_uv_vcryinfo;
+        u1_s_tydc_mak_uv_vcryinfo     = (U1)TYDC_MAK_UV_ACK_INA;
+        u1_s_tydc_mak_uv_vcryinfo_mrr = (U1)TYDC_MAK_UV_ACK_INA;
+
+    }
+    else{
+        /* No update for u1_s_tydc_mak_uv_ack and u1_s_tydc_mak_uv_vcryinfo(_mrr) */    
+    }
+}
+
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
