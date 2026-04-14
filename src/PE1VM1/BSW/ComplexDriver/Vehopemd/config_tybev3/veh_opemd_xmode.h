@@ -34,22 +34,32 @@
 
 #define VEH_OPEMD_MDBIT_DIAG                     (0x00000080U)  /* BDC1S81.VPSINFOx =                                       0x1e     */
                                                                 /* BDC1S81.VPSINFOS = 0x00                                           */
+
+#warning "BEVCDCFD-2619"
+#if 0 /* BEVCDCFD-2619 */
 #define VEH_OPEMD_MDBIT_FIELDS                   (0x0000009eU)
+#else /* BEVCDCFD-2619 */
+#define VEH_OPEMD_MDBIT_FIELDS                   (0x0000007eU)  /* "VEH_OPEMD_MDBIT_DIAG" does not retain the previous value.        */
+#endif /* BEVCDCFD-2619 */
+                                                                /* It is not included in "VEH_OPEMD_MDBIT_FIELDS".                   */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VEH_OPEMD_EVBIT_ACC_TO_ON                (0x00000002U)
 #define VEH_OPEMD_EVBIT_IG_P_TO_ON               (0x00000004U)
 #define VEH_OPEMD_EVBIT_PBA_TO_ON                (0x00000008U)
 #define VEH_OPEMD_EVBIT_IG_R_TO_ON               (0x00000010U)
-#define VEH_OPEMD_EVBIT_DIAG_TO_ON               (0x00000080U)
 
 #define VEH_OPEMD_EVBIT_ACC_TO_OFF               (0x00020000U)
 #define VEH_OPEMD_EVBIT_IG_P_TO_OFF              (0x00040000U)
 #define VEH_OPEMD_EVBIT_PBA_TO_OFF               (0x00080000U)
 #define VEH_OPEMD_EVBIT_IG_R_TO_OFF              (0x00100000U)
-#define VEH_OPEMD_EVBIT_DIAG_TO_OFF              (0x00800000U)
 
+#warning "BEVCDCFD-2619"
+#if 0 /* BEVCDCFD-2619 */
 #define VEH_OPEMD_EVBIT_FIELDS                   (0x009e009eU)
+#else /* BEVCDCFD-2619 */
+#define VEH_OPEMD_EVBIT_FIELDS                   (0x007e007eU)
+#endif /* BEVCDCFD-2619 */
 
 #define VEH_OPEMD_PTS_INV_OFF                    (0U)
 #define VEH_OPEMD_PTS_INV_ON                     (1U)

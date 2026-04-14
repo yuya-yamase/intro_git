@@ -30,8 +30,6 @@
 
 #include <Ecu_Memmap_SdaDisableE_env.h>
 
-#include "vCryCl.h"
-
 #if (PROCESSING_LOAD_MEASURE_TIME > 0)
 #include "gpt_drv_frt.h"
 
@@ -92,7 +90,6 @@ TASK(eMCOS_TASK_High)
 /* Task hook start */
 
     BswM_CS_MainFunctionHigh();
-    vd_g_vCryCl_MainFunction();
 
 /* Task hook end */
 #if (PROCESSING_LOAD_MEASURE_TIME > 0)
