@@ -26,7 +26,7 @@
 #if ((HMILOCALE_C_MAJOR != HMILOCALE_H_MAJOR) || \
      (HMILOCALE_C_MINOR != HMILOCALE_H_MINOR) || \
      (HMILOCALE_C_PATCH != HMILOCALE_H_PATCH))
-#error "hmiodo.c and hmiodo.h : source and header files are inconsistent!"
+#error "hmilocale.c and hmilocale.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
