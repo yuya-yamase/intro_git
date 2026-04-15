@@ -52,11 +52,11 @@
 
 /* Request frame offset */
 #define FWUSH_REQ_SUBTYPE_OFFSET                (0U)
-#define FWUSH_REQ_SEQCNT_OFFSET                 (7U)
-#define FWUSH_REQ_PREP_CUR_TARGET_OFFSET        (1U)
-#define FWUSH_REQ_PREP_ALL_TARGET_OFFSET        (2U)
-#define FWUSH_REQ_PREP_DATA_CRC_OFFSET          (0U)
+#define FWUSH_REQ_CUR_TARGET_OFFSET             (1U)
+#define FWUSH_REQ_ALL_TARGET_OFFSET             (2U)
 #define FWUSH_REQ_RUN_BLKOFS_OFFSET             (3U)
+#define FWUSH_REQ_SEQCNT_OFFSET                 (7U)
+#define FWUSH_REQ_PREP_DATA_CRC_OFFSET          (0U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
@@ -80,25 +80,21 @@
 /* NOTE: After ACT completes, transition to ROLLBACK or reset->PREP_WAITING. */
 
 /* Event definitions */
-#define FWUSH_EVENT_MAX                         (18U)
+#define FWUSH_EVENT_MAX                         (14U)
 #define FWUSH_EVENT_NONE                        (0U)           /* No event */
 #define FWUSH_EVENT_NEW_REQUEST                 (1U)           /* New request received */
-#define FWUSH_EVENT_SAME_REQUEST                (2U)           /* Same request received (continue) */
-#define FWUSH_EVENT_MEMACC_SUCCESS              (3U)           /* MemAcc job success */
-#define FWUSH_EVENT_MEMACC_PROGRESS             (4U)           /* MemAcc job in progress */
-#define FWUSH_EVENT_MEMACC_ERROR                (5U)           /* MemAcc job error */
-#define FWUSH_EVENT_INVALID_REQUEST             (6U)           /* Invalid request */
-#define FWUSH_EVENT_CANCEL                      (7U)           /* Cancel requested */
-#define FWUSH_EVENT_MEMACC_RUN_PARTIAL          (8U)           /* MemAcc run job partial success */
-#define FWUSH_EVENT_MEMACC_RUN_COMPLETE         (9U)           /* MemAcc run job complete */
-#define FWUSH_EVENT_ROLLBACK                    (10U)          /* Activate job rollback */
-#define FWUSH_EVENT_SWITCH_DETECT               (11U)          /* Active area switch detected */
-#define FWUSH_EVENT_PREP_ACCEPT                 (12U)          /* Prepare accept event */
-#define FWUSH_EVENT_ACT_ACCEPT                  (13U)          /* Activate accept event (ACT/VALI OK response, stay waiting) */
-#define FWUSH_EVENT_RESUME_ACT                  (14U)          /* Resume from Activate (MCU reset with Verify done) */
-#define FWUSH_EVENT_VALID_ACCEPT                (15U)          /* Resume from Validate (Fin waiting, rollback not done) */
-#define FWUSH_EVENT_RESUME_FIN                  (16U)          /* Resume from Finalize (Prep to Validate completed) */
-#define FWUSH_EVENT_FIN_ACCEPT                  (17U)          /* Finalize accept event */
+#define FWUSH_EVENT_MEMACC_SUCCESS              (2U)           /* MemAcc job success (incl. run complete) */
+#define FWUSH_EVENT_MEMACC_ERROR                (3U)           /* MemAcc job error */
+#define FWUSH_EVENT_INVALID_REQUEST             (4U)           /* Invalid request */
+#define FWUSH_EVENT_CANCEL                      (5U)           /* Cancel requested */
+#define FWUSH_EVENT_MEMACC_RUN_PARTIAL          (6U)           /* MemAcc run job partial success */
+#define FWUSH_EVENT_ROLLBACK                    (7U)           /* Activate job rollback */
+#define FWUSH_EVENT_SWITCH_DETECT               (8U)           /* Active area switch detected */
+#define FWUSH_EVENT_PREP_ACCEPT                 (9U)           /* Prepare accept event */
+#define FWUSH_EVENT_RES_OK                      (10U)          /* OK response only (ACT/VALID accept) */
+#define FWUSH_EVENT_RESUME_ACT                  (11U)          /* Resume from Activate (MCU reset with Verify done) */
+#define FWUSH_EVENT_RESUME_FIN                  (12U)          /* Resume from Finalize (Prep to Validate completed) */
+#define FWUSH_EVENT_FIN_ACCEPT                  (13U)          /* Finalize accept event */
 
 /* job progress */
 #define FWUSH_PROGRESS_INIT                     (0x00U)        /* Before reprog start */

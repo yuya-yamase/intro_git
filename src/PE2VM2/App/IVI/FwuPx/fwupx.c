@@ -92,45 +92,51 @@ void            vd_g_FwupxPutReqData(const U1 * u1_ap_SUB4_ADD, const U2 u2_a_DT
     else {
         u1_s_fwupx_req_seqcnt = (U1)0U;  /* Reset sequence count */
     }
-    switch (u1_ap_SUB4_ADD[0]) {
-        case (U1)FWUPX_SUBTYPE_REQ_PREP:
-                /* Prepare request */
-                u4_tp_head[0]  = (U4)u1_ap_SUB4_ADD[0];                 /* SubType */
-                u4_tp_head[0] |= (U4)(u1_ap_SUB4_ADD[1] << (U4)8U);     /* logical block */
-                u4_tp_head[0] |= (U4)(u1_ap_SUB4_ADD[2] << (U4)16U);    /* total logical block */
-                u4_tp_head[1]  = (U4)(u1_s_fwupx_req_seqcnt << (U4)24U);    /* SEQ_CNT */
+    if (u2_a_DTLEN > (U1)FWUPX_REQ_SUBTYPE_OFFSET) {
+        switch (u1_ap_SUB4_ADD[0]) {
+            case (U1)FWUPX_SUBTYPE_REQ_PREP:
+                    /* Prepare request */
+                    u4_tp_head[0]  = (U4)u1_ap_SUB4_ADD[0];                 /* SubType */
+                    if (u2_a_DTLEN >= (U1)FWUPX_REQ_PREP_SIZE) {
+                        u4_tp_head[0] |= (U4)(u1_ap_SUB4_ADD[1] << (U4)8U);     /* logical block */
+                        u4_tp_head[0] |= (U4)(u1_ap_SUB4_ADD[2] << (U4)16U);    /* total logical block */
 
-                for(u4_t_loop = (U4)0U; u4_t_loop < (U4)FWUPX_WRI_PREP_DATA_SIZE; u4_t_loop++) {
-                    u1_sp_fwupx_reqdata[u4_t_loop] = (U4)u1_ap_SUB4_ADD[u4_t_loop + FWUPX_WRI_PREP_DATA_START];
-                }
-                u4_t_data_adr = (U4)&u1_sp_fwupx_reqdata[0];
-                vd_g_iVDshWribyDid(IVDSH_DID_WRI_FWUPXREQ_H, &u4_tp_head[0], (U2)FWUPX_WRI_HEAD_WORDS);
-                vd_g_iVDshWribyDid(IVDSH_DID_WRI_FWUPXREQ_D, &u4_t_data_adr, (U2)FWUPX_WRI_DATA_ADR_WORDS);
-            break;
-        case (U1)FWUPX_SUBTYPE_REQ_RUN:
-                /* Run request */
-                u4_tp_head[0]  = (U4)u1_ap_SUB4_ADD[0];                   /* SubType */
-                u4_tp_head[0] |= (U4)(u1_ap_SUB4_ADD[1] << (U4)8U);       /* logical block */
-                u4_tp_head[0] |= (U4)(u1_ap_SUB4_ADD[2] << (U4)24U);      /* block offset */
-                u4_tp_head[1]  = (U4)(u1_ap_SUB4_ADD[3]);                 /* block offset */
-                u4_tp_head[1] |= (U4)(u1_s_fwupx_req_seqcnt << (U4)24U);      /* SEQ_CNT */
+                        for(u4_t_loop = (U4)0U; u4_t_loop < (U4)FWUPX_WRI_PREP_DATA_SIZE; u4_t_loop++) {
+                            u1_sp_fwupx_reqdata[u4_t_loop] = (U4)u1_ap_SUB4_ADD[u4_t_loop + FWUPX_WRI_PREP_DATA_START];
+                        }
+                        u4_t_data_adr = (U4)&u1_sp_fwupx_reqdata[0];
+                        vd_g_iVDshWribyDid(IVDSH_DID_WRI_FWUPXREQ_D, &u4_t_data_adr, (U2)FWUPX_WRI_DATA_ADR_WORDS);
+                    }
+                    u4_tp_head[1]  = (U4)(u1_s_fwupx_req_seqcnt << (U4)24U);    /* SEQ_CNT */
+                    vd_g_iVDshWribyDid(IVDSH_DID_WRI_FWUPXREQ_H, &u4_tp_head[0], (U2)FWUPX_WRI_HEAD_WORDS);
+                break;
+            case (U1)FWUPX_SUBTYPE_REQ_RUN:
+                    /* Run request */
+                    u4_tp_head[0]  = (U4)u1_ap_SUB4_ADD[0];                   /* SubType */
+                    if (u2_a_DTLEN >= (U1)FWUPX_REQ_RUN_SIZE) {
+                        u4_tp_head[0] |= (U4)(u1_ap_SUB4_ADD[1] << (U4)8U);       /* logical block */
+                        u4_tp_head[0] |= (U4)(u1_ap_SUB4_ADD[2] << (U4)24U);      /* block offset */
+                        u4_tp_head[1]  = (U4)(u1_ap_SUB4_ADD[3]);                 /* block offset */
 
-                for(u4_t_loop = (U4)0U; u4_t_loop < (U4)FWUPX_WRI_RUN_DATA_SIZE; u4_t_loop++) {
-                    u1_sp_fwupx_reqdata[u4_t_loop] = (U4)u1_ap_SUB4_ADD[u4_t_loop + FWUPX_WRI_RUN_DATA_START];
-                }
-                u4_t_data_adr = (U4)&u1_sp_fwupx_reqdata[0];
-                vd_g_iVDshWribyDid(IVDSH_DID_WRI_FWUPXREQ_H, &u4_tp_head[0], (U2)FWUPX_WRI_HEAD_WORDS);
-                vd_g_iVDshWribyDid(IVDSH_DID_WRI_FWUPXREQ_D, &u4_t_data_adr, (U2)FWUPX_WRI_DATA_ADR_WORDS);
-            break;
-        default:  /* Other requests */
-                /* Verification request */
-                u4_tp_head[0]  = (U4)u1_ap_SUB4_ADD[0];                   /* SubType */
-                if (u2_a_DTLEN > (U1)1U) {
-                    u4_tp_head[0] |= (U4)(u1_ap_SUB4_ADD[1] << (U4)8U);       /* logical block */
-                }
-                u4_tp_head[1]  = (U4)(u1_s_fwupx_req_seqcnt << (U4)24U);      /* SEQ_CNT */
-                vd_g_iVDshWribyDid(IVDSH_DID_WRI_FWUPXREQ_H, &u4_tp_head[0], (U2)FWUPX_WRI_HEAD_WORDS);
-            break;
+                        for(u4_t_loop = (U4)0U; u4_t_loop < (U4)FWUPX_WRI_RUN_DATA_SIZE; u4_t_loop++) {
+                            u1_sp_fwupx_reqdata[u4_t_loop] = (U4)u1_ap_SUB4_ADD[u4_t_loop + FWUPX_WRI_RUN_DATA_START];
+                        }
+                        u4_t_data_adr = (U4)&u1_sp_fwupx_reqdata[0];
+                        vd_g_iVDshWribyDid(IVDSH_DID_WRI_FWUPXREQ_D, &u4_t_data_adr, (U2)FWUPX_WRI_DATA_ADR_WORDS);
+                    }
+                    u4_tp_head[1] |= (U4)(u1_s_fwupx_req_seqcnt << (U4)24U);      /* SEQ_CNT */
+                    vd_g_iVDshWribyDid(IVDSH_DID_WRI_FWUPXREQ_H, &u4_tp_head[0], (U2)FWUPX_WRI_HEAD_WORDS);
+                break;
+            default:  /* Other requests */
+                    /* Verification request */
+                    u4_tp_head[0]  = (U4)u1_ap_SUB4_ADD[0];                   /* SubType */
+                    if (u2_a_DTLEN > (U1)FWUPX_REQ_LB_OFFSET) {
+                        u4_tp_head[0] |= (U4)(u1_ap_SUB4_ADD[1] << (U4)8U);       /* logical block */
+                    }
+                    u4_tp_head[1]  = (U4)(u1_s_fwupx_req_seqcnt << (U4)24U);      /* SEQ_CNT */
+                    vd_g_iVDshWribyDid(IVDSH_DID_WRI_FWUPXREQ_H, &u4_tp_head[0], (U2)FWUPX_WRI_HEAD_WORDS);
+                break;
+        }
     }
 }
 
