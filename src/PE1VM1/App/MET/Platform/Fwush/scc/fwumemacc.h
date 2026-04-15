@@ -39,7 +39,7 @@
 #define FWUMEMACC_ADRS_INV_OFFSET        (0x02000000U)   /* address conversion offset */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*  Type Definitions - Phase 2                                                                                                       */
+/*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
 /* Job types */
@@ -57,7 +57,7 @@
 #define FWUMEMACC_MAIN_STATUS_COMPLETED  (3U)    /* completed successfully */
 #define FWUMEMACC_MAIN_STATUS_ERROR      (4U)    /* error */
 
-/* Job status (internal state machine for Phase2) */
+/* Job status (internal state machine) */
 #define FWUMEMACC_JOB_STATUS_MAX             (7U)
 #define FWUMEMACC_JOB_STATUS_IDLE            (0U)
 #define FWUMEMACC_JOB_STATUS_ERASE_ACTIVE    (1U)
@@ -123,7 +123,7 @@ U1 u1_g_FwuMemAccEraseReq(U4 u4_a_start_adrs, U4 u4_a_length, U4 u4_a_expected_c
 U1 u1_g_FwuMemAccUpdateReq(U2 u2_a_block_offset, const U4* u4p_a_write_data);
 U1 u1_g_FwuMemAccSwitchReq(void);
 
-/* Unified status get API (for Fwush Phase2) */
+/* Unified status get API */
 void vd_g_FwuMemAccGetStatus( U1* u1p_a_job_type, U1* u1p_a_main_status);
 
 /* Individual status getters */
@@ -133,9 +133,6 @@ U1 u1_g_FwuMemAccGetUpdateStatus(void);
 
 /* Debug APIs */
 U1 u1_g_FwuMemAccIsJobActive(void);
-
-/* Cancel API (to be implemented in Phase3) */
-void vd_g_FwuMemAccCancelJob(void);
 
 #endif /* FWUMEMACC_H */
 /*===================================================================================================================================*/

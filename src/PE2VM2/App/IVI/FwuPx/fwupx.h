@@ -21,15 +21,17 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define FWUPX_SUBTYPE_PREP                (0x01U)
-#define FWUPX_SUBTYPE_RUN                 (0x02U)
-#define FWUPX_SUBTYPE_VERI                (0x18U)
-#define FWUPX_SUBTYPE_PHASE               (0x37U)
-#define FWUPX_SUBTYPE_PRNUM               (0x63U)
+#define FWUPX_SUBTYPE_REQ_PREP                (0x01U)
+#define FWUPX_SUBTYPE_REQ_RUN                 (0x02U)
+#define FWUPX_SUBTYPE_REQ_VERI                (0x18U)
+#define FWUPX_SUBTYPE_REQ_CANCEL              (0x27U)
+#define FWUPX_SUBTYPE_REQ_PHASE               (0x37U)
+#define FWUPX_SUBTYPE_REQ_PRNUM               (0x63U)
 
 #define FWUPX_SUBTYPE_RES_PREP            (0x07U)
 #define FWUPX_SUBTYPE_RES_RUN             (0x17U)
 #define FWUPX_SUBTYPE_RES_VERI            (0x19U)
+#define FWUPX_SUBTYPE_RES_CANCEL          (0x28U)
 #define FWUPX_SUBTYPE_RES_PHASE           (0x38U)
 #define FWUPX_SUBTYPE_RES_PRNUM           (0x64U)
 

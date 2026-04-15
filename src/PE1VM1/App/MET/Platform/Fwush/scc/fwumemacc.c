@@ -331,19 +331,6 @@ U1 u1_g_FwuMemAccIsJobActive(void)
 }
 
 /*===================================================================================================================================*/
-/* void vd_g_FwuMemAccCancelJob(void)                                                                                                */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void vd_g_FwuMemAccCancelJob(void)
-{
-    /* TODO Phase3: implement cancel handling */
-    /* Abort current job and return to IDLE */
-    vd_g_FwuMemAccInit();
-}
-
-/*===================================================================================================================================*/
 /*  Task implementations (ERASE/UPDATE/SWITCH/CRC)                                                                                   */
 /*===================================================================================================================================*/
 
@@ -392,6 +379,8 @@ static void vd_s_FwuMemAccEraseTask(void)
             }
         }
         /* MEMACC_JOB_BUSY: in progress - continue */
+    } else {
+        /* Do nothing */
     }
 }
 
@@ -478,6 +467,8 @@ static void vd_s_FwuMemAccUpdateTask(void)
 /*===================================================================================================================================*/
 static void vd_s_FwuMemAccSwitchTask(void)
 {
+    U1 u1_t_job_status;
+    U1 u1_t_job_result;
     U1 u1_t_switch_result;
     U1 u1_t_data_dummy;
     U4 u4_t_length_dummy;
@@ -495,14 +486,32 @@ static void vd_s_FwuMemAccSwitchTask(void)
             &u4_t_length_dummy);
         
         if (u1_t_switch_result == (U1)MEMACC_MEM_OK) {
-            /* Switch completed (immediate) */
-            u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_COMPLETED;
-            u1_s_last_error = (U1)FWUMEMACC_ERROR_NONE;
+            /* Switch start succeeded */
+            u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_SWITCH_ACTIVE;
         } else {
-            /* Switch failed */
+            /* Switch start failed */
             u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_ERROR;
             u1_s_last_error = (U1)FWUMEMACC_ERROR_MEMACC_FAILED;
         }
+    } else if (u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_SWITCH_ACTIVE) {
+        /* Check MemAcc job status */
+        u1_t_job_status = (U1)MemAcc_GetJobStatus((U2)MEMACC_ADDRAREA_1);
+        if (u1_t_job_status == (U1)MEMACC_JOB_IDLE) {
+            /* Job completed -> check result */
+            u1_t_job_result = (U1)MemAcc_GetJobResult((U2)MEMACC_ADDRAREA_1);
+            if (u1_t_job_result == (U1)MEMACC_MEM_OK) {
+                /* Switch completed */
+                u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_COMPLETED;
+                u1_s_last_error = (U1)FWUMEMACC_ERROR_NONE;
+            } else {
+                /* Switch failed */
+                u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_ERROR;
+                u1_s_last_error = (U1)FWUMEMACC_ERROR_MEMACC_FAILED;
+            }
+        }
+        /* MEMACC_JOB_BUSY: in progress - continue */
+    } else {
+        /* Do nothing */
     }
 }
 

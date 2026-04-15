@@ -27,9 +27,6 @@ static U1                u1_sp_fwupx_reqdata[FWUPX_WRI_DATA_SIZE_MAX];
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 void            vd_g_FwupxInit(void)
 {
-    U4  u4_tp_zero[FWUPX_WRI_HEAD_WORDS];
-
-    vd_g_MemfillU4(&u4_tp_zero[0], (U4)0U, (U4)FWUPX_WRI_HEAD_WORDS);
     vd_g_MemfillU1(&u1_sp_fwupx_reqdata[0], (U4)0U, (U4)FWUPX_WRI_DATA_SIZE_MAX);
     u1_s_fwupx_req_seqcnt = (U1)0U;
 }
@@ -84,7 +81,7 @@ void            vd_g_FwupxPutReqData(const U1 * u1_ap_SUB4_ADD, const U2 u2_a_DT
 {
     U4          u4_tp_head[FWUPX_WRI_HEAD_WORDS];
     U4          u4_t_data_adr;
-    U2          u2_t_loop;
+    U4          u4_t_loop;
 
     vd_g_MemfillU4(&u4_tp_head[0], (U4)0U, (U4)FWUPX_WRI_HEAD_WORDS);
 
@@ -96,21 +93,21 @@ void            vd_g_FwupxPutReqData(const U1 * u1_ap_SUB4_ADD, const U2 u2_a_DT
         u1_s_fwupx_req_seqcnt = (U1)0U;  /* Reset sequence count */
     }
     switch (u1_ap_SUB4_ADD[0]) {
-        case (U1)FWUPX_SUBTYPE_PREP:
+        case (U1)FWUPX_SUBTYPE_REQ_PREP:
                 /* Prepare request */
                 u4_tp_head[0]  = (U4)u1_ap_SUB4_ADD[0];                 /* SubType */
                 u4_tp_head[0] |= (U4)(u1_ap_SUB4_ADD[1] << (U4)8U);     /* logical block */
                 u4_tp_head[0] |= (U4)(u1_ap_SUB4_ADD[2] << (U4)16U);    /* total logical block */
                 u4_tp_head[1]  = (U4)(u1_s_fwupx_req_seqcnt << (U4)24U);    /* SEQ_CNT */
 
-                for(u2_t_loop = (U2)0U; u2_t_loop < (U2)FWUPX_WRI_PREP_DATA_SIZE; u2_t_loop++) {
-                    u1_sp_fwupx_reqdata[u2_t_loop] = (U4)u1_ap_SUB4_ADD[u2_t_loop + FWUPX_WRI_PREP_DATA_START];
+                for(u4_t_loop = (U4)0U; u4_t_loop < (U4)FWUPX_WRI_PREP_DATA_SIZE; u4_t_loop++) {
+                    u1_sp_fwupx_reqdata[u4_t_loop] = (U4)u1_ap_SUB4_ADD[u4_t_loop + FWUPX_WRI_PREP_DATA_START];
                 }
                 u4_t_data_adr = (U4)&u1_sp_fwupx_reqdata[0];
                 vd_g_iVDshWribyDid(IVDSH_DID_WRI_FWUPXREQ_H, &u4_tp_head[0], (U2)FWUPX_WRI_HEAD_WORDS);
                 vd_g_iVDshWribyDid(IVDSH_DID_WRI_FWUPXREQ_D, &u4_t_data_adr, (U2)FWUPX_WRI_DATA_ADR_WORDS);
             break;
-        case (U1)FWUPX_SUBTYPE_RUN:
+        case (U1)FWUPX_SUBTYPE_REQ_RUN:
                 /* Run request */
                 u4_tp_head[0]  = (U4)u1_ap_SUB4_ADD[0];                   /* SubType */
                 u4_tp_head[0] |= (U4)(u1_ap_SUB4_ADD[1] << (U4)8U);       /* logical block */
@@ -118,17 +115,19 @@ void            vd_g_FwupxPutReqData(const U1 * u1_ap_SUB4_ADD, const U2 u2_a_DT
                 u4_tp_head[1]  = (U4)(u1_ap_SUB4_ADD[3]);                 /* block offset */
                 u4_tp_head[1] |= (U4)(u1_s_fwupx_req_seqcnt << (U4)24U);      /* SEQ_CNT */
 
-                for(u2_t_loop = (U2)0U; u2_t_loop < (U2)FWUPX_WRI_RUN_DATA_SIZE; u2_t_loop++) {
-                    u1_sp_fwupx_reqdata[u2_t_loop] = (U4)u1_ap_SUB4_ADD[u2_t_loop + FWUPX_WRI_RUN_DATA_START];
+                for(u4_t_loop = (U4)0U; u4_t_loop < (U4)FWUPX_WRI_RUN_DATA_SIZE; u4_t_loop++) {
+                    u1_sp_fwupx_reqdata[u4_t_loop] = (U4)u1_ap_SUB4_ADD[u4_t_loop + FWUPX_WRI_RUN_DATA_START];
                 }
                 u4_t_data_adr = (U4)&u1_sp_fwupx_reqdata[0];
                 vd_g_iVDshWribyDid(IVDSH_DID_WRI_FWUPXREQ_H, &u4_tp_head[0], (U2)FWUPX_WRI_HEAD_WORDS);
                 vd_g_iVDshWribyDid(IVDSH_DID_WRI_FWUPXREQ_D, &u4_t_data_adr, (U2)FWUPX_WRI_DATA_ADR_WORDS);
             break;
-        default:  /* FWUPX_SUBTYPE_VERI,FWUPX_SUBTYPE_PHASE */
+        default:  /* FWUPX_SUBTYPE_REQ_VERI,FWUPX_SUBTYPE_REQ_PHASE,FWUPX_SUBTYPE_REQ_CANCEL */
                 /* Verification request */
                 u4_tp_head[0]  = (U4)u1_ap_SUB4_ADD[0];                   /* SubType */
-                u4_tp_head[0] |= (U4)(u1_ap_SUB4_ADD[1] << (U4)8U);       /* logical block */
+                if (u2_a_DTLEN > (U1)1U) {
+                    u4_tp_head[0] |= (U4)(u1_ap_SUB4_ADD[1] << (U4)8U);       /* logical block */
+                }
                 u4_tp_head[1]  = (U4)(u1_s_fwupx_req_seqcnt << (U4)24U);      /* SEQ_CNT */
                 vd_g_iVDshWribyDid(IVDSH_DID_WRI_FWUPXREQ_H, &u4_tp_head[0], (U2)FWUPX_WRI_HEAD_WORDS);
             break;
