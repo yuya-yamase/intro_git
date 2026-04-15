@@ -28,12 +28,16 @@
 #define    XSPI_IVI_REPRO_SUBTYPE_VERI_RES   (0x19U)
 #define    XSPI_IVI_REPRO_SUBTYPE_CANCEL_RES (0x27U)
 #define    XSPI_IVI_REPRO_SUBTYPE_ACT_RES    (0x38U)
+#define    XSPI_IVI_REPRO_SUBTYPE_VALID_RES  (0x48U)
+#define    XSPI_IVI_REPRO_SUBTYPE_FIN_RES    (0x58U)
 #define    XSPI_IVI_REPRO_DATA_SIZE          (8U)
 #define    XSPI_IVI_REPRO_PREP_ACK_SIZE      (3U)
 #define    XSPI_IVI_REPRO_RUN_ACK_SIZE       (7U)
 #define    XSPI_IVI_REPRO_VERI_ACK_SIZE      (3U)
 #define    XSPI_IVI_REPRO_CANCEL_ACK_SIZE    (2U)
 #define    XSPI_IVI_REPRO_ACT_ACK_SIZE       (2U)
+#define    XSPI_IVI_REPRO_VALID_ACK_SIZE     (2U)
+#define    XSPI_IVI_REPRO_FIN_ACK_SIZE       (2U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -97,6 +101,12 @@ void vd_g_XspiIviSub1ReproMainTask(void)
                     break;
                 case XSPI_IVI_REPRO_SUBTYPE_ACT_RES:
                     vd_s_XspiIviSub1ReproDataToQueue((U2)XSPI_IVI_REPRO_ACT_ACK_SIZE, &u1_tp_read[0]);
+                    break;
+                case XSPI_IVI_REPRO_SUBTYPE_VALID_RES:
+                    vd_s_XspiIviSub1ReproDataToQueue((U2)XSPI_IVI_REPRO_VALID_ACK_SIZE, &u1_tp_read[0]);
+                    break;
+                case XSPI_IVI_REPRO_SUBTYPE_FIN_RES:
+                    vd_s_XspiIviSub1ReproDataToQueue((U2)XSPI_IVI_REPRO_FIN_ACK_SIZE, &u1_tp_read[0]);
                     break;
                 default:
                     /* 未知のサブタイプは無視 */
