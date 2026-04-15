@@ -35,12 +35,17 @@
 
 #define FWUPX_WRI_HEAD_WORDS              (2U)
 #define FWUPX_WRI_DATA_ADR_WORDS          (1U)
-#define FWUPX_WRI_DATA_SIZE_MAX           (3500U)
+#define FWUPX_WRI_DATA_SIZE_MAX           (1024U)
 
 #define FWUPX_WRI_PREP_DATA_SIZE          (512U)
 #define FWUPX_WRI_PREP_DATA_START         (4U)
 
 #define FWUPX_WRI_RUN_DATA_SIZE           (1024U)
+#if (FWUPX_WRI_RUN_DATA_SIZE != 1024U)
+#error \
+    "FWUPX_WRI_RUN_DATA_SIZE must be same with FWUMEMACC_WRITE_LENGTH in PE1VM1 fwumemacc.h. " \
+    "Change with FWUMEMACC_WRITE_LENGTH & this error check value"
+#endif
 #define FWUPX_WRI_RUN_DATA_START          (6U)
 
 #define FWUPX_READ_WORDS                  (2U)
@@ -57,7 +62,7 @@
 void            vd_g_FwupxInit(void);
 void            vd_g_FwupxMainTask(void);
 U1              u1_g_FwupxResData(U1 * u1_ap_resdata, U1 u1_a_len);
-void            vd_s_FwupxPutReqData(const U1 * u1_ap_SUB4_ADD, const U2 u2_a_DTLEN);
+void            vd_g_FwupxPutReqData(const U1 * u1_ap_SUB4_ADD, const U2 u2_a_DTLEN);
 
 #endif /* FWUPX_H */
 /*===================================================================================================================================*/

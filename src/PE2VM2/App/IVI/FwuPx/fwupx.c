@@ -17,10 +17,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U1                u1_s_fwupx_subtype_prev;
-static U1                u1_s_fwupx_res_prev;
-static U2                u2_s_fwupx_run_offset_prev;
-U1                       u1_sp_fwupx_reqdata[FWUPX_WRI_DATA_SIZE_MAX];
+static U1                u1_s_fwupx_req_seqcnt;
+static U1                u1_sp_fwupx_reqdata[FWUPX_WRI_DATA_SIZE_MAX];
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -33,9 +31,7 @@ void            vd_g_FwupxInit(void)
 
     vd_g_MemfillU4(&u4_tp_zero[0], (U4)0U, (U4)FWUPX_WRI_HEAD_WORDS);
     vd_g_MemfillU1(&u1_sp_fwupx_reqdata[0], (U4)0U, (U4)FWUPX_WRI_DATA_SIZE_MAX);
-    u1_s_fwupx_subtype_prev = (U1)0xFFU;
-    u1_s_fwupx_res_prev = (U1)0xFFU;
-    u2_s_fwupx_run_offset_prev = (U2)0xFFFFU;
+    u1_s_fwupx_req_seqcnt = (U1)0U;
 }
 
 void            vd_g_FwupxMainTask(void)
@@ -65,30 +61,11 @@ U1            u1_g_FwupxResData(U1 * u1_ap_resdata, U1 u1_a_len)
     u1_t_ret = (U1)FALSE;
     u1_t_read_ok = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_FWUPXRES, &u4_tp_data[0], (U2)FWUPX_READ_WORDS);
     if(u1_t_read_ok != (U1)IVDSH_NO_REA){
+        u1_t_ret = (U1)TRUE;
         for(u1_t_idx = (U1)0U; u1_t_idx < u1_a_len; u1_t_idx++) {
             u1_t_pos = (U1)(u1_t_idx / FWUPX_WORD_SIZE);
             u1_t_shift = (U1)(u1_t_idx % FWUPX_WORD_SIZE);
             u1_ap_resdata[u1_t_idx] = (U1)((u4_tp_data[u1_t_pos] >> (U4)(u1_t_shift * (U1)FWUPX_SHIFT_BIT)) & (U4)0xFFU);
-        }
-        u1_t_ret = (U1)TRUE;
-        u2_t_run_offset = (U2)(u1_ap_resdata[3] << (U2)8U | (u1_ap_resdata[4]));
-        if ((u1_ap_resdata[0] == FWUPX_SUBTYPE_RES_RUN) && (u2_t_run_offset != u2_s_fwupx_run_offset_prev)) {
-            /* SubType changed */
-            u1_s_fwupx_res_prev = u1_ap_resdata[0];
-            u4_tp_head[0] = (U4)0xFFU | (U4)(u1_ap_resdata[3] << (U1)24U);              /* SubType & higher offset */
-            u4_tp_head[1] = (U4)u1_ap_resdata[4];                                       /* lower offset */
-            vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_FWUPXREQ_H, &u4_tp_head[0], (U2)FWUPX_WRI_HEAD_WORDS);
-            u1_s_fwupx_subtype_prev = (U1)0xFFU;  /* Reset previous subtype */
-            u2_s_fwupx_run_offset_prev = u2_t_run_offset;
-        }else if (u1_ap_resdata[0] != u1_s_fwupx_res_prev) {
-            /* SubType changed */
-            u1_s_fwupx_res_prev = u1_ap_resdata[0];
-            u4_tp_head[0] = (U4)0xFFU;              /* SubType */
-            u4_tp_head[1] = (U4)0U;
-            vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_FWUPXREQ_H, &u4_tp_head[0], (U2)FWUPX_WRI_HEAD_WORDS);
-            u1_s_fwupx_subtype_prev = (U1)0xFFU;  /* Reset previous subtype */
-        }else{
-            /* do nothing */
         }
     }
 
@@ -96,14 +73,14 @@ U1            u1_g_FwupxResData(U1 * u1_ap_resdata, U1 u1_a_len)
 }
 
 /*===================================================================================================================================*/
-/*  void            vd_s_FwupxPutReqData(const U1 * u1_ap_SUB4_ADD, const U2 u2_a_DTLEN)                                             */
+/*  void            vd_g_FwupxPutReqData(const U1 * u1_ap_SUB4_ADD, const U2 u2_a_DTLEN)                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    サブフレーム4 Repro Data 解析 送信処理                                                                             */
-/*  Arguments:      u1_ap_SUB4_ADD : サブフレーム4 Repro Data開始位置                                                                  */
+/*  Description:    サブフレーム1/4 Repro Data 解析 送信処理                                                                           */
+/*  Arguments:      u1_ap_SUB4_ADD : サブフレーム1/4 Repro Data開始位置                                                                */
 /*                  u2_a_DTLEN     : 有効データ長                                                                                     */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void            vd_s_FwupxPutReqData(const U1 * u1_ap_SUB4_ADD, const U2 u2_a_DTLEN)
+void            vd_g_FwupxPutReqData(const U1 * u1_ap_SUB4_ADD, const U2 u2_a_DTLEN)
 {
     U4          u4_tp_head[FWUPX_WRI_HEAD_WORDS];
     U4          u4_t_data_adr;
@@ -112,60 +89,49 @@ void            vd_s_FwupxPutReqData(const U1 * u1_ap_SUB4_ADD, const U2 u2_a_DT
     vd_g_MemfillU4(&u4_tp_head[0], (U4)0U, (U4)FWUPX_WRI_HEAD_WORDS);
 
 
-    if (u1_ap_SUB4_ADD[0] != u1_s_fwupx_subtype_prev) {
-        switch (u1_ap_SUB4_ADD[0]) {
-            case (U1)FWUPX_SUBTYPE_PREP:
-                
-                    /* Prepare request */
-                    u4_tp_head[0] = (U4)u1_ap_SUB4_ADD[0];              /* SubType */
-                    u4_tp_head[0] |= (U4)(u1_ap_SUB4_ADD[1] << (U4)8U);     /* logical block */
-                    u4_tp_head[0] |= (U4)(u1_ap_SUB4_ADD[2] << (U4)16U);    /* Length */
-                    u4_tp_head[0] |= (U4)(u1_ap_SUB4_ADD[3] << (U4)24U);    /* Length */
-                    for(u2_t_loop = (U2)0U; u2_t_loop < (U2)FWUPX_WRI_PREP_DATA_SIZE; u2_t_loop++) {
-                        u1_sp_fwupx_reqdata[u2_t_loop] = (U4)u1_ap_SUB4_ADD[u2_t_loop + FWUPX_WRI_PREP_DATA_START];
-                    }
-                    u4_t_data_adr = (U4)&u1_sp_fwupx_reqdata[0];
-                    vd_g_iVDshWribyDid(IVDSH_DID_WRI_FWUPXREQ_H, &u4_tp_head[0], (U2)FWUPX_WRI_HEAD_WORDS);
-                    vd_g_iVDshWribyDid(IVDSH_DID_WRI_FWUPXREQ_D, &u4_t_data_adr, (U2)FWUPX_WRI_DATA_ADR_WORDS);
-                break;
-            case (U1)FWUPX_SUBTYPE_RUN:
-                    /* Run request */
-                    u4_tp_head[0] = (U4)u1_ap_SUB4_ADD[0];              /* SubType */
-                    u4_tp_head[0] |= (U4)(u1_ap_SUB4_ADD[1] << (U4)8U);     /* logical block */
-                    u4_tp_head[0] |= (U4)(u1_ap_SUB4_ADD[2] << (U4)16U);    /* block offset */
-                    u4_tp_head[0] |= (U4)(u1_ap_SUB4_ADD[3] << (U4)24U);    /* block offset */
-                    u4_tp_head[1] = (U4)u1_ap_SUB4_ADD[4];              /* Length */
-                    u4_tp_head[1] |= (U4)(u1_ap_SUB4_ADD[5] << (U4)8U);     /* Length */
-                    for(u2_t_loop = (U2)0U; u2_t_loop < (U2)FWUPX_WRI_RUN_DATA_SIZE; u2_t_loop++) {
-                        u1_sp_fwupx_reqdata[u2_t_loop] = (U4)u1_ap_SUB4_ADD[u2_t_loop + FWUPX_WRI_RUN_DATA_START];
-                    }
-                    u4_t_data_adr = (U4)&u1_sp_fwupx_reqdata[0];
-                    vd_g_iVDshWribyDid(IVDSH_DID_WRI_FWUPXREQ_H, &u4_tp_head[0], (U2)FWUPX_WRI_HEAD_WORDS);
-                    vd_g_iVDshWribyDid(IVDSH_DID_WRI_FWUPXREQ_D, &u4_t_data_adr, (U2)FWUPX_WRI_DATA_ADR_WORDS);
-                break;
-            case (U1)FWUPX_SUBTYPE_VERI:
-                    /* Verification request */
-                    u4_tp_head[0] = (U4)u1_ap_SUB4_ADD[0];              /* SubType */
-                    u4_tp_head[0] |= (U4)(u1_ap_SUB4_ADD[1] << (U4)8U);     /* logical block */
-                    vd_g_iVDshWribyDid(IVDSH_DID_WRI_FWUPXREQ_H, &u4_tp_head[0], (U2)FWUPX_WRI_HEAD_WORDS);
-                break;
-            case (U1)FWUPX_SUBTYPE_PHASE:
-                    /* Phase change request */
-                    u4_tp_head[0] = (U4)u1_ap_SUB4_ADD[0];              /* SubType */
-                    vd_g_iVDshWribyDid(IVDSH_DID_WRI_FWUPXREQ_H, &u4_tp_head[0], (U2)FWUPX_WRI_HEAD_WORDS);
-                break;
-            case (U1)FWUPX_SUBTYPE_PRNUM:
-                    /* Serial number get request */
-                    u4_tp_head[0] = (U4)u1_ap_SUB4_ADD[0];              /* SubType */
-                    u4_tp_head[0] |= (U4)(u1_ap_SUB4_ADD[1] << (U4)8U);     /* logical block */
-                    u4_tp_head[0] |= (U4)(u1_ap_SUB4_ADD[2] << (U4)16U);    /* bank */
-                    vd_g_iVDshWribyDid(IVDSH_DID_WRI_FWUPXREQ_H, &u4_tp_head[0], (U2)FWUPX_WRI_HEAD_WORDS);
-                break;
-            default:
-                /* Do nothing */
-                break;
-        }
-        u1_s_fwupx_subtype_prev = u1_ap_SUB4_ADD[0];
+    if (u1_s_fwupx_req_seqcnt < (U1)0xFFU) {
+        u1_s_fwupx_req_seqcnt++;
+    }
+    else {
+        u1_s_fwupx_req_seqcnt = (U1)0U;  /* Reset sequence count */
+    }
+    switch (u1_ap_SUB4_ADD[0]) {
+        case (U1)FWUPX_SUBTYPE_PREP:
+                /* Prepare request */
+                u4_tp_head[0]  = (U4)u1_ap_SUB4_ADD[0];                 /* SubType */
+                u4_tp_head[0] |= (U4)(u1_ap_SUB4_ADD[1] << (U4)8U);     /* logical block */
+                u4_tp_head[0] |= (U4)(u1_ap_SUB4_ADD[2] << (U4)16U);    /* total logical block */
+                u4_tp_head[1]  = (U4)(u1_s_fwupx_req_seqcnt << (U4)24U);    /* SEQ_CNT */
+
+                for(u2_t_loop = (U2)0U; u2_t_loop < (U2)FWUPX_WRI_PREP_DATA_SIZE; u2_t_loop++) {
+                    u1_sp_fwupx_reqdata[u2_t_loop] = (U4)u1_ap_SUB4_ADD[u2_t_loop + FWUPX_WRI_PREP_DATA_START];
+                }
+                u4_t_data_adr = (U4)&u1_sp_fwupx_reqdata[0];
+                vd_g_iVDshWribyDid(IVDSH_DID_WRI_FWUPXREQ_H, &u4_tp_head[0], (U2)FWUPX_WRI_HEAD_WORDS);
+                vd_g_iVDshWribyDid(IVDSH_DID_WRI_FWUPXREQ_D, &u4_t_data_adr, (U2)FWUPX_WRI_DATA_ADR_WORDS);
+            break;
+        case (U1)FWUPX_SUBTYPE_RUN:
+                /* Run request */
+                u4_tp_head[0]  = (U4)u1_ap_SUB4_ADD[0];                   /* SubType */
+                u4_tp_head[0] |= (U4)(u1_ap_SUB4_ADD[1] << (U4)8U);       /* logical block */
+                u4_tp_head[0] |= (U4)(u1_ap_SUB4_ADD[2] << (U4)24U);      /* block offset */
+                u4_tp_head[1]  = (U4)(u1_ap_SUB4_ADD[3]);                 /* block offset */
+                u4_tp_head[1] |= (U4)(u1_s_fwupx_req_seqcnt << (U4)24U);      /* SEQ_CNT */
+
+                for(u2_t_loop = (U2)0U; u2_t_loop < (U2)FWUPX_WRI_RUN_DATA_SIZE; u2_t_loop++) {
+                    u1_sp_fwupx_reqdata[u2_t_loop] = (U4)u1_ap_SUB4_ADD[u2_t_loop + FWUPX_WRI_RUN_DATA_START];
+                }
+                u4_t_data_adr = (U4)&u1_sp_fwupx_reqdata[0];
+                vd_g_iVDshWribyDid(IVDSH_DID_WRI_FWUPXREQ_H, &u4_tp_head[0], (U2)FWUPX_WRI_HEAD_WORDS);
+                vd_g_iVDshWribyDid(IVDSH_DID_WRI_FWUPXREQ_D, &u4_t_data_adr, (U2)FWUPX_WRI_DATA_ADR_WORDS);
+            break;
+        default:  /* FWUPX_SUBTYPE_VERI,FWUPX_SUBTYPE_PHASE */
+                /* Verification request */
+                u4_tp_head[0]  = (U4)u1_ap_SUB4_ADD[0];                   /* SubType */
+                u4_tp_head[0] |= (U4)(u1_ap_SUB4_ADD[1] << (U4)8U);       /* logical block */
+                u4_tp_head[1]  = (U4)(u1_s_fwupx_req_seqcnt << (U4)24U);      /* SEQ_CNT */
+                vd_g_iVDshWribyDid(IVDSH_DID_WRI_FWUPXREQ_H, &u4_tp_head[0], (U2)FWUPX_WRI_HEAD_WORDS);
+            break;
     }
 }
 

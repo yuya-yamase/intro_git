@@ -1,671 +1,907 @@
-/* 1.0.0 */
+/* 2.0.0 */
 /*===================================================================================================================================*/
-/*  FW Update State Handler                                                                                                          */
+/*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-
+/* FW Update State Handler                                                                                                           */
+/*                                                                                                                                   */
+/*===================================================================================================================================*/
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Version                                                                                                                          */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define FWUSH_C_MAJOR                   (2U)
+#define FWUSH_C_MINOR                   (0U)
+#define FWUSH_C_PATCH                   (0U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "fwush.h"
 
 #include "ivdsh.h"
-
-#include "aip_common.h"
+#include "memfill_u1.h"
 #include "memfill_u4.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-
-/* Action Definitions for 8-State Machine */
-#define FWUSH_ACT_TO_RUN      (0U)  /* RUN状態への遷移 */
-#define FWUSH_ACT_TO_RUN_FIN  (1U)  /* RUN状態からの遷移 */
-#define FWUSH_ACT_TO_ACT      (2U)  /* ACT状態への遷移 */
-#define FWUSH_ACT_TO_ACT_FIN  (3U)  /* ACT状態からの遷移 */
-#define FWUSH_ACT_PREP        (4U)  /* PREP状態での処理継続 */
-#define FWUSH_ACT_RUN         (5U)  /* RUN状態での処理継続 */
-#define FWUSH_ACT_VERI        (6U)  /* VERI状態での処理継続 */
-#define FWUSH_ACT_ACT         (7U)  /* ACT状態での処理継続 */
-
-/* Event Definitions */
-#define FWUSH_EAS_CHK_PREP_FIN      (0x01U)  /* PREP処理完了 */
-#define FWUSH_EAS_CHK_RUN_FIN       (0x02U)  /* RUN処理完了 */
-#define FWUSH_EAS_CHK_VERI_FIN      (0x04U)  /* VERI処理完了 */
-#define FWUSH_EAS_CHK_ACT_FIN       (0x08U)  /* ACT処理完了 */
-
-/* Log types for debugging */
-#define FWUSH_LOG_NORMAL_TRANSITION (0x00U)
-#define FWUSH_LOG_ABORT_TRANSITION  (0x01U)
-
-/* System status bit masks */
-#define SYSTEM_STATUS_CRITICAL_ERROR (0x80000000UL)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+
+typedef struct {
+    U1 u1_next_main_state;
+    U1 u1_next_sub_state;
+    void (*fp_handler_func)(void);
+} ST_FWUSH_TRANSITION_ENTRY;
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U1                u1_sp_fwush_header[FWUSH_REQ_H_SIZE];
-static U1                u1_s_fwush_subtype_prev;
-static U1                u1_s_fwush_stm_ctl;
-static U1                u1_s_fwush_stm_act;
-static U1                u1_s_fwush_memacc_job_active;
-static U1                u1_s_fwush_abort_active;
+static U1 u1_s_fwush_state_main;
+static U1 u1_s_fwush_state_sub;
 
-static U2                u2_s_fwush_run_offset_prev;
-static U1                u1_s_fwush_act_fin_flg;
+static U1 u1_s_fwupx_req_seqcnt_pre;
+static U1 u1_s_fwupx_res_seqcnt;
+
+static U1 u1_s_fwush_abort;
+
+/* PREP state data */
+static U1 u1_s_fwush_prep_data_ready;
+static U4 u4_s_fwush_prep_data_crc;
+
+/* RUN state data */
+static U2 u2_s_fwush_run_ofst;
+
+/* Request header buffer */
+static U1 u1_sp_fwush_header[FWUSH_REQ_H_SIZE];
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U1       u1_s_FwushReadHeader(U1 * u1_ap_ptr);
-static U1        u1_s_FwushReadData(U2 u2_a_length, U4* u4_ap_reqadr);
-static U2       u2_s_FwushEasChk(void);
 
-static void     vd_s_FwushStmEvPrep(void);
-static void     vd_s_FwushStmEvRun(void);
-static void     vd_s_FwushStmEvVeri(void);
-static void     vd_s_FwushStmEvAct(void);
-static void     vd_s_FwushStmEvToRun(void);
-static void     vd_s_FwushStmEvToRunFin(void);
-static void     vd_s_FwushStmEvToAct(void);
-static void     vd_s_FwushStmEvToActFin(void);
+/* Request processing */
+static U1 u1_s_FwushReadHeader(U1 * u1_ap_ptr);
+static U1 u1_s_FwushReadData(U4* u4_ap_adr);
 
-static U1       u1_s_FwushReqChk(void);
-static void     vd_s_FwushPrepMemAccChk(void);
-static void     vd_s_FwushRunMemAccChk(void);
-static void     vd_s_FwushVeriMemAccChk(void);
-static void     vd_s_FwushActMemAccChk(void);
-static void     vd_s_FwushMakeAckData(U1 u1_a_subtype);
-static void     vd_s_FwushMakeNackData(U1 u1_a_subtype);
-static U1       u1_s_FwushMakePrepData(U4 * u4_ap_adr, U4 * u4_ap_length, U4 * u4_ap_crc);
-static U1       u1_s_FwushMakeRunData(U4 * u4_ap_adr, U2 * u2_ap_ofst);
+/* Event detection */
+static U1 u1_s_FwushDetectEvent(void);
+static U1 u1_s_FwushDetectEventForWaiting(void);
+static U1 u1_s_FwushDetectEventForProcessing(void);
+static U1 u1_s_FwushCheckMemAccJobEvent(void);
+/* State-to-event mapping helper (Phase2 unified) */
+static U1 u1_s_MapMainStatusToEvent(U1 u1_a_main_status);
+static void vd_s_FwushExecuteStateSpecificAction(U1 event);
 
+/* State handlers */
+static void vd_s_FwushHandleEraseReq(void);
+static void vd_s_FwushHandleRunReq(void);
+static void vd_s_FwushHandleVerifyReq(void);
+static void vd_s_FwushHandleActivateReq(void);
+static void vd_s_FwushHandleMonitorJob(void);
+static void vd_s_FwushHandleEraseSuccess(void);
+static void vd_s_FwushHandleRunSuccess(void);
+static void vd_s_FwushHandleVerifySuccess(void);
+static void vd_s_FwushHandleActivateSuccess(void);
+static void vd_s_FwushHandleJobProgress(void);
+static void vd_s_FwushHandleAbort(void);
+
+/* CANCEL handlers */
+static void vd_s_FwushHandleCancel(void);
+static void vd_s_FwushHandleCancelDuringJob(void);
+static void vd_s_FwushHandleCancelRollback(void);
+
+/* Data generation */
+static void vd_s_FwushMakeResData(U1 u1_a_subtype_res, U1 u1_a_response);
+static U1   u1_s_FwushMakePrepData(U4 * u4_ap_adr, U4 * u4_ap_length, U4 * u4_ap_crc);
+static U1   u1_s_FwushMakeRunData(U4 * u4_ap_adr, U2 * u2_ap_ofst);
+
+/* Abort handling */
+static void vd_g_FwushAbort(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+
+/* State transition table: [main state][sub state][event] Size: [5 main states][2 sub states][8 events] = 80 entries (38% reduction from old 128 entries) */
+static const ST_FWUSH_TRANSITION_ENTRY stp_sp3_FWUSH_STM[FWUSH_MAIN_STATE_MAX]
+                                                        [FWUSH_SUB_STATE_MAX ]
+                                                        [FWUSH_EVENT_MAX     ] = {
+    /*************************************************************************************************************/
+    /* FWUSH_MAIN_STATE_PREP                                                                                     */
+    /*************************************************************************************************************/
+    {
+        /* FWUSH_SUB_STATE_WAITING                                                                               */
+        {
+            /* u1_next_main_state             u1_next_sub_state               fp_handler_func                     */
+            {(U1)FWUSH_MAIN_STATE_PREP, (U1)FWUSH_SUB_STATE_WAITING,    vdp_PTR_NA},                       /* FWUSH_EVENT_NONE            */
+            {(U1)FWUSH_MAIN_STATE_PREP, (U1)FWUSH_SUB_STATE_PROCESSING, &vd_s_FwushHandleEraseReq},        /* FWUSH_EVENT_NEW_REQUEST     */
+            {(U1)FWUSH_MAIN_STATE_PREP, (U1)FWUSH_SUB_STATE_WAITING,    vdp_PTR_NA},                       /* FWUSH_EVENT_SAME_REQUEST    */
+            {(U1)FWUSH_MAIN_STATE_PREP, (U1)FWUSH_SUB_STATE_WAITING,    vdp_PTR_NA},                       /* FWUSH_EVENT_MEMACC_SUCCESS  */
+            {(U1)FWUSH_MAIN_STATE_PREP, (U1)FWUSH_SUB_STATE_WAITING,    vdp_PTR_NA},                       /* FWUSH_EVENT_MEMACC_PROGRESS */
+            {(U1)FWUSH_MAIN_STATE_PREP, (U1)FWUSH_SUB_STATE_WAITING,    &vd_s_FwushHandleAbort},           /* FWUSH_EVENT_MEMACC_ERROR    */
+            {(U1)FWUSH_MAIN_STATE_PREP, (U1)FWUSH_SUB_STATE_WAITING,    &vd_s_FwushHandleAbort},           /* FWUSH_EVENT_INVALID_REQUEST */
+            {(U1)FWUSH_MAIN_STATE_PREP, (U1)FWUSH_SUB_STATE_WAITING,    vdp_PTR_NA},                       /* FWUSH_EVENT_CANCEL          */
+            {(U1)FWUSH_MAIN_STATE_PREP, (U1)FWUSH_SUB_STATE_WAITING,    vdp_PTR_NA},                       /* FWUSH_EVENT_MEMACC_RUN_PARTIAL */
+            {(U1)FWUSH_MAIN_STATE_PREP, (U1)FWUSH_SUB_STATE_WAITING,    vdp_PTR_NA},                       /* FWUSH_EVENT_MEMACC_RUN_COMPLETE */
+            {(U1)FWUSH_MAIN_STATE_PREP, (U1)FWUSH_SUB_STATE_WAITING,    vdp_PTR_NA}                        /* FWUSH_EVENT_MEMACC_ACT_ROLLBACK */
+        },
+        /* FWUSH_SUB_STATE_PROCESSING                                                                            */
+        {
+            /* u1_next_main_state             u1_next_sub_state               fp_handler_func                     */
+            {(U1)FWUSH_MAIN_STATE_PREP, (U1)FWUSH_SUB_STATE_PROCESSING, vdp_PTR_NA},                       /* FWUSH_EVENT_NONE            */
+            {(U1)FWUSH_MAIN_STATE_PREP, (U1)FWUSH_SUB_STATE_PROCESSING, vdp_PTR_NA},                       /* FWUSH_EVENT_NEW_REQUEST     */
+            {(U1)FWUSH_MAIN_STATE_PREP, (U1)FWUSH_SUB_STATE_PROCESSING, &vd_s_FwushHandleMonitorJob},      /* FWUSH_EVENT_SAME_REQUEST    */
+            {(U1)FWUSH_MAIN_STATE_RUN,  (U1)FWUSH_SUB_STATE_WAITING,    &vd_s_FwushHandleEraseSuccess},    /* FWUSH_EVENT_MEMACC_SUCCESS  */
+            {(U1)FWUSH_MAIN_STATE_PREP, (U1)FWUSH_SUB_STATE_PROCESSING, &vd_s_FwushHandleJobProgress},     /* FWUSH_EVENT_MEMACC_PROGRESS */
+            {(U1)FWUSH_MAIN_STATE_PREP, (U1)FWUSH_SUB_STATE_WAITING,    &vd_s_FwushHandleAbort},           /* FWUSH_EVENT_MEMACC_ERROR    */
+            {(U1)FWUSH_MAIN_STATE_PREP, (U1)FWUSH_SUB_STATE_PROCESSING, vdp_PTR_NA},                       /* FWUSH_EVENT_INVALID_REQUEST */
+            {(U1)FWUSH_MAIN_STATE_PREP, (U1)FWUSH_SUB_STATE_WAITING,    &vd_s_FwushHandleCancelDuringJob}, /* FWUSH_EVENT_CANCEL          */
+            {(U1)FWUSH_MAIN_STATE_PREP, (U1)FWUSH_SUB_STATE_PROCESSING, vdp_PTR_NA},                       /* FWUSH_EVENT_MEMACC_RUN_PARTIAL */
+            {(U1)FWUSH_MAIN_STATE_PREP, (U1)FWUSH_SUB_STATE_PROCESSING, vdp_PTR_NA},                       /* FWUSH_EVENT_MEMACC_RUN_COMPLETE */
+            {(U1)FWUSH_MAIN_STATE_PREP, (U1)FWUSH_SUB_STATE_PROCESSING, vdp_PTR_NA}                        /* FWUSH_EVENT_MEMACC_ACT_ROLLBACK */
+        }
+    },
+    
+    /*************************************************************************************************************/
+    /* FWUSH_MAIN_STATE_RUN                                                                                      */
+    /*************************************************************************************************************/
+    {
+        /* FWUSH_SUB_STATE_WAITING                                                                               */
+        {
+            /* u1_next_main_state             u1_next_sub_state               fp_handler_func                     */
+            {(U1)FWUSH_MAIN_STATE_RUN,  (U1)FWUSH_SUB_STATE_WAITING,    vdp_PTR_NA},                      /* FWUSH_EVENT_NONE            */
+            {(U1)FWUSH_MAIN_STATE_RUN,  (U1)FWUSH_SUB_STATE_PROCESSING, &vd_s_FwushHandleRunReq},         /* FWUSH_EVENT_NEW_REQUEST     */
+            {(U1)FWUSH_MAIN_STATE_RUN,  (U1)FWUSH_SUB_STATE_WAITING,    vdp_PTR_NA},                      /* FWUSH_EVENT_SAME_REQUEST    */
+            {(U1)FWUSH_MAIN_STATE_RUN,  (U1)FWUSH_SUB_STATE_WAITING,    vdp_PTR_NA},                      /* FWUSH_EVENT_MEMACC_SUCCESS  */
+            {(U1)FWUSH_MAIN_STATE_RUN,  (U1)FWUSH_SUB_STATE_WAITING,    vdp_PTR_NA},                      /* FWUSH_EVENT_MEMACC_PROGRESS */
+            {(U1)FWUSH_MAIN_STATE_RUN,  (U1)FWUSH_SUB_STATE_WAITING,    &vd_s_FwushHandleAbort},          /* FWUSH_EVENT_MEMACC_ERROR    */
+            {(U1)FWUSH_MAIN_STATE_RUN,  (U1)FWUSH_SUB_STATE_WAITING,    &vd_s_FwushHandleAbort},          /* FWUSH_EVENT_INVALID_REQUEST */
+            {(U1)FWUSH_MAIN_STATE_PREP, (U1)FWUSH_SUB_STATE_WAITING,    &vd_s_FwushHandleCancel},         /* FWUSH_EVENT_CANCEL          */
+            {(U1)FWUSH_MAIN_STATE_RUN,  (U1)FWUSH_SUB_STATE_WAITING,     vdp_PTR_NA},                     /* FWUSH_EVENT_MEMACC_RUN_PARTIAL */
+            {(U1)FWUSH_MAIN_STATE_RUN,  (U1)FWUSH_SUB_STATE_WAITING,     vdp_PTR_NA},                     /* FWUSH_EVENT_MEMACC_RUN_COMPLETE */
+            {(U1)FWUSH_MAIN_STATE_RUN,  (U1)FWUSH_SUB_STATE_WAITING,     vdp_PTR_NA}                      /* FWUSH_EVENT_MEMACC_ACT_ROLLBACK */
+        },
+        /* FWUSH_SUB_STATE_PROCESSING                                                                            */
+        {
+            /* u1_next_main_state             u1_next_sub_state               fp_handler_func                     */
+            {(U1)FWUSH_MAIN_STATE_RUN,  (U1)FWUSH_SUB_STATE_PROCESSING,  vdp_PTR_NA},                       /* FWUSH_EVENT_NONE            */
+            {(U1)FWUSH_MAIN_STATE_RUN,  (U1)FWUSH_SUB_STATE_PROCESSING,  vdp_PTR_NA},                       /* FWUSH_EVENT_NEW_REQUEST     */
+            {(U1)FWUSH_MAIN_STATE_RUN,  (U1)FWUSH_SUB_STATE_PROCESSING,  &vd_s_FwushHandleMonitorJob},      /* FWUSH_EVENT_SAME_REQUEST    */
+            {(U1)FWUSH_MAIN_STATE_RUN,  (U1)FWUSH_SUB_STATE_WAITING,     vdp_PTR_NA},                       /* FWUSH_EVENT_MEMACC_SUCCESS  */
+            {(U1)FWUSH_MAIN_STATE_RUN,  (U1)FWUSH_SUB_STATE_PROCESSING,  &vd_s_FwushHandleJobProgress},     /* FWUSH_EVENT_MEMACC_PROGRESS */
+            {(U1)FWUSH_MAIN_STATE_RUN,  (U1)FWUSH_SUB_STATE_WAITING,     &vd_s_FwushHandleAbort},           /* FWUSH_EVENT_MEMACC_ERROR    */
+            {(U1)FWUSH_MAIN_STATE_RUN,  (U1)FWUSH_SUB_STATE_PROCESSING,  vdp_PTR_NA},                       /* FWUSH_EVENT_INVALID_REQUEST */
+            {(U1)FWUSH_MAIN_STATE_PREP, (U1)FWUSH_SUB_STATE_WAITING,     &vd_s_FwushHandleCancelDuringJob}, /* FWUSH_EVENT_CANCEL          */
+            {(U1)FWUSH_MAIN_STATE_RUN,  (U1)FWUSH_SUB_STATE_WAITING,     &vd_s_FwushHandleRunSuccess},      /* FWUSH_EVENT_MEMACC_RUN_PARTIAL */
+            {(U1)FWUSH_MAIN_STATE_VERI, (U1)FWUSH_SUB_STATE_WAITING,     &vd_s_FwushHandleRunSuccess},      /* FWUSH_EVENT_MEMACC_RUN_COMPLETE */
+            {(U1)FWUSH_MAIN_STATE_RUN,  (U1)FWUSH_SUB_STATE_PROCESSING,  vdp_PTR_NA}                        /* FWUSH_EVENT_MEMACC_ACT_ROLLBACK */
+        }
+    },
+    
+    /*************************************************************************************************************/
+    /* FWUSH_MAIN_STATE_VERI                                                                                     */
+    /*************************************************************************************************************/
+    {
+        /* FWUSH_SUB_STATE_WAITING                                                                               */
+        {
+            /* u1_next_main_state             u1_next_sub_state               fp_handler_func                     */
+            {(U1)FWUSH_MAIN_STATE_VERI, (U1)FWUSH_SUB_STATE_WAITING,     vdp_PTR_NA},                       /* FWUSH_EVENT_NONE            */
+            {(U1)FWUSH_MAIN_STATE_VERI, (U1)FWUSH_SUB_STATE_PROCESSING,  &vd_s_FwushHandleVerifyReq},       /* FWUSH_EVENT_NEW_REQUEST     */
+            {(U1)FWUSH_MAIN_STATE_VERI, (U1)FWUSH_SUB_STATE_WAITING,     vdp_PTR_NA},                       /* FWUSH_EVENT_SAME_REQUEST    */
+            {(U1)FWUSH_MAIN_STATE_VERI, (U1)FWUSH_SUB_STATE_WAITING,     vdp_PTR_NA},                       /* FWUSH_EVENT_MEMACC_SUCCESS  */
+            {(U1)FWUSH_MAIN_STATE_VERI, (U1)FWUSH_SUB_STATE_WAITING,     vdp_PTR_NA},                       /* FWUSH_EVENT_MEMACC_PROGRESS */
+            {(U1)FWUSH_MAIN_STATE_VERI, (U1)FWUSH_SUB_STATE_WAITING,     &vd_s_FwushHandleAbort},           /* FWUSH_EVENT_MEMACC_ERROR    */
+            {(U1)FWUSH_MAIN_STATE_VERI, (U1)FWUSH_SUB_STATE_WAITING,     &vd_s_FwushHandleAbort},           /* FWUSH_EVENT_INVALID_REQUEST */
+            {(U1)FWUSH_MAIN_STATE_PREP, (U1)FWUSH_SUB_STATE_WAITING,     &vd_s_FwushHandleCancel},          /* FWUSH_EVENT_CANCEL          */
+            {(U1)FWUSH_MAIN_STATE_VERI, (U1)FWUSH_SUB_STATE_WAITING,     vdp_PTR_NA},                       /* FWUSH_EVENT_MEMACC_RUN_PARTIAL */
+            {(U1)FWUSH_MAIN_STATE_VERI, (U1)FWUSH_SUB_STATE_WAITING,     vdp_PTR_NA},                       /* FWUSH_EVENT_MEMACC_RUN_COMPLETE */
+            {(U1)FWUSH_MAIN_STATE_VERI, (U1)FWUSH_SUB_STATE_WAITING,     vdp_PTR_NA}                        /* FWUSH_EVENT_MEMACC_ACT_ROLLBACK */
+        }, 
+        /* FWUSH_SUB_STATE_PROCESSING                                                                            */
+        {
+            /* u1_next_main_state             u1_next_sub_state               fp_handler_func                     */
+            {(U1)FWUSH_MAIN_STATE_VERI, (U1)FWUSH_SUB_STATE_PROCESSING,  vdp_PTR_NA},                       /* FWUSH_EVENT_NONE            */
+            {(U1)FWUSH_MAIN_STATE_VERI, (U1)FWUSH_SUB_STATE_PROCESSING,  vdp_PTR_NA},                       /* FWUSH_EVENT_NEW_REQUEST     */
+            {(U1)FWUSH_MAIN_STATE_VERI, (U1)FWUSH_SUB_STATE_PROCESSING,  &vd_s_FwushHandleMonitorJob},      /* FWUSH_EVENT_SAME_REQUEST    */
+            {(U1)FWUSH_MAIN_STATE_ACT,  (U1)FWUSH_SUB_STATE_WAITING,     &vd_s_FwushHandleVerifySuccess},   /* FWUSH_EVENT_MEMACC_SUCCESS  */
+            {(U1)FWUSH_MAIN_STATE_VERI, (U1)FWUSH_SUB_STATE_PROCESSING,  &vd_s_FwushHandleJobProgress},     /* FWUSH_EVENT_MEMACC_PROGRESS */
+            {(U1)FWUSH_MAIN_STATE_VERI, (U1)FWUSH_SUB_STATE_WAITING,     &vd_s_FwushHandleAbort},           /* FWUSH_EVENT_MEMACC_ERROR    */
+            {(U1)FWUSH_MAIN_STATE_VERI, (U1)FWUSH_SUB_STATE_PROCESSING,  vdp_PTR_NA},                       /* FWUSH_EVENT_INVALID_REQUEST */
+            {(U1)FWUSH_MAIN_STATE_PREP, (U1)FWUSH_SUB_STATE_WAITING,     &vd_s_FwushHandleCancelDuringJob}, /* FWUSH_EVENT_CANCEL          */
+            {(U1)FWUSH_MAIN_STATE_VERI, (U1)FWUSH_SUB_STATE_PROCESSING,  vdp_PTR_NA},                       /* FWUSH_EVENT_MEMACC_RUN_PARTIAL */
+            {(U1)FWUSH_MAIN_STATE_VERI, (U1)FWUSH_SUB_STATE_PROCESSING,  vdp_PTR_NA},                       /* FWUSH_EVENT_MEMACC_RUN_COMPLETE */
+            {(U1)FWUSH_MAIN_STATE_VERI, (U1)FWUSH_SUB_STATE_PROCESSING,  vdp_PTR_NA}                        /* FWUSH_EVENT_MEMACC_ACT_ROLLBACK */
+        }
+    },
+    
+    /*************************************************************************************************************/
+    /* FWUSH_MAIN_STATE_ACT                                                                                      */
+    /*************************************************************************************************************/
+    {
+        /* FWUSH_SUB_STATE_WAITING                                                                               */
+        {
+            /* u1_next_main_state             u1_next_sub_state               fp_handler_func                     */
+            {(U1)FWUSH_MAIN_STATE_ACT,  (U1)FWUSH_SUB_STATE_WAITING,     vdp_PTR_NA},                       /* FWUSH_EVENT_NONE            */
+            {(U1)FWUSH_MAIN_STATE_ACT,  (U1)FWUSH_SUB_STATE_PROCESSING,  &vd_s_FwushHandleActivateReq},     /* FWUSH_EVENT_NEW_REQUEST     */
+            {(U1)FWUSH_MAIN_STATE_ACT,  (U1)FWUSH_SUB_STATE_WAITING,     vdp_PTR_NA},                       /* FWUSH_EVENT_SAME_REQUEST    */
+            {(U1)FWUSH_MAIN_STATE_ACT,  (U1)FWUSH_SUB_STATE_WAITING,     vdp_PTR_NA},                       /* FWUSH_EVENT_MEMACC_SUCCESS  */
+            {(U1)FWUSH_MAIN_STATE_ACT,  (U1)FWUSH_SUB_STATE_WAITING,     vdp_PTR_NA},                       /* FWUSH_EVENT_MEMACC_PROGRESS */
+            {(U1)FWUSH_MAIN_STATE_ACT,  (U1)FWUSH_SUB_STATE_WAITING,     &vd_s_FwushHandleAbort},           /* FWUSH_EVENT_MEMACC_ERROR    */
+            {(U1)FWUSH_MAIN_STATE_ACT,  (U1)FWUSH_SUB_STATE_WAITING,     &vd_s_FwushHandleAbort},           /* FWUSH_EVENT_INVALID_REQUEST */
+            {(U1)FWUSH_MAIN_STATE_PREP, (U1)FWUSH_SUB_STATE_WAITING,     &vd_s_FwushHandleCancel},          /* FWUSH_EVENT_CANCEL          */
+            {(U1)FWUSH_MAIN_STATE_ACT,  (U1)FWUSH_SUB_STATE_WAITING,     vdp_PTR_NA},                       /* FWUSH_EVENT_MEMACC_RUN_PARTIAL */
+            {(U1)FWUSH_MAIN_STATE_ACT,  (U1)FWUSH_SUB_STATE_WAITING,     vdp_PTR_NA},                       /* FWUSH_EVENT_MEMACC_RUN_COMPLETE */
+            {(U1)FWUSH_MAIN_STATE_ACT,  (U1)FWUSH_SUB_STATE_WAITING,     vdp_PTR_NA}                        /* FWUSH_EVENT_MEMACC_ACT_ROLLBACK */
+        },
+        /* FWUSH_SUB_STATE_PROCESSING                                                                            */
+        {
+            /* u1_next_main_state             u1_next_sub_state               fp_handler_func                     */
+            {(U1)FWUSH_MAIN_STATE_ACT,       (U1)FWUSH_SUB_STATE_PROCESSING,  vdp_PTR_NA},                       /* FWUSH_EVENT_NONE            */
+            {(U1)FWUSH_MAIN_STATE_ACT,       (U1)FWUSH_SUB_STATE_PROCESSING,  vdp_PTR_NA},                       /* FWUSH_EVENT_NEW_REQUEST     */
+            {(U1)FWUSH_MAIN_STATE_ACT,       (U1)FWUSH_SUB_STATE_PROCESSING,  &vd_s_FwushHandleMonitorJob},      /* FWUSH_EVENT_SAME_REQUEST    */
+            {(U1)FWUSH_MAIN_STATE_ACT,       (U1)FWUSH_SUB_STATE_WAITING,     &vd_s_FwushHandleActivateSuccess}, /* FWUSH_EVENT_MEMACC_SUCCESS  */
+            {(U1)FWUSH_MAIN_STATE_ACT,       (U1)FWUSH_SUB_STATE_PROCESSING,  &vd_s_FwushHandleJobProgress},     /* FWUSH_EVENT_MEMACC_PROGRESS */
+            {(U1)FWUSH_MAIN_STATE_ACT,       (U1)FWUSH_SUB_STATE_WAITING,     &vd_s_FwushHandleAbort},           /* FWUSH_EVENT_MEMACC_ERROR    */
+            {(U1)FWUSH_MAIN_STATE_ACT,       (U1)FWUSH_SUB_STATE_PROCESSING,  vdp_PTR_NA},                       /* FWUSH_EVENT_INVALID_REQUEST */
+            {(U1)FWUSH_MAIN_STATE_PREP,      (U1)FWUSH_SUB_STATE_WAITING,     &vd_s_FwushHandleCancelDuringJob}, /* FWUSH_EVENT_CANCEL          */
+            {(U1)FWUSH_MAIN_STATE_ACT,       (U1)FWUSH_SUB_STATE_PROCESSING,  vdp_PTR_NA},                       /* FWUSH_EVENT_MEMACC_RUN_PARTIAL */
+            {(U1)FWUSH_MAIN_STATE_ACT,       (U1)FWUSH_SUB_STATE_PROCESSING,  vdp_PTR_NA},                       /* FWUSH_EVENT_MEMACC_RUN_COMPLETE */
+            {(U1)FWUSH_MAIN_STATE_ROLLBACK,  (U1)FWUSH_SUB_STATE_WAITING,     vdp_PTR_NA}                        /* FWUSH_EVENT_MEMACC_ACT_ROLLBACK */
+        }
+    },
+    
+    /*************************************************************************************************************/
+    /* FWUSH_MAIN_STATE_ROLLBACK                                                                                 */
+    /*************************************************************************************************************/
+    {
+        /* FWUSH_SUB_STATE_WAITING                                                                               */
+        {
+            /* u1_next_main_state             u1_next_sub_state               fp_handler_func                     */
+            {(U1)FWUSH_MAIN_STATE_ROLLBACK, (U1)FWUSH_SUB_STATE_WAITING,    vdp_PTR_NA},                    /* FWUSH_EVENT_NONE            */
+            {(U1)FWUSH_MAIN_STATE_ROLLBACK, (U1)FWUSH_SUB_STATE_WAITING,    vdp_PTR_NA},                    /* FWUSH_EVENT_NEW_REQUEST     */
+            {(U1)FWUSH_MAIN_STATE_ROLLBACK, (U1)FWUSH_SUB_STATE_WAITING,    vdp_PTR_NA},                    /* FWUSH_EVENT_SAME_REQUEST    */
+            {(U1)FWUSH_MAIN_STATE_ROLLBACK, (U1)FWUSH_SUB_STATE_WAITING,    vdp_PTR_NA},                    /* FWUSH_EVENT_MEMACC_SUCCESS  */
+            {(U1)FWUSH_MAIN_STATE_ROLLBACK, (U1)FWUSH_SUB_STATE_WAITING,    vdp_PTR_NA},                    /* FWUSH_EVENT_MEMACC_PROGRESS */
+            {(U1)FWUSH_MAIN_STATE_ROLLBACK, (U1)FWUSH_SUB_STATE_WAITING,    vdp_PTR_NA},                    /* FWUSH_EVENT_MEMACC_ERROR    */
+            {(U1)FWUSH_MAIN_STATE_ROLLBACK, (U1)FWUSH_SUB_STATE_WAITING,    vdp_PTR_NA},                    /* FWUSH_EVENT_INVALID_REQUEST */
+            {(U1)FWUSH_MAIN_STATE_ROLLBACK, (U1)FWUSH_SUB_STATE_WAITING,    vdp_PTR_NA},                    /* FWUSH_EVENT_CANCEL          */
+            {(U1)FWUSH_MAIN_STATE_ROLLBACK, (U1)FWUSH_SUB_STATE_WAITING,    vdp_PTR_NA},                    /* FWUSH_EVENT_MEMACC_RUN_PARTIAL */
+            {(U1)FWUSH_MAIN_STATE_ROLLBACK, (U1)FWUSH_SUB_STATE_WAITING,    vdp_PTR_NA},                    /* FWUSH_EVENT_MEMACC_RUN_COMPLETE */
+            {(U1)FWUSH_MAIN_STATE_ROLLBACK, (U1)FWUSH_SUB_STATE_WAITING,    vdp_PTR_NA}                     /* FWUSH_EVENT_MEMACC_ACT_ROLLBACK */
+        },
+        /* FWUSH_SUB_STATE_PROCESSING                                                                            */
+        {
+            /* u1_next_main_state             u1_next_sub_state               fp_handler_func                     */
+            {(U1)FWUSH_MAIN_STATE_ROLLBACK, (U1)FWUSH_SUB_STATE_PROCESSING, vdp_PTR_NA},                    /* FWUSH_EVENT_NONE            */
+            {(U1)FWUSH_MAIN_STATE_ROLLBACK, (U1)FWUSH_SUB_STATE_PROCESSING, vdp_PTR_NA},                    /* FWUSH_EVENT_NEW_REQUEST     */
+            {(U1)FWUSH_MAIN_STATE_ROLLBACK, (U1)FWUSH_SUB_STATE_PROCESSING, vdp_PTR_NA},                    /* FWUSH_EVENT_SAME_REQUEST    */
+            {(U1)FWUSH_MAIN_STATE_ROLLBACK, (U1)FWUSH_SUB_STATE_PROCESSING, vdp_PTR_NA},                    /* FWUSH_EVENT_MEMACC_SUCCESS  */
+            {(U1)FWUSH_MAIN_STATE_ROLLBACK, (U1)FWUSH_SUB_STATE_PROCESSING, vdp_PTR_NA},                    /* FWUSH_EVENT_MEMACC_PROGRESS */
+            {(U1)FWUSH_MAIN_STATE_ROLLBACK, (U1)FWUSH_SUB_STATE_PROCESSING, vdp_PTR_NA},                    /* FWUSH_EVENT_MEMACC_ERROR    */
+            {(U1)FWUSH_MAIN_STATE_ROLLBACK, (U1)FWUSH_SUB_STATE_PROCESSING, vdp_PTR_NA},                    /* FWUSH_EVENT_INVALID_REQUEST */
+            {(U1)FWUSH_MAIN_STATE_ROLLBACK, (U1)FWUSH_SUB_STATE_PROCESSING, vdp_PTR_NA},                    /* FWUSH_EVENT_CANCEL          */
+            {(U1)FWUSH_MAIN_STATE_ROLLBACK, (U1)FWUSH_SUB_STATE_PROCESSING, vdp_PTR_NA},                    /* FWUSH_EVENT_MEMACC_RUN_PARTIAL */
+            {(U1)FWUSH_MAIN_STATE_ROLLBACK, (U1)FWUSH_SUB_STATE_PROCESSING, vdp_PTR_NA},                    /* FWUSH_EVENT_MEMACC_RUN_COMPLETE */
+            {(U1)FWUSH_MAIN_STATE_ROLLBACK, (U1)FWUSH_SUB_STATE_PROCESSING, vdp_PTR_NA}                     /* FWUSH_EVENT_MEMACC_ACT_ROLLBACK */
+        }
+    }
+};
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-void    vd_g_FwushInit(void)
+/*===================================================================================================================================*/
+/* void vd_g_FwushInit(void)                                                                                                         */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void vd_g_FwushInit(void)
 {
-    u1_s_fwush_subtype_prev = (U1)FWUSH_REQ_SUBTYPE_NA;
-    u1_s_fwush_stm_ctl = (U1)FWUSH_STS_PREP;  /* Initialize to PREP_受信中 */
-    u1_s_fwush_stm_act = (U1)0U;
-    u1_s_fwush_abort_active = (U1)FALSE;
-    u1_s_fwush_memacc_job_active = (U1)FALSE;
-    u2_s_fwush_run_offset_prev = (U2)0xFFFFU;
-
-    u1_s_fwush_act_fin_flg = (U1)FALSE;
-
+    /* Initialize state variables */
+    u1_s_fwush_state_main       = (U1)FWUSH_MAIN_STATE_PREP;
+    u1_s_fwush_state_sub        = (U1)FWUSH_SUB_STATE_WAITING;
+    u1_s_fwupx_req_seqcnt_pre   = (U1)0x00U;
+    u1_s_fwupx_res_seqcnt       = (U1)0x00U;
+    u1_s_fwush_abort            = (U1)FALSE;
+    u1_s_fwush_prep_data_ready  = (U1)FALSE;
+    u4_s_fwush_prep_data_crc    = (U4)0U;
+    u2_s_fwush_run_ofst     = (U2)0xFFFFU;
+    
+    /* Clear header buffer */
+    vd_g_MemfillU1(&u1_sp_fwush_header[0], (U1)0U, (U4)FWUSH_REQ_H_SIZE);
+    
+    /* Initialize FwuMemAcc */
     vd_g_FwuMemAccInit();
 }
 
-
-void    vd_g_FwushMainTask(void)
+/*===================================================================================================================================*/
+/* void vd_g_FwushMainTask(void)                                                                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void vd_g_FwushMainTask(void)
 {
-    /* State transition matrix: [Event][Current_State] -> Action */
-    /* Current State: PREP(0), RUN(1), VERI(2), ACT(3) */
-    /* Event Index: bit pattern from u2_t_eas_chk */
-    static const U1 u1_sp_FWUSH_STM[] = {
-        /* EAS=0: Normal operation (no events) */
-        /* PREP               RUN                       VERI                  ACT                    */
-        (U1)FWUSH_ACT_PREP,   (U1)FWUSH_ACT_RUN,        (U1)FWUSH_ACT_VERI,   (U1)FWUSH_ACT_ACT,
-        /* EAS=1    : PREP_FIN */
-        (U1)FWUSH_ACT_TO_RUN, (U1)FWUSH_ACT_RUN,        (U1)FWUSH_ACT_VERI,   (U1)FWUSH_ACT_ACT,
-        /* EAS=2    : RUN_FIN */
-        (U1)FWUSH_ACT_PREP,   (U1)FWUSH_ACT_TO_RUN_FIN, (U1)FWUSH_ACT_VERI,   (U1)FWUSH_ACT_ACT,
-        /* EAS=3    : RUN_FIN + PREP_FIN (irregular) */
-        (U1)FWUSH_ACT_PREP,   (U1)FWUSH_ACT_RUN,        (U1)FWUSH_ACT_VERI,   (U1)FWUSH_ACT_ACT,
-        /* EAS=4    : VERI_FIN */
-        (U1)FWUSH_ACT_PREP,   (U1)FWUSH_ACT_RUN,        (U1)FWUSH_ACT_TO_ACT, (U1)FWUSH_ACT_ACT,
-        /* EAS=5-7  : VERI_FIN + other (irregular) */
-        (U1)FWUSH_ACT_PREP,   (U1)FWUSH_ACT_RUN,        (U1)FWUSH_ACT_VERI,   (U1)FWUSH_ACT_ACT,
-        (U1)FWUSH_ACT_PREP,   (U1)FWUSH_ACT_RUN,        (U1)FWUSH_ACT_VERI,   (U1)FWUSH_ACT_ACT,
-        (U1)FWUSH_ACT_PREP,   (U1)FWUSH_ACT_RUN,        (U1)FWUSH_ACT_VERI,   (U1)FWUSH_ACT_ACT,
-        /* EAS=8    : ACT_FIN */
-        (U1)FWUSH_ACT_PREP,   (U1)FWUSH_ACT_RUN,        (U1)FWUSH_ACT_VERI,   (U1)FWUSH_ACT_TO_ACT_FIN,
-        /* EAS=9-15 : ACT_FIN + other (irregular) */
-        (U1)FWUSH_ACT_PREP,   (U1)FWUSH_ACT_RUN,        (U1)FWUSH_ACT_VERI,   (U1)FWUSH_ACT_ACT,
-        (U1)FWUSH_ACT_PREP,   (U1)FWUSH_ACT_RUN,        (U1)FWUSH_ACT_VERI,   (U1)FWUSH_ACT_ACT,
-        (U1)FWUSH_ACT_PREP,   (U1)FWUSH_ACT_RUN,        (U1)FWUSH_ACT_VERI,   (U1)FWUSH_ACT_ACT,
-        (U1)FWUSH_ACT_PREP,   (U1)FWUSH_ACT_RUN,        (U1)FWUSH_ACT_VERI,   (U1)FWUSH_ACT_ACT,
-        (U1)FWUSH_ACT_PREP,   (U1)FWUSH_ACT_RUN,        (U1)FWUSH_ACT_VERI,   (U1)FWUSH_ACT_ACT,
-        (U1)FWUSH_ACT_PREP,   (U1)FWUSH_ACT_RUN,        (U1)FWUSH_ACT_VERI,   (U1)FWUSH_ACT_ACT,
-        (U1)FWUSH_ACT_PREP,   (U1)FWUSH_ACT_RUN,        (U1)FWUSH_ACT_VERI,   (U1)FWUSH_ACT_ACT
-        /* PREP               RUN                       VERI                  ACT                    */
-    };
+    const ST_FWUSH_TRANSITION_ENTRY*    stp_t_TRANSITION;
+    U1                                  u1_t_state_main_crnt;
+    U1                                  u1_t_state_sub_crnt;
+    U1                                  u1_t_event;
 
-    /* Action function pointer table */
-    static void (* const  fp_sp_FWUSH_ACT[])(void) = {
-        &vd_s_FwushStmEvToRun,            /* FWUSH_ACT_TO_RUN      (0U) */
-        &vd_s_FwushStmEvToRunFin,         /* FWUSH_ACT_TO_RUN_FIN  (1U) */
-        &vd_s_FwushStmEvToAct,            /* FWUSH_ACT_TO_ACT      (2U) */
-        &vd_s_FwushStmEvToActFin,         /* FWUSH_ACT_TO_ACT_FIN  (3U) */
-        &vd_s_FwushStmEvPrep,             /* FWUSH_ACT_PREP        (4U) */
-        &vd_s_FwushStmEvRun,              /* FWUSH_ACT_RUN         (5U) */
-        &vd_s_FwushStmEvVeri,             /* FWUSH_ACT_VERI        (6U) */
-        &vd_s_FwushStmEvAct               /* FWUSH_ACT_ACT         (7U) */
-    };
-    static const U2  u2_s_FWUSH_ACT_SIZE = sizeof(fp_sp_FWUSH_ACT) / sizeof(fp_sp_FWUSH_ACT[0]);
+    u1_t_state_main_crnt = u1_s_fwush_state_main;
+    u1_t_state_sub_crnt  = u1_s_fwush_state_sub;
 
-    U1  u1_t_head_ok;
-    U2  u2_t_eas_chk;
-    U2  u2_t_act;
-
-    /* Check for external request changes */
-    u1_t_head_ok = u1_s_FwushReqChk();
-    if(u1_t_head_ok == (U1)TRUE){
+    /* 1. Event detection (reads header internally) */
+    u1_t_event = u1_s_FwushDetectEvent();
     
-        /* Determine event/action status */
-        u2_t_eas_chk = u2_s_FwushEasChk();
-    
-        /* Calculate table index: (Event_Index * State_Count) + Current_State */
-        u2_t_act = (u2_t_eas_chk * (U2)FWUSH_NUM_STS) + (U2)u1_s_fwush_stm_ctl;
+    /* 2. Consult state transition table */
+    stp_t_TRANSITION = &stp_sp3_FWUSH_STM[u1_t_state_main_crnt]
+                                         [u1_t_state_sub_crnt ]
+                                         [u1_t_event    ];
 
-        /* Bounds check for state machine table */
-        if(u2_t_act < (U2)(sizeof(u1_sp_FWUSH_STM) / sizeof(u1_sp_FWUSH_STM[0]))){
-            u2_t_act = (U2)u1_sp_FWUSH_STM[u2_t_act];
-            
-            /* Bounds check for function pointer table */
-            if(u2_t_act < u2_s_FWUSH_ACT_SIZE){
-                /* Null check */
-                if(fp_sp_FWUSH_ACT[u2_t_act] != vdp_PTR_NA){
-                    /* Execute selected action */
-                    fp_sp_FWUSH_ACT[u2_t_act]();
-                }
-            }
-        }
-        /* Store previous subtype for change detection */
-        u1_s_fwush_subtype_prev = u1_sp_fwush_header[FWUSH_REQ_SUBTYPE_OFFSET];
-
-        /* 関数化 */
-        if(u1_s_fwush_abort_active != (U1)FALSE){
-            /* Handle error state */
-            vd_s_FwushMakeNackData(u1_sp_fwush_header[FWUSH_REQ_SUBTYPE_OFFSET]);
-            vd_g_FwushInit();
-        }
+    /* 3. Execute Transition Event Handler */
+    if(stp_t_TRANSITION->fp_handler_func != vdp_PTR_NA){
+        stp_t_TRANSITION->fp_handler_func();
     }
 
+    /* 4. Update state */
+    u1_s_fwush_state_main = stp_t_TRANSITION->u1_next_main_state;
+    u1_s_fwush_state_sub  = stp_t_TRANSITION->u1_next_sub_state;
+
+    /* 5. Error handling */
+    if(u1_s_fwush_abort != (U1)FALSE){
+        vd_s_FwushMakeResData(u1_t_state_main_crnt, (U1)FWUSH_ACK_NG);
+        vd_g_FwushAbort();
+    }
+    
+    /* 6. Execute MemAcc task */
     vd_g_FwuMemAccMainTask();
 }
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U1    u1_s_FwushReqChk(void)
-{
-    U1  u1_t_read_ok;
-    
-    /* FWUPXREQ_H analysis */
-    u1_t_read_ok = u1_s_FwushReadHeader(&u1_sp_fwush_header[0]);
-
-    return(u1_t_read_ok);
-}
-
-static U2       u2_s_FwushEasChk(void)
-{
-    U2  u2_t_eas_pattern;
-    
-    /* Clear previous EAS check result */
-    u2_t_eas_pattern = (U2)0U;
-    
-    /* Build event pattern from current request status */
-    if((u1_s_fwush_stm_act & (U1)FWUSH_EAS_CHK_PREP_FIN) != (U1)0U){
-        u2_t_eas_pattern |= (U2)FWUSH_EAS_CHK_PREP_FIN;
-    }
-
-    if((u1_s_fwush_stm_act & (U1)FWUSH_EAS_CHK_RUN_FIN) != (U1)0U){
-        u2_t_eas_pattern |= (U2)FWUSH_EAS_CHK_RUN_FIN;
-    }
-    
-    if((u1_s_fwush_stm_act & (U1)FWUSH_EAS_CHK_VERI_FIN) != (U1)0U){
-        u2_t_eas_pattern |= (U2)FWUSH_EAS_CHK_VERI_FIN;
-    }
-
-    if((u1_s_fwush_stm_act & (U1)FWUSH_EAS_CHK_ACT_FIN) != (U1)0U){
-        u2_t_eas_pattern |= (U2)FWUSH_EAS_CHK_ACT_FIN;
-    }
-
-    /* 異常中断要求はEvent Action Statusで管理しない*/
-
-    /* Clear processed flags */
-    u1_s_fwush_stm_act = (U1)0U;
-    
-    return(u2_t_eas_pattern);
-}
-
-static void     vd_s_FwushPrepMemAccChk(void)
-{
-    U1  u1_t_prep_sts;
-    u1_t_prep_sts = u1_g_FwuMemAccEraseSts();
-    switch (u1_t_prep_sts)
-    {
-    case FWUSH_MEMACC_STATUS_PREP_IDLE:
-        break;
-    case FWUSH_MEMACC_STATUS_PREP_RUNNING:
-        break;
-    case FWUSH_MEMACC_STATUS_PREP_SUCCESS:
-        /* Job completed successfully */
-        u1_s_fwush_memacc_job_active = (U1)FALSE;
-        u1_s_fwush_stm_act |= (U1)FWUSH_EAS_CHK_PREP_FIN;
-        break;
-    case FWUSH_MEMACC_STATUS_PREP_ERROR:
-        /* Job failed */
-        u1_s_fwush_memacc_job_active = (U1)FALSE;
-        u1_s_fwush_stm_act |= (U1)FWUSH_EAS_CHK_PREP_FIN;
-        break;
-    default:
-        break;  /* Invalid status */
-    }
-}
-
-static void     vd_s_FwushRunMemAccChk(void)
-{
-    U1  u1_t_run_sts;
-
-    u1_t_run_sts = u1_g_FwuMemAccUpdateSts();
-    switch (u1_t_run_sts)
-    {
-    case (U1)FWUSH_MEMACC_STATUS_RUN_IDLE:
-        break;
-    case (U1)FWUSH_MEMACC_STATUS_RUN_RUNNING:
-        break;
-    case (U1)FWUSH_MEMACC_STATUS_RUN_CRC_CHECK:
-        break;
-    case (U1)FWUSH_MEMACC_STATUS_RUN_SUCCESS_MIDWAY:
-        /* Job completed successfully (MIDWAY) */
-        u1_s_fwush_memacc_job_active = (U1)FALSE;
-        u1_s_fwush_stm_act |= (U1)FWUSH_EAS_CHK_RUN_FIN;
-        break;
-    case (U1)FWUSH_MEMACC_STATUS_RUN_SUCCESS_FINAL:
-        /* Job completed successfully (FINAL)*/
-        u1_s_fwush_memacc_job_active = (U1)FALSE;
-        u1_s_fwush_stm_act |= (U1)FWUSH_EAS_CHK_RUN_FIN;
-        break;
-    case (U1)FWUSH_MEMACC_STATUS_RUN_ERROR:
-        /* Job failed */
-        u1_s_fwush_memacc_job_active = (U1)FALSE;
-        u1_s_fwush_stm_act |= (U1)FWUSH_EAS_CHK_RUN_FIN;
-        break;
-    default:
-        break;  /* Invalid status */
-    }
-}
-
-static void     vd_s_FwushVeriMemAccChk(void)
-{
-        /* u1_s_fwush_veri_sts = u1_g_MemAcc_GetVeriJobStatus(); */  /* Step1では不要 */
-        u1_s_fwush_stm_act |= (U1)FWUSH_EAS_CHK_VERI_FIN;
-}
-
-static void     vd_s_FwushActMemAccChk(void)
-{
-    U1  u1_t_act_sts;
-    u1_t_act_sts = u1_g_FwuMemAccSwitchSts();
-    switch (u1_t_act_sts)
-    {
-    case FWUSH_MEMACC_STATUS_ACT_IDLE:
-        /* Job is idle */
-        break;
-    case FWUSH_MEMACC_STATUS_ACT_RUNNING:
-        /* Job is running */
-    break;
-    case FWUSH_MEMACC_STATUS_ACT_SUCCESS:
-        /* Job completed successfully */
-        u1_s_fwush_memacc_job_active = (U1)FALSE;
-        u1_s_fwush_stm_act |= (U1)FWUSH_EAS_CHK_ACT_FIN;
-        break;
-    case FWUSH_MEMACC_STATUS_ACT_ERROR:
-        /* Job failed */
-        u1_s_fwush_memacc_job_active = (U1)FALSE;
-        u1_s_fwush_stm_act |= (U1)FWUSH_EAS_CHK_ACT_FIN;
-        break;
-    default:
-        break;  /* Invalid status */
-    }
-}
-
+/*  Event Detection                                                                                                                  */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-
-
-/* 定常処理 */
-static void   vd_s_FwushStmEvPrep(void)
+/*===================================================================================================================================*/
+/* static U1 u1_s_FwushDetectEvent(void)                                                                                             */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         U1 : Detected event                                                                                              */
+/*===================================================================================================================================*/
+static U1 u1_s_FwushDetectEvent(void)
 {
-    U1    u1_t_read_ok;
-    U4    u4_t_adr;
-    U4    u4_t_length;
-    U4    u4_t_crc;
+    U1 u1_t_event;
+    U1 u1_t_head_ok;
 
-    switch (u1_s_fwush_subtype_prev)  /* Check previous subtype */
-    {
-        case FWUSH_REQ_SUBTYPE_NA:    /* RECV */  /* 関数化 */
-            if(u1_sp_fwush_header[FWUSH_REQ_SUBTYPE_OFFSET] == (U1)FWUSH_REQ_SUBTYPE_PREP)
-            {
-                /* make memacc data for Prep */
-                u1_t_read_ok = u1_s_FwushMakePrepData(&u4_t_adr, &u4_t_length, &u4_t_crc);
-                /* Start MemAcc job for preparation */
-                if(u1_t_read_ok == (U1)TRUE){
-                    u1_s_fwush_memacc_job_active = (U1)TRUE;
-                    vd_g_FwuMemAccEraseReqTrg(u4_t_adr, u4_t_length, u4_t_crc);
-                } else {
-                    u1_s_fwush_abort_active = (U1)TRUE;  /* Set abort flag */
-                }
-            }
-            else
-            {
-                /* u1_s_fwush_stm_ctl = (U1)FWUSH_STS_PREP; */  /* No need to action. */
-            }
-            break;
-        case FWUSH_REQ_SUBTYPE_PREP:    /* PROC */  /* 関数化 */
-            if(u1_sp_fwush_header[FWUSH_REQ_SUBTYPE_OFFSET] == (U1)FWUSH_REQ_SUBTYPE_PREP)
-            {
-                /* Already in PREP state, continue processing */
-                vd_s_FwushPrepMemAccChk();
-            }
-            else
-            {
-                u1_s_fwush_abort_active = (U1)TRUE;  /* Set abort flag */
-            }
-        default:
-            break;
+    if(u1_s_fwush_state_sub == (U1)FWUSH_SUB_STATE_WAITING){
+        u1_t_head_ok = u1_s_FwushReadHeader(&u1_sp_fwush_header[0]);
+        if(u1_t_head_ok == (U1)FALSE){
+            u1_t_event = (U1)FWUSH_EVENT_NONE;
+        }
+        else{
+            u1_t_event = u1_s_FwushDetectEventForWaiting();
+            vd_s_FwushExecuteStateSpecificAction(u1_t_event);
+        }
     }
+    else if(u1_s_fwush_state_sub == (U1)FWUSH_SUB_STATE_PROCESSING){
+        u1_t_event = u1_s_FwushDetectEventForProcessing();
+    }
+    else{
+        /* Unexpected substate */
+        u1_t_event = (U1)FWUSH_EVENT_NONE;
+    }
+
+    return(u1_t_event);
 }
 
-static void   vd_s_FwushStmEvRun(void)
+/*===================================================================================================================================*/
+/* static U1 u1_s_FwushDetectEventForWaiting(void)                                                                                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         U1 : Detected event                                                                                              */
+/*===================================================================================================================================*/
+static U1 u1_s_FwushDetectEventForWaiting(void)
 {
-    U1    u1_t_read_ok;
-    U4    u4_t_adr;
-    U2    u2_t_ofst;
-
-    switch (u1_s_fwush_subtype_prev)  /* Check previous subtype */
+    static const U1 u1_sp_FWUSH_EXPCT_SUBTYPE_WA[FWUSH_MAIN_STATE_MAX] =
     {
-        case FWUSH_REQ_SUBTYPE_NA:    /* RECV */  /* 関数化 */
-            if(u1_sp_fwush_header[FWUSH_REQ_SUBTYPE_OFFSET] == (U1)FWUSH_REQ_SUBTYPE_RUN)
-            {
-                /* make memacc data for Run */
-                u1_t_read_ok = u1_s_FwushMakeRunData(&u4_t_adr, &u2_t_ofst);
-                if (u2_t_ofst != u2_s_fwush_run_offset_prev)
-                {
-                    /* Start MemAcc job for Run */
-                    if(u1_t_read_ok == (U1)TRUE){
-                        u1_s_fwush_memacc_job_active = (U1)TRUE;
-                        vd_g_FwuMemAccUpdateReqTrg(u2_t_ofst, (U4 *)u4_t_adr);
-                    } else {
-                        u1_s_fwush_abort_active = (U1)TRUE;  /* Set abort flag */
-                    }
-                }
-                else
-                {
-                    /* Offset has not changed, no need to start MemAcc job */
-                    u1_sp_fwush_header[FWUSH_REQ_SUBTYPE_OFFSET] = FWUSH_REQ_SUBTYPE_NA;  /* Wait new request */
-                }
-                /* Update previous offset */
-                u2_s_fwush_run_offset_prev = u2_t_ofst;
-            }
-            else
-            {
-                /* u1_s_fwush_stm_ctl = (U1)FWUSH_STS_RUN; */  /* No need to action. */
-            }
-            break;
-        case FWUSH_REQ_SUBTYPE_RUN:    /* PROC */  /* 関数化 */
-            if(u1_sp_fwush_header[FWUSH_REQ_SUBTYPE_OFFSET] == (U1)FWUSH_REQ_SUBTYPE_RUN)
-            {
-                /* Already in RUN state, continue processing */
-                vd_s_FwushRunMemAccChk();
-            }
-            else
-            {
-                u1_s_fwush_abort_active = (U1)TRUE;  /* Set abort flag */
-            }
-        default:
-            break;
+        (U1)FWUSH_REQ_SUBTYPE_PREP,                      /* FWUSH_MAIN_STATE_PREP     (0U) */
+        (U1)FWUSH_REQ_SUBTYPE_RUN,                       /* FWUSH_MAIN_STATE_RUN      (1U) */
+        (U1)FWUSH_REQ_SUBTYPE_VERI,                      /* FWUSH_MAIN_STATE_VERI     (2U) */
+        (U1)FWUSH_REQ_SUBTYPE_ACT,                       /* FWUSH_MAIN_STATE_ACT      (3U) */
+        (U1)FWUSH_REQ_SUBTYPE_NA                         /* FWUSH_MAIN_STATE_ROLLBACK (4U) */
+    };
+    U1 u1_t_event;
+    U1 u1_t_current_req_subtype;
+    U1 u1_t_expected_subtype;
+    U1 u1_t_seqcnt;
+    
+    /* Expected subtype for main state */
+    u1_t_current_req_subtype = u1_sp_fwush_header[FWUSH_REQ_SUBTYPE_OFFSET];
+    u1_t_seqcnt              = u1_sp_fwush_header[FWUSH_REQ_SEQCNT_OFFSET];
+    u1_t_event               = (U1)FWUSH_EVENT_NONE;
+    u1_t_expected_subtype    = (U1)u1_sp_FWUSH_EXPCT_SUBTYPE_WA[u1_s_fwush_state_main];
+    
+    /* Detect request change */
+    if(u1_t_seqcnt != u1_s_fwupx_req_seqcnt_pre){
+        if(u1_t_current_req_subtype == u1_t_expected_subtype){
+            u1_t_event = (U1)FWUSH_EVENT_NEW_REQUEST;
+        }
+        else if(u1_t_current_req_subtype == (U1)FWUSH_REQ_SUBTYPE_CANCEL){
+            u1_t_event = (U1)FWUSH_EVENT_CANCEL;
+        }
+        else if(u1_t_current_req_subtype != (U1)FWUSH_REQ_SUBTYPE_NA){
+            u1_t_event = (U1)FWUSH_EVENT_INVALID_REQUEST;
+        }
+        else{
+            /* Do Nothing */
+        }
+        u1_s_fwupx_req_seqcnt_pre = u1_t_seqcnt;
     }
+    else{
+        u1_t_event = (U1)FWUSH_EVENT_SAME_REQUEST;
+    }
+
+    return(u1_t_event);
 }
 
-static void     vd_s_FwushStmEvVeri(void)
+/*===================================================================================================================================*/
+/* static U1 u1_s_FwushDetectEventForProcessing(void)                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         U1 : Detected event                                                                                              */
+/*===================================================================================================================================*/
+static U1 u1_s_FwushDetectEventForProcessing(void)
 {
-    switch (u1_s_fwush_subtype_prev)  /* Check previous subtype */
+    static const U1 u1_sp_FWUSH_EXPCT_SUBTYPE_PR[FWUSH_MAIN_STATE_MAX] =
     {
-        case FWUSH_REQ_SUBTYPE_NA:    /* RECV */  /* 関数化 */
-            if(u1_sp_fwush_header[FWUSH_REQ_SUBTYPE_OFFSET] == (U1)FWUSH_REQ_SUBTYPE_VERI)
-            {
-                /* Start MemAcc job for verification */
-                u1_s_fwush_memacc_job_active = (U1)TRUE;
-            }
-            else
-            {
-                /* u1_s_fwush_stm_ctl = (U1)FWUSH_STS_VERI; */  /* No need to action. */
-            }
-            break;
-        case FWUSH_REQ_SUBTYPE_VERI:    /* PROC */  /* 関数化 */
-            if(u1_sp_fwush_header[FWUSH_REQ_SUBTYPE_OFFSET] == (U1)FWUSH_REQ_SUBTYPE_VERI)
-            {
-                /* Already in VERI state, continue processing */
-                vd_s_FwushVeriMemAccChk();
-            }
-            else
-            {
-                u1_s_fwush_abort_active = (U1)TRUE;  /* Set abort flag */
-            }
-        default:
-            break;
+        (U1)FWUSH_REQ_SUBTYPE_PREP,                      /* FWUSH_MAIN_STATE_PREP     (0U) */
+        (U1)FWUSH_REQ_SUBTYPE_RUN,                       /* FWUSH_MAIN_STATE_RUN      (1U) */
+        (U1)FWUSH_REQ_SUBTYPE_VERI,                      /* FWUSH_MAIN_STATE_VERI     (2U) */
+        (U1)FWUSH_REQ_SUBTYPE_ACT,                       /* FWUSH_MAIN_STATE_ACT      (3U) */
+        (U1)FWUSH_REQ_SUBTYPE_NA                         /* FWUSH_MAIN_STATE_ROLLBACK (4U) */
+    };
+    U1 u1_t_event;
+    U1 u1_t_current_req_subtype;
+    U1 u1_t_expected_subtype;
+
+    u1_t_event                  = (U1)FWUSH_EVENT_NONE;
+    u1_t_current_req_subtype    = u1_sp_fwush_header[FWUSH_REQ_SUBTYPE_OFFSET];
+    u1_t_expected_subtype       = (U1)u1_sp_FWUSH_EXPCT_SUBTYPE_PR[u1_s_fwush_state_main];
+    
+    /* Check whether current subtype is valid (expected, NA, or CANCEL) */
+    if(u1_t_current_req_subtype == (U1)FWUSH_REQ_SUBTYPE_CANCEL){
+
+        u1_t_event = (U1)FWUSH_EVENT_CANCEL;
     }
+    else if (u1_t_current_req_subtype == u1_t_expected_subtype) {
+        u1_t_event = u1_s_FwushCheckMemAccJobEvent();
+    }
+    else if (u1_t_current_req_subtype != (U1)FWUSH_REQ_SUBTYPE_NA) {
+        u1_t_event = (U1)FWUSH_EVENT_INVALID_REQUEST;
+    } else {
+        /* u1_t_event = (U1)FWUSH_EVENT_NONE; */
+    }
+
+    return(u1_t_event);
 }
 
-static void     vd_s_FwushStmEvAct(void)
+/*===================================================================================================================================*/
+/* static void vd_s_FwushExecuteStateSpecificAction(U1 u1_a_event)                                                                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      U1 u1_a_event : Detected event                                                                                   */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_FwushExecuteStateSpecificAction(U1 u1_a_event)
 {
-    if(u1_s_fwush_act_fin_flg == (U1)FALSE)
-    {
-        switch (u1_s_fwush_subtype_prev)  /* Check previous subtype */
-        {
-            case FWUSH_REQ_SUBTYPE_NA:    /* RECV */  /* 関数化 */
-                if(u1_sp_fwush_header[FWUSH_REQ_SUBTYPE_OFFSET] == (U1)FWUSH_REQ_SUBTYPE_ACT)
-                {
-                    /* Start MemAcc job for activation */
-                    vd_g_FwuMemAccSwitchReqTrg();
-                    u1_s_fwush_memacc_job_active = (U1)TRUE;
-                }
-                else
-                {
-                    /* u1_s_fwush_stm_ctl = (U1)FWUSH_STS_ACT; */  /* No need to action. */
-                }
-                break;
-            case FWUSH_REQ_SUBTYPE_ACT:    /* PROC */  /* 関数化 */
-                if(u1_sp_fwush_header[FWUSH_REQ_SUBTYPE_OFFSET] == (U1)FWUSH_REQ_SUBTYPE_ACT)
-                {
-                    /* Already in ACT state, continue processing */
-                    vd_s_FwushActMemAccChk();
-                }
-                else
-                {
-                    u1_s_fwush_abort_active = (U1)TRUE;  /* Set abort flag */
-                }
-            default:
-                break;
+    U4 u4_t_adr;
+    U1* u1_tp_adr;
+    U1 u1_t_read_ok;
+    
+    /* Execute state-specific handling only on NEW_REQUEST event */
+    if(u1_a_event == (U1)FWUSH_EVENT_NEW_REQUEST){
+        switch (u1_s_fwush_state_main){
+        case (U1)FWUSH_MAIN_STATE_PREP:
+            /* PREP: read data & store CRC in context */
+            u1_t_read_ok = u1_s_FwushReadData(&u4_t_adr);
+            if(u1_t_read_ok == (U1)TRUE){
+                u1_tp_adr = (U1 *)u4_t_adr;
+                u4_s_fwush_prep_data_crc =    (U4)u1_tp_adr[FWUSH_REQ_PREP_DATA_CRC_OFFSET]
+                                            | ((U4)u1_tp_adr[FWUSH_REQ_PREP_DATA_CRC_OFFSET + 1] << (U4)8U)
+                                            | ((U4)u1_tp_adr[FWUSH_REQ_PREP_DATA_CRC_OFFSET + 2] << (U4)16U)
+                                            | ((U4)u1_tp_adr[FWUSH_REQ_PREP_DATA_CRC_OFFSET + 3] << (U4)24U);
+                u1_s_fwush_prep_data_ready = (U1)TRUE;
+            }
+            else{
+
+                u1_s_fwush_prep_data_ready = (U1)FALSE;
+            }
+            break;
+        default:
+            break;
         }
     }
 }
 
-/* 遷移処理 */
-static void     vd_s_FwushStmEvToRun(void)
+/*===================================================================================================================================*/
+/* static U1 u1_s_FwushCheckMemAccJobEvent(void)                                                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         U1 : Detected event                                                                                              */
+/*===================================================================================================================================*/
+static U1 u1_s_FwushCheckMemAccJobEvent(void)
 {
-    U1  u1_t_prep_sts;
+    U1 u1_t_job_type;
+    U1 u1_t_main_status;
+    U1 u1_t_event;
+    U1 u1_t_update_status;
 
-    u1_t_prep_sts = u1_g_FwuMemAccEraseSts();
-    switch (u1_t_prep_sts)
-    {
-    case (U1)FWUSH_MEMACC_STATUS_PREP_SUCCESS:
-        /* Transition to RUN state */
-        u1_s_fwush_stm_ctl = (U1)FWUSH_STS_RUN;
-        vd_s_FwushMakeAckData(u1_sp_fwush_header[FWUSH_REQ_SUBTYPE_OFFSET]);
-        break;
-    case (U1)FWUSH_MEMACC_STATUS_PREP_ERROR:
-        /* Transition to PREP state with abort */
-        u1_s_fwush_abort_active = (U1)TRUE;  /* Set abort flag */
-    default:
-        break;
+    u1_t_event = (U1)FWUSH_EVENT_NONE;
+    /* Get status from Phase2 unified GetStatus */
+    vd_g_FwuMemAccGetStatus(&u1_t_job_type, &u1_t_main_status);
+    u1_t_event = u1_s_MapMainStatusToEvent(u1_t_main_status);
+
+    switch (u1_s_fwush_state_main){
+        case (U1)FWUSH_MAIN_STATE_RUN:
+            if(u1_t_main_status == (U1)FWUMEMACC_MAIN_STATUS_COMPLETED){
+                u1_t_update_status = u1_g_FwuMemAccGetUpdateStatus();
+                if(u1_t_update_status == (U1)FWUMEMACC_UPDT_STS_ALL_COMP){
+                    u1_t_event = (U1)FWUSH_EVENT_MEMACC_RUN_COMPLETE;
+                }
+                else if(u1_t_update_status == (U1)FWUMEMACC_UPDT_STS_IN_PROGRESS){
+                    u1_t_event = (U1)FWUSH_EVENT_MEMACC_RUN_PARTIAL;
+                }
+                else {
+                    /* FWUMEMACC_UPDT_STS_IDLE (Do Nothing) */
+                }
+            }
+            break;
+        case (U1)FWUSH_MAIN_STATE_VERI:
+            u1_t_event = (U1)FWUSH_EVENT_MEMACC_SUCCESS; /* treated as immediate success */
+            break;
+        case (U1)FWUSH_MAIN_STATE_PREP:
+        case (U1)FWUSH_MAIN_STATE_ACT:
+        case (U1)FWUSH_MAIN_STATE_ROLLBACK:
+            /* u1_t_event = u1_s_MapMainStatusToEvent(u1_t_main_status); */
+            break;
+        default:
+            u1_t_event = (U1)FWUSH_EVENT_NONE;
+            break;
     }
+
+    return(u1_t_event);
 }
 
-static void     vd_s_FwushStmEvToRunFin(void)
+/*===================================================================================================================================*/
+/* static U1 u1_s_MapMainStatusToEvent(U1 u1_a_main_status)                                                                          */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      U1 u1_a_main_status : Main status from MemAcc                                                                    */
+/*  Return:         U1 : Mapped event                                                                                                */
+/*===================================================================================================================================*/
+static U1 u1_s_MapMainStatusToEvent(U1 u1_a_main_status)
 {
-    U1  u1_t_run_sts;
-
-    u1_t_run_sts = u1_g_FwuMemAccUpdateSts();
-    switch (u1_t_run_sts)
+    static const U1 u1_sp_FWUMEMACC_STATUS_TO_EVENT[FWUMEMACC_MAIN_STATUS_MAX] =
     {
-    case (U1)FWUSH_MEMACC_STATUS_RUN_SUCCESS_MIDWAY:
-        /* Keep Run state */
-        u1_s_fwush_stm_ctl = (U1)FWUSH_STS_RUN;
-        vd_s_FwushMakeAckData(u1_sp_fwush_header[FWUSH_REQ_SUBTYPE_OFFSET]);
-        break;
-    case (U1)FWUSH_MEMACC_STATUS_RUN_SUCCESS_FINAL:
-        /* Transition to FIN state */
-        u1_s_fwush_stm_ctl = (U1)FWUSH_STS_VERI;
-        vd_s_FwushMakeAckData(u1_sp_fwush_header[FWUSH_REQ_SUBTYPE_OFFSET]);
-        break;
-    case (U1)FWUSH_MEMACC_STATUS_RUN_ERROR:
-        /* Transition to PREP state with abort */
-        u1_s_fwush_abort_active = (U1)TRUE;  /* Set abort flag */
-    default:
-        break;
-    }
-}
+        (U1)FWUSH_EVENT_NONE,            /* FWUMEMACC_MAIN_STATUS_IDLE      (0U) */
+        (U1)FWUSH_EVENT_MEMACC_PROGRESS, /* FWUMEMACC_MAIN_STATUS_REQUESTED (1U) */
+        (U1)FWUSH_EVENT_MEMACC_PROGRESS, /* FWUMEMACC_MAIN_STATUS_ACTIVE    (2U) */
+        (U1)FWUSH_EVENT_MEMACC_SUCCESS,  /* FWUMEMACC_MAIN_STATUS_COMPLETED (3U) */
+        (U1)FWUSH_EVENT_MEMACC_ERROR     /* FWUMEMACC_MAIN_STATUS_ERROR     (4U) */
+    };
 
-static void     vd_s_FwushStmEvToAct(void)
-{
-    /* Step1ではVERIの管理不要。必ず成功扱いでACTに遷移する。 */
-    u1_s_fwush_stm_ctl = (U1)FWUSH_STS_ACT;
-    vd_s_FwushMakeAckData(u1_sp_fwush_header[FWUSH_REQ_SUBTYPE_OFFSET]);
-}
-
-static void     vd_s_FwushStmEvToActFin(void)
-{
-    U1  u1_t_act_sts;
-
-    u1_t_act_sts = u1_g_FwuMemAccSwitchSts();
-    switch (u1_t_act_sts)
-    {
-    case (U1)FWUSH_MEMACC_STATUS_ACT_SUCCESS:
-        /* Transition to ACT state */
-        u1_s_fwush_stm_ctl = (U1)FWUSH_STS_ACT;  /* Step1では手動リセットがかかるまでACTで固定する。 */
-        u1_s_fwush_act_fin_flg = (U1)TRUE;       /* Step1では手動リセットがかかるまでACTで固定する。 */
-        vd_s_FwushMakeAckData(u1_sp_fwush_header[FWUSH_REQ_SUBTYPE_OFFSET]);
-        break;
-    case (U1)FWUSH_MEMACC_STATUS_ACT_ERROR:
-        /* Transition to PREP state with abort */
-        u1_s_fwush_abort_active = (U1)TRUE;  /* Set abort flag */
-    default:
-        break;
-    }
+    return(u1_sp_FWUMEMACC_STATUS_TO_EVENT[u1_a_main_status]);
 }
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static void     vd_s_FwushMakeAckData(U1 u1_a_subtype)
+/*  State Handlers                                                                                                                   */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*===================================================================================================================================*/
+/* static void vd_s_FwushHandleEraseReq(void)                                                                                        */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      void                                                                                                             */
+/*  Return:         void                                                                                                             */
+/*===================================================================================================================================*/
+static void vd_s_FwushHandleEraseReq(void)
 {
-    /* ヘッダデータ(グローバル変数) または 現在の遷移状態に従って応答データを変えられるように作る */
-    U4  u4_tp_ack_data[FWUSH_RES_WORDS];
-    
-    /* Clear response data buffer */
-    vd_g_MemfillU4(&u4_tp_ack_data[0], (U4)0U, (U4)FWUSH_RES_WORDS);
-    
-    switch (u1_a_subtype)  /* Check subtype for specific NACK handling */
-    {
-    case (U1)FWUSH_REQ_SUBTYPE_PREP:
-        /* Handle PREP specific ACK */
-        /* make write data (Subtype 07h, Ack OK) */
-        u4_tp_ack_data[0] = (U4)0x07U | ((U4)FWUSH_ACK_OK << (U1)8U) | ((U4)0x01U << (U1)16U); /* SubType & Ack & LogicalBlock */
-        u4_tp_ack_data[1] = (U4)0x00U; /* Reserve */
-        /* iVDshWrite */
-        vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_FWUPXRES, &u4_tp_ack_data[0], (U2)FWUSH_RES_WORDS);
-        u1_sp_fwush_header[FWUSH_REQ_SUBTYPE_OFFSET] = FWUSH_REQ_SUBTYPE_NA;  /* Reset previous subtype */
-        break;
-    case (U1)FWUSH_REQ_SUBTYPE_RUN:
-        /* make write data (Subtype 17h, Ack OK) */
-        u4_tp_ack_data[0] = (U4)(0x17U | ((U4)FWUSH_ACK_OK << (U1)8U) | ((U4)0x01U << (U1)16U)
-                          | (U4)((u2_s_fwush_run_offset_prev & (U2)0xFF00U) << (U1)16U)); /* SubType & Ack & LogicalBlock & offset(high) */
-        u4_tp_ack_data[1] = (U4)((u2_s_fwush_run_offset_prev & (U2)0x00FFU)) | ((U4)0x04U << (U1)8U) | ((U4)0x00U << (U1)16U); /* offset(low) & length(high) & length (low) */
-        /* iVDshWrite */
-        vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_FWUPXRES, &u4_tp_ack_data[0], (U2)FWUSH_RES_WORDS);
-        u1_sp_fwush_header[FWUSH_REQ_SUBTYPE_OFFSET] = FWUSH_REQ_SUBTYPE_NA;  /* Reset previous subtype */
-        break;
-    case (U1)FWUSH_REQ_SUBTYPE_VERI:
-        /* make write data (Subtype 18h, Ack OK) */
-        u4_tp_ack_data[0] = (U4)0x19U | ((U4)FWUSH_ACK_OK << (U1)8U) | ((U4)0x01U << (U1)16U); /* SubType & Ack & LogicalBlock */
-        u4_tp_ack_data[1] = (U4)0x00U; /* Reserve */
-        /* iVDshWrite */
-        vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_FWUPXRES, &u4_tp_ack_data[0], (U2)FWUSH_RES_WORDS);
-        u1_sp_fwush_header[FWUSH_REQ_SUBTYPE_OFFSET] = FWUSH_REQ_SUBTYPE_NA;  /* Reset previous subtype */
-        break;
-    case (U1)FWUSH_REQ_SUBTYPE_ACT:
-        /* make write data (Subtype 38h, Ack OK) */
-        u4_tp_ack_data[0] = (U4)0x38U | ((U4)FWUSH_ACK_OK << (U1)8U); /* SubType & Ack */
-        u4_tp_ack_data[1] = (U4)0x00U; /* Reserve */
-        /* iVDshWrite */
-        vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_FWUPXRES, &u4_tp_ack_data[0], (U2)FWUSH_RES_WORDS);
-        u1_sp_fwush_header[FWUSH_REQ_SUBTYPE_OFFSET] = FWUSH_REQ_SUBTYPE_NA;  /* Reset previous subtype */
-        break;
-    default:
-        break;
+    U4 u4_t_adr;
+    U4 u4_t_length;
+    U4 u4_t_crc;
+
+    U1 u1_t_result;
+
+    if(u1_s_fwush_prep_data_ready == (U1)TRUE){
+        u4_t_adr    = (U4)0x1c000U;
+        u4_t_length = (U4)0x7A4000U;
+        u4_t_crc    = u4_s_fwush_prep_data_crc;
+        
+        u1_t_result = u1_g_FwuMemAccEraseReq(u4_t_adr, u4_t_length, u4_t_crc);
+        if(u1_t_result != (U1)FWUMEMACC_RET_OK){
+            u1_s_fwush_abort = (U1)TRUE;
+        }
+
+        u1_s_fwush_prep_data_ready = (U1)FALSE;
     }
+    else{
+
+        u1_s_fwush_abort = (U1)TRUE;
+    }
+}
+/*===================================================================================================================================*/
+/* static void vd_s_FwushHandleRunReq(void)                                                                                       */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      void                                                                                                             */
+/*  Return:         void                                                                                                             */
+/*===================================================================================================================================*/
+static void vd_s_FwushHandleRunReq(void)
+{
+    U1 u1_t_read_ok;
+    U4 u4_t_adr;
+    U1 u1_t_result;
+
+    u1_t_read_ok = u1_s_FwushMakeRunData(&u4_t_adr, &u2_s_fwush_run_ofst);
+    if(u1_t_read_ok == (U1)TRUE){
+        u1_t_result = u1_g_FwuMemAccUpdateReq(u2_s_fwush_run_ofst, (const U4 *)u4_t_adr);
+        if(u1_t_result != (U1)FWUMEMACC_RET_OK){
+            u1_s_fwush_abort = (U1)TRUE;
+        }
+    }
+    else{
+        u1_s_fwush_abort = (U1)TRUE;
+    }
+}
+/*===================================================================================================================================*/
+/* static void vd_s_FwushHandleVerifyReq(void)                                                                                       */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      void                                                                                                             */
+/*  Return:         void                                                                                                             */
+/*===================================================================================================================================*/
+static void vd_s_FwushHandleVerifyReq(void)
+{
+}
+/*===================================================================================================================================*/
+/* static void vd_s_FwushHandleActivateReq(void)                                                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      void                                                                                                             */
+/*  Return:         void                                                                                                             */
+/*===================================================================================================================================*/
+static void vd_s_FwushHandleActivateReq(void)
+{
+    U1 u1_t_result;
+
+    u1_t_result = u1_g_FwuMemAccSwitchReq();
+    if(u1_t_result != (U1)FWUMEMACC_RET_OK){
+        u1_s_fwush_abort = (U1)TRUE;
+    }
+}
+/*===================================================================================================================================*/
+/* static void vd_s_FwushHandleRollbackReq(void)                                                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      void                                                                                                             */
+/*  Return:         void                                                                                                             */
+/*===================================================================================================================================*/
+static void vd_s_FwushHandleRollbackReq(void)
+{
+}
+/*===================================================================================================================================*/
+/* static void vd_s_FwushHandleValidateReq(void)                                                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_FwushHandleValidateReq(void)
+{
+}
+/*===================================================================================================================================*/
+/* static void vd_s_FwushMonitorJob(void)                                                                                            */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_FwushHandleMonitorJob(void)
+{
+    /* No special processing in current implementation */
+    /* MemAcc status monitored by event detection */
+}
+
+/*===================================================================================================================================*/
+/* static void vd_s_FwushHandleEraseSuccess(void)                                                                                    */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_FwushHandleEraseSuccess(void)
+{
+    /* State transition already applied by table */
+    /* Send ACK */
+    vd_s_FwushMakeResData((U1)FWUSH_MAIN_STATE_PREP, (U1)FWUSH_ACK_OK);
+}
+
+/*===================================================================================================================================*/
+/* static void vd_s_FwushHandleRunSuccess(void)                                                                                      */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_FwushHandleRunSuccess(void)
+{
+    /* State transition already applied by table */
+    /* Send ACK */
+    vd_s_FwushMakeResData((U1)FWUSH_MAIN_STATE_RUN, (U1)FWUSH_ACK_OK);
+}
+
+/*===================================================================================================================================*/
+/* static void vd_s_FwushHandleVerifySuccess(void)                                                                                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_FwushHandleVerifySuccess(void)
+{
+    /* State transition already applied by table */
+    /* Send ACK */
+    vd_s_FwushMakeResData((U1)FWUSH_MAIN_STATE_VERI, (U1)FWUSH_ACK_OK);
+}
+
+/*===================================================================================================================================*/
+/* static void vd_s_FwushHandleActivateSuccess(void)                                                                                 */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_FwushHandleActivateSuccess(void)
+{
+    /* State transition already applied by table */
+    /* Send ACK */
+    vd_s_FwushMakeResData((U1)FWUSH_MAIN_STATE_ACT, (U1)FWUSH_ACK_OK);
+}
+
+/*===================================================================================================================================*/
+/* static void vd_s_FwushHandleJobProgress(void)                                                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_FwushHandleJobProgress(void)
+{
+    /* No special processing required in current implementation */
+}
+
+/*===================================================================================================================================*/
+/* static void vd_s_FwushHandleAbort(void)                                                                                           */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_FwushHandleAbort(void)
+{
+    /* set error flag */
+    u1_s_fwush_abort = (U1)TRUE;
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static void     vd_s_FwushMakeNackData(U1 u1_a_subtype)
+/*  CANCEL Handlers                                                                                                                  */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*===================================================================================================================================*/
+/* static void vd_s_FwushHandleCancel(void)                                                                                          */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_FwushHandleCancel(void)
 {
-    /* ヘッダデータ(グローバル変数) または 現在の遷移状態に従って応答データを変えられるように作る */
-    U4  u4_tp_nack_data[FWUSH_RES_WORDS];
-    
-    /* Clear response data buffer */
-    vd_g_MemfillU4(&u4_tp_nack_data[0], (U4)0U, (U4)FWUSH_RES_WORDS);
-    
-    switch (u1_a_subtype)  /* Check subtype for specific NACK handling */
-    {
-    case (U1)FWUSH_REQ_SUBTYPE_PREP:
-        /* Handle PREP specific NACK */
-        /* make write data (Subtype 07h, Ack NG) */
-        u4_tp_nack_data[0] = (U4)0x07U | ((U4)FWUSH_ACK_NG << (U1)8U) | ((U4)0x01U << (U1)16U); /* SubType & Ack & LogicalBlock */
-        u4_tp_nack_data[1] = (U4)0x00U; /* Reserve */
-        /* iVDshWrite */
-        vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_FWUPXRES, &u4_tp_nack_data[0], (U2)FWUSH_RES_WORDS);
-        u1_sp_fwush_header[FWUSH_REQ_SUBTYPE_OFFSET] = FWUSH_REQ_SUBTYPE_NA;  /* Reset previous subtype */
-        break;
-    case (U1)FWUSH_REQ_SUBTYPE_RUN:
-        /* make write data (Subtype 17h, Ack NG) */
-        u4_tp_nack_data[0] = (U4)(0x17U | ((U4)FWUSH_ACK_NG << (U1)8U) | ((U4)0x01U << (U1)16U)
-                           | (U4)((u2_s_fwush_run_offset_prev & (U2)0xFF00U) << (U1)16U)); /* SubType & Ack & LogicalBlock & offset(high) */
-        u4_tp_nack_data[1] = (U4)((u2_s_fwush_run_offset_prev & (U2)0x00FFU)) | ((U4)0x04U << (U1)8U) | ((U4)0x00U << (U1)16U); /* offset(low) & length(high) & length (low) */
-        /* iVDshWrite */
-        vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_FWUPXRES, &u4_tp_nack_data[0], (U2)FWUSH_RES_WORDS);
-        u1_sp_fwush_header[FWUSH_REQ_SUBTYPE_OFFSET] = FWUSH_REQ_SUBTYPE_NA;  /* Reset previous subtype */
-        break;
-    case (U1)FWUSH_REQ_SUBTYPE_VERI:
-        /* make write data (Subtype 18h, Ack NG) */
-        u4_tp_nack_data[0] = (U4)0x19U | ((U4)FWUSH_ACK_NG << (U1)8U) | ((U4)0x01U << (U1)16U); /* SubType & Ack & LogicalBlock */
-        u4_tp_nack_data[1] = (U4)0x00U; /* Reserve */
-        /* iVDshWrite */
-        vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_FWUPXRES, &u4_tp_nack_data[0], (U2)FWUSH_RES_WORDS);
-        u1_sp_fwush_header[FWUSH_REQ_SUBTYPE_OFFSET] = FWUSH_REQ_SUBTYPE_NA;  /* Reset previous subtype */
-        break;
-    case (U1)FWUSH_REQ_SUBTYPE_ACT:
-        /* make write data (Subtype 38h, Ack NG) */
-        u4_tp_nack_data[0] = (U4)0x38U | ((U4)FWUSH_ACK_NG << (U1)8U); /* SubType & Ack */
-        u4_tp_nack_data[1] = (U4)0x00U; /* Reserve */
-        /* iVDshWrite */
-        vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_FWUPXRES, &u4_tp_nack_data[0], (U2)FWUSH_RES_WORDS);
-        u1_sp_fwush_header[FWUSH_REQ_SUBTYPE_OFFSET] = FWUSH_REQ_SUBTYPE_NA;  /* Reset previous subtype */
-        break;
-    default:
-        break;
-    }
+    /* Return to PREP_WAITING (set in table) */
 }
 
-static U1     u1_s_FwushMakePrepData(U4 * u4_ap_adr, U4 * u4_ap_length, U4 * u4_ap_crc)
+/*===================================================================================================================================*/
+/* static void vd_s_FwushHandleCancelDuringJob(void)                                                                                 */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_FwushHandleCancelDuringJob(void)
+{
+    /* Initialize FwuMemAcc (job abort) */
+    vd_g_FwuMemAccInit();
+    
+    /* Return to PREP_WAITING (set in table) */
+    u2_s_fwush_run_ofst                      = (U2)0xFFFFU;
+}
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Request Processing                                                                                                               */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*===================================================================================================================================*/
+/* static U1 u1_s_FwushReadHeader(U1 * u1_ap_ptr)                                                                                    */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      U1 * u1_ap_ptr : Pointer to header buffer                                                                        */
+/*  Return:         U1 : TRUE if header read successfully, FALSE otherwise                                                           */
+/*===================================================================================================================================*/
+static U1 u1_s_FwushReadHeader(U1 * u1_ap_ptr)
+{
+    U4  u4_tp_data[FWUSH_REQ_H_WORDS];
+    U1  u1_t_read_ok;
+    U1  u1_t_ret;
+    U2  u2_t_idx;
+
+    u1_t_ret = (U1)FALSE;
+    u1_t_read_ok = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_FWUPXREQ_H, &u4_tp_data[0], (U2)FWUSH_REQ_H_WORDS);
+    if(u1_t_read_ok != (U1)IVDSH_NO_REA){
+        for(u2_t_idx = 0U; u2_t_idx < (U2)FWUSH_REQ_H_SIZE; u2_t_idx++){
+            u1_ap_ptr[u2_t_idx] = (U1)(u4_tp_data[u2_t_idx / (U2)4U] >> ((U2)8U * (u2_t_idx % (U2)4U)) & (U4)0xFFU);
+        }
+        u1_t_ret = (U1)TRUE;
+    }
+
+    return(u1_t_ret);
+}
+
+/*===================================================================================================================================*/
+/* static U1 u1_s_FwushReadData(U4* u4_ap_adr)                                                                                       */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      U4* u4_ap_adr : Pointer to store read address                                                                    */
+/*  Return:         U1 : TRUE if data read successfully, FALSE otherwise                                                             */
+/*===================================================================================================================================*/
+static U1 u1_s_FwushReadData(U4* u4_ap_adr)
+{
+    U1  u1_t_read_ok;
+    U1  u1_t_ret;
+
+    u1_t_ret = (U1)FALSE;
+
+    u1_t_read_ok = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_FWUPXREQ_D, u4_ap_adr, (U2)FWUSH_REQ_D_WORDS);
+
+    if((u1_t_read_ok != (U1)IVDSH_NO_REA) &&
+       (u4_ap_adr != vdp_PTR_NA      )){
+        u1_t_ret = (U1)TRUE;
+    }
+
+    return(u1_t_ret);
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Data Generation                                                                                                                  */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*===================================================================================================================================*/
+/* static void vd_s_FwushMakeResData(U1 u1_a_state, U1 u1_a_response)                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      U1 u1_a_state : Response state                                                                                   */
+/*                  U1 u1_a_response : Response code (FWUSH_ACK_OK or FWUSH_ACK_NG)                                                  */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_FwushMakeResData(U1 u1_a_state, U1 u1_a_response)
+{
+    static const U1 u1_sp_FWUSH_EXPCT_SUBTYPE[FWUSH_MAIN_STATE_MAX] =
+    {
+        (U1)FWUSH_RESP_SUBTYPE_PREP,                      /* FWUSH_MAIN_STATE_PREP     (0U) */
+        (U1)FWUSH_RESP_SUBTYPE_RUN,                       /* FWUSH_MAIN_STATE_RUN      (1U) */
+        (U1)FWUSH_RESP_SUBTYPE_VERI,                      /* FWUSH_MAIN_STATE_VERI     (2U) */
+        (U1)FWUSH_RESP_SUBTYPE_ACT,                       /* FWUSH_MAIN_STATE_ACT      (3U) */
+        (U1)FWUSH_RESP_SUBTYPE_NA                         /* FWUSH_MAIN_STATE_ROLLBACK (4U) */
+    };
+    U4  u4_tp_res_data[FWUSH_RES_WORDS];
+
+    if(u1_s_fwupx_res_seqcnt < (U1)0xFFU){
+        u1_s_fwupx_res_seqcnt++;
+    }
+    else{
+        u1_s_fwupx_res_seqcnt = (U1)0U;
+    }
+    vd_g_MemfillU4(&u4_tp_res_data[0], (U4)0U, (U4)FWUSH_RES_WORDS);
+
+    u4_tp_res_data[0] = (U4)(u1_sp_FWUSH_EXPCT_SUBTYPE[u1_a_state] | ((U4)u1_a_response << (U1)8U) | ((U4)0x01U << (U1)16U)
+                      | (U4)((u2_s_fwush_run_ofst & (U2)0xFF00U) << (U1)16U));
+    u4_tp_res_data[1] = (U4)((u2_s_fwush_run_ofst & (U2)0x00FFU)) | ((U4)0x04U << (U1)8U) | ((U4)0x00U << (U1)16U)
+                      | ((U4)u1_s_fwupx_res_seqcnt << (U1)24U);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_FWUPXRES, &u4_tp_res_data[0], (U2)FWUSH_RES_WORDS);
+}
+/*===================================================================================================================================*/
+/* static U1 u1_s_FwushMakePrepData(U4 * u4_ap_adr, U4 * u4_ap_length, U4 * u4_ap_crc)                                               */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      U4 * u4_ap_adr    : Pointer to store address                                                                     */
+/*                  U4 * u4_ap_length  : Pointer to store length                                                                     */
+/*                  U4 * u4_ap_crc     : Pointer to store CRC                                                                        */
+/*  Return:         U1 : TRUE if data created successfully, FALSE otherwise                                                          */
+/*===================================================================================================================================*/
+static U1 u1_s_FwushMakePrepData(U4 * u4_ap_adr, U4 * u4_ap_length, U4 * u4_ap_crc)
 {
     U4   u4_t_adr;
     U1 * u1_tp_adr;
     U1   u1_t_ret;
 
-    /* Calculate CRC */
-    u1_t_ret = u1_s_FwushReadData((U2)FWUSH_REQ_D_WORDS, &u4_t_adr);
+    u1_t_ret  = u1_s_FwushReadData(&u4_t_adr);
     u1_tp_adr = (U1 *)u4_t_adr;
+
     if(u1_t_ret == (U1)TRUE){
         *u4_ap_adr    = (U4)0x1c000U;
         *u4_ap_length = (U4)0x7A4000U;
@@ -674,52 +910,48 @@ static U1     u1_s_FwushMakePrepData(U4 * u4_ap_adr, U4 * u4_ap_length, U4 * u4_
                       | ((U4)u1_tp_adr[FWUSH_REQ_PREP_DATA_CRC_OFFSET + 2] << (U4)16U)
                       | ((U4)u1_tp_adr[FWUSH_REQ_PREP_DATA_CRC_OFFSET + 3] << (U4)24U);
     }
+
     return(u1_t_ret);
 }
 
-static U1     u1_s_FwushMakeRunData(U4 * u4_ap_adr, U2 * u2_ap_ofst)
+/*===================================================================================================================================*/
+/* static U1 u1_s_FwushMakeRunData(U4 * u4_ap_adr, U2 * u2_ap_ofst)                                                                  */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      U4 * u4_ap_adr    : Pointer to store address                                                                     */
+/*                  U2 * u2_ap_ofst   : Pointer to store block offset                                                                */
+/*  Return:         U1 : TRUE if data created successfully, FALSE otherwise                                                          */
+/*===================================================================================================================================*/
+static U1 u1_s_FwushMakeRunData(U4 * u4_ap_adr, U2 * u2_ap_ofst)
 {
     U1   u1_t_ret;
 
-    u1_t_ret = u1_s_FwushReadData((U2)FWUSH_REQ_D_WORDS, u4_ap_adr);
+    u1_t_ret = u1_s_FwushReadData(u4_ap_adr);
     *u2_ap_ofst = ((U2)u1_sp_fwush_header[FWUSH_REQ_RUN_BLKOFS_OFFSET + 1]) | 
                   ((U2)u1_sp_fwush_header[FWUSH_REQ_RUN_BLKOFS_OFFSET] << (U2)8U);
     return(u1_t_ret);
 }
-
-static U1       u1_s_FwushReadHeader(U1 * u1_ap_ptr)
+/*===================================================================================================================================*/
+/* static void vd_g_FwushAbort(void)                                                                                                 */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_g_FwushAbort(void)
 {
-    U4  u4_tp_data[FWUSH_REQ_H_WORDS];
-    U1  u1_t_read_ok;
-    U1  u1_t_ret;
-    U2  u2_t_idx;
-
-    u1_t_ret = (U1)FALSE;
-    u1_t_read_ok = u1_g_iVDshReabyDid(IVDSH_DID_REA_FWUPXREQ_H, &u4_tp_data[0], (U2)FWUSH_REQ_H_WORDS);
-    if(u1_t_read_ok != (U1)IVDSH_NO_REA){
-        for(u2_t_idx = 0U; u2_t_idx < (U2)FWUSH_REQ_H_SIZE; u2_t_idx++){
-            u1_ap_ptr[u2_t_idx] = (U1)(u4_tp_data[u2_t_idx / (U1)4U] >> ((U1)8U * (u2_t_idx % (U1)4U)) & (U1)0xFFU);
-        }
-        u1_t_ret = (U1)TRUE;
-    }
-
-    return(u1_t_ret);
+    /* Initialize state variables */
+    u1_s_fwush_state_main       = (U1)FWUSH_MAIN_STATE_PREP;
+    u1_s_fwush_state_sub        = (U1)FWUSH_SUB_STATE_WAITING;
+    u1_s_fwush_abort            = (U1)FALSE;
+    u1_s_fwush_prep_data_ready  = (U1)FALSE;
+    u4_s_fwush_prep_data_crc    = (U4)0U;
+    u2_s_fwush_run_ofst     = (U2)0xFFFFU;
+    
+    /* Clear header buffer */
+    vd_g_MemfillU1(&u1_sp_fwush_header[0], (U1)0U, (U4)FWUSH_REQ_H_SIZE);
+    
+    /* Initialize FwuMemAcc */
+    vd_g_FwuMemAccInit();
 }
-
-static U1        u1_s_FwushReadData(U2 u2_a_length, U4* u4_ap_reqadr)
-{
-    U1  u1_t_read_ok;
-    U1  u1_t_ret;
-
-    u1_t_ret = (U1)FALSE;
-    /* get request data */
-    u1_t_read_ok = u1_g_iVDshReabyDid(IVDSH_DID_REA_FWUPXREQ_D, u4_ap_reqadr, (U2)FWUSH_REQ_D_WORDS);
-    if(u1_t_read_ok != (U1)IVDSH_NO_REA && u4_ap_reqadr != vdp_PTR_NA){
-        u1_t_ret = (U1)TRUE;
-    }
-    return(u1_t_ret);
-}
-
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
@@ -730,7 +962,7 @@ static U1        u1_s_FwushReadData(U2 u2_a_length, U4* u4_ap_reqadr)
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  1.0.0    10/27/2025  KI       New.                                                                                               */
-/*                                                                                                                                   */
+/*  2.0.0    02/16/2026  KI       Refactoring - State machine reconstruction with CANCEL support                                     */
 /*                                                                                                                                   */
 /* * KI   = Kanji Ito, Denso Techno                                                                                                  */
 /*                                                                                                                                   */

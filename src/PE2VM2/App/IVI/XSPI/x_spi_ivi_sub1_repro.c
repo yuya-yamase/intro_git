@@ -38,8 +38,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-U1        u1_s_xspi_ivi_sub1_repro_subtype_prev;
-U2        u2_s_xspi_ivi_sub1_repro_run_ofst_prev;
+U1        u1_s_xspi_ivi_sub1_repro_seq_cnt_prev;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -60,8 +59,7 @@ static void            vd_s_XspiIviSub1ReproDataToQueue(const U2 u2_a_size,const
 void vd_g_XspiIviSub1ReproInit(void)
 {
     /* 初期化処理をここに記述 */
-    u1_s_xspi_ivi_sub1_repro_subtype_prev = (U1)0xFFU; /* 初期値設定 */
-    u2_s_xspi_ivi_sub1_repro_run_ofst_prev = (U2)0xFFFFU; /* 初期値設定 */
+    u1_s_xspi_ivi_sub1_repro_seq_cnt_prev = (U1)0xFFU; /* 初期値設定 */
 }
 
 /*===================================================================================================================================*/
@@ -75,19 +73,13 @@ void vd_g_XspiIviSub1ReproMainTask(void)
 {
     U1    u1_tp_read[XSPI_IVI_REPRO_DATA_SIZE];
     U1    u1_t_read_ok;
-    U2    u2_t_run_offset;
+    U2    u1_t_seqcnt_curr;
 
     u1_t_read_ok = u1_g_FwupxResData(&u1_tp_read[0], (U1)XSPI_IVI_REPRO_DATA_SIZE);
     if (u1_t_read_ok == (U1)TRUE) {
-        u2_t_run_offset = (U2)((u1_tp_read[3] << 8) | u1_tp_read[4]);
-        if((u1_tp_read[0] == XSPI_IVI_REPRO_SUBTYPE_RUN_REQ) && 
-                 (u2_t_run_offset != u2_s_xspi_ivi_sub1_repro_run_ofst_prev)) {
-            /* サブタイプがRUNで、オフセットが前回と異なる場合 */
-            vd_s_XspiIviSub1ReproDataToQueue((U2)XSPI_IVI_REPRO_RUN_ACK_SIZE, &u1_tp_read[0]);
-            u2_s_xspi_ivi_sub1_repro_run_ofst_prev = u2_t_run_offset;
-            u1_s_xspi_ivi_sub1_repro_subtype_prev = u1_tp_read[0];
-        }else if (u1_tp_read[0] != u1_s_xspi_ivi_sub1_repro_subtype_prev) {
-            u1_s_xspi_ivi_sub1_repro_subtype_prev = u1_tp_read[0];
+        u1_t_seqcnt_curr = u1_tp_read[7];
+        if (u1_t_seqcnt_curr != u1_s_xspi_ivi_sub1_repro_seq_cnt_prev) {
+            u1_s_xspi_ivi_sub1_repro_seq_cnt_prev = u1_t_seqcnt_curr;
             switch (u1_tp_read[0]) {
                 case XSPI_IVI_REPRO_SUBTYPE_PREP_REQ:
                     vd_s_XspiIviSub1ReproDataToQueue((U2)XSPI_IVI_REPRO_PREP_ACK_SIZE, &u1_tp_read[0]);
