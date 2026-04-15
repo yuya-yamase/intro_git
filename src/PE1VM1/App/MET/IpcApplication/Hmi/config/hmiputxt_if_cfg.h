@@ -31,7 +31,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define HMIPUTXT_SYSMAL_JDG                      (1)
+#define HMIPUTXT_SYSMAL_JDG                      (1U)
 
 #define HMIPUTXTCFG_SLOT_A                       (1U)
 #define HMIPUTXTCFG_SLOT_B                       (2U)
@@ -42,7 +42,7 @@
 #define HMIPUTXTCFG_IF_NUM                       (28U)
 #define HMIPUTXTCFG_IF_SLOTA_NUM                 (23U)
 #define HMIPUTXTCFG_IF_SLOTB_NUM                 (39U)
-#define HMIPUTXTCFG_IF_SLOTC_NUM                 (66U)
+#define HMIPUTXTCFG_IF_SLOTC_NUM                 (65U)
 #define HMIPUTXTCFG_IF_SLOTD_NUM                 (49U)
 /* #define HMIPUTXTCFG_IF_SLOTE_NUM                 (0U) */
 
