@@ -65,6 +65,9 @@ static void vd_s_FwuMemAccSwitchTask(void);
 /* CRC segmented task (WDG mitigation) */
 static void vd_s_FwuMemAccCrcCalc(void);
 
+/* Start error classification helper */
+static void vd_s_FwuMemAccSetStartError(void);
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions for CRC                                                                                                      */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -156,6 +159,9 @@ U1 u1_g_FwuMemAccEraseReq(U4 u4_a_start_adrs, U4 u4_a_length, U4 u4_a_expected_c
 
             u1_t_ret = (U1)FWUMEMACC_RET_OK;
         }
+    }else {
+        u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_ERROR;  /* task will start it */
+        u1_s_last_error = (U1)FWUMEMACC_ERROR_PRECONDITION_ERR;
     }
 
     return(u1_t_ret);
@@ -189,8 +195,12 @@ U1 u1_g_FwuMemAccUpdateReq(U2 u2_a_block_offset, const U4* u4p_a_write_data)
                 u1_s_last_error = (U1)FWUMEMACC_ERROR_NONE;
 
                 u1_t_ret = (U1)FWUMEMACC_RET_OK;
-            } else {
-                u1_s_last_error = (U1)FWUMEMACC_ERROR_OFFSET_MISMATCH;
+            } else if (u2_s_block_counter < u2_a_block_offset) {
+                u1_s_last_error = (U1)FWUMEMACC_ERROR_OFFSET_JUMP;
+            } else if (u2_s_block_counter == (U2)(u2_a_block_offset + (U2)1U)) {
+                u1_s_last_error = (U1)FWUMEMACC_ERROR_OFFSET_UNCHANGED;
+            } else {    /* u2_s_block_counter > (U2)(u2_a_block_offset + (U2)1U) */
+                u1_s_last_error = (U1)FWUMEMACC_ERROR_OFFSET_SUBTRACT;
             }
         }
     }
@@ -208,8 +218,6 @@ U1 u1_g_FwuMemAccSwitchReq(void)
 {
     U1 u1_t_ret;
 
-    /* Only proceed when not busy */
-    u1_t_ret = (U1)FWUMEMACC_RET_NG;
     if (u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_IDLE ||
         u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_COMPLETED ||
         u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_ERROR) {
@@ -218,6 +226,12 @@ U1 u1_g_FwuMemAccSwitchReq(void)
         u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_IDLE;  /* task will start it */
         u1_s_last_error = (U1)FWUMEMACC_ERROR_NONE;
         u1_t_ret = (U1)FWUMEMACC_RET_OK;
+    }
+    else {
+        /* Only proceed when not busy */
+        u1_t_ret = (U1)FWUMEMACC_RET_NG;
+        u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_ERROR;  /* task will start it */
+        u1_s_last_error = (U1)FWUMEMACC_ERROR_PRECONDITION_ERR;
     }
 
     return(u1_t_ret);
@@ -345,7 +359,7 @@ static void vd_s_FwuMemAccEraseTask(void)
     U1 u1_t_job_status;
     U1 u1_t_job_result;
     U1 u1_t_erase_result;
-    
+
     if (u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_IDLE) {
         /* MemAcc erase request */
         u1_t_erase_result = (U1)MemAcc_Erase((U2)MEMACC_ADDRAREA_1, 
@@ -358,12 +372,11 @@ static void vd_s_FwuMemAccEraseTask(void)
         } else {
             /* Erase start failed */
             u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_ERROR;
-            u1_s_last_error = (U1)FWUMEMACC_ERROR_MEMACC_FAILED;
+            vd_s_FwuMemAccSetStartError();
         }
     } else if (u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_ERASE_ACTIVE) {
         /* Check MemAcc job status */
         u1_t_job_status = (U1)MemAcc_GetJobStatus((U2)MEMACC_ADDRAREA_1);
-        
         if (u1_t_job_status == (U1)MEMACC_JOB_IDLE) {
             /* Job completed -> check result */
             u1_t_job_result = (U1)MemAcc_GetJobResult((U2)MEMACC_ADDRAREA_1);
@@ -414,7 +427,7 @@ static void vd_s_FwuMemAccUpdateTask(void)
         } else {
             /* Write start failed */
             u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_ERROR;
-            u1_s_last_error = (U1)FWUMEMACC_ERROR_MEMACC_FAILED;
+            vd_s_FwuMemAccSetStartError();
         }
     } else if (u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_WRITE_ACTIVE) {
         /* Check MemAcc job status */
@@ -491,7 +504,7 @@ static void vd_s_FwuMemAccSwitchTask(void)
         } else {
             /* Switch start failed */
             u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_ERROR;
-            u1_s_last_error = (U1)FWUMEMACC_ERROR_MEMACC_FAILED;
+            vd_s_FwuMemAccSetStartError();
         }
     } else if (u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_SWITCH_ACTIVE) {
         /* Check MemAcc job status */
@@ -558,10 +571,29 @@ static void vd_s_FwuMemAccCrcCalc(void)
             } else {
                 /* CRC mismatch */
                 u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_ERROR;
-                u1_s_last_error = (U1)FWUMEMACC_ERROR_CRC_MISMATCH;
+                u1_s_last_error = (U1)FWUMEMACC_ERROR_MEMACC_FAILED;
             }
         }
         /* If remaining chunks exist, continue in next MainTask() call */
+    }
+}
+
+/*===================================================================================================================================*/
+/* static void vd_s_FwuMemAccSetStartError(void)                                                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_FwuMemAccSetStartError(void)
+{
+    U1 u1_t_job_status;
+
+    /* Check MemAcc job status */
+    u1_t_job_status = (U1)MemAcc_GetJobStatus((U2)MEMACC_ADDRAREA_1);
+    if (u1_t_job_status == (U1)MEMACC_JOB_PENDING) {
+        u1_s_last_error = (U1)FWUMEMACC_ERROR_PRECONDITION_ERR;
+    } else {
+        u1_s_last_error = (U1)FWUMEMACC_ERROR_START_ERR;
     }
 }
 

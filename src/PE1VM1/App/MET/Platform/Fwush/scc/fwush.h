@@ -31,15 +31,24 @@
 #define FWUSH_REQ_H_SIZE                        (FWUSH_REQ_H_WORDS * FWUSH_REQ_WORD_BYTE)
 #define FWUSH_RES_WORDS                         (2U)
 
-/* Response definition */
+/* Positive response definition */
 #define FWUSH_ACK_OK                            (0x00U)
-#define FWUSH_ACK_NG                            (0x01U)
+#define FWUSH_ACK_ROLLBACK_DONE                 (0x01U)
+/* Negative response definition */
 #define FWUSH_ACK_PROCESSING                    (0x80U)
+#define FWUSH_ACK_SEQ_ERR                       (0x81U)
+#define FWUSH_ACK_PRECONDITION_ERR              (0x82U)
+#define FWUSH_ACK_PROC_START_ERR                (0x83U)
+#define FWUSH_ACK_PROC_NG                       (0x84U)
+#define FWUSH_ACK_NO_REPRO_TARGET               (0x85U)
+#define FWUSH_ACK_LB_ERR                        (0x86U)
+#define FWUSH_ACK_OFFSET_JUMP                   (0x87U)
+#define FWUSH_ACK_OFFSET_UNCHANGED              (0x88U)
+#define FWUSH_ACK_OFFSET_SUBTRACT               (0x89U)
+#define FWUSH_ACK_ROLLBACK_PRECOND_ERR          (0x8AU)
+#define FWUSH_ACK_ROLLBACK_START_ERR            (0x8BU)
+#define FWUSH_ACK_ROLLBACK_NG                   (0x8CU)
 
-#define FWUSH_ACK_CANCEL_OK                     (0x00U)        /* Interrupt OK */
-#define FWUSH_ACK_CANCEL_ROLLBACK_OK            (0x01U)        /* Rollback OK */
-#define FWUSH_ACK_CANCEL_ROLLBACK_DONE          (0x02U)        /* Rollback complete */
-#define FWUSH_ACK_CANCEL_NG                     (0x03U)        /* Process NG (error code) */
 
 /* Request frame offset */
 #define FWUSH_REQ_SUBTYPE_OFFSET                (0U)
@@ -127,9 +136,9 @@
 #define FWUSH_VERI_LB1_COMP                     (0x0001U)        /* LB1 Complete */
 #define FWUSH_VERI_TARGET_LB1                   (0x0100U)        /* Rewriting Target LB1 */
 
-#define FWUSH_CHECK_PHA_MATCH                   (0x00U)          /* Check phase match */
-#define FWUSH_CHECK_PHA_UNMATCH                 (0x01U)          /* Check phase unmatch */
-#define FWUSH_CHECK_PHA_ERROR                   (0xFFU)          /* Check phase error */
+#define FWUSH_CHECK_VA_MATCH                    (0x00U)          /* Valid Area match */
+#define FWUSH_CHECK_VA_UNMATCH                  (0x01U)          /* Valid Area unmatch */
+#define FWUSH_CHECK_VA_ERROR                    (0xFFU)          /* Valid Area read error */
 
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
