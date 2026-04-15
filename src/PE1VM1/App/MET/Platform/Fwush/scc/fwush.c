@@ -49,6 +49,7 @@ static U1 u1_s_fwush_error_log;
 static U1 u1_s_fwush_seq_progress;
 static U4 u4_s_fwush_fswa_stat;
 static U2 u2_s_fwush_veri_stat;
+static U1 u1_s_fwush_veri_target;
 
 /* PREP state data */
 static U4 u4_s_fwush_prep_data_crc;
@@ -114,6 +115,7 @@ static void vd_s_FwushHandleRollbackAbort(void);
 static void vd_s_FwushHandleInvalidReq(void);
 
 static U1 u1_s_FwushCheckValidArea(void);
+static U1 u1_s_FwushCheckPrepTarget(U4 *u4_ap_adr);
 
 /* CANCEL handlers */
 static void vd_s_FwushHandleCancel(void);
@@ -132,7 +134,7 @@ static U1   u1_s_FwushGetFswaStat(void);
 static void vd_s_FwushUpdateFswaStat(void);
 static void vd_s_FwushResetFswaStat(void);
 
-static void vd_s_FwushUpdateVeriStat(U2 u2_t_veri_target, U2 u2_t_veri_comp);
+static void vd_s_FwushUpdateVeriStat(U1 u1_t_veri_target, U1 u1_t_veri_comp);
 static void vd_s_FwushResetVeriStat(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -274,7 +276,7 @@ static const ST_FWUSH_TRANSITION_ENTRY stp_sp3_FWUSH_STM[FWUSH_MAIN_STATE_MAX]
             {(U1)FWUSH_MAIN_STATE_VERI, (U1)FWUSH_SUB_STATE_PROCESSING,  vdp_PTR_NA},                       /* FWUSH_EVENT_NONE            */
             {(U1)FWUSH_MAIN_STATE_VERI, (U1)FWUSH_SUB_STATE_PROCESSING,  vdp_PTR_NA},                       /* FWUSH_EVENT_NEW_REQUEST     */
             {(U1)FWUSH_MAIN_STATE_VERI, (U1)FWUSH_SUB_STATE_PROCESSING,  &vd_s_FwushHandleMonitorJob},      /* FWUSH_EVENT_SAME_REQUEST    */
-            {(U1)FWUSH_MAIN_STATE_ACT,  (U1)FWUSH_SUB_STATE_WAITING,     &vd_s_FwushHandleVerifySuccess},   /* FWUSH_EVENT_MEMACC_SUCCESS  */
+            {(U1)FWUSH_MAIN_STATE_PREP, (U1)FWUSH_SUB_STATE_WAITING,     &vd_s_FwushHandleVerifySuccess},   /* FWUSH_EVENT_MEMACC_SUCCESS  */
             {(U1)FWUSH_MAIN_STATE_VERI, (U1)FWUSH_SUB_STATE_PROCESSING,  &vd_s_FwushHandleJobProgress},     /* FWUSH_EVENT_MEMACC_PROGRESS */
             {(U1)FWUSH_MAIN_STATE_PREP, (U1)FWUSH_SUB_STATE_WAITING,     &vd_s_FwushHandleVerifyAbort},     /* FWUSH_EVENT_MEMACC_ERROR    */
             {(U1)FWUSH_MAIN_STATE_VERI, (U1)FWUSH_SUB_STATE_PROCESSING,  &vd_s_FwushHandleProcessing},      /* FWUSH_EVENT_INVALID_REQUEST */
@@ -462,6 +464,7 @@ void vd_g_FwushInit(void)
     u1_s_fwush_error_log        = (U1)FWUSH_ACK_OK;
     u4_s_fwush_prep_data_crc    = (U4)0U;
     u2_s_fwush_run_ofst         = (U2)0xFFFFU;
+    u1_s_fwush_veri_target      = (U1)FWUSH_VERI_LB_NONE;
     u1_t_nvm_chk = u1_g_Nvmc_ReadU1withSts((U2)NVMCID_U1_FWUSH_SEQ_PROGRESS, &u1_s_fwush_seq_progress);
     if(u1_t_nvm_chk != (U1)NVMC_STATUS_COMP) {
         /* If read error, reset progress */
@@ -475,7 +478,7 @@ void vd_g_FwushInit(void)
     u1_t_nvm_chk = u1_g_Nvmc_ReadU2withSts((U2)NVMCID_U2_FWUSH_VERIFY_LBN_COMP, &u2_s_fwush_veri_stat);
     if(u1_t_nvm_chk != (U1)NVMC_STATUS_COMP) {
         /* If read error, reset progress */
-        u2_s_fwush_veri_stat = (U2)FWUSH_VERI_LBN_COMP_INIT;
+        u2_s_fwush_veri_stat = (U2)FWUSH_VERI_LB_STAT_INIT;
     }
 
     /* Clear header buffer */
@@ -593,7 +596,7 @@ static U1 u1_s_FwushDetectResumeEvent(void)
             u1_t_event = (U1)FWUSH_EVENT_SWITCH_DETECT;
         }
         else if((u1_t_veri_target == u1_t_veri_comp) &&
-                (u2_s_fwush_veri_stat != (U2)FWUSH_VERI_LBN_COMP_INIT)){
+                (u2_s_fwush_veri_stat != (U2)FWUSH_VERI_LB_STAT_INIT)){
                 u1_t_event = (U1)FWUSH_EVENT_RESUME_ACT;
         }
         else if((u1_s_fwush_seq_progress & u1_s_FWUSH_PROG_MASK) == u1_s_FWUSH_PROG_VALID_CRIT){
@@ -888,7 +891,8 @@ static U1 u1_s_FwushMapMemAccErrorToAckForRollback(void)
         (U1)FWUSH_ACK_OFFSET_UNCHANGED,       /* FWUMEMACC_ERROR_OFFSET_UNCHANGED (3U) */
         (U1)FWUSH_ACK_OFFSET_SUBTRACT,        /* FWUMEMACC_ERROR_OFFSET_SUBTRACT  (4U) */
         (U1)FWUSH_ACK_ROLLBACK_NG,            /* FWUMEMACC_ERROR_MEMACC_FAILED    (5U) */
-        (U1)FWUSH_ACK_ROLLBACK_START_ERR      /* FWUMEMACC_ERROR_START_ERR        (6U) */
+        (U1)FWUSH_ACK_ROLLBACK_START_ERR,     /* FWUMEMACC_ERROR_START_ERR        (6U) */
+        (U1)FWUSH_ACK_LB_ERR                  /* FWUMEMACC_ERROR_LB_INFO_ERR      (7U) */
     };
     U1 u1_t_error;
     u1_t_error = u1_g_FwuMemAccGetError();
@@ -927,41 +931,38 @@ static U1 u1_s_FwushMapMemAccErrorToAckForOth(void)
 /*===================================================================================================================================*/
 static void vd_s_FwushHandleEraseReq(void)
 {
-    U1 u1_t_read_ok;
+    U1 u1_t_error;
     U1 *u1_tp_adr;
     U4 u4_t_adr;
-    U4 u4_t_length;
 
     U1 u1_t_result;
 
     /* read data & store CRC in context */
-    u1_t_read_ok = u1_s_FwushReadData(&u4_t_adr);
-    if(u1_t_read_ok == (U1)TRUE){
+    u1_t_error = u1_s_FwushCheckPrepTarget(&u4_t_adr);
+    if(u1_t_error == (U1)FWUSH_ACK_OK){
         u1_tp_adr = (U1 *)u4_t_adr;
         u4_s_fwush_prep_data_crc =    (U4)u1_tp_adr[FWUSH_REQ_PREP_DATA_CRC_OFFSET]
                                     | ((U4)u1_tp_adr[FWUSH_REQ_PREP_DATA_CRC_OFFSET + 1] << (U4)8U)
                                     | ((U4)u1_tp_adr[FWUSH_REQ_PREP_DATA_CRC_OFFSET + 2] << (U4)16U)
                                     | ((U4)u1_tp_adr[FWUSH_REQ_PREP_DATA_CRC_OFFSET + 3] << (U4)24U);
-        u4_t_adr    = (U4)0x1c000U;
-        u4_t_length = (U4)0x7A4000U;
         vd_s_FwushResetSeqProgress();
         vd_s_FwushUpdateFswaStat();
 
-        u1_t_result = u1_g_FwuMemAccEraseReq(u4_t_adr, u4_t_length, u4_s_fwush_prep_data_crc);
+        u1_t_result = u1_g_FwuMemAccEraseReq(u1_sp_fwush_header[FWUSH_REQ_PREP_CUR_TARGET_OFFSET], u4_s_fwush_prep_data_crc);
         if(u1_t_result != (U1)FWUMEMACC_RET_OK){
             u1_s_fwush_abort     = (U1)TRUE;
             u1_s_fwush_error_log = u1_s_FwushMapMemAccErrorToAck();
         }
-        else if(u2_s_fwush_veri_stat == (U2)FWUSH_VERI_LBN_COMP_INIT){
-            /* STUB:only with LB1 target */
-            vd_s_FwushUpdateVeriStat((U2)FWUSH_VERI_TARGET_LB1, (U2)FWUSH_VERI_LBN_COMP_INIT);
+        else if(u2_s_fwush_veri_stat == (U2)FWUSH_VERI_LB_STAT_INIT){
+            u1_s_fwush_veri_target = u1_sp_fwush_header[FWUSH_REQ_PREP_CUR_TARGET_OFFSET];
+            vd_s_FwushUpdateVeriStat(u1_sp_fwush_header[FWUSH_REQ_PREP_ALL_TARGET_OFFSET], (U1)FWUSH_VERI_LB_NONE);
         }else{
             /* Don nothing */
         }
     }
     else{
         u1_s_fwush_abort     = (U1)TRUE;
-        u1_s_fwush_error_log = (U1)FWUSH_ACK_PRECONDITION_ERR;
+        u1_s_fwush_error_log = (U1)u1_t_error;
     }
 }
 /*===================================================================================================================================*/
@@ -1114,6 +1115,44 @@ static U1 u1_s_FwushCheckValidArea(void)
 }
 
 /*===================================================================================================================================*/
+/* static U1 u1_s_FwushCheckPrepTarget(U4 *u4_ap_adr)                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      U4 *u4_ap_adr : Pointer to receive data address from FwushReadData                                               */
+/*  Return:         U1 : FWUSH_ACK_OK / FWUSH_ACK_PRECONDITION_ERR / FWUSH_ACK_NO_REPRO_TARGET / FWUSH_ACK_LB_ERR                    */
+/*===================================================================================================================================*/
+static U1 u1_s_FwushCheckPrepTarget(U4 *u4_ap_adr)
+{
+    static const U1 u1_s_FWUSH_LB_VALID_MASK = (U1)(FWUSH_VERI_LB1 | FWUSH_VERI_LB2);
+    U1 u1_t_read_ok;
+    U1 u1_t_cur_target;
+    U1 u1_t_all_target;
+    U1 u1_t_result;
+
+    u1_t_read_ok = u1_s_FwushReadData(u4_ap_adr);
+    if(u1_t_read_ok == (U1)FALSE){
+        u1_t_result = (U1)FWUSH_ACK_PRECONDITION_ERR;
+    }
+    else{
+        u1_t_cur_target = u1_sp_fwush_header[FWUSH_REQ_PREP_CUR_TARGET_OFFSET];
+        u1_t_all_target = u1_sp_fwush_header[FWUSH_REQ_PREP_ALL_TARGET_OFFSET];
+
+        if(u1_t_all_target == (U1)FWUSH_VERI_LB_NONE){
+            u1_t_result = (U1)FWUSH_ACK_NO_REPRO_TARGET;
+        }
+        else if(((u1_t_cur_target & u1_t_all_target) != u1_t_cur_target) ||
+                ((u1_t_cur_target & u1_s_FWUSH_LB_VALID_MASK) != u1_t_cur_target) ||
+                ((u1_t_all_target & u1_s_FWUSH_LB_VALID_MASK) != u1_t_all_target)){
+            u1_t_result = (U1)FWUSH_ACK_LB_ERR;
+        }
+        else{
+            u1_t_result = (U1)FWUSH_ACK_OK;
+        }
+    }
+
+    return(u1_t_result);
+}
+
+/*===================================================================================================================================*/
 /* static void vd_s_FwushMonitorJob(void)                                                                                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -1161,8 +1200,7 @@ static void vd_s_FwushHandleRunSuccess(void)
 static void vd_s_FwushHandleVerifySuccess(void)
 {
     /* State transition already applied by table */
-    /* STUB:only with LB1 target */
-    vd_s_FwushUpdateVeriStat((U2)FWUSH_VERI_LBN_COMP_INIT, (U2)FWUSH_VERI_LB1_COMP);
+    vd_s_FwushUpdateVeriStat((U1)FWUSH_VERI_LB_NONE, u1_s_fwush_veri_target);
     /* Send ACK */
     vd_s_FwushMakeResData((U1)FWUSH_RESP_SUBTYPE_VERI, (U1)FWUSH_ACK_OK);
 }
@@ -1617,16 +1655,17 @@ static void vd_s_FwushResetFswaStat(void)
 }
 
 /*===================================================================================================================================*/
-/* static void vd_s_FwushUpdateVeriStat(void)                                                                                        */
+/* static void vd_s_FwushUpdateVeriStat(U1 u1_t_veri_target, U1 u1_t_veri_comp)                                                      */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
+/*  Arguments:      u1_t_veri_target : target Logical Block                                                                          */
+/*                  u1_t_veri_comp   : verification completion status                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static void vd_s_FwushUpdateVeriStat(U2 u2_t_veri_target, U2 u2_t_veri_comp)
+static void vd_s_FwushUpdateVeriStat(U1 u1_t_veri_target, U1 u1_t_veri_comp)
 {
     U2 u2_t_updated;
 
-    u2_t_updated = (U2)(u2_s_fwush_veri_stat | (u2_t_veri_target | u2_t_veri_comp));
+    u2_t_updated = (U2)(u2_s_fwush_veri_stat | ((u1_t_veri_target << (U1)8U) | u1_t_veri_comp));
 
     /* Write only if changed */
     if(u2_t_updated != u2_s_fwush_veri_stat){
@@ -1643,8 +1682,8 @@ static void vd_s_FwushUpdateVeriStat(U2 u2_t_veri_target, U2 u2_t_veri_comp)
 /*===================================================================================================================================*/
 static void vd_s_FwushResetVeriStat(void)
 {
-    if(u2_s_fwush_veri_stat != (U2)FWUSH_VERI_LBN_COMP_INIT){
-        u2_s_fwush_veri_stat = (U2)FWUSH_VERI_LBN_COMP_INIT;
+    if(u2_s_fwush_veri_stat != (U2)FWUSH_VERI_LB_STAT_INIT){
+        u2_s_fwush_veri_stat = (U2)FWUSH_VERI_LB_STAT_INIT;
         vd_g_Nvmc_WriteU2((U2)NVMCID_U2_FWUSH_VERIFY_LBN_COMP, u2_s_fwush_veri_stat);
     }
 }

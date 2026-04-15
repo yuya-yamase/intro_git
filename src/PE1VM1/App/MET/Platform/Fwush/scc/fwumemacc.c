@@ -15,6 +15,7 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "fwumemacc.h"
+#include "fwumemacc_cfg.h"
 
 #include "MemAcc.h"
 #include "crc32.h"
@@ -131,33 +132,39 @@ void vd_g_FwuMemAccMainTask(void)
 }
 
 /*===================================================================================================================================*/
-/*  U1 u1_g_FwuMemAccEraseReq(U4 u4_a_start_adrs, U4 u4_a_length, U4 u4_a_expected_crc)                                            */
+/*  U1 u1_g_FwuMemAccEraseReq(U1 u1_a_lb_id, U4 u4_a_expected_crc)                                                                  */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      U4 u4_a_start_adrs    : Start address                                                                           */
-/*                  U4 u4_a_length        : Data length                                                                              */
+/*  Arguments:      U1 u1_a_lb_id         : Logical block ID                                                                         */
 /*                  U4 u4_a_expected_crc  : Expected CRC value                                                                       */
 /*  Return:         U1 : FWUMEMACC_RET_OK / FWUMEMACC_RET_NG                                                                        */
 /*===================================================================================================================================*/
-U1 u1_g_FwuMemAccEraseReq(U4 u4_a_start_adrs, U4 u4_a_length, U4 u4_a_expected_crc)
+U1 u1_g_FwuMemAccEraseReq(U1 u1_a_lb_id, U4 u4_a_expected_crc)
 {
     U1 u1_t_ret;
+    U1 u1_t_result;
+    U4 u4_t_start_address;
+    U4 u4_t_length;
 
     /* Only proceed when not busy */
     u1_t_ret = (U1)FWUMEMACC_RET_NG;
     if (u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_IDLE ||
         u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_COMPLETED ||
         u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_ERROR) {
-        /* Parameter validation */
-        if ((u4_a_start_adrs != (U4)0U) && (u4_a_length != (U4)0U)) {
+        /* Get LB info from configuration */
+        u1_t_result = u1_g_FwuMemAccCfgGetLbInfo(u1_a_lb_id, &u4_t_start_address, &u4_t_length);
+        if (u1_t_result == (U1)FWUMEMACC_CFG_RET_OK) {
             /* Set job request */
             u1_s_job_type = (U1)FWUMEMACC_JOB_TYPE_ERASE;
             u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_IDLE;  /* task will start it */
-            u4_s_start_address = u4_a_start_adrs + (U4)FWUMEMACC_ADRS_INV_OFFSET;
-            u4_s_data_length = u4_a_length;
+            u4_s_start_address = u4_t_start_address + (U4)FWUMEMACC_ADRS_INV_OFFSET;
+            u4_s_data_length = u4_t_length;
             u4_s_expected_crc = u4_a_expected_crc;
             u1_s_last_error = (U1)FWUMEMACC_ERROR_NONE;
 
             u1_t_ret = (U1)FWUMEMACC_RET_OK;
+        } else {
+            u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_ERROR;
+            u1_s_last_error = (U1)FWUMEMACC_ERROR_LB_ERR;
         }
     }else {
         u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_ERROR;  /* task will start it */
