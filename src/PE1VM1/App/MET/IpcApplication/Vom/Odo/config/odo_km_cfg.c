@@ -55,10 +55,10 @@
 #define ODO_DIST_TX_ODO_MET                      (4U)
 #define ODO_DIST_ODO_TX_MAX                      (999999U)
 #define ODO_DIST_ODO_01_TX_MAX                   (9999999U)
-#define ODO_DIST_ODO_MET_TX_MAX                  (9999999U)
+#define ODO_DIST_ODO_MET_TX_MAX                  (42000000U)
 #define ODO_DIST_TRIP_TX_MOD                     (100000U)
 
-#define ODO_BECU_INHERIT_VAL_MAX                 (9999999U)
+#define ODO_BECU_INHERIT_VAL_MAX                 (42000000U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -653,6 +653,7 @@ U1    u1_g_OdoCfgGetOdoBecuRxSts(void)
 /*  19PFv3-1 10/03/2023  SH       Remove unnecessary config and rename config_t300d_met to config                                    */
 /*  19PFv3-2  2/23/2024  DR       Changed function presence of TMNT                                                                  */
 /*  BEV-1    02/09/2026  MA       Add vd_g_OdoCfgGetOmRstVal and Delete OM_MLG, PR_OM_FL send process                                */
+/*  BEV-2    04/10/2026  RS       Change the maximum values of ODO_BECU and ODO_MET for Electronic CV.                               */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * YN   = Yasuhiro Nakamura, Denso Techno                                                                                         */
