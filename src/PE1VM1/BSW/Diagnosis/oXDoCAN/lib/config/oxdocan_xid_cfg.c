@@ -25,6 +25,7 @@
 #include "tydocan_xid_ma_cfg_private.h"
 
 /* Application Headers */
+#include "tydocan_nvmif.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -214,25 +215,17 @@ const ST_TYDC_KZK_RX    st_gp_TYDC_KZK_RX[TYDC_KZK_NUM_RX] = {              /* o
 /*===================================================================================================================================*/
 U1      u1_g_TyDoCANXidMaCfgSafeKeyNum(U1 * u1_ap_skn)
 {
-    /* ----------------------------------------------------------------- */
-    /* Attention :                                                       */
-    /* ----------------------------------------------------------------- */
-    /* The array size of u1_ap_skn = OXDC_DATA_REA_ANS_NB_A901 and it's  */
-    /* tested in oxdocan_rebyid.c                                        */
-    /* ----------------------------------------------------------------- */
+    U1  u1_t_proc;
 
-    /* sample start : Notify fixed values */
-    static const U1 u1_sp_SKEY_NUMBER[OXDC_DATA_REA_ANS_NB_A901] = {
-        0x00U,0x11U,0x22U,0x33U,
-        0x44U,0x55U,0x66U,0x77U,
-        0x88U,0x99U,0xaaU,0xbbU,
-        0xccU,0xddU,0xeeU,0xffU
-    };
+    u1_t_proc = u1_g_TyDoCANNvmIfRead(&u1_ap_skn[0], (U2)TYDC_NVM_BA_SKN);
+    if(u1_t_proc == (U1)OXDC_SAL_PROC_FIN){
+        u1_t_proc = (U1)TRUE;
+    }
+    else{
+        u1_t_proc = (U1)FALSE;
+    }
 
-    vd_g_MemcpyU1(u1_ap_skn, &u1_sp_SKEY_NUMBER[0], (U4)OXDC_DATA_REA_ANS_NB_A901);
-    /* sample end */
-
-    return((U1)TRUE);
+    return(u1_t_proc);
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
