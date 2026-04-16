@@ -26,13 +26,13 @@
 #if ((HMIPUTXT_IF_CFG_C_MAJOR != HMIPUTXT_H_MAJOR) || \
      (HMIPUTXT_IF_CFG_C_MINOR != HMIPUTXT_H_MINOR) || \
      (HMIPUTXT_IF_CFG_C_PATCH != HMIPUTXT_H_PATCH))
-#error "hmiputxt_if_cfg.c and hmiputxt_if_cfg.h : source and header files are inconsistent!"
+#error "hmiputxt_if_cfg.c and hmiputxt.h : source and header files are inconsistent!"
 #endif
 
 #if ((HMIPUTXT_IF_CFG_C_MAJOR != HMIPUTXT_IF_CFG_H_MAJOR) || \
      (HMIPUTXT_IF_CFG_C_MINOR != HMIPUTXT_IF_CFG_H_MINOR) || \
      (HMIPUTXT_IF_CFG_C_PATCH != HMIPUTXT_IF_CFG_H_PATCH))
-#error "hmiputxt_if_cfg.c and hmiputxt__if_cfg.h : source and header files are inconsistent!"
+#error "hmiputxt_if_cfg.c and hmiputxt_if_cfg.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -211,7 +211,6 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT_SLOTC[HMIPUTXTCFG_IF_SLOTC_NUM] = {
     {    (U2)ALERT_CH_C_STEER_PD,           (U1)ALERT_REQ_C_STEER_PD_NONSYNC_MOD,   (U1)26U,    (U4)0x00020000U    },
     {    (U2)ALERT_CH_C_STEER_PD,           (U1)ALERT_REQ_C_STEER_PD_SELF_CALIB,    (U1)26U,    (U4)0x00040000U    },
     {    (U2)ALERT_CH_C_STEER_PD,           (U1)ALERT_REQ_C_STEER_PD_RDY_DRIVE,     (U1)26U,    (U4)0x00080000U    },
-    {    (U2)ALERT_CH_C_STEER_PD,           (U1)ALERT_REQ_C_STEER_PD_SPDLIMIT,      (U1)26U,    (U4)0x00100000U    },
     {    (U2)ALERT_CH_C_STEER_PD,           (U1)ALERT_REQ_C_STEER_PD_FURLMTSPD,     (U1)26U,    (U4)0x00200000U    },
     {    (U2)ALERT_CH_C_STEER_PD,           (U1)ALERT_REQ_C_STEER_PD_CMAXSPDLMT,    (U1)26U,    (U4)0x00400000U    },
     {    (U2)ALERT_CH_C_STEER_PD,           (U1)ALERT_REQ_C_STEER_PD_CMAXSPDFLMT,   (U1)26U,    (U4)0x00800000U    },
@@ -357,6 +356,9 @@ U2 u2_g_HmiputxtSizeReqbit(void){
 /*  BEV-20   03/12/2026  SN       Change config for BEV Full_Function_2.                                                             */
 /*                                MET-B_OPTMON-CSTD-0-00-A-C0                                                                        */
 /*                                Added config for B_OPTMON MID.                                                                     */
+/*  BEV-21   04/09/2026  HY       Change config for BEV Electronic CV.                                                               */
+/*                                MET-C_STEER-CSTD-0-03-A-C0                                                                         */
+/*                                Removed Alert_REQ for C_STEER MID.                                                                 */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */

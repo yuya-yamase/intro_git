@@ -59,6 +59,9 @@
 #include "xspi_met.h"
 #include "datesi_met.h"
 #include "omavrchk.h"
+#include "asilchk.h"
+#include "nvmc_if_ivi.h"
+#include "nvmc_if_cen.h"
 
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
@@ -113,7 +116,10 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_HudImgAdjInit,
         &vd_g_DateSIMETInit,
         &vd_g_CanTxAppInit,
-        &vd_g_FwushInit
+        &vd_g_AsilChkBonRstWkInit,
+        &vd_g_FwushInit,
+    	&vd_g_NvmcIfIVIBonInit,
+    	&vd_g_NvmcIfCENBonInit
     };
 
     U1    u1_t_rslt;
@@ -178,7 +184,10 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_HudImgAdjInit,
         &vd_g_DateSIMETInit,
         &vd_g_CanTxAppInit,
-        &vd_g_FwushInit
+        &vd_g_AsilChkBonRstWkInit,
+        &vd_g_FwushInit,
+    	&vd_g_NvmcIfIVIRstInit,
+    	&vd_g_NvmcIfCENRstInit
     };
 
     U1    u1_t_rslt;
@@ -243,7 +252,10 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_HudImgAdjInit,
         &vd_g_DateSIMETInit,
         &vd_g_CanTxAppInit,
-        &vd_g_FwushInit
+        &vd_g_AsilChkBonRstWkInit,
+        &vd_g_FwushInit,
+    	&vd_g_NvmcIfIVIWkupInit,
+    	&vd_g_NvmcIfCENWkupInit
     };
 
     U1    u1_t_rslt;

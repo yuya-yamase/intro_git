@@ -38,11 +38,12 @@
 #define u4_HMITT_HB1(x)                           ((U4)((U4)(x) <<  4U))
 #define u4_HMITT_HB0(x)                           ((U4)((U4)(x)       ))
 
-#define HMITT_BLINK_CO_OFF____100P                   (0U)
-#define HMITT_BLINK_CO_ON_____100P                   (1U)
-#define HMITT_BLINK_CO_2P00HZ__50P                   (2U)
-#define HMITT_BLINK_CO_4P00HZ__50P                   (3U)
-#define HMITT_BLINK_CO_1P00HZ__50P                   (2U)
+/* The following HMITT_BLINK_CO_* macros are defined in hmitt.h. */
+/* #define HMITT_BLINK_CO_OFF____100P                   (0U) */
+/* #define HMITT_BLINK_CO_ON_____100P                   (1U) */
+/* #define HMITT_BLINK_CO_2P00HZ__50P                   (2U) */
+/* #define HMITT_BLINK_CO_4P00HZ__50P                   (3U) */
+/* #define HMITT_BLINK_CO_1P00HZ__50P                   (2U) */
 #define HMITT_BLINK_CO_4P00HZ__50P_EPB               (4U)
 #define HMITT_BLINK_CO_2P00HZ__50P_EPB               (3U)
 #define HMITT_BLINK_CO_4P00HZ__50P_STEER             (2U)

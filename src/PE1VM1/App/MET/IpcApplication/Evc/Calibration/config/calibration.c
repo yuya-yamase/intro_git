@@ -804,6 +804,11 @@ volatile const U1 u1_CALIB_MCUID_RSV_1B_0754       = (U1)0U;        /* Reserve_1
 volatile const U1 u1_CALIB_MCUID_RSV_1B_0755       = (U1)0U;        /* Reserve_1B-0755                                               */
 volatile const U1 u1_CALIB_MCUID_RSV_1B_0756       = (U1)0U;        /* Reserve_1B-0756                                               */
 volatile const U1 u1_CALIB_MCUID0797_CNST_WRITEFLG = (U1)1U;        /* Constant write flag                                           */
+#if 0 /* privisonary */
+#else
+volatile const U1 u1_CALIB_MCUIDXXXX_DAV_ACT       = (U1)0U;        /* Drawing-Area-Verification Active flag                         */
+#endif
+
 
 #pragma ghs section rodata  = ".calibration_area_2B"
 volatile const U2 u2_CALIB_MCUID3002_ANUNC_MID     = (U2)400U;      /* Basic 7 Tones Reporting Tone Medium                           */

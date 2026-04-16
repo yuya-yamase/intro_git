@@ -81,6 +81,9 @@
 #include "himgadj.h"
 #include "datesi_met.h"
 #include "omavrchk.h"
+#include "asilchk.h"
+#include "nvmc_if_ivi.h"
+#include "nvmc_if_cen.h"
 /*---------------------------------------------------------------------------*/
 /* Platform Header                                                           */
 /*---------------------------------------------------------------------------*/
@@ -331,6 +334,14 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     {&vd_g_SbltsyncMainTask,            (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_ThblnkrMainTask,             (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_wChimeMainTask,              (U4)SCHDLR_TASKBIT__10MS_A  },
+    {&vd_g_AsilChkMainTask,             (U4)SCHDLR_TASKBIT__10MS_B  },
+    /*-------------------------------------------------------------------*/
+    /*                                                                   */
+    /*  5ms Non-Platform Task                                            */
+    /*                                                                   */
+    /*-------------------------------------------------------------------*/
+    {&vd_g_NvmcIfIVIMainTask,           (U4)SCHDLR_TASKBIT___5MS    },
+    {&vd_g_NvmcIfCENMainTask,           (U4)SCHDLR_TASKBIT___5MS    },
     /*-------------------------------------------------------------------*/
     /*                                                                   */
     /*  Platform Post Task                                               */

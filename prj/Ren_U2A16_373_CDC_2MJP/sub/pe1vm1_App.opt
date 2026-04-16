@@ -54,6 +54,7 @@
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Vehspd/scc
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Vptran/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Vptran/scc
+    -I../../src/PE1VM1/App/MET/IpcApplication/Vsv/AsilChk/scc
     -I../../src/PE1VM1/App/MET/IpcApplication/Vsv/Gauge/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Vsv/Gauge/scc
     -I../../src/PE1VM1/App/MET/IpcApplication/Vsv/Illumi/config
@@ -73,9 +74,11 @@
     -I../../src/PE1VM1/App/MET/Platform/Fwush/scc
     -I../../src/PE1VM1/App/MET/XSPI_MET/config
     -I../../src/PE1VM1/App/MET/XSPI_MET/scc
+    -I../../src/PE1VM1/App/Nvmc_IF/CEN/scc
+    -I../../src/PE1VM1/App/Nvmc_IF/IVI/scc
 
 # ----------------------------------------------------------------------------------------------------------------------------------
 # ghsprj version 1-1-0
-# Date generated: 2026/03/27 16:09:04
+# Date generated: 2026/04/16 10:07:21
 # ----------------------------------------------------------------------------------------------------------------------------------
 
