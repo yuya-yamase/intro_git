@@ -18,6 +18,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "tydocan_nvmif_cfg_private.h"
 #include "oxdocan_saif.h"
+#include "tydocan_nvmif_ba.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -37,6 +38,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define TYDC_NVM_IF_2E_B32                       (0U)
+#define TYDC_NVM_IF_2E_N32                       (1U)
+#define TYDC_NVM_IF_BA_SKN                       (2U)
+#define TYDC_NVM_IF_BA_GMA                       (3U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -52,8 +57,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define TYDC_NVM_IF_2E_B32                       (0U)
-#define TYDC_NVM_IF_2E_N32                       (1U)
 static const ST_TYDC_NVM_IF   st_sp_TYDC_NVM_IF[] = {
     /* TYDC_NVM_IF_2E_B32   (0U) */
     {
@@ -74,6 +77,26 @@ static const ST_TYDC_NVM_IF   st_sp_TYDC_NVM_IF[] = {
         &u4_g_TyDoCANNvmIfMax_2E,                     /* fp_u4_MAX */
         &u1_g_TyDoCANNvmIfAns_2E,                     /* fp_u1_ANS */
         &u1_g_TyDoCANNvmIfReq_2E                      /* fp_u1_REQ */
+    },
+    /* TYDC_NVM_IF_BA_SKN   (2U) */
+    {
+        &u1_g_TyDoCANNvmIfRea_Skn,                    /* fp_u1_REA */
+        &u1_g_TyDoCANNvmIfWri_Skn,                    /* fp_u1_WRI */
+        &u1_g_TyDoCANNvmIfSynchk,                     /* fp_u1_SYN */
+
+        vdp_PTR_NA,                                   /* fp_u4_MAX */
+        &u1_g_TyDoCANNvmIfAns_Skn,                    /* fp_u1_ANS */
+        &u1_g_TyDoCANNvmIfReq_Skn                     /* fp_u1_REQ */
+    },
+    /* TYDC_NVM_IF_BA_GMA   (3U) */
+    {
+        &u1_g_TyDoCANNvmIfRea_Gma,                    /* fp_u1_REA */
+        &u1_g_TyDoCANNvmIfWri_Gma,                    /* fp_u1_WRI */
+        &u1_g_TyDoCANNvmIfSynchk,                     /* fp_u1_SYN */
+
+        vdp_PTR_NA,                                   /* fp_u4_MAX */
+        &u1_g_TyDoCANNvmIfAns_Gma,                    /* fp_u1_ANS */
+        &u1_g_TyDoCANNvmIfReq_Gma                     /* fp_u1_REQ */
     }
 };
 
@@ -106,6 +129,20 @@ const ST_TYDC_NVM_DID    st_gp_TYDC_NVM_DID[] = {
 
         (U2)U2_MAX,                     /* u2_nid    */    /* BEV Diag provisionally */
         (U2)OXDC_DATA_WRI_REQ_NB_20C2                 /* u2_nbyte  */
+    },
+    /* TYDC_NVM_BA_SKN  (4U) */
+    {
+        &st_sp_TYDC_NVM_IF[TYDC_NVM_IF_BA_SKN],       /* stp_IF    */
+
+        (U2)NVMCID_OTR_OXDC_BA_SAFEKEY_NUM,           /* u2_nid    */
+        (U2)OXDC_DATA_WRI_REQ_NB_SKN                  /* u2_nbyte  */
+    },
+    /* TYDC_NVM_BA_GMA  (5U) */
+    {
+        &st_sp_TYDC_NVM_IF[TYDC_NVM_IF_BA_GMA],       /* stp_IF    */
+
+        (U2)NVMCID_OTR_ETH_GLOBAL_MAC_ADDRESS,        /* u2_nid    */
+        (U2)OXDC_DATA_WRI_REQ_NB_GMA                  /* u2_nbyte  */
     }
 };
 const U2                 u2_g_TYDC_NVM_NUM_DID = (U2)TYDC_NVM_NUM_DID;
@@ -136,10 +173,12 @@ const U2                 u2_g_TYDC_NVM_NUM_DID = (U2)TYDC_NVM_NUM_DID;
 /*  800B-1   10/06/2020  AS       Configured for 800B                                                                                */
 /*  19PFv3-1 11/11/2024  SI       Delete DID-2043                                                                                    */
 /*  BEV-1    12/17/2025  SI       Delete DID 0x2021/2204                                                                             */
+/*  BEV-2    03/27/2026  NY       Added support for SID 0xBA commands(2EFD41XX/2EFD42XX)                                             */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * AS   = Atsunori Sugita, DENSO-TECHNO                                                                                           */
 /*  * SI   = Shugo Ichinose, DENSO-TECHNO                                                                                            */
 /*  * SN   = Shimon Nambu, DENSO-TECHNO                                                                                              */
+/*  * NY = Nobuhiro Yoshiyasu, DENSO-TECHNO                                                                                          */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

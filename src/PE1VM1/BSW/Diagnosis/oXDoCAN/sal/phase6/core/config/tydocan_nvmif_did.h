@@ -42,8 +42,10 @@
 /* If #defines are modified, lib_ipc_tycan_xxx.a shall be recompiled and rebuilt.                                    */
 /* ----------------------------------------------------------------------------------------------------------------- */
 
+#define TYDC_NVM_BA_SKN                          (4U)    /* SID 0xBA / SAFEKEY NUMBER WRITE                          */
+#define TYDC_NVM_BA_GMA                          (5U)    /* SID 0xBA / GLOBAL MAC ADDRESS WRITE                      */
 
-#define TYDC_NVM_NUM_DID                         (4U)
+#define TYDC_NVM_NUM_DID                         (6U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */

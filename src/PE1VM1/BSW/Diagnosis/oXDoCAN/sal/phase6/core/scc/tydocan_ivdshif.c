@@ -2,37 +2,42 @@
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  TyDoCAN Service Application Layer / SAFEKEY NUMBER WRITE                                                                         */
-/*  SID 0xBA ECU Shipping Inspection                                                                                                 */
+/*  TyDoCAN iVDsh Interface                                                                                                            */
+/*                                                                                                                                   */
 /*===================================================================================================================================*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define TYDOCAN_MET_ESI_2EFD41XX_C_MAJOR             (1)
-#define TYDOCAN_MET_ESI_2EFD41XX_C_MINOR             (0)
-#define TYDOCAN_MET_ESI_2EFD41XX_C_PATCH             (0)
+#define TYDOCAN_IVDSHIF_C_MAJOR                   (1)
+#define TYDOCAN_IVDSHIF_C_MINOR                   (0)
+#define TYDOCAN_IVDSHIF_C_PATCH                   (0)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "aip_common.h"
-#include "tydocan_sal.h"
-#include "oxdocan_saif.h"
+#include "ivdsh.h"
+#include "memfill_u4.h"
 
-#include "tydocan_met_esi_cfg_private.h"
+#include "oxdocan_oem.h"
 #include "tydocan_nvmif.h"
+#include "tydocan_ivdshif.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if ((TYDOCAN_IVDSHIF_C_MAJOR != TYDOCAN_IVDSHIF_H_MAJOR) || \
+     (TYDOCAN_IVDSHIF_C_MINOR != TYDOCAN_IVDSHIF_H_MINOR) || \
+     (TYDOCAN_IVDSHIF_C_PATCH != TYDOCAN_IVDSHIF_H_PATCH))
+#error "tydocan_ivdshif.c and tydocan_ivdshif.h : source and header files are inconsistent!"
+#endif
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define OXDC_2EFD41XX_NB_SKN                         (16U)      /* Number of bytes for SAFEKEY NUMBER.  */
-#define OXDC_2EFD41XX_SKN_INI                        (0xFFU)
-
-#define OXDC_2EFD41XX_MT_PAS                         (0xF5U)
-#define OXDC_2EFD41XX_MT_FAI                         (0xFAU)
+#define TYDC_IVDSH_IF_WRI_CYCLE                 (100U / OXDC_MAIN_TICK)   /* 100ms */
+#define TYDC_IVDSH_IF_GMA_WORDS                 (2U)                      /* Global MAC Address is 6 bytes, and each word is 4 bytes. */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -43,10 +48,12 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static U2       u2_s_tydc_ivdsh_if_cnt;
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U1      u1_s_oXdcMetEsi_PreWriSkn(const U2 u2_a_ELPSD);
+static void     vd_s_GmaAddrUpdt(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -55,85 +62,58 @@ static U1      u1_s_oXdcMetEsi_PreWriSkn(const U2 u2_a_ELPSD);
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*===================================================================================================================================*/
-/*  U1      u1_g_oXDoCANEsiTRx_2EFD41XX(const U1 * u1_ap_REQ_RX, U1 * u1_ap_ans_tx, const U2 u2_a_ELPSD)                             */
+/*  void    vd_g_TyDoCANiVDshIfInit(void)                                                                                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U1      u1_g_oXDoCANEsiTRx_2EFD41XX(const U1 * u1_ap_REQ_RX, U1 * u1_ap_ans_tx, const U2 u2_a_ELPSD)
+void    vd_g_TyDoCANiVDshIfInit(void)
 {
-    U1                            u1_t_pre;
-    U1                            u1_t_wri;
-    U1                            u1_t_proc;
-
-    u1_t_pre = u1_s_oXdcMetEsi_PreWriSkn(u2_a_ELPSD);
-
-    if(u1_t_pre != (U1)OXDC_SAL_PROC_NR_72){
-
-        u1_t_wri = u1_g_TyDoCANNvmIfWrite(&u1_ap_REQ_RX[TYDC_MET_ESI_TRX_B3], u2_a_ELPSD, (U2)TYDC_NVM_BA_SKN);
-        if(u1_t_wri == (U1)OXDC_SAL_PROC_FIN){              /* sync complete */
-
-            u1_t_proc = (U1)OXDC_SAL_PROC_FIN;
-            u1_ap_ans_tx[TYDC_MET_ESI_TRX_B0] = (U1)TYDC_MET_ESI_ANS_2E;
-            u1_ap_ans_tx[TYDC_MET_ESI_TRX_B1] = u1_ap_REQ_RX[TYDC_MET_ESI_TRX_B1];
-            u1_ap_ans_tx[TYDC_MET_ESI_TRX_B2] = u1_ap_REQ_RX[TYDC_MET_ESI_TRX_B2];
-            u1_ap_ans_tx[TYDC_MET_ESI_TRX_B3] = (U1)OXDC_2EFD41XX_MT_PAS;
-        }
-        else if(u1_t_wri == (U1)OXDC_SAL_PROC_NR_72){       /* sync fail */
-
-            u1_t_proc = (U1)OXDC_SAL_PROC_FIN;
-            u1_ap_ans_tx[TYDC_MET_ESI_TRX_B0] = (U1)TYDC_MET_ESI_ANS_2E;
-            u1_ap_ans_tx[TYDC_MET_ESI_TRX_B1] = u1_ap_REQ_RX[TYDC_MET_ESI_TRX_B1];
-            u1_ap_ans_tx[TYDC_MET_ESI_TRX_B2] = u1_ap_REQ_RX[TYDC_MET_ESI_TRX_B2];
-            u1_ap_ans_tx[TYDC_MET_ESI_TRX_B3] = (U1)OXDC_2EFD41XX_MT_FAI;
-        }
-        else{                                               /* Write */ 
-            u1_t_proc = (U1)OXDC_SAL_PROC_RUN;
-        }
-    }
-    else{
-
-        u1_t_proc = (U1)OXDC_SAL_PROC_FIN;
-        u1_ap_ans_tx[TYDC_MET_ESI_TRX_B0] = (U1)TYDC_MET_ESI_ANS_2E;
-        u1_ap_ans_tx[TYDC_MET_ESI_TRX_B1] = u1_ap_REQ_RX[TYDC_MET_ESI_TRX_B1];
-        u1_ap_ans_tx[TYDC_MET_ESI_TRX_B2] = u1_ap_REQ_RX[TYDC_MET_ESI_TRX_B2];
-        u1_ap_ans_tx[TYDC_MET_ESI_TRX_B3] = (U1)OXDC_2EFD41XX_MT_FAI;
-    }
-
-    return(u1_t_proc);
+    u2_s_tydc_ivdsh_if_cnt = (U2)0U;
 }
 /*===================================================================================================================================*/
-/*  static U1      u1_s_oXdcMetEsi_PreWriSkn(const U2 u2_a_EPLSD)                                                                    */
+/*  void    vd_g_TyDoCANiVDshIfMainTask(void)                                                                                        */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static U1      u1_s_oXdcMetEsi_PreWriSkn(const U2 u2_a_ELPSD)
+void    vd_g_TyDoCANiVDshIfMainTask(void)
 {
-    U1                            u1_t_skn[OXDC_2EFD41XX_NB_SKN];
+    vd_s_GmaAddrUpdt();
+}
+/*===================================================================================================================================*/
+/*  void    vd_g_TyDoCANiVDshIfWrite_Gma(const U4 * u4_ap_REQ, const U2 u2_a_NWORD)                                                  */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_TyDoCANiVDshIfWrite_Gma(const U4 * u4_ap_REQ, const U2 u2_a_NWORD)
+{
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM1TO3_MAC_ADDRESS, u4_ap_REQ, u2_a_NWORD);
+}
 
-    U4                            u4_t_lpcnt;
-    U1                            u1_t_proc;
+/*===================================================================================================================================*/
+/*  static void     vd_s_GmaAddrUpdt(void)                                                                                           */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void     vd_s_GmaAddrUpdt(void)
+{
+    U1    u1_t_proc;
+    U4    u4_tp_wri[TYDC_IVDSH_IF_GMA_WORDS];
 
-    if(u2_a_ELPSD == (U2)0U){
-
-        u1_t_proc = u1_g_TyDoCANNvmIfRead(&u1_t_skn[0], (U2)TYDC_NVM_BA_SKN);
-        if(u1_t_proc == (U1)OXDC_SAL_PROC_FIN){
-
-            for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)OXDC_2EFD41XX_NB_SKN; u4_t_lpcnt++){
-                if(u1_t_skn[u4_t_lpcnt] != (U1)OXDC_2EFD41XX_SKN_INI){
-                    u1_t_proc = (U1)OXDC_SAL_PROC_NR_72;
-                    break;
-                }
-            }
+    if (u2_s_tydc_ivdsh_if_cnt >= (U2)TYDC_IVDSH_IF_WRI_CYCLE) {
+        u1_t_proc = u1_g_TyDoCANNvmIfRead((U1*)&u4_tp_wri[0], (U2)TYDC_NVM_BA_GMA);
+        if (u1_t_proc != (U1)OXDC_SAL_PROC_FIN) {
+            vd_g_MemfillU4(&u4_tp_wri[0], (U4)0U, (U4)TYDC_IVDSH_IF_GMA_WORDS);
         }
+        vd_g_TyDoCANiVDshIfWrite_Gma(&u4_tp_wri[0], (U2)TYDC_IVDSH_IF_GMA_WORDS);
+        u2_s_tydc_ivdsh_if_cnt = (U2)0U;
     }
-    else{
-        u1_t_proc = (U1)OXDC_SAL_PROC_RUN;
+    else {
+        u2_s_tydc_ivdsh_if_cnt++;
     }
-
-    return(u1_t_proc);
 }
 
 /*===================================================================================================================================*/
@@ -144,15 +124,11 @@ static U1      u1_s_oXdcMetEsi_PreWriSkn(const U2 u2_a_ELPSD)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  1.0.0    03/18/2026  SI       New.                                                                                               */
-/*                                                                                                                                   */
+/*  1.0.0    03/27/2026  NY       New.                                                                                               */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  BEV-1    03/27/2026  NY       Implemented processing to write the SAFEKEY NUMBER to NVM.                                         */
 /*                                                                                                                                   */
-/*                                                                                                                                   */
-/*  * SI = Shugo Ichinose, DENSO-TECHNO                                                                                              */
-/*  * NY = Nobuhiro Yoshiyasu, DENSO-TECHNO                                                                                          */
+/*  * NY  = Nobuhiro Yoshiyasu, DENSO-TECHNO                                                                                         */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
