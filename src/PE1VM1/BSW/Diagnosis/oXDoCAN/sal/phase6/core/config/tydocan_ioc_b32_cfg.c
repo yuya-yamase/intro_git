@@ -146,14 +146,18 @@ static void    vd_s_TydcIocB32Act_Mid(const U2 u2_a_GR, const U4 * u4_ap_R32)
     U4                      u4_t_req_tx;
 
     u4_t_req_tx = (U4)0x00000001U << u4_ap_R32[TYDC_IOC_R32_CST];
+#if 0     /* BEV Diag provisionally */
     vd_g_XSpiDsrUnlock((U4)XSPI_DSR_UNLOCK);
     vd_g_XSpiDsrTx((U1)XSPI_DSR_2F_MID, u4_t_req_tx);
+#endif    /* BEV Diag provisionally */
 }
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 static void    vd_s_TydcIocB32Dea_Mid(const U2 u2_a_GR)
 {
+#if 0     /* BEV Diag provisionally */
     vd_g_XSpiDsrUnlock((U4)XSPI_DSR_UNLOCK);
     vd_g_XSpiDsrTx((U1)XSPI_DSR_2F_MID, (U4)0U);
+#endif    /* BEV Diag provisionally */
 }
 /*===================================================================================================================================*/
 /*  static U4      u4_s_TydcIocB32Sup_Vsi(const U2 u2_a_GR)                                                                          */
@@ -327,15 +331,19 @@ static void    vd_s_TydcIocB32Act_Hud(const U2 u2_a_GR, const U4 * u4_ap_R32)
 
     u4_t_req_tx = u4_ap_R32[TYDC_IOC_R32_CST];
     if(u4_t_req_tx < (U4)u1_s_TYDC_IOC_NUM_HUD){
+#if 0     /* BEV Diag provisionally */
         vd_g_XSpiDsrUnlock((U4)XSPI_DSR_UNLOCK);
         vd_g_XSpiDsrTx((U1)XSPI_DSR_2F_HUD, (U4)u1_sp_TYDC_IOC_HUD[u4_t_req_tx]);
+#endif    /* BEV Diag provisionally */
     }
 }
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 static void    vd_s_TydcIocB32Dea_Hud(const U2 u2_a_GR)
 {
+#if 0     /* BEV Diag provisionally */
     vd_g_XSpiDsrUnlock((U4)XSPI_DSR_UNLOCK);
     vd_g_XSpiDsrTx((U1)XSPI_DSR_2F_HUD, (U4)0U);
+#endif    /* BEV Diag provisionally */
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */

@@ -358,7 +358,8 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     {&vd_g_oXDoCANMainTask,             (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_oXCANMainPosTask,            (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_oXSECMainPosMid,             (U4)SCHDLR_TASKBIT___5MS    },
-    {&vd_g_XSpiDsalMainTask,            (U4)SCHDLR_TASKBIT__10MS_A  },
+    {&vd_g_XSpiDsalMainTask,            (U4)SCHDLR_TASKBIT___5MS    },      /* This task shall be called after vd_g_oXDoCANMainTask           */
+                                                                            /* and before vd_g_XSpiMETPduTx.                                  */
     {&vd_g_XSpiMETPduTx,                (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_XSpiCalibMainTask,           (U4)SCHDLR_TASKBIT_100MS_A  },      /* This task is not needed to be called before vd_g_XSpiMETPduTx  */
     {&vd_g_iVDshMainWriTask,            (U4)SCHDLR_TASKBIT___5MS    },

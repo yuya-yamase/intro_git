@@ -22,6 +22,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define DSAL_MAIN_TICK_CFG                   (5U)               /* DSAL_TASKTIME_MSEC : 5 milliseconds                    */
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define XSPI_DTC_NUM_RX                      (4U)
 #define XSPI_DTC_RX_B1510                    (0U)               /* GVIF/HUD->MET                                          */
 #define XSPI_DTC_RX_B1511                    (1U)               /* GVIF/MET->HUD                                          */
@@ -37,11 +40,9 @@
 #define XSPI_DTC_RX_UNK_GVIF                 (0x04U)            /* B1510/B1511/B1518/B1519 GVIF Unknown Label             */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_DSR_NUM_CH                      (4U)
-#define XSPI_DSR_2F_MID                      (0U)               /* SID 0x2F / DID 0x2831                                  */
-#define XSPI_DSR_2F_HUD                      (1U)               /* SID 0x2F / DID 0x2B01                                  */
-#define XSPI_DSR_31_ESO                      (2U)               /* SID 0x31 / RID 0x11FF                                  */
-#define XSPI_DSR_14_DTC                      (3U)               /* SID 0x14 / DTC Clear Finalized                         */
+#define XSPI_DSR_NUM_CH                      (2U)
+#define XSPI_DSR_31_ESO                      (0U)               /* SID 0x31 / RID 0x11FF                                  */
+#define XSPI_DSR_14_DTC                      (1U)               /* SID 0x14 / DTC Clear Finalized                         */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define XSPI_DSR_UNLOCK                      (0x12f0425aU)
@@ -127,8 +128,10 @@ void    vd_g_XSpiDs22Read(const U1 u1_a_DS22_DID, U1 * u1_ap_ans);
 
 U1      u1_g_XSpiSpnRx(const U1 u1_a_SPN, U1 * u1_ap_spn_rx, const U1 u1_a_NBYTE); /* Return : TRUE = rxed, FALSE = not rxed */
 
+#if 0     /* BEV Diag provisionally */
 U1      u1_g_XSpiDsHudEvCapt(const U1 u1_a_ODO_UPDT, U4 * u4_ap_ss);
 U1      u1_g_XSpiDsDispEvCapt(const U1 u1_a_ODO_UPDT, U4 * u4_ap_ss);
+#endif    /* BEV Diag provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
