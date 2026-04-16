@@ -36,3 +36,5 @@ bswSEC_CycurHSM.dba
 #Tool
 *_component.json
 !*DefaultMCUConst*.x
+#USBRPRG
+!mcuconst_USBRPG.bin
