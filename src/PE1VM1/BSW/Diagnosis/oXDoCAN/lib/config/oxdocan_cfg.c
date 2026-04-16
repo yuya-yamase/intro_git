@@ -44,6 +44,7 @@
 #include "es_inspect.h"
 
 #include "tydocan_xpn.h"
+/*#include "tydocan_dippi.h"*//* BEV Diag provisionally */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -133,6 +134,7 @@ void    vd_g_oXDoCANCfgWkupPreInit(void)
 void    vd_g_oXDoCANCfgBonInit(void)
 {
     vd_g_TyDoCANXpnInit();
+/*    vd_g_TyDoCANDippiInit(); *//* BEV Diag provisionally */
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_oXDoCANCfgRstInit(void)                                                                                             */
@@ -143,6 +145,7 @@ void    vd_g_oXDoCANCfgBonInit(void)
 void    vd_g_oXDoCANCfgRstInit(void)
 {
     vd_g_TyDoCANXpnInit();
+/*    vd_g_TyDoCANDippiInit(); *//* BEV Diag provisionally */
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_oXDoCANCfgWkupInit(void)                                                                                            */
@@ -153,6 +156,7 @@ void    vd_g_oXDoCANCfgRstInit(void)
 void    vd_g_oXDoCANCfgWkupInit(void)
 {
     vd_g_TyDoCANXpnInit();
+/*    vd_g_TyDoCANDippiInit(); *//* BEV Diag provisionally */
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_oXDoCANCfgServiceInit(void)                                                                                         */
@@ -189,6 +193,7 @@ void    vd_g_oXDoCANCfgMainStart(const ST_OXDC_REQ * st_ap_REQ, const U2 u2_a_TS
     }
 
     vd_g_TyDoCANXpnMainTask(st_ap_REQ->u1_eom_aft);
+/*    vd_g_TyDoCANDippiMainTask(st_ap_REQ->u1_eom_aft, u2_a_TSLOT);*//* BEV Diag provisionally */
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_oXDoCANCfgServiceMain(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_ANS * st_ap_ans, const U2 u2_a_TSLOT)                  */

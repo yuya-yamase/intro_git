@@ -171,7 +171,7 @@ static const ST_XSPI_DSR_CH   st_sp_XSPI_DSR_CH[XSPI_DSR_NUM_CH] = {
     /* XSPI_DSR_31_ESO (0U) */
     {
         (U2)200U   / (U2)DSAL_MAIN_TICK_CFG,    /* u2_tout */
-        (U2)464U                                /* u2_woff */
+        (U2)245U                                /* u2_woff */
     },
     /* XSPI_DSR_14_DTC (1U) */
     {

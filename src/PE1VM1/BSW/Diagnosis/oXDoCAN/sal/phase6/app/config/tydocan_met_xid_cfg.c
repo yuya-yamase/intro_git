@@ -218,22 +218,15 @@ U1      u1_g_TyDoCANPwrVol(void)
 /*===================================================================================================================================*/
 void    vd_g_TyDoCANEsoReset(void)
 {
-#if 0    /* BEV Diag provisionally */
     vd_g_TyDoCANDtcUnlock((U4)OXDC_DTC_KEY_UNLOCK);
     vd_g_TyDoCANDtcLogRxReset();
 
     (void)u1_g_VardefEsOptReset((U1)TRUE);
-    vd_g_VardefTcRxReset();
-    (void)vd_g_VardefPtsRxReset();
-    vd_g_VardefPtsRxMilreqReset();
 
     vd_g_XSpiDsrUnlock((U4)XSPI_DSR_UNLOCK);
     vd_g_XSpiDsrTx((U1)XSPI_DSR_31_ESO, (U4)XSPI_ESO_RES_RUN);
 
-    vd_g_VardefMmMthdReset();
     vd_g_VardefHcsRxReset();
-    vd_g_VardefSgaugeReset();
-#endif    /* BEV Diag provisionally */
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_oXDoCANDidSup_1025(void)                                                                                            */
@@ -349,11 +342,13 @@ U1      u1_g_oXDoCANDidSup_1027(void)
 /*                                Remove Unnecessary Parameter for DID 10A7/10A9.                                                    */
 /*  19PFv3-3 12/23/2024  SI       Temporarily Disable Support for DID 2202/2203                                                      */
 /*  BEV-1    12/17/2025  SI       Remove unnecessary functions in BEV.                                                               */
+/*  BEV-2    03/27/2026  NY       Update vd_g_TyDoCANEsoReset for BEV initialization.                                                */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * AS   = Atsunori Sugita, DENSO-TECHNO                                                                                           */
 /*  * SM = Shota Maegawa, DENSO-TECHNO                                                                                               */
 /*  * TK = Toru Kamishina, DENSO-TECHNO                                                                                              */
 /*  * SI = Shugo Ichinose, DENSO-TECHNO                                                                                              */
+/*  * NY = Nobuhiro Yoshiyasu, DENSO-TECHNO                                                                                          */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
