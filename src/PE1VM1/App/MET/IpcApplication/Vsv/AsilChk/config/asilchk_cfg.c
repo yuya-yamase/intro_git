@@ -48,7 +48,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define    ASILCHK_VM_1WORD                                  (1U)
 
-#define    ASILCHK_DAX_ACT_FLG_ON                            (1U)
+#define    ASILCHK_DAV_ACT_FLG_ON                            (1U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
@@ -637,8 +637,8 @@ void    vd_g_AsilChkCfgCrcFailAct(void)
     U4                  u4_t_tx_data;
     U1                  u1_t_calib_flg;
 
-    u1_t_calib_flg    = u1_CALIB_MCUIDXXXX_DAX_ACT;
-    if(u1_t_calib_flg == (U1)ASILCHK_DAX_ACT_FLG_ON){
+    u1_t_calib_flg    = u1_CALIB_MCUIDXXXX_DAV_ACT;
+    if(u1_t_calib_flg == (U1)ASILCHK_DAV_ACT_FLG_ON){
         /* Abnormal process of CRC value unmatch */
         u4_t_tx_data = u4_s_TX_SPIFAIL_NG;
         vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM1TO3_SPI_FAIL, &u4_t_tx_data, (U2)ASILCHK_VM_1WORD);
@@ -657,8 +657,8 @@ void    vd_g_AsilChkCfgAliveCntFailAct(void)
     U4                  u4_t_tx_data;
     U1                  u1_t_calib_flg;
 
-    u1_t_calib_flg    = u1_CALIB_MCUIDXXXX_DAX_ACT;
-    if(u1_t_calib_flg == (U1)ASILCHK_DAX_ACT_FLG_ON){
+    u1_t_calib_flg    = u1_CALIB_MCUIDXXXX_DAV_ACT;
+    if(u1_t_calib_flg == (U1)ASILCHK_DAV_ACT_FLG_ON){
         /* Abnormal process of Alive Counter */
         u4_t_tx_data = u4_s_TX_SPIFAIL_NG;
         vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM1TO3_SPI_FAIL, &u4_t_tx_data, (U2)ASILCHK_VM_1WORD);
