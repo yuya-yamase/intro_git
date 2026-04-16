@@ -1,34 +1,46 @@
-/* 2.0.1 */
+/* 1.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/* TyDoCAN Service Application Layer / DID 0xF18A Supplier Identifier                                                                */
+/* TyDoCAN Service Application Layer / DID 0xF1A0                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define TYDOCAN_MET_DID_F18A_C_MAJOR             (2)
-#define TYDOCAN_MET_DID_F18A_C_MINOR             (0)
-#define TYDOCAN_MET_DID_F18A_C_PATCH             (1)
+#define TYDOCAN_MET_DID_F1A0_C_MAJOR             (1)
+#define TYDOCAN_MET_DID_F1A0_C_MINOR             (0)
+#define TYDOCAN_MET_DID_F1A0_C_PATCH             (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "aip_common.h"
-#include "oxdocan_saif.h"
 #include "tydocan_sal.h"
-#include "nvmc_mgr.h"
+#include "oxdocan_saif.h"
+#include "tydocan_xpn.h"
 
+#include "memcpy_u1.h"
+#include "memfill_u1.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define TYDC_SUP_ID_NVMC_NB                        (8U)
+#define OXDC_F1A0_SLV_P_SN_POS                   (3U)       /* Slave Part serial number start position          */
 
+#define OXDC_F1A0_BYTE0                          (0U)
+#define OXDC_F1A0_BYTE1                          (1U)
+#define OXDC_F1A0_BYTE2                          (2U)
+
+#define OXDC_F1A0_SLV_P_NUM                      (0x01U)    /* The Output number of Slave Part Serial Number    */
+#define OXDC_F1A0_SLV_P_ID                       (0x02U)    /* Slave Part ID #1 (HUD)                           */
+#define OXDC_F1A0_SLV_P_SN_LEN                   (0x14U)    /* Data Length for Slave Part Serial Number #1      */
+
+#define OXDC_F1A0_UNKNOWN                        (0x3FU)
+#define OXDC_F1A0_INVALID                        (0xFFU)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -48,32 +60,35 @@
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  U1      u1_g_oXDoCANRebyId_F18A(U1 * u1_ap_ans, const U2 u2_a_ELPSD)                                                             */
+/*  U1      u1_g_oXDoCANRebyId_F1A0(U1 * u1_ap_ans, const U2 u2_a_ELPSD)                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U1      u1_g_oXDoCANRebyId_F18A(U1 * u1_ap_ans, const U2 u2_a_ELPSD)
+U1      u1_g_oXDoCANRebyId_F1A0(U1 * u1_ap_ans, const U2 u2_a_ELPSD)
 {
-    U1                 u1_tp_src[TYDC_SUP_ID_NVMC_NB];
-    U1                 u1_t_nvm_chk;
-    U1                 u1_t_proc;
+    U1                     u1_tp_pn_tx[OXDC_DATA_REA_ANS_NB_F1A0];
+    U1                     u1_t_xpn_sts;
 
-    u1_t_nvm_chk = u1_g_Nvmc_ReadOthrwithSts((U2)NVMCID_OTR_OXDC_22_F18A, (U2)TYDC_SUP_ID_NVMC_NB, &u1_tp_src[0]);
+    vd_g_MemfillU1(u1_tp_pn_tx, (U1)OXDC_F1A0_INVALID, (U4)OXDC_DATA_REA_ANS_NB_F1A0);
+    u1_tp_pn_tx[OXDC_F1A0_BYTE0] = (U1)OXDC_F1A0_SLV_P_NUM;
+    u1_tp_pn_tx[OXDC_F1A0_BYTE1] = (U1)OXDC_F1A0_SLV_P_ID;
+    u1_tp_pn_tx[OXDC_F1A0_BYTE2] = (U1)OXDC_F1A0_SLV_P_SN_LEN;
 
-    if((u1_t_nvm_chk <  (U1)NVMC_STATUS_KIND_NG ) &&
-       (u1_t_nvm_chk != (U1)NVMC_STATUS_ERRCOMP ) &&
-       (u1_t_nvm_chk != (U1)NVMC_STATUS_CACHE_NG)){
-        /* Since the data read from the DTF is stored in endian format, it must be converted (RH850: Little Endian). */
-        u1_ap_ans[0] = u1_tp_src[1];
-        u1_ap_ans[1] = u1_tp_src[0];
-        u1_t_proc = (U1)OXDC_SAL_PROC_FIN;
+    u1_t_xpn_sts = u1_g_TyDoCANXpnTx((U1)TYDC_XPN_RX_HUD_SERI_N, &u1_tp_pn_tx[OXDC_F1A0_SLV_P_SN_POS], (U1)TYDC_XPN_NB_HUD_SERI_N);
+    if(u1_t_xpn_sts == (U1)TYDC_XPN_UNKNOWN){
+        vd_g_MemfillU1(&u1_tp_pn_tx[OXDC_F1A0_SLV_P_SN_POS], (U1)OXDC_F1A0_UNKNOWN, (U4)OXDC_F1A0_SLV_P_SN_LEN);
+    }
+    else if(u1_t_xpn_sts == (U1)TYDC_XPN_INVALID){
+        vd_g_MemfillU1(&u1_tp_pn_tx[OXDC_F1A0_SLV_P_SN_POS], (U1)OXDC_F1A0_INVALID, (U4)OXDC_F1A0_SLV_P_SN_LEN);
     }
     else{
-        u1_t_proc = (U1)OXDC_SAL_PROC_NR_22;
+        /* Do Nothing */
     }
 
-    return(u1_t_proc);
+    vd_g_MemcpyU1(u1_ap_ans, &u1_tp_pn_tx[0], (U4)OXDC_DATA_REA_ANS_NB_F1A0);
+
+    return((U1)OXDC_SAL_PROC_FIN);
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
@@ -83,16 +98,8 @@ U1      u1_g_oXDoCANRebyId_F18A(U1 * u1_ap_ans, const U2 u2_a_ELPSD)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  1.0.0     1/ 30/2024  TK       New.                                                                                              */
-/*  2.0.0    12/ 19/2024  SI       Get Supplier Identifier from NVMC.                                                                */
-/*  2.0.1     7/ 23/2025  SI       Remove guard check for values greater than 0x270F.                                                */
+/*  1.0.0     3/26/2026  NY       New.                                                                                               */
 /*                                                                                                                                   */
-/*  Revision Date        Author   Change Description                                                                                 */
-/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  BEV-1     3/ 23/2026  NY       Modified NVMCID for BEV configuration.                                                            */
-/*                                                                                                                                   */
-/*  * TK = Toru Kamishina, Denso Techno                                                                                              */
-/*  * SI = Shugo Ichinose, Denso Techno                                                                                              */
 /*  * NY = Nobuhiro Yoshiyasu, Denso Techno                                                                                          */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -90,7 +90,8 @@
 #define XSPI_SPN_RX_LB6                      (3U)
 #define XSPI_SPN_RX_HUD                      (4U)
 #define XSPI_SPN_RX_DISP                     (5U)
-#define XSPI_SPN_RX_VER                      (6U)
+#define XSPI_SPN_RX_HUD_SERI_N               (6U)
+#define XSPI_SPN_RX_VER                      (7U)
 
 #define XSPI_SPN_NB_LB3                      (12U)
 #define XSPI_SPN_NB_LB4                      (12U)
@@ -98,6 +99,7 @@
 #define XSPI_SPN_NB_LB6                      (12U)
 #define XSPI_SPN_NB_HUD                      (12U)
 #define XSPI_SPN_NB_DISP                     (12U)
+#define XSPI_SPN_NB_HUD_SERI_N               (20U)
 #define XSPI_SPN_NB_VER                      (5U)
 
 
@@ -141,6 +143,6 @@ U1      u1_g_XSpiDsDispEvCapt(const U1 u1_a_ODO_UPDT, U4 * u4_ap_ss);
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  lcom_spi_dsal.c                                                                                               */
+/*  Change History  :  xspi_met_dsal.c                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

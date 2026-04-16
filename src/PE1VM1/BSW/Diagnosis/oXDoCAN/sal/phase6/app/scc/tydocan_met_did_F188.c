@@ -24,9 +24,7 @@
 #include "memcpy_u1.h"
 #include "memfill_u1.h"
 
-#if 0    /* BEV Diag provisionally */
 #include "product.h"
-#endif    /* BEV Diag provisionally */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -36,7 +34,8 @@
 #define OXDC_SOC_LB_NUM                          (4U)       /*LB3-LB6                             */
 
 #define OXDC_SOFT_N_NUM_SOC                      (64U)      /*16Byte * 4(SOC LB NUM)              */
-#define OXDC_SOFT_N_NUM_CPU                      (6U)       /*LB1/LB2/LB3/LB4/LB5/LB6             */
+#define OXDC_SOFT_N_NUM_CPU                      (2U)       /* BEV Diag provisionally */
+                                                            /*MCU software part number/ MET vehicle individual part number  */
 #define OXDC_SOFT_N_LENGTH                       (16U)      /*The Length of Software Parts Number */
 #define OXDC_SOFT_N_ECUID                        (0x01U)    /*METECU = 0x01 Fixed Value           */
 
@@ -110,7 +109,6 @@
 /*===================================================================================================================================*/
 U1      u1_g_oXDoCANRebyId_F188(U1 * u1_ap_ans, const U2 u2_a_ELPSD)
 {
-#if 0    /* BEV Diag provisionally */
     U1                     u1_tp_pn_tx[OXDC_DATA_REA_ANS_NB_F188];
     U1                     u1_t_xpn_sts;
 
@@ -123,10 +121,12 @@ U1      u1_g_oXDoCANRebyId_F188(U1 * u1_ap_ans, const U2 u2_a_ELPSD)
 
     (void)u1_g_Product((U1)PRDCT_PN_SOFT_N, &u1_tp_pn_tx[OXDC_SOFT_N_LB1], (U1)PRDCT_SOFT_N_NBYTE);
 
-    u1_tp_pn_tx[OXDC_SOFT_N_LB1_RES13] = (U1)0U;
-    u1_tp_pn_tx[OXDC_SOFT_N_LB1_RES14] = (U1)0U;
-    u1_tp_pn_tx[OXDC_SOFT_N_LB1_RES15] = (U1)0U;
-    u1_tp_pn_tx[OXDC_SOFT_N_LB1_RES16] = (U1)0U;
+    /* BEV Diag provisionally *//* OXDC_SOFT_N_LB1_RES13-16 */
+    /* Temporary implementation for the ECV phase; will be fixed in a later phase. */
+    u1_tp_pn_tx[OXDC_SOFT_N_LB1_RES13] = (U1)OXDC_F188_INVALID;
+    u1_tp_pn_tx[OXDC_SOFT_N_LB1_RES14] = (U1)OXDC_F188_INVALID;
+    u1_tp_pn_tx[OXDC_SOFT_N_LB1_RES15] = (U1)OXDC_F188_INVALID;
+    u1_tp_pn_tx[OXDC_SOFT_N_LB1_RES16] = (U1)OXDC_F188_INVALID;
 
     u1_tp_pn_tx[19]  = (U1)OXDC_SOFT_N_ECUID;           /* OXDC_SOFT_N_LB2 - 1 */
     vd_g_Product_LB2_SoftNumber(&u1_tp_pn_tx[OXDC_SOFT_N_LB2], (U1)PRDCT_SOFT_N_CONST_NBYTE);
@@ -136,6 +136,7 @@ U1      u1_g_oXDoCANRebyId_F188(U1 * u1_ap_ans, const U2 u2_a_ELPSD)
     u1_tp_pn_tx[OXDC_SOFT_N_LB2_RES15] = (U1)0U;
     u1_tp_pn_tx[OXDC_SOFT_N_LB2_RES16] = (U1)0U;
 
+#if 0   /* BEV Diag provisionally *//* Temporary implementation for the ECV phase; will be fixed in a later phase. */
     /*SOC Software Number Set */
     u1_tp_pn_tx[36]  = (U1)OXDC_SOFT_N_ECUID;           /* OXDC_SOFT_N_LB3 - 1 */
     u1_tp_pn_tx[53]  = (U1)OXDC_SOFT_N_ECUID;           /* OXDC_SOFT_N_LB4 - 1 */
@@ -203,13 +204,11 @@ U1      u1_g_oXDoCANRebyId_F188(U1 * u1_ap_ans, const U2 u2_a_ELPSD)
     u1_tp_pn_tx[OXDC_SOFT_N_LB6_RES14] = (U1)0U;
     u1_tp_pn_tx[OXDC_SOFT_N_LB6_RES15] = (U1)0U;
     u1_tp_pn_tx[OXDC_SOFT_N_LB6_RES16] = (U1)0U;
+#endif  /* BEV Diag provisionally *//* Temporary implementation for the ECV phase; will be fixed in a later phase. */
 
     vd_g_MemcpyU1(u1_ap_ans, &u1_tp_pn_tx[0], (U4)OXDC_DATA_REA_ANS_NB_F188);
 
     return((U1)OXDC_SAL_PROC_FIN);
-#else    /* BEV Diag provisionally */
-    return((U1)OXDC_SAL_PROC_NR_22);
-#endif    /* BEV Diag provisionally */
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
@@ -224,8 +223,10 @@ U1      u1_g_oXDoCANRebyId_F188(U1 * u1_ap_ans, const U2 u2_a_ELPSD)
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /* 19PFv3-1   1/08/2025  TeN      Change for TRS_UDS-DA.5.1.46.                                                                      */
+/* BEV-1      3/26/2026  NY       Temporary implementation for the ECV phase.                                                        */
 /*                                                                                                                                   */
 /*  * TK  = Toru Kamishina, Denso Techno                                                                                             */
 /*  * TeN = Tetsuhsi Nakanao, Denso Techno                                                                                           */
+/*  * NY  = Nobuhiro Yoshiyasu, Denso Techno                                                                                         */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

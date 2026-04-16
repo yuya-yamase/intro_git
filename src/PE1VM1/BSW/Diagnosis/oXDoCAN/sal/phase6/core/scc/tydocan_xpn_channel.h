@@ -34,6 +34,7 @@
 #define TYDC_XPN_RX_DISP                         (5U)
 #define TYDC_XPN_RX_ECU_PN                       (6U)
 #define TYDC_XPN_RX_SERI_N                       (7U)
+#define TYDC_XPN_RX_HUD_SERI_N                   (8U)
 
 /* Byte */
 #define TYDC_XPN_NB_LB3                          (12U)
@@ -44,6 +45,7 @@
 #define TYDC_XPN_NB_DISP                         (12U)
 #define TYDC_XPN_NB_ECU_PN                       (12U)
 #define TYDC_XPN_NB_SERI_N                       (10U)
+#define TYDC_XPN_NB_HUD_SERI_N                   (20U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */

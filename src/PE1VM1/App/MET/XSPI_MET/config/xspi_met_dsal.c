@@ -17,14 +17,13 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "aip_common.h"
+#include "xspi_met.h"
 #include "xspi_met_dsal.h"
 
 #include "memfill_u1.h"
 #include "memcpy_u1.h"
 #include "vardef.h"
-#if 0    /* BEV Diag provisionally */
 #include "product.h"
-#endif    /* BEV Diag provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -45,7 +44,7 @@
 #define XSPI_SPN_RX_CHK                      (0x00000003U)
 #define XSPI_SOCSPN_RX_CHK                   (0x0000000FU)
 
-#define XSPI_SPN_RX_NWORD                    (20U)
+#define XSPI_SPN_RX_NWORD                    (25U)
 #define XSPI_SPN_RX_NW_3                     (3U)
 
 #define XSPI_SPN_RX_W0_LB3                   (0U)
@@ -66,8 +65,13 @@
 #define XSPI_SPN_RX_W15_DISP                 (15U)
 #define XSPI_SPN_RX_W16_DISP                 (16U)
 #define XSPI_SPN_RX_W17_DISP                 (17U)
-#define XSPI_SPN_RX_W18_VER                  (18U)
-#define XSPI_SPN_RX_W19_VER                  (19U)
+#define XSPI_SPN_RX_W18_HUD_SERI_N           (18U)
+#define XSPI_SPN_RX_W19_HUD_SERI_N           (19U)
+#define XSPI_SPN_RX_W20_HUD_SERI_N           (20U)
+#define XSPI_SPN_RX_W21_HUD_SERI_N           (21U)
+#define XSPI_SPN_RX_W22_HUD_SERI_N           (22U)
+#define XSPI_SPN_RX_W23_VER                  (23U)
+#define XSPI_SPN_RX_W24_VER                  (24U)
 
 #define XSPI_SPN_RX_TOC_INI                  (0xffU)
 #define XSPI_SPN_RX_TOC_MAX                  (0xfeU)
@@ -158,7 +162,6 @@ static void    vd_s_XSpiDsalRx_Spn(const U4 * u4_ap_PDU_RX);
 static void    vd_s_XSpiDsalRx_Gvif(const U4 * u4_ap_PDU_RX);
 
 static void    vd_s_XSpiDsalTx_2E(U4 * u4_ap_pdu_tx);
-static void    vd_s_XSpiDsalTx_Xpn(U4 * u4_ap_pdu_tx);
 static void    vd_s_XSpiDsalTx_Dsr(U4 * u4_ap_pdu_tx);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -243,9 +246,8 @@ void    vd_g_XSpiDsalRx(const U4 * u4_ap_PDU_RX)
     vd_s_XSpiDsalRx_Gvif(u4_ap_PDU_RX);    /* GVIF                    */
 
     vd_s_XSpiDsalRx_Dtc(u4_ap_PDU_RX);     /* Diag Trouble Code       */
-
-    vd_s_XSpiDsalRx_Spn(u4_ap_PDU_RX);     /* Soft Product Number     */
 #endif    /* BEV Diag provisionally */
+    vd_s_XSpiDsalRx_Spn(u4_ap_PDU_RX);     /* Soft Product Number     */
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_XSpiDsalTx(U4 * u4_ap_pdu_tx)                                                                                       */
@@ -259,8 +261,6 @@ void    vd_g_XSpiDsalTx(U4 * u4_ap_pdu_tx)
 
 #if 0     /* BEV Diag provisionally */
     vd_s_XSpiDsalTx_2E(u4_ap_pdu_tx);     /* TyDoCAN Customize        */
-
-    vd_s_XSpiDsalTx_Xpn(u4_ap_pdu_tx);    /* Product Number           */
 #endif    /* BEV Diag provisionally */
 }
 /*===================================================================================================================================*/
@@ -328,7 +328,6 @@ void    vd_g_XSpiDsrTx(const U1 u1_a_CH, const U4 u4_a_REQ_TX)
 /*===================================================================================================================================*/
 U1      u1_g_XSpiSpnRx(const U1 u1_a_SPN, U1 * u1_ap_spn_rx, const U1 u1_a_NBYTE)
 {
-#if 0    /* BEV Diag provisionally */
     static const U1                   u1_sp_XSPI_SPN_RX_NB_MIN[] = {
         (U1)XSPI_SPN_NB_LB3,
         (U1)XSPI_SPN_NB_LB4,
@@ -336,7 +335,19 @@ U1      u1_g_XSpiSpnRx(const U1 u1_a_SPN, U1 * u1_ap_spn_rx, const U1 u1_a_NBYTE
         (U1)XSPI_SPN_NB_LB6,
         (U1)XSPI_SPN_NB_HUD,
         (U1)XSPI_SPN_NB_DISP,
+        (U1)XSPI_SPN_NB_HUD_SERI_N,
         (U1)XSPI_SPN_NB_VER
+    };
+
+    static const U1                   u1_sp_XSPI_SPN_RX_OFFSET[] = {
+        (U1)XSPI_SPN_RX_W0_LB3,
+        (U1)XSPI_SPN_RX_W3_LB4,
+        (U1)XSPI_SPN_RX_W6_LB5,
+        (U1)XSPI_SPN_RX_W9_LB6,
+        (U1)XSPI_SPN_RX_W12_HUD,
+        (U1)XSPI_SPN_RX_W15_DISP,
+        (U1)XSPI_SPN_RX_W18_HUD_SERI_N,
+        (U1)XSPI_SPN_RX_W23_VER
     };
 
     U1                                u1_t_rx_chk;
@@ -356,15 +367,12 @@ U1      u1_g_XSpiSpnRx(const U1 u1_a_SPN, U1 * u1_ap_spn_rx, const U1 u1_a_NBYTE
         if((u1_a_NBYTE  >= u1_t_nb_min) &&
            (u1_t_rx_chk == (U1)TRUE   )){
 
-            u1_t_woff = u1_a_SPN * (U1)XSPI_SPN_RX_NW_3;
+            u1_t_woff = u1_sp_XSPI_SPN_RX_OFFSET[u1_a_SPN];
             vd_g_MemcpyU1(u1_ap_spn_rx, (U1 *)&u4_sp_xspi_spn_rx[u1_t_woff], (U4)u1_t_nb_min);
         }
     }
 
     return(u1_t_rx_chk);
-#else    /* BEV Diag provisionally */
-    return((U1)FALSE);
-#endif    /* BEV Diag provisionally */
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_XSpiDsHudEvCapt(const U1 u1_a_ODO_UPDT, U4 * u4_ap_ss)                                                              */
@@ -625,12 +633,12 @@ static void    vd_s_XSpiDsalRx_Dtc(const U4 * u4_ap_PDU_RX)
 /*===================================================================================================================================*/
 static void    vd_s_XSpiDsalRx_Spn(const U4 * u4_ap_PDU_RX)
 {
-#if 0    /* BEV Diag provisionally */
-    U4                                u4_t_ok;
+    U1                                u1_t_ok;
     U1                                u1_t_rx_chk;
 
     u1_t_rx_chk = (U1)0U;
 
+#if 0   /* BEV Diag provisionally *//* Temporary implementation for the ECV phase; will be fixed in a later phase. */
     /* LB3      */
     u4_t_ok = u4_ap_PDU_RX[423] & (U4)XSPI_SOCSPN_RX_CHK;
     if(u4_t_ok == (U4)0U){
@@ -663,22 +671,35 @@ static void    vd_s_XSpiDsalRx_Spn(const U4 * u4_ap_PDU_RX)
         u4_sp_xspi_spn_rx[XSPI_SPN_RX_W11_LB6]  = u4_ap_PDU_RX[438];
         u1_t_rx_chk                                    |= (U1)((U1)0x01U << XSPI_SPN_RX_LB6);
     }
+#endif  /* BEV Diag provisionally *//* Temporary implementation for the ECV phase; will be fixed in a later phase. */
+
     /* HUD  */
-    u4_t_ok = (U4)(u4_ap_PDU_RX[102] >> 24) & (U4)U1_MAX;
-    if(u4_t_ok == (U4)0U){
-        u4_sp_xspi_spn_rx[XSPI_SPN_RX_W12_HUD]  = u4_ap_PDU_RX[116];
-        u4_sp_xspi_spn_rx[XSPI_SPN_RX_W13_HUD]  = u4_ap_PDU_RX[117];
-        u4_sp_xspi_spn_rx[XSPI_SPN_RX_W14_HUD]  = u4_ap_PDU_RX[118];
+    u1_t_ok = u1_g_XSpiMETRxRdAccessSts((U1)XSPI_MET_XSPI_RX_HUDGVIFCTL);   /* HUDGVIFCTL_UP_STS(2,3-2)         */
+    if(u1_t_ok == (U1)XSPI_MET_XSPI_RX_READ_VALID){
+        /* HUD Product Number */
+        u4_sp_xspi_spn_rx[XSPI_SPN_RX_W12_HUD]  = u4_ap_PDU_RX[65];         /* HUD_DG_22_F191_SPN_11-14         */
+        u4_sp_xspi_spn_rx[XSPI_SPN_RX_W13_HUD]  = u4_ap_PDU_RX[66];         /* HUD_DG_22_F191_SPN_15,21-23      */
+        u4_sp_xspi_spn_rx[XSPI_SPN_RX_W14_HUD]  = u4_ap_PDU_RX[67];         /* HUD_DG_22_F191_SPN_24-25,M1-M2   */
         u1_t_rx_chk                                    |= (U1)((U1)0x01U << XSPI_SPN_RX_HUD);
+
+        /* HUD Serial number */
+        u4_sp_xspi_spn_rx[XSPI_SPN_RX_W18_HUD_SERI_N]  = u4_ap_PDU_RX[73];  /* HUD_GV_DG_HUDSN_1-4              */
+        u4_sp_xspi_spn_rx[XSPI_SPN_RX_W19_HUD_SERI_N]  = u4_ap_PDU_RX[74];  /* HUD_GV_DG_HUDSN_5-8              */
+        u4_sp_xspi_spn_rx[XSPI_SPN_RX_W20_HUD_SERI_N]  = u4_ap_PDU_RX[75];  /* HUD_GV_DG_HUDSN_9-12             */
+        u4_sp_xspi_spn_rx[XSPI_SPN_RX_W21_HUD_SERI_N]  = u4_ap_PDU_RX[76];  /* HUD_GV_DG_HUDSN_13-16            */
+        u4_sp_xspi_spn_rx[XSPI_SPN_RX_W22_HUD_SERI_N]  = u4_ap_PDU_RX[77];  /* HUD_GV_DG_HUDSN_17-20            */
+        u1_t_rx_chk                                    |= (U1)((U1)0x01U << XSPI_SPN_RX_HUD_SERI_N);
     }
     /* EXT DISP  */
-    u4_t_ok = (U4)(u4_ap_PDU_RX[124] >> 24) & (U4)XSPI_SPN_RX_CHK;
-    if(u4_t_ok == (U4)0x01U){
-        u4_sp_xspi_spn_rx[XSPI_SPN_RX_W15_DISP]  = u4_ap_PDU_RX[121];
-        u4_sp_xspi_spn_rx[XSPI_SPN_RX_W16_DISP]  = u4_ap_PDU_RX[122];
-        u4_sp_xspi_spn_rx[XSPI_SPN_RX_W17_DISP]  = u4_ap_PDU_RX[123];
+    u1_t_ok = u1_g_XSpiMETRxRdAccessSts((U1)XSPI_MET_XSPI_RX_METGVIFCTL);   /* METGVIFCTL_UP_STS(2,1-0)         */
+    if(u1_t_ok == (U1)XSPI_MET_XSPI_RX_READ_VALID){
+        u4_sp_xspi_spn_rx[XSPI_SPN_RX_W15_DISP]  = u4_ap_PDU_RX[121];       /* DISP_DG_22_F191_SPN_11-14        */
+        u4_sp_xspi_spn_rx[XSPI_SPN_RX_W16_DISP]  = u4_ap_PDU_RX[122];       /* DISP_DG_22_F191_SPN_15,21-23     */
+        u4_sp_xspi_spn_rx[XSPI_SPN_RX_W17_DISP]  = u4_ap_PDU_RX[123];       /* DISP_DG_22_F191_SPN_24-25,M1-M2  */
         u1_t_rx_chk                                     |= (U1)((U1)0x01U << XSPI_SPN_RX_DISP);
     }
+
+#if 0   /* BEV Diag provisionally *//* Temporary implementation for the ECV phase; will be fixed in a later phase. */
     /* Software Version */
     u4_t_ok = u4_ap_PDU_RX[509] & (U4)XSPI_SPN_RX_CHK;
     if(u4_t_ok == (U4)0U){
@@ -686,10 +707,10 @@ static void    vd_s_XSpiDsalRx_Spn(const U4 * u4_ap_PDU_RX)
         u4_sp_xspi_spn_rx[XSPI_SPN_RX_W19_VER] = u4_ap_PDU_RX[508];
         u1_t_rx_chk                                   |= (U1)((U1)0x01U << XSPI_SPN_RX_VER);
     }
+#endif  /* BEV Diag provisionally *//* Temporary implementation for the ECV phase; will be fixed in a later phase. */
 
     u1_s_xspi_spn_rx_tocnt = (U1)XSPI_SPN_RX_TOC_INI;
     u1_s_xspi_spn_rx_chk   = u1_t_rx_chk;
-#endif     /* BEV Diag provisionally */
 }
 /*===================================================================================================================================*/
 /*  static void    vd_s_XSpiDsalTx_2E(U4 * u4_ap_pdu_tx)                                                                             */
@@ -702,48 +723,6 @@ static void    vd_s_XSpiDsalTx_2E(U4 * u4_ap_pdu_tx)
 #if 0      /* BEV Diag provisionally */
     u4_ap_pdu_tx[441]  = u4_g_VardefDs2E_Las32((U2)VDF_DS_2E_2002);                 /* DG_2E_2002_4_MET_IGOFF_ODO_TIME      */
 #endif     /* BEV Diag provisionally */
-}
-/*===================================================================================================================================*/
-/*  static void    vd_s_XSpiDsalTx_Xpn(U4 * u4_ap_pdu_tx)                                                                            */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_XSpiDsalTx_Xpn(U4 * u4_ap_pdu_tx)
-{
-#if 0    /* BEV Diag provisionally */
-    U1 *                              u1_tp_xpn_tx;
-
-    U1                                u1_tp_sn[PRDCT_SERI_N_NBYTE + PRDCT_ECU_PN_NBYTE];
-    U1                                u1_t_ok;
-
-    u1_t_ok = u1_g_Product((U1)PRDCT_PN_ECU_PN,
-                           &u1_tp_sn[0],
-                           (U1)PRDCT_ECU_PN_NBYTE);                                        /* ECU Product Number        */
-    u1_t_ok &= u1_g_Product((U1)PRDCT_PN_SERI_N, 
-                            &u1_tp_sn[PRDCT_ECU_PN_NBYTE], 
-                            (U1)PRDCT_SERI_N_NBYTE);                                       /* Serial Number             */
-
-    u1_tp_xpn_tx = (U1 *)&u4_ap_pdu_tx[458];
-    if(u1_t_ok == (U1)TRUE){
-        vd_g_MemcpyU1(&u1_tp_xpn_tx[3], &u1_tp_sn[0], (U4)XSPI_XPN_TX_ECU_N);
-    }
-    else{
-        vd_g_MemfillU1(&u1_tp_xpn_tx[3], (U1)XSPI_XPN_TX_UNDEF, (U4)XSPI_XPN_TX_ECU_N);
-    }
-
-    u1_tp_xpn_tx = (U1 *)&u4_ap_pdu_tx[2];
-    if(u1_t_ok == (U1)TRUE){
-        vd_g_MemcpyU1(u1_tp_xpn_tx, &u1_tp_sn[0], (U4)PRDCT_SERI_N_NBYTE + (U4)PRDCT_ECU_PN_NBYTE);
-    }
-    else{
-        vd_g_MemfillU1(u1_tp_xpn_tx, (U1)XSPI_XPN_TX_UNDEF, (U4)PRDCT_SERI_N_NBYTE + (U4)PRDCT_ECU_PN_NBYTE);
-    }
-
-    (void)u1_g_Product((U1)PRDCT_PN_REL_VN,
-                       (U1 *)&u4_ap_pdu_tx[478],
-                       (U1)PRDCT_REL_VN_NBYTE);                                            /* D1L1/MET Software Versoin */
-#endif    /* BEV Diag provisionally */
 }
 /*===================================================================================================================================*/
 /*  static void    vd_s_XSpiDsalTx_Dsr(U4 * u4_ap_pdu_tx)                                                                            */

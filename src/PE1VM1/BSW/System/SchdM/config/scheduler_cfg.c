@@ -84,6 +84,7 @@
 #include "himgadj.h"
 #include "datesi_met.h"
 #include "omavrchk.h"
+#include "product.h"
 /*---------------------------------------------------------------------------*/
 /* Platform Header                                                           */
 /*---------------------------------------------------------------------------*/
@@ -289,6 +290,7 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*-------------------------------------------------------------------*/
     {&vd_g_VardefMainTask,              (U4)SCHDLR_TASKBIT__20MS_B  },
     {&vd_g_McstMainTask,                (U4)SCHDLR_TASKBIT__20MS_B  },
+    {&vd_g_ProductNvmSynTask,           (U4)SCHDLR_TASKBIT_100MS_B  },
     /*-------------------------------------------------------------------*/
     /*                                                                   */
     /*                                                                   */

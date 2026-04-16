@@ -63,6 +63,7 @@
 #include "xspi_met.h"
 #include "datesi_met.h"
 #include "omavrchk.h"
+#include "product.h"
 
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
@@ -91,6 +92,7 @@
 void vd_g_22SSCallout_StaBonInit(void)
 {
     static const FP_VD_FVD             fp_sp_vd_ECU_M_CFG_BON_INIT[] = {
+    	&vd_g_ProductInit,
         &vd_g_VardefBonInit,
         &vd_g_McstBonInit,
         &vd_g_LocaleBonInit,
@@ -165,6 +167,7 @@ void vd_g_22SSCallout_StaBonInit(void)
 void vd_g_22SSCallout_StaRstInit(void)
 {
     static const FP_VD_FVD             fp_sp_vd_ECU_M_CFG_RST_INIT[] = {
+        &vd_g_ProductInit,
         &vd_g_VardefRstwkInit,
         &vd_g_McstRstwkInit,
         &vd_g_LocaleRstWkupInit,
@@ -238,6 +241,7 @@ void vd_g_22SSCallout_StaRstInit(void)
 void vd_g_22SSCallout_StaWkupInit(void)
 {
     static const FP_VD_FVD             fp_sp_vd_ECU_M_CFG_WKUP_INIT[] = {
+        &vd_g_ProductInit,
         &vd_g_VardefRstwkInit,
         &vd_g_McstRstwkInit,
         &vd_g_LocaleRstWkupInit,
