@@ -16,30 +16,29 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "x_spi_ivi_sub1_repro.h"
+#include "fwupx.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define    XSPI_IVI_REPRO_TYPE_ID           (0x38U)
-#define    XSPI_IVI_REPRO_SUBTYPE_PREP_REQ  (0x07U)
-#define    XSPI_IVI_REPRO_SUBTYPE_RUN_REQ   (0x17U)
-#define    XSPI_IVI_REPRO_SUBTYPE_VERI_REQ  (0x19U)
-#define    XSPI_IVI_REPRO_SUBTYPE_ACT_REQ   (0x38U)
-#define    XSPI_IVI_REPRO_DATA_SIZE         (8U)
-#define    XSPI_IVI_REPRO_PREP_ACK_SIZE     (3U)
-#define    XSPI_IVI_REPRO_RUN_ACK_SIZE      (7U)
-#define    XSPI_IVI_REPRO_VERI_ACK_SIZE     (3U)
-#define    XSPI_IVI_REPRO_ACT_ACK_SIZE      (2U)
+#define    XSPI_IVI_REPRO_TYPE_ID            (0x38U)
+#define    XSPI_IVI_REPRO_DATA_SIZE          (8U)
+#define    XSPI_IVI_REPRO_PREP_ACK_SIZE      (3U)
+#define    XSPI_IVI_REPRO_RUN_ACK_SIZE       (7U)
+#define    XSPI_IVI_REPRO_VERI_ACK_SIZE      (3U)
+#define    XSPI_IVI_REPRO_CANCEL_ACK_SIZE    (2U)
+#define    XSPI_IVI_REPRO_ACT_ACK_SIZE       (2U)
+#define    XSPI_IVI_REPRO_VALID_ACK_SIZE     (2U)
+#define    XSPI_IVI_REPRO_FIN_ACK_SIZE       (2U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-U1        u1_s_xspi_ivi_sub1_repro_subtype_prev;
-U2        u2_s_xspi_ivi_sub1_repro_run_ofst_prev;
+U1        u1_s_xspi_ivi_sub1_repro_seq_cnt_prev;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -60,8 +59,7 @@ static void            vd_s_XspiIviSub1ReproDataToQueue(const U2 u2_a_size,const
 void vd_g_XspiIviSub1ReproInit(void)
 {
     /* 初期化処理をここに記述 */
-    u1_s_xspi_ivi_sub1_repro_subtype_prev = (U1)0xFFU; /* 初期値設定 */
-    u2_s_xspi_ivi_sub1_repro_run_ofst_prev = (U2)0xFFFFU; /* 初期値設定 */
+    u1_s_xspi_ivi_sub1_repro_seq_cnt_prev = (U1)0xFFU; /* 初期値設定 */
 }
 
 /*===================================================================================================================================*/
@@ -75,31 +73,34 @@ void vd_g_XspiIviSub1ReproMainTask(void)
 {
     U1    u1_tp_read[XSPI_IVI_REPRO_DATA_SIZE];
     U1    u1_t_read_ok;
-    U2    u2_t_run_offset;
+    U2    u1_t_seqcnt_curr;
 
     u1_t_read_ok = u1_g_FwupxResData(&u1_tp_read[0], (U1)XSPI_IVI_REPRO_DATA_SIZE);
     if (u1_t_read_ok == (U1)TRUE) {
-        u2_t_run_offset = (U2)((u1_tp_read[3] << 8) | u1_tp_read[4]);
-        if((u1_tp_read[0] == XSPI_IVI_REPRO_SUBTYPE_RUN_REQ) && 
-                 (u2_t_run_offset != u2_s_xspi_ivi_sub1_repro_run_ofst_prev)) {
-            /* サブタイプがRUNで、オフセットが前回と異なる場合 */
-            vd_s_XspiIviSub1ReproDataToQueue((U2)XSPI_IVI_REPRO_RUN_ACK_SIZE, &u1_tp_read[0]);
-            u2_s_xspi_ivi_sub1_repro_run_ofst_prev = u2_t_run_offset;
-            u1_s_xspi_ivi_sub1_repro_subtype_prev = u1_tp_read[0];
-        }else if (u1_tp_read[0] != u1_s_xspi_ivi_sub1_repro_subtype_prev) {
-            u1_s_xspi_ivi_sub1_repro_subtype_prev = u1_tp_read[0];
+        u1_t_seqcnt_curr = u1_tp_read[7];
+        if (u1_t_seqcnt_curr != u1_s_xspi_ivi_sub1_repro_seq_cnt_prev) {
+            u1_s_xspi_ivi_sub1_repro_seq_cnt_prev = u1_t_seqcnt_curr;
             switch (u1_tp_read[0]) {
-                case XSPI_IVI_REPRO_SUBTYPE_PREP_REQ:
+                case FWUPX_SUBTYPE_RES_PREP:
                     vd_s_XspiIviSub1ReproDataToQueue((U2)XSPI_IVI_REPRO_PREP_ACK_SIZE, &u1_tp_read[0]);
                     break;
-                case XSPI_IVI_REPRO_SUBTYPE_RUN_REQ:
+                case FWUPX_SUBTYPE_RES_RUN:
                     vd_s_XspiIviSub1ReproDataToQueue((U2)XSPI_IVI_REPRO_RUN_ACK_SIZE, &u1_tp_read[0]);
                     break;
-                case XSPI_IVI_REPRO_SUBTYPE_VERI_REQ:
+                case FWUPX_SUBTYPE_RES_VERI:
                     vd_s_XspiIviSub1ReproDataToQueue((U2)XSPI_IVI_REPRO_VERI_ACK_SIZE, &u1_tp_read[0]);
                     break;
-                case XSPI_IVI_REPRO_SUBTYPE_ACT_REQ:
+                case FWUPX_SUBTYPE_RES_CANCEL:
+                    vd_s_XspiIviSub1ReproDataToQueue((U2)XSPI_IVI_REPRO_CANCEL_ACK_SIZE, &u1_tp_read[0]);
+                    break;
+                case FWUPX_SUBTYPE_RES_ACT:
                     vd_s_XspiIviSub1ReproDataToQueue((U2)XSPI_IVI_REPRO_ACT_ACK_SIZE, &u1_tp_read[0]);
+                    break;
+                case FWUPX_SUBTYPE_RES_VALID:
+                    vd_s_XspiIviSub1ReproDataToQueue((U2)XSPI_IVI_REPRO_VALID_ACK_SIZE, &u1_tp_read[0]);
+                    break;
+                case FWUPX_SUBTYPE_RES_FIN:
+                    vd_s_XspiIviSub1ReproDataToQueue((U2)XSPI_IVI_REPRO_FIN_ACK_SIZE, &u1_tp_read[0]);
                     break;
                 default:
                     /* 未知のサブタイプは無視 */

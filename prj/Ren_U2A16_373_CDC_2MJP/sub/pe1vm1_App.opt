@@ -70,6 +70,7 @@
     -I../../src/PE1VM1/App/MET/Platform/ComplexDriver/SoundMiddle/data_TYT
     -I../../src/PE1VM1/App/MET/Platform/ComplexDriver/SoundMiddle/include/U2Ax
     -I../../src/PE1VM1/App/MET/Platform/ComplexDriver/SoundMiddle/scc
+    -I../../src/PE1VM1/App/MET/Platform/Fwush/config
     -I../../src/PE1VM1/App/MET/Platform/Fwush/scc
     -I../../src/PE1VM1/App/MET/XSPI_MET/config
     -I../../src/PE1VM1/App/MET/XSPI_MET/scc

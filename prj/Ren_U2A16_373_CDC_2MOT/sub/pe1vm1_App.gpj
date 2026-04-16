@@ -294,8 +294,11 @@
 ../../src/PE1VM1/App/MET/Platform/ComplexDriver/DrecTx/config/drec_tx.c
 ../../src/PE1VM1/App/MET/Platform/ComplexDriver/SoundMiddle/config/sound_cri_mgr.c
 ../../src/PE1VM1/App/MET/Platform/ComplexDriver/SoundMiddle/scc/sound_cri_drv.c
+../../src/PE1VM1/App/MET/Platform/Fwush/config/fwumemacc_cfg.c
 ../../src/PE1VM1/App/MET/Platform/Fwush/scc/fwumemacc.c
 ../../src/PE1VM1/App/MET/Platform/Fwush/scc/fwush.c
+../../src/PE1VM1/App/MET/Platform/Fwush/scc/fwush_evt.c
+../../src/PE1VM1/App/MET/Platform/Fwush/scc/fwush_stm.c
 ../../src/PE1VM1/App/MET/XSPI_MET/config/xspi_met_calib.c
 ../../src/PE1VM1/App/MET/XSPI_MET/config/xspi_met_can.c
 ../../src/PE1VM1/App/MET/XSPI_MET/config/xspi_met_ch0.c
