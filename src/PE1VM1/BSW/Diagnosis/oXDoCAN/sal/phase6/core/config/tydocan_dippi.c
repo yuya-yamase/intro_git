@@ -1,4 +1,4 @@
-/* 1.0.1 */
+/* 1.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define TYDOCAN_DIPPI_C_MAJOR                    (1)
-#define TYDOCAN_DIPPI_C_MINOR                    (0)
-#define TYDOCAN_DIPPI_C_PATCH                    (1)
+#define TYDOCAN_DIPPI_C_MINOR                    (1)
+#define TYDOCAN_DIPPI_C_PATCH                    (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -37,7 +37,7 @@
 #define TYDOCAN_DIPPI_DEL_RQ                    (0xa55aa55aU)
 
 #define TYDOCAN_DIPPI_EVT_NON                   (0x00U)
-#define TYDOCAN_DIPPI_EVT_IGON                  (0x01U)
+#define TYDOCAN_DIPPI_EVT_DIAGON                (0x01U)
 #define TYDOCAN_DIPPI_EVT_DELSTS_OTH            (0x00U)         /* return from u1_s_TyDoCANDippiDeleteChk */
 #define TYDOCAN_DIPPI_EVT_DELSTS_SUC            (0x02U)         /* return from u1_s_TyDoCANDippiDeleteChk */
 #define TYDOCAN_DIPPI_EVT_DELSTS_FAI            (0x04U)         /* return from u1_s_TyDoCANDippiDeleteChk */
@@ -109,16 +109,16 @@ void    vd_g_TyDoCANDippiMainTask(const U1 u1_a_EOM, const U2 u2_a_SLOT)
     static const U2 u2_s_TYDOCAN_DIPPI_CHKSLOT = (U2)OXDC_TSLOT_BIT_4;      /* 100ms E */
     static const U2 u2_s_TYDOCAN_DIPPI_CHKWAIT = (U2)100U;                  /* 1000ms (1-65535) */
 
-    U1          u1_t_igon;
+    U1          u1_t_diag_on;
     U1          u1_t_evt;
     U2          u2_t_chk;
 
     u1_t_evt = (U1)TYDOCAN_DIPPI_EVT_NON;
 
     /* bit0 */
-    u1_t_igon = u1_a_EOM & (U1)OXDC_EOM_IGN_ON;
-    if(u1_t_igon != (U1)0x00U){
-        u1_t_evt = (U1)TYDOCAN_DIPPI_EVT_IGON;
+    u1_t_diag_on = u1_a_EOM & (U1)OXDC_EOM_DIAG_ON;
+    if(u1_t_diag_on != (U1)0x00U){
+        u1_t_evt = (U1)TYDOCAN_DIPPI_EVT_DIAGON;
     }
 
     /* bit1,2 */
@@ -425,8 +425,10 @@ static void vd_s_TyDoCANDippiCfgDeleteExe(void)
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  1.0.0    01/21/2025  MaO(M)   New.                                                                                               */
 /*  1.0.1    05/20/2025  KM       Change u1_g_AvgGrphRslt() IF.                                                                      */
+/*  1.1.0    04/02/2026  TK       Change EOM monitoring target from IGN to Diag Power.                                               */
 /*                                                                                                                                   */
 /*  * MaO(M) = Masayuki Okada, NTT Data MSE                                                                                          */
 /*    KM     = Keisuke Mashita, Denso Techno                                                                                         */
+/*    TK     = Tamao Kamiya, Denso Techno                                                                                            */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

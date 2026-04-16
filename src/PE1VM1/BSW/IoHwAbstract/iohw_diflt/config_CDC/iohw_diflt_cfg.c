@@ -58,8 +58,9 @@
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IOHW_DIFLT_NUM_DIPORT                    (1U)
+#define IOHW_DIFLT_NUM_DIPORT                    (2U)
 #define IOHW_DIFLT_DIPORT_00                     (0U)
+#define IOHW_DIFLT_DIPORT_01                     (1U)
 
 #if (IOHW_DIFLT_NUM_DIPORT > IOHW_DIFLT_DIPORT_NUM_INST)
 #error "IOHW_DIFLT_NUM_DIPORT shall be less than IOHW_DIFLT_DIPORT_NUM_INST. Otherwise, iohw_diflt shall be rebuilt from *.c."
@@ -86,9 +87,8 @@ ST_IOHW_DICTRL              st_gp_iohw_diflt_ctrl[IOHW_DIFLT_NUM_DISGNL];
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#ifdef ADC_CH_B_MON2
-static U2      u2_s_IoHwDifltBMON2Lvchk(void);
-#endif
+static U2      u2_s_IoHwDifltB2onLvchk(void);
+static U2      u2_s_IoHwDifltBDIonLvchk(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -112,11 +112,8 @@ const U2                    u2_g_IOHW_DIFLT_SMPLGCHK_AT_EVT = ((U2)IOHW_DIFLT_SM
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const U2                    u2_g_IOHW_DIFLT_NUM_DIPORT = (U2)IOHW_DIFLT_NUM_DIPORT;
 
-#define IOHW_DIFLT_NUM_FLTR                      (4U)
-#define IOHW_DIFLT_FLTR_ALWAYS                   (0U)
-#define IOHW_DIFLT_FLTR_IGN_ON                   (1U)
-#define IOHW_DIFLT_FLTR_ALW__2                   (2U)
-#define IOHW_DIFLT_FLTR_PW3V_IGN_ON              (3U)
+#define IOHW_DIFLT_NUM_FLTR                      (1U)
+#define IOHW_DIFLT_FLTR_B_ON                     (0U)
 const ST_IOHW_DIFLTR        st_gp_IOHW_DIFLT_FLTR[IOHW_DIFLT_NUM_FLTR] = {
     {
         (U2)0x0000U,                                                          /* u2_smplgchk   */
@@ -129,60 +126,28 @@ const ST_IOHW_DIFLTR        st_gp_IOHW_DIFLT_FLTR[IOHW_DIFLT_NUM_FLTR] = {
         /* ----------------------------------------------------------------------------------- */
         (U2)IOHW_DILFT_CTRLOPT_INIT_ENA,                                      /* u2_ctrlopt    */
         (U2)0U,                                                               /* u2_dlymask    */
-        (U2)10U / (U2)IOHW_DIFLT_SMPLG_TICK,                                  /* u2_cycle      */
-        (U1)6U,                                                               /* u1_valid_init */
-        (U1)6U                                                                /* u1_valid_nrml */
-    },
-    {
-        (U2)IOHW_DIFLT_SMPLGCHK_IGN_ON | (U2)IOHW_DIFLT_SMPLGCHK_STA_ON,      /* u2_smplgchk   */
-        (U2)IOHW_DIFLT_SMPLGCHK_IGN_ON,                                       /* u2_smplgena   */
-        /* ----------------------------------------------------------------------------------- */
-        /* Attention :                                                                         */
-        /* ----------------------------------------------------------------------------------- */
-        /* if u2_dlymask > 0, IOHW_DILFT_CTRLOPT_DLYMSK_ENA shall be set to u2_ctrlopt.        */
-        /* if u1_valid_init >= 2, IOHW_DILFT_CTRLOPT_INIT_ENA shall be set to u2_ctrlopt.      */
-        /* ----------------------------------------------------------------------------------- */
-        (U2)IOHW_DILFT_CTRLOPT_INIT_ENA,                                      /* u2_ctrlopt    */
-        (U2)0U,                                                               /* u2_dlymask    */
-        (U2)10U / (U2)IOHW_DIFLT_SMPLG_TICK,                                  /* u2_cycle      */
-        (U1)3U,                                                               /* u1_valid_init */
-        (U1)6U                                                                /* u1_valid_nrml */
-    },
-    {
-        (U2)0x0000U,                                                          /* u2_smplgchk   */
-        (U2)0x0000U,                                                          /* u2_smplgena   */
-        /* ----------------------------------------------------------------------------------- */
-        /* Attention :                                                                         */
-        /* ----------------------------------------------------------------------------------- */
-        /* if u2_dlymask > 0, IOHW_DILFT_CTRLOPT_DLYMSK_ENA shall be set to u2_ctrlopt.        */
-        /* if u1_valid_init >= 2, IOHW_DILFT_CTRLOPT_INIT_ENA shall be set to u2_ctrlopt.      */
-        /* ----------------------------------------------------------------------------------- */
-        (U2)IOHW_DILFT_CTRLOPT_INIT_ENA,                                      /* u2_ctrlopt    */
-        (U2)0U,                                                               /* u2_dlymask    */
-        (U2)10U / (U2)IOHW_DIFLT_SMPLG_TICK,                                  /* u2_cycle      */
-        (U1)2U,                                                               /* u1_valid_init */
-        (U1)2U                                                                /* u1_valid_nrml */
-    },
-    {
-        (U2)IOHW_DIFLT_SMPLGCHK_IGN_ON | (U2)IOHW_DIFLT_SMPLGCHK_PW3V_ACT,    /* u2_smplgchk   */
-        (U2)IOHW_DIFLT_SMPLGCHK_IGN_ON | (U2)IOHW_DIFLT_SMPLGCHK_PW3V_ACT,    /* u2_smplgena   */
-        /* ----------------------------------------------------------------------------------- */
-        /* Attention :                                                                         */
-        /* ----------------------------------------------------------------------------------- */
-        /* if u2_dlymask > 0, IOHW_DILFT_CTRLOPT_DLYMSK_ENA shall be set to u2_ctrlopt.        */
-        /* if u1_valid_init >= 2, IOHW_DILFT_CTRLOPT_INIT_ENA shall be set to u2_ctrlopt.      */
-        /* ----------------------------------------------------------------------------------- */
-        (U2)IOHW_DILFT_CTRLOPT_DLYMSK_ENA | (U2)IOHW_DILFT_CTRLOPT_INIT_ENA,  /* u2_ctrlopt    */
-        (U2)100U / (U2)IOHW_DIFLT_SMPLG_TICK,                                 /* u2_dlymask    */
-        (U2)10U  / (U2)IOHW_DIFLT_SMPLG_TICK,                                 /* u2_cycle      */
-        (U1)3U,                                                               /* u1_valid_init */
-        (U1)6U                                                                /* u1_valid_nrml */
+        (U2)100U / (U2)IOHW_DIFLT_SMPLG_TICK,                                 /* u2_cycle      */
+        (U1)1U,                                                               /* u1_valid_init */
+        (U1)1U                                                                /* u1_valid_nrml */
     }
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const ST_IOHW_DISGNL        st_gp_IOHW_DIFLT_DISGNL[IOHW_DIFLT_NUM_DISGNL] = {
-    {(U2)0x0001U, (U2)0x0001U, (U2)IOHW_DIFLT_DIPORT_00, (U2)IOHW_DIFLT_FLTR_ALW__2}     /* 00 : IOHW_DISGNL_BMON2_10P5V     */
+    /* 00 : IOHW_DISGNL_B_MONI2_10P5V   :   ADCJ2I3  */
+    {
+        (U2)0x0001U,
+        (U2)0x0001U,
+        (U2)IOHW_DIFLT_DIPORT_00,
+        (U2)IOHW_DIFLT_FLTR_B_ON
+    },
+    /* 01 : IOHW_DISGNL_B_MONI3_10P5V   :   ADCJ1I7  */
+    {
+        (U2)0x0001U,
+        (U2)0x0001U,
+        (U2)IOHW_DIFLT_DIPORT_01,
+        (U2)IOHW_DIFLT_FLTR_B_ON
+    }
 };
 const U2                    u2_g_IOHW_DIFLT_NUM_DISGNL = (U2)IOHW_DIFLT_NUM_DISGNL;
 
@@ -248,39 +213,67 @@ void    vd_g_IoHwDifltCfgRead(U2 * u2_ap_di_inst)
     /*-------------------------------------------------------------------*/
     /*  IOHW_DIFLT_DIPORT_00                                             */
     /*-------------------------------------------------------------------*/
-#ifdef ADC_CH_B_MON2
-    u2_ap_di_inst[IOHW_DIFLT_DIPORT_00] = u2_s_IoHwDifltBMON2Lvchk();
-#else
-    u2_ap_di_inst[IOHW_DIFLT_DIPORT_00] = (U2)0U;
-#endif
+    u2_ap_di_inst[IOHW_DIFLT_DIPORT_00] = u2_s_IoHwDifltB2onLvchk();
+
+    /*-------------------------------------------------------------------*/
+    /*  IOHW_DIFLT_DIPORT_01                                             */
+    /*-------------------------------------------------------------------*/
+    u2_ap_di_inst[IOHW_DIFLT_DIPORT_01] = u2_s_IoHwDifltBDIonLvchk();
+
 }
 
-#ifdef ADC_CH_B_MON2
 /*===================================================================================================================================*/
-/*  static U2      u2_s_IoHwDifltBMON2Lvchk(void)                                                                                      */
+/*  static U2      u2_s_IoHwDifltB2onLvchk(void)                                                                                     */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:                                                                                                                       */
 /*  Return:                                                                                                                          */
 /*===================================================================================================================================*/
-static U2      u2_s_IoHwDifltBMON2Lvchk(void)
+static U2      u2_s_IoHwDifltB2onLvchk(void)
 {
-    U2                             u2_t_di_inst;
-    U2                             u2_t_lv;
+    /* IOHW_DISGNL_B_MONI2_10P5V */
+    static const U2                u2_s_IOHW_DIFLT_B2_10P5V_MAX   = (U2)4095U;
+    static const U2                u2_s_IOHW_DIFLT_B2_10P5V_MIN   = (U2)1730U;
 
-    static const U2                u2_s_IOHW_DIFLT_BMON2_10P5V_MAX = (U2)IOHW_ADC_LV_MAX;  /* 12bit A/D MAX value */
-    static const U2                u2_s_IOHW_DIFLT_BMON2_10P5V_MIN = (U2)0x06B9U;          /* 10.5V MIN A/D value */
+    U2                             u2_t_lv;
+    U2                             u2_t_di_inst;
 
     u2_t_di_inst = (U2)0U;
     u2_t_lv = u2_g_IoHwAdcLv((U1)ADC_CH_B_MON2);
 
-    if((u2_t_lv <= u2_s_IOHW_DIFLT_BMON2_10P5V_MAX) &&
-       (u2_t_lv >= u2_s_IOHW_DIFLT_BMON2_10P5V_MIN)){
+    /* IOHW_DISGNL_B_MONI2_10P5V */
+    if((u2_t_lv <= u2_s_IOHW_DIFLT_B2_10P5V_MAX) &&
+       (u2_t_lv >= u2_s_IOHW_DIFLT_B2_10P5V_MIN)){
         u2_t_di_inst |= (U2)0x0001U;
     }
 
     return(u2_t_di_inst);
 }
-#endif
+/*===================================================================================================================================*/
+/*  static U2      u2_s_IoHwDifltBDIonLvchk(void)                                                                                    */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:                                                                                                                       */
+/*  Return:                                                                                                                          */
+/*===================================================================================================================================*/
+static U2      u2_s_IoHwDifltBDIonLvchk(void)
+{
+    /* IOHW_DISGNL_B_MONI3_10P5V */
+    static const U2                u2_s_IOHW_DIFLT_B3_10P5V_MAX   = (U2)4095U;
+    static const U2                u2_s_IOHW_DIFLT_B3_10P5V_MIN   = (U2)1730U;
+
+    U2                             u2_t_lv;
+    U2                             u2_t_di_inst;
+
+    u2_t_di_inst = (U2)0U;
+    u2_t_lv = u2_g_IoHwAdcLv((U1)ADC_CH_B_MON3);
+
+    /* IOHW_DISGNL_B_MONI3_10P5V */
+    if((u2_t_lv <= u2_s_IOHW_DIFLT_B3_10P5V_MAX) &&
+       (u2_t_lv >= u2_s_IOHW_DIFLT_B3_10P5V_MIN)){
+        u2_t_di_inst |= (U2)0x0001U;
+    }
+
+    return(u2_t_di_inst);
+}
 
 #pragma ghs section text=default
 
@@ -300,6 +293,11 @@ static U2      u2_s_IoHwDifltBMON2Lvchk(void)
 /*  1.3.2     9/ 7/2021  TN       iohw_diflt.c v1.3.1 -> v1.3.2.                                                                     */
 /*  1.4.0    10/ 4/2021  TN       iohw_diflt.c v1.3.2 -> v1.4.0.                                                                     */
 /*                                                                                                                                   */
+/*  Revision Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1     3/12/2026  TK       Configured for BEV E-CV.                                                                           */
+/*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
+/*  * TK   = Tamao Kamiya, Denso Techno                                                                                              */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

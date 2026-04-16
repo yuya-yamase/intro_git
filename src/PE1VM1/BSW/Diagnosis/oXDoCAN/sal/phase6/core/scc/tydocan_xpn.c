@@ -41,9 +41,9 @@
 #define TYDC_XPN_SERI_N_NBYTE                    (10U)
 #define TYDC_XPN_HUD_SERI_N_NBYTE                (20U)
 
-#define TYDC_XPN_IGON_TOUT                       (5000U / OXDC_MAIN_TICK)  /*  5000ms  */
-#define TYDC_XPN_IGON_TOUT_MAX                   (0xFFFEU)
-#define TYDC_XPN_IGON_TOUT_INI                   (0xFFFFU)
+#define TYDC_XPN_DIAGON_TOUT                     (5000U / OXDC_MAIN_TICK)  /*  5000ms  */
+#define TYDC_XPN_DIAGON_TOUT_MAX                 (0xFFFEU)
+#define TYDC_XPN_DIAGON_TOUT_INI                 (0xFFFFU)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -65,7 +65,7 @@ static U1                u1_sp_tydc_xpn_seri_n[TYDC_XPN_SERI_N_NBYTE];
 static U1                u1_sp_tydc_xpn_hud_seri_n[TYDC_XPN_HUD_SERI_N_NBYTE];
 
 static U2                u2_s_tydc_xpn_rx_sts;
-static U2                u2_s_tydc_xpn_igon_cnt;
+static U2                u2_s_tydc_xpn_dgon_cnt;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -95,7 +95,7 @@ void    vd_g_TyDoCANXpnInit(void)
     vd_g_MemfillU1(u1_sp_tydc_xpn_hud_seri_n, (U1)0U, (U4)TYDC_XPN_HUD_SERI_N_NBYTE);
 
     u2_s_tydc_xpn_rx_sts    = (U2)0U;
-    u2_s_tydc_xpn_igon_cnt  = (U2)TYDC_XPN_IGON_TOUT_INI;
+    u2_s_tydc_xpn_dgon_cnt  = (U2)TYDC_XPN_DIAGON_TOUT_INI;
 }
 
 /*===================================================================================================================================*/
@@ -106,15 +106,15 @@ void    vd_g_TyDoCANXpnInit(void)
 /*===================================================================================================================================*/
 void    vd_g_TyDoCANXpnMainTask(const U1 u1_a_EOM)
 {
-    U1                         u1_t_igon;
+    U1                         u1_t_diag_on;
 
-    u1_t_igon = u1_a_EOM & (U1)OXDC_EOM_IGN_ON;
-    if(u1_t_igon != (U1)0U){
-        if(u2_s_tydc_xpn_igon_cnt < (U2)TYDC_XPN_IGON_TOUT_MAX){
-            u2_s_tydc_xpn_igon_cnt++;
+    u1_t_diag_on = u1_a_EOM & (U1)OXDC_EOM_DIAG_ON;
+    if(u1_t_diag_on != (U1)0U){
+        if(u2_s_tydc_xpn_dgon_cnt < (U2)TYDC_XPN_DIAGON_TOUT_MAX){
+            u2_s_tydc_xpn_dgon_cnt++;
         }
-        else if(u2_s_tydc_xpn_igon_cnt >= (U2)TYDC_XPN_IGON_TOUT_INI){
-            u2_s_tydc_xpn_igon_cnt  = (U2)0U;
+        else if(u2_s_tydc_xpn_dgon_cnt >= (U2)TYDC_XPN_DIAGON_TOUT_INI){
+            u2_s_tydc_xpn_dgon_cnt  = (U2)0U;
         }
         else {
             /* Do Nothing */
@@ -124,7 +124,7 @@ void    vd_g_TyDoCANXpnMainTask(const U1 u1_a_EOM)
         vd_g_TyDoCANXpnInit();
     }
 
-    if(u2_s_tydc_xpn_igon_cnt < (U2)TYDC_XPN_IGON_TOUT){
+    if(u2_s_tydc_xpn_dgon_cnt < (U2)TYDC_XPN_DIAGON_TOUT){
         u2_s_tydc_xpn_rx_sts  = (U2)((u1_g_XSpiSpnRx((U1)XSPI_SPN_RX_LB3, 
                                     &u1_sp_tydc_xpn_lb3[0], 
                                     (U1)XSPI_SPN_NB_LB3) & (U1)TRUE)) <<  TYDC_XPN_RX_LB3;
@@ -219,8 +219,8 @@ U1      u1_g_TyDoCANXpnTx(const U1 u1_a_XPN, U1 * u1_ap_xpn, const U1 u1_a_NBYTE
             u1_t_ret = (U1)TYDC_XPN_VALID;
 
         }
-        else if((u2_s_tydc_xpn_igon_cnt <  (U2)TYDC_XPN_IGON_TOUT) ||
-                (u2_s_tydc_xpn_igon_cnt >= (U2)TYDC_XPN_IGON_TOUT_INI)){
+        else if((u2_s_tydc_xpn_dgon_cnt <  (U2)TYDC_XPN_DIAGON_TOUT    ) ||
+                (u2_s_tydc_xpn_dgon_cnt >= (U2)TYDC_XPN_DIAGON_TOUT_INI)){
 
             u1_t_ret = (U1)TYDC_XPN_UNKNOWN;
             
@@ -250,8 +250,10 @@ U1      u1_g_TyDoCANXpnTx(const U1 u1_a_XPN, U1 * u1_ap_xpn, const U1 u1_a_NBYTE
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  BEV-1    03/26/2026  NY       Added logic related to DID-F1A0.                                                                   */
 /*                                Change the timeout duration from 10000ms to 5000ms.                                                */
+/*  BEV-2    04/02/2026  TK       Change EOM monitoring target from IGN to Diag Power.                                               */
 /*                                                                                                                                   */
 /*  * TeN = Tetsushi Nakano, DENSO-TECHNO                                                                                            */
 /*  * NY  = Nobuhiro Yoshiyasu, DENSO-TECHNO                                                                                         */
+/*  * TK  = Tamao Kamiya, Denso Techno                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

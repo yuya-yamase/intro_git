@@ -205,6 +205,29 @@ static inline void    vd_s_XSpiCfgEsopt(           U4 * u4_ap_pdu_tx);
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxPowerMd(       U4 * u4_ap_pdu_tx) {
+
+    U1  u1_t_b2_10p5v;
+    U1  u1_t_b2_10p5v_cvt;                                                              /* +B2VOL_AD12BIT CONVERT                    */
+    U1  u1_t_b3_10p5v;
+    U1  u1_t_b3_10p5v_cvt;                                                              /* +B3VOL_AD12BIT CONVERT                    */
+
+    u1_t_b2_10p5v  = u1_g_IoHwDifltSwitch((U2)IOHW_DISGNL_B_MONI2_10P5V);
+    u1_t_b3_10p5v  = u1_g_IoHwDifltSwitch((U2)IOHW_DISGNL_B_MONI3_10P5V);
+
+    if (u1_t_b2_10p5v == (U1)IOHW_DIFLT_SWITCH_ACT) {
+        u1_t_b2_10p5v_cvt = (U1)TRUE;
+    }
+    else {
+        u1_t_b2_10p5v_cvt = (U1)FALSE;
+    }
+
+    if (u1_t_b3_10p5v == (U1)IOHW_DIFLT_SWITCH_ACT) {
+        u1_t_b3_10p5v_cvt = (U1)TRUE;
+    }
+    else {
+        u1_t_b3_10p5v_cvt = (U1)FALSE;
+    }
+
     u4_ap_pdu_tx[0]    = ((U4)u1_g_VehopemdIgnOn());                                    /* IGR_ON                                    */
     u4_ap_pdu_tx[0]   |= ((U4)u1_g_VehopemdAccOn() << 3);                               /* ACC_ON                                    */
     u4_ap_pdu_tx[0]   |= ((U4)u1_g_VehopemdPtsOn((U1)VEH_OPEMD_PTS_INV_OFF) << 5);      /* CAN_MOVE_FLAG                             */
@@ -212,6 +235,9 @@ static inline void    vd_s_XSpiCfgTxPowerMd(       U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[0]   |= ((U4)u1_g_VehopemdBaOn() << 8);                                /* BA ON                                     */
     u4_ap_pdu_tx[0]   |= ((U4)u1_g_VehspdGetStopFlg() << 9);                            /* STOP_JDG_FLAG                             */
     u4_ap_pdu_tx[0]   |= ((U4)u1_g_VehopemdApofrqOn() << 10);                           /* APOFRQ_ON                                 */
+    u4_ap_pdu_tx[0]   |= ((U4)u1_g_VehopemdDiagOn() << 16);                             /* Diag_ON                                   */
+    u4_ap_pdu_tx[0]   |= ((U4)u1_t_b2_10p5v_cvt << 17);                                 /* +B2VOL_AD12BIT                            */
+    u4_ap_pdu_tx[0]   |= ((U4)u1_t_b3_10p5v_cvt << 18);                                 /* +B3VOL_AD12BIT                            */
 }
 
 /*===================================================================================================================================*/
@@ -1194,6 +1220,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*                                MET-D_4WDSYS-CSTD-2-02-A-C1                                                                        */
 /*                                Remove process that sets SYS_4WDSYS_DISCON to TRUE                                                 */
 /*  BEV-41    03/17/2026 SH       Change for BEV Full_Function_2. (Add SYS_CPBBSW_CUSTOM_P and DISTEMPTY_EV_KM_DIFF)                 */
+/*  BEV-45    04/01/2026 TK       Add power status for diagnostics                                                                   */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
@@ -1226,5 +1253,6 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  * HH   = Hiroki Hara, Denso Techno                                                                                               */
 /*  * YH   = Yuki Hatakeyama, KSE                                                                                                    */
 /*  * SH   = Sae Hirose, Denso Techno                                                                                                */
+/*  * TK   = Tamao Kamiya,  Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
