@@ -1,4 +1,4 @@
-/* 0.0.1 */
+/* 0.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define DATESI_C_MAJOR                      (0)
-#define DATESI_C_MINOR                      (0)
-#define DATESI_C_PATCH                      (1)
+#define DATESI_C_MINOR                      (1)
+#define DATESI_C_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -20,6 +20,7 @@
 #include "datesi_tim_cfg_private.h"
 #include "datesi_cal_cfg_private.h"
 #include "datesi_com.h"
+#include "datesi_abs.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -65,6 +66,7 @@
 /*===================================================================================================================================*/
 void            vd_g_DateSIBonInit(void)
 {
+    vd_g_DateSIAbsBonInit();
     vd_g_DateSIComBonInit();
     vd_g_DateSITimBonInit();
     vd_g_DateSICalBonInit();
@@ -78,6 +80,7 @@ void            vd_g_DateSIBonInit(void)
 /*===================================================================================================================================*/
 void            vd_g_DateSIRstWkupInit(void)
 {
+    vd_g_DateSIAbsRstWkupInit();
     vd_g_DateSIComRstWkupInit();
     vd_g_DateSITimRstWkupInit();
     vd_g_DateSICalRstWkupInit();
@@ -91,6 +94,7 @@ void            vd_g_DateSIRstWkupInit(void)
 /*===================================================================================================================================*/
 void            vd_g_DateSIMainTask(void)
 {
+    vd_g_DateSIAbsMainTask();
     vd_g_DateSITimMainTask();
     vd_g_DateSICalMainTask();
     vd_g_DateSIComCommandTx();
@@ -105,11 +109,9 @@ void            vd_g_DateSIMainTask(void)
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  0.0.0    04/23/2025  MN       New.                                                                                               */
-/*  0.0.1    12/18/2025  MN       Change for BEV Pre_CV                                                                              */
+/*  0.0.1    12/18/2025  MN       Addressing issues.                                                                                 */
+/*  0.1.0    04/01/2026  MN       Fix:Change in RTC handling (do not reflect user operations)                                        */
 /*                                                                                                                                   */
-/*  Revision Date        Author   Change Description                                                                                 */
-/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  BEV-1    12/18/2025  MN       Addressing issues.                                                                                 */
 /*                                                                                                                                   */
 /*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*                                                                                                                                   */

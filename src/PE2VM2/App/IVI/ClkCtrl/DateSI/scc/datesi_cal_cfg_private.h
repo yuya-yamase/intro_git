@@ -1,4 +1,4 @@
-/* 0.0.1 */
+/* 0.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,8 +13,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define DATESI_CAL_CFG_H_MAJOR                  (0)
-#define DATESI_CAL_CFG_H_MINOR                  (0)
-#define DATESI_CAL_CFG_H_PATCH                  (1)
+#define DATESI_CAL_CFG_H_MINOR                  (1)
+#define DATESI_CAL_CFG_H_PATCH                  (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -64,6 +64,8 @@ typedef struct{
 void            vd_g_DateSICalBonInit(void);
 void            vd_g_DateSICalRstWkupInit(void);
 void            vd_g_DateSICalMainTask(void);
+U1              u1_g_DateSICalAdjustOwnClk(const U4 u4_a_YYYYMMDD);
+U1              u1_g_DateSICalDateSyncChk(const ST_DATESI_CAL_RX st_a_CAL_RX, U4 * u4_ap_yymmdd);
 void            vd_g_DateSICalSyncAct(void);
 void            vd_g_DateSICalExecTmSet(const U1 u1_a_ADD);
 void            vd_g_DateSICalClockUpdate(void);

@@ -46,6 +46,10 @@
 #define RIMID_U4_SAMPLE_BBB_4                    (0x8000U)
 #define RIMID_U4_BOOTLOG_SOCWAKE                 (0x8001U)
 #define RIMID_U4_DRC_TICKTIME                    (0x8002U)
+#define RIMID_U4_PRE_RTCTIM                      (0x8003U)
+#define RIMID_U4_ABSTIM                          (0x8004U)
+#define RIMID_U4_PRE_RTCCAL                      (0x8005U)
+#define RIMID_U4_ABSCAL                          (0x8006U)
 /* END : ##TOOL_OUT#RIM_ID_MOD_3B_U4## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_3B_OTR## */
 #define RIMID_OTR_SAMPLE_BBB_OTH                 (0xC000U)
