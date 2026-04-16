@@ -53,6 +53,7 @@
 #include "gagdst_nxmph.h"
 #include "wchime.h"
 #include "illumi.h"
+#include "asilchk.h"
 
 /* HMI */
 #include "hmiodo.h"
@@ -188,7 +189,7 @@ static inline void    vd_s_XSpiCfgRxTripcom(    const U4 * u4_ap_PDU_RX);
 static inline void    vd_s_XSpiCfgRxHUD(        const U4 * u4_ap_PDU_RX);
 static inline void    vd_s_XSpiCfgRxMetcstm(    const U4 * u4_ap_PDU_RX);
 static inline void    vd_s_XSpiCfgRxAvgGrph(    const U4 * u4_ap_PDU_RX);
-
+static inline void    vd_s_XSpiCfgRxAsilChk(    const U4 * u4_ap_PDU_RX);
 
 static inline void    vd_s_XSpiCfgEsopt(           U4 * u4_ap_pdu_tx);
 
@@ -1009,6 +1010,20 @@ static inline void    vd_s_XSpiCfgRxAvgGrph(const U4 * u4_ap_PDU_RX) {
 }
 
 /*===================================================================================================================================*/
+/*  static void    vd_s_XSpiCfgRxAsilChk(U4 * u4_ap_PDU_RX)                                                                          */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static inline void    vd_s_XSpiCfgRxAsilChk(const U4 * u4_ap_PDU_RX) {
+
+    static const U1 u1_s_XSPI_ASILCHK_CRC_BUFSIZE = (U1)ASILCHK_TT_NUM * (U1)2U;
+
+    vd_g_AsilChkGetAliveCnt(u4_ap_PDU_RX[0]);
+    vd_g_AsilChkGetCrcVal(&u4_ap_PDU_RX[1], u1_s_XSPI_ASILCHK_CRC_BUFSIZE);
+}
+
+/*===================================================================================================================================*/
 /*  void    vd_g_XSpiCfgInitCh0(void)                                                                                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -1037,6 +1052,7 @@ void    vd_g_XSpiCfgPduRxCh0(const U4 * u4_ap_PDU_RX)
     vd_s_XSpiCfgRxTripcom(    &u4_ap_PDU_RX[ 44]);
     vd_s_XSpiCfgRxHUD(        &u4_ap_PDU_RX[ 57]);
     vd_s_XSpiCfgRxMetcstm(    &u4_ap_PDU_RX[212]);
+    vd_s_XSpiCfgRxAsilChk(    &u4_ap_PDU_RX[613]);
 }
 
 /*===================================================================================================================================*/
@@ -1191,6 +1207,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*                                Remove process that sets SYS_4WDSYS_DISCON to TRUE                                                 */
 /*  BEV-42    03/17/2026 SH       Change for BEV Full_Function_2. (Add SYS_CPBBSW_CUSTOM_P and DISTEMPTY_EV_KM_DIFF)                 */
 /*  BEV-43    04/06/2026 TB       Change for BEV FF2.(Remove switching information for time and unit)                                */
+/*  BEV-44    04/08/2026 KO       Change for BEV Electronic CV. (Add TT abnormality monitoring)                                      */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */

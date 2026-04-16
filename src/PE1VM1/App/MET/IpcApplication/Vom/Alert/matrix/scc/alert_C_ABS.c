@@ -1,4 +1,4 @@
-/* 5.3.0 */
+/* 5.4.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_C_ABS_C_MAJOR                      (5)
-#define ALERT_C_ABS_C_MINOR                      (3)
+#define ALERT_C_ABS_C_MINOR                      (4)
 #define ALERT_C_ABS_C_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -61,7 +61,7 @@ static const U1  u1_sp_ALERT_C_ABS_TT_DST[ALERT_C_ABS_TT_NUM_DST] = {
     (U1)ALERT_REQ_C_ABS_TT_FLASH_1HZ,                                          /* 04 FLASH_1HZ                                       */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 05 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 06 UNKNOWN                                         */
-    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 07 ON                                              */
+    (U1)ALERT_REQ_C_ABS_TT_ASIL_ON,                                            /* 07 ASIL_ON                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 08 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 09 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 10 UNKNOWN                                         */
@@ -70,22 +70,22 @@ static const U1  u1_sp_ALERT_C_ABS_TT_DST[ALERT_C_ABS_TT_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 13 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 14 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 15 UNKNOWN                                         */
-    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 16 ON                                              */
-    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 17 ON                                              */
-    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 18 ON                                              */
-    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 19 ON                                              */
-    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 20 ON                                              */
-    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 21 ON                                              */
-    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 22 ON                                              */
-    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 23 ON                                              */
-    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 24 ON                                              */
-    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 25 ON                                              */
-    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 26 ON                                              */
-    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 27 ON                                              */
-    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 28 ON                                              */
-    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 29 ON                                              */
-    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 30 ON                                              */
-    (U1)ALERT_REQ_C_ABS_TT_ON                                                  /* 31 ON                                              */
+    (U1)ALERT_REQ_C_ABS_TT_ASIL_ON,                                            /* 16 ASIL_ON                                         */
+    (U1)ALERT_REQ_C_ABS_TT_ASIL_ON,                                            /* 17 ASIL_ON                                         */
+    (U1)ALERT_REQ_C_ABS_TT_ASIL_ON,                                            /* 18 ASIL_ON                                         */
+    (U1)ALERT_REQ_C_ABS_TT_ASIL_ON,                                            /* 19 ASIL_ON                                         */
+    (U1)ALERT_REQ_C_ABS_TT_ASIL_ON,                                            /* 20 ASIL_ON                                         */
+    (U1)ALERT_REQ_C_ABS_TT_ASIL_ON,                                            /* 21 ASIL_ON                                         */
+    (U1)ALERT_REQ_C_ABS_TT_ASIL_ON,                                            /* 22 ASIL_ON                                         */
+    (U1)ALERT_REQ_C_ABS_TT_ASIL_ON,                                            /* 23 ASIL_ON                                         */
+    (U1)ALERT_REQ_C_ABS_TT_ASIL_ON,                                            /* 24 ASIL_ON                                         */
+    (U1)ALERT_REQ_C_ABS_TT_ASIL_ON,                                            /* 25 ASIL_ON                                         */
+    (U1)ALERT_REQ_C_ABS_TT_ASIL_ON,                                            /* 26 ASIL_ON                                         */
+    (U1)ALERT_REQ_C_ABS_TT_ASIL_ON,                                            /* 27 ASIL_ON                                         */
+    (U1)ALERT_REQ_C_ABS_TT_ASIL_ON,                                            /* 28 ASIL_ON                                         */
+    (U1)ALERT_REQ_C_ABS_TT_ASIL_ON,                                            /* 29 ASIL_ON                                         */
+    (U1)ALERT_REQ_C_ABS_TT_ASIL_ON,                                            /* 30 ASIL_ON                                         */
+    (U1)ALERT_REQ_C_ABS_TT_ASIL_ON                                             /* 31 ASIL_ON                                         */
 };
 static const U1  u1_sp_ALERT_C_ABS_PD_DST[ALERT_C_ABS_PD_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
@@ -195,10 +195,12 @@ static U4      u4_s_AlertC_absPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 /*                                Removed "ALERT_REQ" in order to transfer signal transmission control from the MCU to the SoC       */
 /*  5.3.0     4/ 6/2026  HY       Change for Electronic CV (MET-M_REMWAR-CSTD-2-05-A-C0)                                             */
 /*                                Remove the remote warning signal receiving process.                                                */
+/*  5.4.0     4/13/2026  KO       Change for BEV Electronic CV. (Add TT abnormality monitoring)                                      */
 /*                                                                                                                                   */
 /*  * MY   = Masaki Yoshizawa, NTTD MSE                                                                                              */
 /*  * TI   = Takuro Iwanaga, NTTD MSE                                                                                                */
 /*  * HT   = Hibiki Tanii, KSE                                                                                                       */
 /*  * HY   = Haruki Yagi, KSE                                                                                                        */
+/*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -988,6 +988,10 @@ extern volatile const U1 u1_CALIB_MCUID_RSV_1B_0754;       /* Reserve_1B-0754   
 extern volatile const U1 u1_CALIB_MCUID_RSV_1B_0755;       /* Reserve_1B-0755                                                        */
 extern volatile const U1 u1_CALIB_MCUID_RSV_1B_0756;       /* Reserve_1B-0756                                                        */
 extern volatile const U1 u1_CALIB_MCUID0797_CNST_WRITEFLG; /* Constant write flag                                                    */
+#if 0 /* privisonary */
+#else
+extern volatile const U1 u1_CALIB_MCUIDXXXX_DAX_ACT;       /* Drawing-area-extraction Active flag                                    */
+#endif
 
 extern volatile const U2 u2_CALIB_MCUID3002_ANUNC_MID;     /* Basic 7 Tones Reporting Tone Medium                                    */
 extern volatile const U2 u2_CALIB_MCUID3003_ANUNC_SP_MID;  /* Basic 7 Tones Reporting Tone (Special) Medium                          */

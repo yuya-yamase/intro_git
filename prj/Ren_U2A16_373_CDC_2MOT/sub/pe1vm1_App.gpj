@@ -273,6 +273,8 @@
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Vptran/config/vptran_sel_cfg.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Vptran/scc/vptran_byw.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Vptran/scc/vptran_sel.c
+../../src/PE1VM1/App/MET/IpcApplication/Vsv/AsilChk/config/asilchk_cfg.c
+../../src/PE1VM1/App/MET/IpcApplication/Vsv/AsilChk/scc/asilchk.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vsv/Gauge/config/gagdst_nxmph_cfg.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vsv/Gauge/config/gauge_cfg.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vsv/Gauge/scc/gagdst_nxmph.c
