@@ -273,6 +273,8 @@
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Vptran/config/vptran_sel_cfg.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Vptran/scc/vptran_byw.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Vptran/scc/vptran_sel.c
+../../src/PE1VM1/App/MET/IpcApplication/Vsv/AsilChk/config/asilchk_cfg.c
+../../src/PE1VM1/App/MET/IpcApplication/Vsv/AsilChk/scc/asilchk.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vsv/Gauge/config/gagdst_nxmph_cfg.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vsv/Gauge/config/gauge_cfg.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vsv/Gauge/scc/gagdst_nxmph.c
@@ -300,6 +302,8 @@
 ../../src/PE1VM1/App/MET/XSPI_MET/config/xspi_met_ch1.c
 ../../src/PE1VM1/App/MET/XSPI_MET/config/xspi_met_vptran.c
 ../../src/PE1VM1/App/MET/XSPI_MET/scc/xspi_met.c
+../../src/PE1VM1/App/Nvmc_IF/CEN/scc/nvmc_if_cen.c
+../../src/PE1VM1/App/Nvmc_IF/IVI/scc/nvmc_if_ivi.c
 
 # ----------------------------------------------------------------------------------------------------------------------------------
 # libraries and linker directives
@@ -313,6 +317,6 @@
 
 # ----------------------------------------------------------------------------------------------------------------------------------
 # ghsprj version 1-1-0
-# Date generated: 2026/02/10 18:53:29
+# Date generated: 2026/04/16 10:07:21
 # ----------------------------------------------------------------------------------------------------------------------------------
 

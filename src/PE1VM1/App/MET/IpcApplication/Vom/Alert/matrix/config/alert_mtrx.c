@@ -1,4 +1,4 @@
-/* 5.4.0 */
+/* 5.5.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_MTRX_C_MAJOR                       (5)
-#define ALERT_MTRX_C_MINOR                       (4)
+#define ALERT_MTRX_C_MINOR                       (5)
 #define ALERT_MTRX_C_PATCH                       (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -266,7 +266,6 @@ void    vd_g_AlertMtrxInit(void)
         &vd_g_AlertB_tpwsrInit,
         &vd_g_AlertC_brlv_2Init,
         &vd_g_AlertC_epbInit,
-        &vd_g_AlertC_steerInit,
         &vd_g_AlertD_sbwInit,
         &vd_g_AlertM_bglfspdInit,
         &vd_g_AlertB_fmseatInit,
@@ -300,6 +299,7 @@ void    vd_g_AlertMtrxInit(void)
 /*  5.2.0    06/25/2025  KO       Change for BEV System_Consideration_2                                                              */
 /*  5.3.0    11/27/2025  PG       Change for BEV System_Consideration_ADAS                                                           */
 /*  5.4.0    01/07/2026  SN       Change for BEV FF2                                                                                 */
+/*  5.5.0    04/09/2026  HY       Change for BEV Electronic CV                                                                       */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
@@ -354,6 +354,9 @@ void    vd_g_AlertMtrxInit(void)
 /*  BEV-35   03/12/2026  SN       Change config for BEV Full_Function_2.                                                             */
 /*                                MET-B_OPTMON-CSTD-0-00-A-C0                                                                        */
 /*                                Add Alert_REQ for OPTMON.                                                                          */
+/*  BEV-36   04/09/2026  HY       Change config for BEV Electronic CV.                                                               */
+/*                                MET-C_STEER-CSTD-0-03-A-C0                                                                         */
+/*                                Remove Alert_REQ for C_STEER.                                                                      */
 /*                                                                                                                                   */
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */
 /*  * RS   = Ryuki Sako,      Denso Techno                                                                                           */

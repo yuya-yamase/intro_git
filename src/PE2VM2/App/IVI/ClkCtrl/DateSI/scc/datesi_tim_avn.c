@@ -1,4 +1,4 @@
-/* 0.0.1 */
+/* 0.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define DATESI_TIM_AVN_C_MAJOR                  (0)
-#define DATESI_TIM_AVN_C_MINOR                  (0)
-#define DATESI_TIM_AVN_C_PATCH                  (1)
+#define DATESI_TIM_AVN_C_MINOR                  (1)
+#define DATESI_TIM_AVN_C_PATCH                  (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -22,6 +22,7 @@
 #include "datesi_time_zone.h"
 #include "datesi_com.h"
 #include "bitcnt.h"
+#include "datesi_abs.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -145,7 +146,6 @@ static  void    vd_s_DateSITimSwCtlInit(void);
 static  U1      u1_s_DateSITimInitReadiVDsh(void);
 static  void    vd_s_DateSITimSwCtlRoutine(void);
 static  U1      u1_s_DateSITimSyncRoutine(U4 * u4p_a_offstd_now);
-static  U1      u1_s_DateSITimClkRangeCheck(const ST_DATESI_TIM_RX st_a_TIM_RX);
 static  U1      u1_s_DateSITimClkSyncCheck(const ST_DATESI_TIM_RX st_a_TIM_RX);
 static  void    vd_s_DateSITimSwstsJdg(const U1 u1_a_SWENABL);
 static  void    vd_s_DateSITimRcvEnblSts(const U1 u1_a_SWSTS);
@@ -162,7 +162,6 @@ static  U4      u4_s_DateSITimOpeAdjClk(const U4 u4_a_HHMMSS_RAW, const U1 u1_a_
 static  U1      u1_s_DateSITimGetClkElem(const U4 u4_a_HHMMSS, const U1 u1_a_RNK);
 static  U1      u1_s_DateSITimCalcClkElem(const U1 u1_a_RAW, const U1 u1_a_RNK, const U1 u1_a_VAL, const U1 u1_a_SIGN);
 static  U4      u4_s_DateSITimUpdtDateTime(const U4 u4_a_HHMMSS_RAW, const U1 u1_a_RNK, const U2 u2_a_VAL);
-static  U4      u4_s_DateSITimMakeHHMMSS(const U1 u1_a_HOUR, const U1 u1_a_MIN, const U1 u1_a_SEC);
 static  U4      u4_s_DateSITimUpdateNow(const U4 u4_a_NOW, const S4 s4_a_OFST);
 static  void    vd_s_DateSITimAddOfstTime(const U1 u1_a_VAL, const U1 u1_a_SIGN);
 static  S4      s4_s_DateSITimChkOfstTime(const S4 s4_a_OFST);
@@ -358,7 +357,7 @@ static U1       u1_s_DateSITimSyncRoutine(U4 * u4p_a_offstd_now)
     u1_t_rxsts                               = u1_g_DateSITimCfgCanRx(&st_t_tim_rx);
     u1_t_result                              = (U1)FALSE;
 
-    u1_t_range_is_ok      = u1_s_DateSITimClkRangeCheck(st_t_tim_rx);
+    u1_t_range_is_ok      = u1_g_DateSITimClkRangeCheck(st_t_tim_rx);
     u1_t_sync_range_is_ok = u1_s_DateSITimClkSyncCheck(st_t_tim_rx);
     u1_t_cntr_exist       = u1_g_DateSITimCfgEcuExst();
     u1_t_calendar         = u1_g_DateSICfgCalExst();
@@ -371,11 +370,11 @@ static U1       u1_s_DateSITimSyncRoutine(U4 * u4p_a_offstd_now)
        (u1_t_sync_range_is_ok                     != (U1)TRUE                   ) ||
        ((st_t_tim_rx.u1p_time[HHMMSS_24H_TIME_HR] == u1_s_datesi_tim_prv_hr     ) &&
         (u1_s_datesi_tim_sync                     == (U1)TRUE                   ))){
-        u4_t_now = u4_g_DateclkHhmmss24h();
+        u4_t_now = u4_g_DateSIAbsHhmmss24h();
         u4_t_adj = (U4)HHMMSS_UNKNWN;
     }
     else{
-        u4_t_now = u4_s_DateSITimMakeHHMMSS(st_t_tim_rx.u1p_time[HHMMSS_24H_TIME_HR],
+        u4_t_now = u4_g_DateSITimMakeHHMMSS(st_t_tim_rx.u1p_time[HHMMSS_24H_TIME_HR],
                                             st_t_tim_rx.u1p_time[HHMMSS_24H_TIME_MI],
                                             st_t_tim_rx.u1p_time[HHMMSS_24H_TIME_SE]);
         u4_t_adj               = u4_t_now;
@@ -413,6 +412,9 @@ static U1       u1_s_DateSITimSyncRoutine(U4 * u4p_a_offstd_now)
 
     if(u4_t_adj != (U4)HHMMSS_UNKNWN){
         u1_t_result = u1_g_DateSITimAdjustOwnClk(u4_t_adj);
+        if(u1_t_result == (U1)TRUE){
+            vd_g_DateSIAbsAdjHhmmss24h(u4_t_now, u4_t_adj);
+        }
     }
     vd_g_DateSIComSetCmp(u1_t_result,(U1)DATESI_COM_KIND_TIM);
 
@@ -431,12 +433,12 @@ S4              s4_g_DateSITimTotalOffset(void)
 }
 
 /*===================================================================================================================================*/
-/* static  U1      u1_s_DateSITimClkRangeCheck(const ST_DATESI_TIM_RX st_a_TIM_RX)                                                   */
+/* U1              u1_g_DateSITimClkRangeCheck(const ST_DATESI_TIM_RX st_a_TIM_RX)                                                   */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static U1       u1_s_DateSITimClkRangeCheck(const ST_DATESI_TIM_RX st_a_TIM_RX)
+U1              u1_g_DateSITimClkRangeCheck(const ST_DATESI_TIM_RX st_a_TIM_RX)
 {
     U1  u1_t_result;
 
@@ -465,7 +467,7 @@ static U1       u1_s_DateSITimClkSyncCheck(const ST_DATESI_TIM_RX st_a_TIM_RX)
     U1  u1_t_range_ok;
 
     u1_t_calendar = u1_g_DateSICfgCalExst();
-    u1_t_range_ok = u1_s_DateSITimClkRangeCheck(st_a_TIM_RX);
+    u1_t_range_ok = u1_g_DateSITimClkRangeCheck(st_a_TIM_RX);
     u1_t_result   = (U1)TRUE;
 
     if(u1_t_calendar == (U1)DATESI_CALEXIST_ON){
@@ -707,15 +709,15 @@ void            vd_g_DateSITimExecTmSet(void)
     vd_s_DateSITimDiagClkFctBak((U1)DATESI_TIM_DIAG_FCT_ZERO);
     vd_s_DateSITimDiagClkOldBak(u4_t_hhmmss_zerorst);
 
-    u4_t_hhmmss_zerorst = u4_s_DateSITimMakeHHMMSS(u1_t_hh_zerorst, (U1)0U, (U1)0U);
+    u4_t_hhmmss_zerorst = u4_g_DateSITimMakeHHMMSS(u1_t_hh_zerorst, (U1)0U, (U1)0U);
 
     s4_t_offset         = s4_s_datesi_tim_ofst * (S4)DATESI_TIM_SIGN_CHG;
 
     u4_t_hhmmss_zerorst = u4_s_DateSITimUpdateNow(u4_t_hhmmss_zerorst, s4_t_offset);
 
-    (void)u1_g_DateSITimAdjustOwnClk(u4_t_hhmmss_zerorst);
+    vd_g_DateSIAbsAdjHhmmss24h(u4_t_hhmmss_zerorst, (U4)HHMMSS_UNKNWN);
 
-    u4_t_hhmmss_diag = u4_g_DateclkHhmmss24h();
+    u4_t_hhmmss_diag = u4_g_DateSIAbsHhmmss24h();
     u4_t_hhmmss_diag = u4_s_DateSITimUpdateNow(u4_t_hhmmss_diag, s4_s_datesi_tim_ofst);
     vd_s_DateSITimDiagClkNewBak(u4_t_hhmmss_diag);
     vd_g_DateSITimSetDispClk(u4_t_hhmmss_diag);
@@ -922,9 +924,9 @@ void            vd_g_DateSITimClockUpdate(void)
 
         u4_t_hhmmss_update = u4_s_DateSITimUpdateNow(u4_s_datesi_tim_adj_clock, s4_t_offset);
 
-        (void)u1_g_DateSITimAdjustOwnClk(u4_t_hhmmss_update);
+        vd_g_DateSIAbsAdjHhmmss24h(u4_t_hhmmss_update, (U4)HHMMSS_UNKNWN);
 
-        u4_t_hhmmss_diag = u4_g_DateclkHhmmss24h();
+        u4_t_hhmmss_diag = u4_g_DateSIAbsHhmmss24h();
         u4_t_hhmmss_diag = u4_s_DateSITimUpdateNow(u4_t_hhmmss_diag, s4_s_datesi_tim_ofst);
         vd_s_DateSITimDiagClkNewBak(u4_t_hhmmss_diag);
         vd_g_DateSITimSetDispClk(u4_t_hhmmss_diag);
@@ -936,15 +938,15 @@ void            vd_g_DateSITimClockUpdate(void)
 }
 
 /*===================================================================================================================================*/
-/* static  U4      u4_s_DateSITimMakeHHMMSS(const U1 u1_a_HOUR, const U1 u1_a_MIN, const U1 u1_a_SEC)                                */
+/* U4              u4_g_DateSITimMakeHHMMSS(const U1 u1_a_HOUR, const U1 u1_a_MIN, const U1 u1_a_SEC)                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static U4       u4_s_DateSITimMakeHHMMSS(const U1 u1_a_HOUR, const U1 u1_a_MIN, const U1 u1_a_SEC)
+U4              u4_g_DateSITimMakeHHMMSS(const U1 u1_a_HOUR, const U1 u1_a_MIN, const U1 u1_a_SEC)
 {
 #if (HHMMSS_LSB_SE != 0)
-#error "datesi_tim_avn.c(u4_s_DateSITimMakeHHMMSS):HHMMSS_LSB_SE is not 0! "
+#error "datesi_tim_avn.c(u4_g_DateSITimMakeHHMMSS):HHMMSS_LSB_SE is not 0! "
 #endif
     U4  u4_t_hhmmss_24h;
 
@@ -1195,11 +1197,9 @@ U1              u1_g_DateSITimDiagEvCapt(const U1 u1_a_ODO_UPDT, U4 * const u4_a
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  0.0.0    04/23/2025  MN       New.                                                                                               */
-/*  0.0.1    12/18/2025  MN       Change for BEV Pre_CV                                                                              */
+/*  0.0.1    12/18/2025  MN       Addressing issues.                                                                                 */
+/*  0.1.0    04/01/2026  MN       Fix:Change in RTC handling (do not reflect user operations)                                        */
 /*                                                                                                                                   */
-/*  Revision Date        Author   Change Description                                                                                 */
-/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  BEV-1    12/18/2025  MN       Addressing issues.                                                                                 */
 /*                                                                                                                                   */
 /*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*                                                                                                                                   */
