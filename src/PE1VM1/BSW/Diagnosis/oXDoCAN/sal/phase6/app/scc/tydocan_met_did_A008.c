@@ -1,4 +1,4 @@
-/* 1.2.0 */
+/* 1.3.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define TYDOCAN_MET_DID_A008_C_MAJOR             (1)
-#define TYDOCAN_MET_DID_A008_C_MINOR             (2)
+#define TYDOCAN_MET_DID_A008_C_MINOR             (3)
 #define TYDOCAN_MET_DID_A008_C_PATCH             (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -57,15 +57,18 @@
 /*===================================================================================================================================*/
 U1      u1_g_oXDoCANRebyId_A008(U1 * u1_ap_ans, const U2 u2_a_ELPSD)
 {
-#if 0    /* BEV Diag provisionally */
-    static const U2        u2_s_TYDC_A008_PWR_VOL_ADC_MAX = (U2)0x03ffU;
-    static const U2        u2_s_TYDC_A008_PWR_VOL_MUL     = (U2)401U;
-    static const U2        u2_s_TYDC_A008_PWR_VOL_DIV     = (U2)2046U;
+    static const U2        u2_s_TYDC_A008_PWR_VOL_ADC_MAX = (U2)0x0fffU;
+     /*===========================================================================================================*/
+     /* See the A/D conversion formula below.                                                                     */
+     /* +B_supply_vol [V] = (ADC_value [hex] * ADC_reference_vol(3.3) [V] / 2^12) * (R1 + R2 + R3 + R4 + R5) / R5 */
+     /*===========================================================================================================*/
+    static const U2        u2_s_TYDC_A008_PWR_VOL_MUL     = (U2)1243U;
+    static const U2        u2_s_TYDC_A008_PWR_VOL_DIV     = (U2)20480U;
 
     U4                     u4_t_vol;
     U2                     u2_t_adc;
 
-    u2_t_adc = u2_g_IoHwAdcLv((U1)ADC_CH_IG_MON);
+    u2_t_adc = u2_g_IoHwAdcLv((U1)ADC_CH_B_MON2);
     if(u2_t_adc <= u2_s_TYDC_A008_PWR_VOL_ADC_MAX){
 
         u4_t_vol = ((U4)u2_t_adc * (U4)u2_s_TYDC_A008_PWR_VOL_MUL) / (U4)u2_s_TYDC_A008_PWR_VOL_DIV;
@@ -77,12 +80,9 @@ U1      u1_g_oXDoCANRebyId_A008(U1 * u1_ap_ans, const U2 u2_a_ELPSD)
         u4_t_vol = (U4)TYDC_A008_PWR_VOL_UNK;
     }
 
-    u1_ap_ans[0] =(U1)u4_t_vol;
+    u1_ap_ans[0] = (U1)u4_t_vol;
 
     return((U1)OXDC_SAL_PROC_FIN);
-#else    /* BEV Diag provisionally */
-    return((U1)OXDC_SAL_PROC_NR_22);
-#endif    /* BEV Diag provisionally */
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
@@ -95,9 +95,11 @@ U1      u1_g_oXDoCANRebyId_A008(U1 * u1_ap_ans, const U2 u2_a_ELPSD)
 /*  1.0.0     1/ 30/2024  TK       New.                                                                                              */
 /*  1.1.0     7/ 29/2024  SI       Add Read Data Logic                                                                               */
 /*  1.2.0    11/ 11/2024  SN       Change u1_g_oXDoCANRebyId_A008 function                                                           */
+/*  1.3.0     3/ 20/2026  TKa      Adjust configuration for BEV                                                                      */
 /*                                                                                                                                   */
-/*  * TK = Toru Kamishina, Denso Techno                                                                                              */
-/*  * SI = Shugo Ichinose, Denso Techno                                                                                              */
-/*  * SN = Shimon Nambu  , Denso Techno                                                                                              */
+/*  * TK  = Toru Kamishina, Denso Techno                                                                                             */
+/*  * SI  = Shugo Ichinose, Denso Techno                                                                                             */
+/*  * SN  = Shimon Nambu  , Denso Techno                                                                                             */
+/*  * Tka = Tamao Kamiya  , Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
