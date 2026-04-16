@@ -46,7 +46,7 @@
 
 #define XSPI_MET_NUM_RTE                    (550U)
 
-#define XSPI_MET_OXCANCFG_NUM               (1U)     /* Number of OXCAN config table */
+#define XSPI_MET_OXCANCFG_NUM               (9U)     /* Number of OXCAN config table */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -101,7 +101,7 @@ static const ST_XSPI_MET_CANGW_STA st_s_XSPI_MET_CANGW_RTE_BUF_STA[XSPIMETCANGW_
 };
 static const ST_XSPI_MET_CANGW_OXCANSTA st_sp_XSPI_MET_CANGW_BUF_OXCSTA[XSPIMETCANGW_OXCANNUM_BLOCK] = {
         /* u2_idx   u2_num_idx */
-        {(U2)0U,    (U2)1U  }
+        {(U2)0U,    (U2)9U  }
 };
 
 static const ST_XSPI_MET_MSG2POSLEN st_sp_XSPI_MET_MSG2POSLEN[] = {
@@ -233,8 +233,16 @@ static const ST_XSPI_MET_MSG2POSLEN st_sp_XSPI_MET_MSG2POSLEN[] = {
         { (U2)542U, (U2)MSG_BDB1S08_RXCH0,     (U1)XSPI_MET_CAN_DLC_32, (U2)126} /* Index125 */
 };
 static const ST_XSPI_MET_OXCANMSG2POSLEN st_sp_XSPI_MET_OXCANMSG2POSLEN[XSPI_MET_OXCANCFG_NUM] = {
-       /* u2_stspos     u2_oxcanid                           u2_timenout                           u2_syschk                             */
-        { (U2)0U,   (U2)OXCAN_RXD_PDU_CAN_SCS1S11_CH0,       (U2)10000U / (U2)OXCAN_MAIN_TICK,     (U2)OXCAN_SYS_IGR | (U2)OXCAN_SYS_IGP},/* Index  0 */
+       /* u2_stspos     u2_oxcanid                           u2_timenout                           u2_syschk                                                */
+        { (U2)0U,   (U2)OXCAN_RXD_PDU_CAN_SCS1S11_CH0,       (U2)10000U / (U2)OXCAN_MAIN_TICK,                         (U2)OXCAN_SYS_IGR | (U2)OXCAN_SYS_IGP},/* Index  0 */
+        { (U2)1U,   (U2)OXCAN_RXD_PDU_CAN_BSR1S01_CH0,       (U2)5000U  / (U2)OXCAN_MAIN_TICK,                         (U2)OXCAN_SYS_IGR | (U2)OXCAN_SYS_IGP},/* Index  1 */
+        { (U2)2U,   (U2)OXCAN_RXD_PDU_CAN_DDM1S17_CH0,       (U2)3600U  / (U2)OXCAN_MAIN_TICK,                         (U2)OXCAN_SYS_IGR | (U2)OXCAN_SYS_IGP},/* Index  2 */
+        { (U2)3U,   (U2)OXCAN_RXD_PDU_CAN_EHV2G02_CH0,       (U2)3600U  / (U2)OXCAN_MAIN_TICK,                                             (U2)OXCAN_SYS_IGP},/* Index  3 */
+        { (U2)4U,   (U2)OXCAN_RXD_PDU_CAN_ENG1G90_CH0,       (U2)5000U  / (U2)OXCAN_MAIN_TICK,                                             (U2)OXCAN_SYS_IGP},/* Index  4 */
+        { (U2)5U,   (U2)OXCAN_RXD_PDU_CAN_FCM1S39_CH0,       (U2)5000U  / (U2)OXCAN_MAIN_TICK,                         (U2)OXCAN_SYS_IGR | (U2)OXCAN_SYS_IGP},/* Index  5 */
+        { (U2)6U,   (U2)OXCAN_RXD_PDU_CAN_FCM1S52_CH0,       (U2)5000U  / (U2)OXCAN_MAIN_TICK,                         (U2)OXCAN_SYS_IGR | (U2)OXCAN_SYS_IGP},/* Index  6 */
+        { (U2)7U,   (U2)OXCAN_RXD_PDU_CAN_PLG1S01_CH0,       (U2)5000U  / (U2)OXCAN_MAIN_TICK,     (U2)OXCAN_SYS_ACC | (U2)OXCAN_SYS_IGR | (U2)OXCAN_SYS_IGP},/* Index  7 */
+        { (U2)8U,   (U2)OXCAN_RXD_PDU_CAN_ZN11S19_CH0,       (U2)5000U  / (U2)OXCAN_MAIN_TICK,     (U2)OXCAN_SYS_ACC | (U2)OXCAN_SYS_IGR | (U2)OXCAN_SYS_IGP} /* Index  8 */
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -789,6 +797,7 @@ void    vd_g_XSpiMETTxSCL(U4 * u4_ap_pdu_tx)
     U1 u1_t_bkl3cmet;
     U1 u1_t_bkl3rmet;
     U4 u4_t_odo;
+    U2 u2_t_ev_range;
     
     u1_t_ecscl    = (U1)0U;
     u1_t_unit6    = (U1)0U;
@@ -802,6 +811,7 @@ void    vd_g_XSpiMETTxSCL(U4 * u4_ap_pdu_tx)
     u1_t_bkl3cmet = (U1)0U;
     u1_t_bkl3rmet = (U1)0U;
     u4_t_odo      = (U4)0U;
+    u2_t_ev_range = (U2)0U;
 
     (void)Com_ReceiveSignal(ComConf_ComSignal_EC_SCL,   &u1_t_ecscl);
     (void)Com_ReceiveSignal(ComConf_ComSignal_UNIT_6,   &u1_t_unit6);
@@ -815,6 +825,7 @@ void    vd_g_XSpiMETTxSCL(U4 * u4_ap_pdu_tx)
     (void)Com_ReceiveSignal(ComConf_ComSignal_BKL3CMET, &u1_t_bkl3cmet);
     (void)Com_ReceiveSignal(ComConf_ComSignal_BKL3RMET, &u1_t_bkl3rmet);
     (void)Com_ReceiveSignal(ComConf_ComSignal_ODO,      &u4_t_odo);
+    (void)Com_ReceiveSignal(ComConf_ComSignal_EV_RANGE, &u2_t_ev_range);
 
     u4_ap_pdu_tx[0]  = ((U4)u1_t_ecscl << 3);      /* EC_SCL   */
     u4_ap_pdu_tx[0] |= ((U4)u1_t_unit6 << 6);      /* UNIT_6   */
@@ -828,6 +839,7 @@ void    vd_g_XSpiMETTxSCL(U4 * u4_ap_pdu_tx)
     u4_ap_pdu_tx[0] |= ((U4)u1_t_bkl3cmet << 28);  /* BKL3CMET */
     u4_ap_pdu_tx[0] |= ((U4)u1_t_bkl3rmet << 30);  /* BKL3RMET */
     u4_ap_pdu_tx[1]  = u4_t_odo;                   /* ODO      */
+    u4_ap_pdu_tx[2]  = (U4)u2_t_ev_range;          /* EV_RANGE */
 
 }
 
@@ -859,6 +871,7 @@ void    vd_g_XSpiMETTxSCL(U4 * u4_ap_pdu_tx)
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  BEV-1    03/17/2026  RS       Change for BEV Full_Function_2.(BSW update for CAN BA v26.02.13.0)                                 */
 /*  BEV-2    03/23/2026  SH       SCS1S11_IG_STATUS have been changed from using the aubist -> OXCAN                                 */
+/*  BEV-3    04/16/2026  SH       Change for BEV E-CV. (Add Special Status and EV_RANGE)                                             */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  * KT   = Kenta Takaji, Denso Techno                                                                                              */
