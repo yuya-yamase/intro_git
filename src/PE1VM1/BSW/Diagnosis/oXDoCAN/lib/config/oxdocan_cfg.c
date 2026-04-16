@@ -41,6 +41,7 @@
 
 #include "Dcm_Dsp_SID28_Cfg.h"
 #include "oxdocan_rout_cfg.h"
+#include "es_inspect.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -342,9 +343,6 @@ U1      u1_g_oXDoCANCfgEomchk(void)
 #if (OXDC_EOM_IGN_ON != TRUE)
 #error "oxdocan_cfg.c : OXDC_EOM_IGN_ON shall be equal to TRUE."
 #endif
-
-#ifdef ES_INSPECT_H
-
 #if ((ES_INSPECT_MDBF_NUO_DI != (OXDC_EOM_NUO_DI >> 2)) || \
      (ES_INSPECT_MDBF_SI_ACT != (OXDC_EOM_SI_ACT >> 2)))
 #error "oxdocan_cfg.c : OXDC_EOM_NUO_DI and/or OXDC_EOM_SI_ACT shall be compabile with ES_INSPECT_MDBF_XXX."
@@ -357,14 +355,6 @@ U1      u1_g_oXDoCANCfgEomchk(void)
     u1_t_eom |= (u1_g_VehopemdIgnOn() & (U1)OXDC_EOM_IGN_ON);
 
     return(u1_t_eom);
-#else  /* #ifdef ES_INSPECT_H */
-    U1                      u1_t_eom;
-
-    u1_t_eom  = ((u1_g_VehopemdDiagOn() << 1U) & (U1)OXDC_EOM_DIAG_ON);
-    u1_t_eom |= (u1_g_VehopemdIgnOn() & (U1)OXDC_EOM_IGN_ON);
-
-    return(u1_t_eom);
-#endif /* #ifdef ES_INSPECT_H */
 }
 /*===================================================================================================================================*/
 /*  uint8   u1_g_oXDoCANComCtrlChk(uint8 * u1_ap_err)                                                                                */

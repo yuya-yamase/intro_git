@@ -2,58 +2,71 @@
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Diagnosis on Can for MET based on AUBIST/DEM, DCM                                                                                */
-/*  SID27                                                                                                                            */
+/*  Diagnosis on Can for Toyota MET/HUD based on AUBIST/DEM, DCM                                                                     */
+/*  SID 0xBA ECU Shipping Inspection                                                                                                 */
 /*===================================================================================================================================*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define TYDOCAN_SECURITY_CFG_C_MAJOR             (1U)
-#define TYDOCAN_SECURITY_CFG_C_MINOR             (1U)
-#define TYDOCAN_SECURITY_CFG_C_PATCH             (0U)
+#define TYDOCAN_MET_ESI_C_MAJOR                  (1)
+#define TYDOCAN_MET_ESI_C_MINOR                  (1)
+#define TYDOCAN_MET_ESI_C_PATCH                  (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "oxdocan_cfg_private.h"
-#include "tydocan_security_cfg_private.h"
-#include "oxdocan_aubif.h"
-#include "es_inspect.h"
-
-#include "NvM.h"
-#include "memfill_u2.h"
-#include "memfill_u1.h"
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* Application Headers */
-
+#include "tydocan_met_esi_cfg_private.h"
+/*Phase6Diag Stub*/
+#include "oxdocan_oem.h"
+/*Phase6Diag Stub*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if (TYDOCAN_SECURITY_CFG_C_MAJOR != OXDOCAN_CFG_H_MAJOR)
-#error "tydocan_security_cfg.c and oxdocan_cfg_private.h : source and header files are inconsistent!"
+#if ((TYDOCAN_MET_ESI_C_MAJOR != TYDOCAN_MET_ESI_H_MAJOR) || \
+     (TYDOCAN_MET_ESI_C_MINOR != TYDOCAN_MET_ESI_H_MINOR) || \
+     (TYDOCAN_MET_ESI_C_PATCH != TYDOCAN_MET_ESI_H_PATCH))
+#error "tydocan_met_esi.c and tydocan_met_esi.h : source and header files are inconsistent!"
 #endif
 
-#if ((TYDOCAN_SECURITY_CFG_C_MAJOR != TYDOCAN_SECURITY_CFG_H_MAJOR) || \
-     (TYDOCAN_SECURITY_CFG_C_MINOR != TYDOCAN_SECURITY_CFG_H_MINOR) || \
-     (TYDOCAN_SECURITY_CFG_C_PATCH != TYDOCAN_SECURITY_CFG_H_PATCH))
-#error "tydocan_security_cfg.c and tydocan_security_cfg_private.h : source and header files are inconsistent!"
+#if ((TYDOCAN_MET_ESI_C_MAJOR != TYDOCAN_MET_ESI_CFG_H_MAJOR) || \
+     (TYDOCAN_MET_ESI_C_MINOR != TYDOCAN_MET_ESI_CFG_H_MINOR) || \
+     (TYDOCAN_MET_ESI_C_PATCH != TYDOCAN_MET_ESI_CFG_H_PATCH))
+#error "tydocan_met_esi.c and tydocan_met_esi_cfg_private.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define TYDC_SECURITY_SEED_NBYTE                 (16U)
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/* ROM/RAM Test                 */
+#define TYDC_MET_ESI_MT_PAS                      (0xF5U)
+#define TYDC_MET_ESI_MT_FAI                      (0xFAU)
+#define TYDC_MET_ESI_MT_INI                      (0xF0U)
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define TYDC_MET_ESI_SSR_NUM_CH                  (2U)
+#define TYDC_MET_ESI_NB_ROB                      (12U)
+
+#define TYDC_MET_ESI_ROB_B00                     (0U)
+#define TYDC_MET_ESI_ROB_B01                     (1U)
+#define TYDC_MET_ESI_ROB_B02                     (2U)
+#define TYDC_MET_ESI_ROB_B03                     (3U)
+#define TYDC_MET_ESI_ROB_B04                     (4U)
+#define TYDC_MET_ESI_ROB_B05                     (5U)
+#define TYDC_MET_ESI_ROB_B06                     (6U)
+#define TYDC_MET_ESI_ROB_B07                     (7U)
+#define TYDC_MET_ESI_ROB_B08                     (8U)
+#define TYDC_MET_ESI_ROB_B09                     (9U)
+#define TYDC_MET_ESI_ROB_B10                     (10U)
+#define TYDC_MET_ESI_ROB_B11                     (11U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-typedef struct{
-    U4                      u4_key_adr;
-    U1                      u1_level;
-}ST_TYDC_SECURITY_KEYCFG;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
@@ -64,76 +77,44 @@ typedef struct{
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*  Function Definitions                                                                                                             */
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  void   vd_g_TyDoCANSecurityCfgInit(void)                                                                                         */
+/*  U1      u1_g_oXDoCANEsiTRx_22FD11XX(const U1 * u1_ap_REQ_RX, U1 * u1_ap_ans_tx, const U2 u2_a_ELPSD)                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void   vd_g_TyDoCANSecurityCfgInit(void)
+U1      u1_g_oXDoCANEsiTRx_22FD11XX(const U1 * u1_ap_REQ_RX, U1 * u1_ap_ans_tx, const U2 u2_a_ELPSD)
 {
-
+    return((U1)OXDC_SAL_PROC_NR_10);
 }
+
 /*===================================================================================================================================*/
-/*  U1   u1_g_TyDoCANSecurityCfgGetSeed(const U1 u1_a_ID, const Dcm_OpStatusType OpStatus, U1 * u1_ap_seed)                          */
+/*  U1      u1_g_oXDoCANEsiTRx_1101XXXX(const U1 * u1_ap_REQ_RX, U1 * u1_ap_ans_tx, const U2 u2_a_ELPSD)                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U1   u1_g_TyDoCANSecurityCfgGetSeed(const U1 u1_a_ID, const Dcm_OpStatusType OpStatus, U1 * u1_ap_seed)
+U1      u1_g_oXDoCANEsiTRx_1101XXXX(const U1 * u1_ap_REQ_RX, U1 * u1_ap_ans_tx, const U2 u2_a_ELPSD)
 {
-    U1                      u1_t_ret;
+    vd_g_ESInspectReqRx((U1)ES_INSPECT_REQ_FIN, (U1)ES_INSPECT_MD_RUN);
 
-    switch(OpStatus)
-    {
-    case DCM_INITIAL:
-        if((u1_a_ID >= (U1)OXDC_SECURITY_ID01) &&
-           (u1_a_ID <= (U1)OXDC_SECURITY_ID02)){
-            u1_t_ret = (U1)DCM_E_PENDING;
-        }
-        else{
-            u1_t_ret = (U1)E_NOT_OK;
-        }
-        break;
-    case DCM_CANCEL:
-        u1_t_ret = (U1)E_OK;
-        break;
-    case DCM_PENDING:
-        vd_g_MemfillU1(&(u1_ap_seed[0]),  (U1)0U, (U4)TYDC_SECURITY_SEED_NBYTE);
-        u1_t_ret = (U1)E_OK;
-        break;
-    default:
-        u1_t_ret = (U1)E_NOT_OK;
-        break;
-    }
+    u1_ap_ans_tx[TYDC_MET_ESI_TRX_B0] = (U1)TYDC_MET_ESI_ANS_11;
+    u1_ap_ans_tx[TYDC_MET_ESI_TRX_B1] = u1_ap_REQ_RX[TYDC_MET_ESI_TRX_B1];
 
-    return(u1_t_ret);
+    return((U1)OXDC_SAL_PROC_FIN);
 }
+
 /*===================================================================================================================================*/
-/*  U1     u1_g_TyDoCANSecurityCfgCompareKey(const U1 u1_a_ID, const U1 * u1_ap_KEY)                                                 */
+/*  U1      u1_g_oXDoCANEsiTRx_ABXXXXXX(const U1 * u1_ap_REQ_RX, U1 * u1_ap_ans_tx, const U2 u2_a_ELPSD)                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U1     u1_g_TyDoCANSecurityCfgCompareKey(const U1 u1_a_ID, const U1 * u1_ap_KEY)
+U1      u1_g_oXDoCANEsiTRx_ABXXXXXX(const U1 * u1_ap_REQ_RX, U1 * u1_ap_ans_tx, const U2 u2_a_ELPSD)
 {
-    U1  u1_t_result;
-    U1  u1_t_ret;
-
-    u1_t_ret    = (U1)E_NOT_OK;
-    u1_t_result = (U1)TRUE; /* Fix to be True for temp, Key will be compared by SEC  */
-    if(u1_t_result == (U1)TRUE){
-        u1_t_ret    = (U1)E_OK;
-        if(u1_a_ID == (U1)OXDC_SECURITY_ID01){
-            vd_g_ESInspectReqRx((U1)ES_INSPECT_REQ_RUN, (U1)ES_INSPECT_MD_CHK);
-        }
-    }
-
-    return(u1_t_ret);
+    return((U1)OXDC_SAL_PROC_NR_10);
 }
+
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
@@ -142,10 +123,22 @@ U1     u1_g_TyDoCANSecurityCfgCompareKey(const U1 u1_a_ID, const U1 * u1_ap_KEY)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  1.0.0    12/08/2023  II       New.                                                                                               */
-/*  1.1.0    07/22/2025  MI       Fix for Intruction detection system.                                                               */
+/*  1.0.0     4/22/2020  TN       New.                                                                                               */
+/*  1.1.0    10/06/2020  AS       Update CANDI Spec.                                                                                 */
 /*                                                                                                                                   */
-/*  * II = Itsuki Ito, DENSO                                                                                                         */
-/*  * MI = Masahiko Izumi, DENSO                                                                                                     */
+/*  Revision Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/* 19PFv3-1  04/23/2024  SI       Remove Unsupported Function                                                                        */
+/* 19PFv3-2  11/14/2024  TeN      Add SIDBA Hard Inspection config.                                                                  */
+/* 19PFv3-3  12/05/2024  TeN      2EFDE0XX Func Move to tydocan_met_esi_secset.c                                                     */
+/* 19PFv3-4  12/20/2024  SI       Remove u1_g_oXDoCANEsiTRx_2FFD80XX                                                                 */
+/* 19PFv3-5  12/26/2024  GM       22FDC0XX Func Move to tydocan_met_esi_22FDC0XX.c                                                   */
+/* 19PFv3-6  01/13/2025  TeN      Change SIDBA Hard Inspection config.                                                               */
+/*                                                                                                                                   */
+/*  * TN  = Takashi Nagai, DENSO                                                                                                     */
+/*  * AS  = Atsunori Sugita, DENSO-TECHNO                                                                                            */
+/*  * SI  = Shugo Ichinose,  Denso Techno                                                                                            */
+/*  * TeN = Tetsushi Nakano, DENSO-TECHNO                                                                                            */
+/*  * GM   = Glen Monteposo, DENSO-TECHNO                                                                                            */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

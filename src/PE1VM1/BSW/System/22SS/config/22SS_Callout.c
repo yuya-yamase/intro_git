@@ -35,6 +35,7 @@
 #include "drec_tx.h"
 #include "sound_cri_mgr.h"
 #include "fwush.h"
+#include "es_inspect.h"
 
 /* Application           */
 #include "dimmer.h"
@@ -140,6 +141,7 @@ void vd_g_22SSCallout_StaBonInit(void)
     vd_g_oXDoCANPreInit();      /* vd_g_oXDoCANPreInit shall be called before vd_g_oXCANRstInit */
     vd_g_oXCANRstInit();
     vd_g_oXDoCANBonInit();
+    vd_g_ESInspectBonInit();
     vd_g_VehopemdRstInit();
     vd_g_iVDshInit();
     vd_g_vCryCl_Init();
@@ -212,6 +214,7 @@ void vd_g_22SSCallout_StaRstInit(void)
     vd_g_oXDoCANPreInit();      /* vd_g_oXDoCANPreInit shall be called before vd_g_oXCANRstInit */
     vd_g_oXCANRstInit();
     vd_g_oXDoCANRstInit();
+    vd_g_ESInspectRstwkInit();
     vd_g_VehopemdRstInit();
     vd_g_iVDshInit();
     vd_g_vCryCl_Init();
@@ -285,6 +288,7 @@ void vd_g_22SSCallout_StaWkupInit(void)
     vd_g_oXDoCANPreInit();      /* vd_g_oXDoCANPreInit shall be called before vd_g_oXCANWkupInit */
     vd_g_oXCANWkupInit();
     vd_g_oXDoCANWkupInit();
+    vd_g_ESInspectRstwkInit();
     vd_g_VehopemdWkupInit();
     vd_g_iVDshInit();
     vd_g_vCryCl_Init();

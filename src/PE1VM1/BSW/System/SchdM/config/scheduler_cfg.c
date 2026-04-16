@@ -50,6 +50,7 @@
 #include "ivdsh.h"
 #include "vCryCl.h"
 #include "fwush.h"
+#include "es_inspect.h"
 
 #include "gpt_drv_ost.h"
 #include "wdg_drv.h"
@@ -367,6 +368,7 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*  10ms A Platform Post Task                                        */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
+    {&vd_g_ESInspectMainTask,           (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_Rim_Task,                    (U4)SCHDLR_TASKBIT__10MS_A  },
 
     /*-------------------------------------------------------------------*/
@@ -445,6 +447,7 @@ void    vd_g_SchdlrCfgIdleToRun(void)
     /*------------------------------------------------------------------------------*/
     vd_g_Gpt_OstStart((U1)GPT_OST_CH_06_SCHDLR_TICK, &u4_sp_SCHDLR_OST_START[0]);
 
+    vd_g_ESInspectRunInit();
     SuspendAllInterrupts();
     xspi_Init( XSPI_CH_02 );
     ResumeAllInterrupts();
