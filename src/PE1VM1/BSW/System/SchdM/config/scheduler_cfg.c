@@ -332,6 +332,7 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     {&vd_g_SbltsyncMainTask,            (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_ThblnkrMainTask,             (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_wChimeMainTask,              (U4)SCHDLR_TASKBIT__10MS_A  },
+    {&vd_g_AsilChkMainTask,             (U4)SCHDLR_TASKBIT__10MS_B  },
     /*-------------------------------------------------------------------*/
     /*                                                                   */
     /*  Platform Post Task                                               */
