@@ -806,7 +806,7 @@ volatile const U1 u1_CALIB_MCUID_RSV_1B_0756       = (U1)0U;        /* Reserve_1
 volatile const U1 u1_CALIB_MCUID0797_CNST_WRITEFLG = (U1)1U;        /* Constant write flag                                           */
 #if 0 /* privisonary */
 #else
-volatile const U1 u1_CALIB_MCUIDXXXX_DAX_ACT       = (U1)0U;        /* Drawing-area-extraction Active flag                           */
+volatile const U1 u1_CALIB_MCUIDXXXX_DAV_ACT       = (U1)0U;        /* Drawing-Area-Verification Active flag                         */
 #endif
 
 

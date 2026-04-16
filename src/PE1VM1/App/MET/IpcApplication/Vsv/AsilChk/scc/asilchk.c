@@ -73,8 +73,8 @@ static void vd_s_AsilChkInit(void);
 static void vd_s_AsilChkAliveCntFailChk(void);
 static void vd_s_AsilChkCrcCompFailChk(void);
 static U2   u2_s_AsilChkCrcFailCount(const U2 u2_a_ABJDGCNT_PRE, const U4   u4_a_CRCCOMP_RSLT);
-static U1   u2_s_AsilChkCrcLightCompChk(const U4 u4_a_ONCRC, const U4 u4_a_CRCVAL);
-static U1   u2_s_AsilChkCrcBlinkCompChk(U1* const u1_ap_BLINK_STS, const U1 u1_a_CYCTIME,
+static U1   u1_s_AsilChkCrcLightCompChk(const U4 u4_a_ONCRC, const U4 u4_a_CRCVAL);
+static U1   u1_s_AsilChkCrcBlinkCompChk(U1* const u1_ap_BLINK_STS, const U1 u1_a_CYCTIME,
                                         U1* const u1_ap_CYCLECHKCNT, const U4 u4_a_ONCRC, const U4 u4_a_CRCVAL);
 static void vd_s_AsilChkCrcBlinkCompClear(U1* const u1_ap_BLINK_STS, U1* const u1_ap_CYCLECHKCNT);
 
@@ -252,7 +252,7 @@ static void vd_s_AsilChkCrcCompFailChk(void)
         if(u1_t_req == (U1)ASILCHK_REQ_ASIL_LIGHT) {
             u4_t_oncrc = st_gp_ASILCHK_TT_TABLE[u4_t_loop].fp_u4_oncrc();
             /* CRC Light Comp Check */
-            u1_t_crccomp_rslt = u2_s_AsilChkCrcLightCompChk(u4_t_oncrc, u4_sp_asilchk_crc_val[u4_t_loop]);
+            u1_t_crccomp_rslt = u1_s_AsilChkCrcLightCompChk(u4_t_oncrc, u4_sp_asilchk_crc_val[u4_t_loop]);
             /* Reset blink data */
             vd_s_AsilChkCrcBlinkCompClear(&u1_sp_asilchk_crc_blink_sts[u4_t_loop],&u1_sp_asilchk_crc_cyclechkcnt[u4_t_loop]);
         }
@@ -260,7 +260,7 @@ static void vd_s_AsilChkCrcCompFailChk(void)
             u4_t_oncrc   = st_gp_ASILCHK_TT_TABLE[u4_t_loop].fp_u4_oncrc();
             u1_t_cyctime = st_gp_ASILCHK_TT_TABLE[u4_t_loop].fp_u1_cyctime();
             /* CRC Blink Comp Check */
-            u1_t_crccomp_rslt = u2_s_AsilChkCrcBlinkCompChk(&u1_sp_asilchk_crc_blink_sts[u4_t_loop],
+            u1_t_crccomp_rslt = u1_s_AsilChkCrcBlinkCompChk(&u1_sp_asilchk_crc_blink_sts[u4_t_loop],
                                                             u1_t_cyctime,
                                                             &u1_sp_asilchk_crc_cyclechkcnt[u4_t_loop],
                                                             u4_t_oncrc,
@@ -311,12 +311,12 @@ static U2 u2_s_AsilChkCrcFailCount(const U2 u2_a_ABJDGCNT_PRE, const U4 u4_a_CRC
 }
 
 /*===================================================================================================================================*/
-/*  static U1   u2_s_AsilChkCrcLightCompChk(const U4 u4_a_ONCRC, const U4 u4_a_CRCVAL)                                               */
+/*  static U1   u1_s_AsilChkCrcLightCompChk(const U4 u4_a_ONCRC, const U4 u4_a_CRCVAL)                                               */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static U1 u2_s_AsilChkCrcLightCompChk(const U4 u4_a_ONCRC, const U4 u4_a_CRCVAL)
+static U1 u1_s_AsilChkCrcLightCompChk(const U4 u4_a_ONCRC, const U4 u4_a_CRCVAL)
 {
     U1    u1_t_comprslt;
 
@@ -330,13 +330,13 @@ static U1 u2_s_AsilChkCrcLightCompChk(const U4 u4_a_ONCRC, const U4 u4_a_CRCVAL)
 }
 
 /*===================================================================================================================================*/
-/*  static U1   u2_s_AsilChkCrcBlinkCompChk(U1* const u1_ap_BLINK_STS, const U1 u1_a_CYCTIME,                                        */
+/*  static U1   u1_s_AsilChkCrcBlinkCompChk(U1* const u1_ap_BLINK_STS, const U1 u1_a_CYCTIME,                                        */
 /*                                           U1* const u1_ap_CYCLECHKCNT, const U4 u4_a_ONCRC, const U4 u4_a_CRCVAL)                 */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static U1 u2_s_AsilChkCrcBlinkCompChk(U1* const u1_ap_BLINK_STS, const U1 u1_a_CYCTIME,
+static U1 u1_s_AsilChkCrcBlinkCompChk(U1* const u1_ap_BLINK_STS, const U1 u1_a_CYCTIME,
                                         U1* const u1_ap_CYCLECHKCNT, const U4 u4_a_ONCRC, const U4 u4_a_CRCVAL)
 {
     U1    u1_t_comprslt;
