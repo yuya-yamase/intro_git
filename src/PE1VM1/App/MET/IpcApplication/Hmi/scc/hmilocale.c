@@ -1,4 +1,4 @@
-/* 1.4.0 */
+/* 1.6.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HMILOCALE_C_MAJOR                         (1)
-#define HMILOCALE_C_MINOR                         (5)
+#define HMILOCALE_C_MINOR                         (6)
 #define HMILOCALE_C_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -26,7 +26,7 @@
 #if ((HMILOCALE_C_MAJOR != HMILOCALE_H_MAJOR) || \
      (HMILOCALE_C_MINOR != HMILOCALE_H_MINOR) || \
      (HMILOCALE_C_PATCH != HMILOCALE_H_PATCH))
-#error "hmiodo.c and hmiodo.h : source and header files are inconsistent!"
+#error "hmilocale.c and hmilocale.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -45,7 +45,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static ST_HMILOCALE st_s_hmilocale_put;
+static U1 u1_s_hmilocale_unit_eleco;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -64,11 +64,7 @@ static ST_HMILOCALE st_s_hmilocale_put;
 /*===================================================================================================================================*/
 void    vd_g_HmiLocaleInit(void)
 {
-    st_s_hmilocale_put.u1_unit_dist   = (U1)U1_MAX;
-    st_s_hmilocale_put.u1_unit_speed  = (U1)U1_MAX;
-    st_s_hmilocale_put.u1_unit_eleco  = (U1)U1_MAX;
-    st_s_hmilocale_put.u1_unit_ambtmp = (U1)U1_MAX;
-    st_s_hmilocale_put.u1_timeformat  = (U1)U1_MAX;
+    u1_s_hmilocale_unit_eleco = (U1)U1_MAX;
 }
 
 /*===================================================================================================================================*/
@@ -79,14 +75,7 @@ void    vd_g_HmiLocaleInit(void)
 /*===================================================================================================================================*/
 void    vd_g_HmiLocaleMainTask(void)
 {
-    /* if (st_s_hmilocale_put.u1_unit_dist <= (U1)HMILOCALE_DIST){ */
-    /*    vd_g_UnitPut((U1)UNIT_IDX_DIST , st_s_hmilocale_put.u1_unit_dist); */
-    /* } */
-    /* if (st_s_hmilocale_put.u1_unit_speed <= (U1)HMILOCALE_SPEED){ */
-    /*    vd_g_UnitPut((U1)UNIT_IDX_SPEED ,st_s_hmilocale_put.u1_unit_speed ); */
-    /* } */
-
-    switch(st_s_hmilocale_put.u1_unit_eleco){
+    switch(u1_s_hmilocale_unit_eleco){
         case (U1)HMILOCALE_ELECO_KMPKWH:
             vd_g_UnitPut((U1)UNIT_IDX_DIST , (U1)UNIT_VAL_DIST_KM);
             vd_g_UnitPut((U1)UNIT_IDX_SPEED ,(U1)UNIT_VAL_SPEED_KMPH);
@@ -106,30 +95,17 @@ void    vd_g_HmiLocaleMainTask(void)
                 /* Do nothing */
             break;
     }
-
-    if (st_s_hmilocale_put.u1_unit_ambtmp <= (U1)HMILOCALE_AMBTMP){
-        vd_g_UnitPut((U1)UNIT_IDX_AMBTMP, st_s_hmilocale_put.u1_unit_ambtmp);
-    }
-    if (st_s_hmilocale_put.u1_timeformat <= (U1)HMILOCALE_TIMEFORMAT){
-        vd_g_TimeFormat12H24HPut(st_s_hmilocale_put.u1_timeformat);
-    }
 }
 
 /*===================================================================================================================================*/
-/*  void    vd_g_HmiLocalePut(const ST_HMILOCALE * stp_a_HMILOCALE)                                                                  */
+/*  void    vd_g_HmiLocalePut(const U1 u1_a_HMILOCALE_UNIT_ELECO)                                                                    */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_HmiLocalePut(const ST_HMILOCALE * stp_a_HMILOCALE)
+void    vd_g_HmiLocalePut(const U1 u1_a_HMILOCALE_UNIT_ELECO)
 {
-    if(stp_a_HMILOCALE != vdp_PTR_NA){
-        st_s_hmilocale_put.u1_unit_dist   = stp_a_HMILOCALE->u1_unit_dist   ;
-        st_s_hmilocale_put.u1_unit_speed  = stp_a_HMILOCALE->u1_unit_speed  ;
-        st_s_hmilocale_put.u1_unit_eleco  = stp_a_HMILOCALE->u1_unit_eleco  ;
-        st_s_hmilocale_put.u1_unit_ambtmp = stp_a_HMILOCALE->u1_unit_ambtmp ;
-        st_s_hmilocale_put.u1_timeformat  = stp_a_HMILOCALE->u1_timeformat  ;
-    }
+    u1_s_hmilocale_unit_eleco  = u1_a_HMILOCALE_UNIT_ELECO;
 }
 
 /*===================================================================================================================================*/
@@ -146,11 +122,13 @@ void    vd_g_HmiLocalePut(const ST_HMILOCALE * stp_a_HMILOCALE)
 /*  1.3.0    07/07/2025  MN       Change for BEV PreCV.(Delete timeformat)                                                           */
 /*  1.4.0    02/09/2026  SN       Change for BEV FF2.(For BEV3CDCMET-2560, remove handling for st_t_hmilocale.u1_unit_fueco)         */
 /*  1.5.0    01/30/2026  YN       Change for BEV FF2.(MET-M_DESTVARI-CSTD-0-01)                                                      */
+/*  1.6.0    04/06/2026  TB       Change for BEV FF2.(For BEV3CDCMET-4666, remove switching information for time and unit)           */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * RS   = Ryuki Sako, Denso Techno                                                                                                */
 /*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*  * SN   = Shizuka Nakajima, KSE                                                                                                   */
 /*  * YN   = Yujiro Nagaya, Denso Techno                                                                                             */
+/*  * TB   = Trisha Bernardo, DTPH                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

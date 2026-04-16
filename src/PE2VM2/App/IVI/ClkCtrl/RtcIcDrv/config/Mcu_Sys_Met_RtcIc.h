@@ -26,6 +26,7 @@
 
 #define MCU_SYS_MET_RTCIC_SETREG_CLK_NUM                    (4U)
 #define MCU_SYS_MET_RTCIC_SETREG_DAYSET_NUM                 (1U)
+#define MCU_SYS_MET_RTCIC_SETREG_VLF_NUM                    (1U)
 
 #define MCU_SYS_MET_RTCIC_READREG_VLF_NUM                   (2U)
 #define MCU_SYS_MET_RTCIC_READREG_CLK_NUM                   (2U)
@@ -72,6 +73,7 @@ extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_MET_RTCIC_READREG_CLK[];
 extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_MET_RTCIC_READREG_CONT[];
 extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_MET_RTCIC_READREG_BACKUP[];
 extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_MET_RTCIC_READREG_RAM[];
+extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_MET_RTCIC_SETREG_VLF[];
 
 #endif      /* MCU_SYS_MET_CRTIC_H */
 /*===================================================================================================================================*/

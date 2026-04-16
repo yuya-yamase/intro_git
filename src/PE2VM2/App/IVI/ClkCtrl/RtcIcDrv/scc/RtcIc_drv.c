@@ -68,17 +68,26 @@
 #define RTCIC_DRV_COMNO_CONTREG_READ             (5U)                           /* 制御レジスタ読み出し                              */
 #define RTCIC_DRV_COMNO_BACKUP_READ              (6U)                           /* バックアップ設定読み出し                          */
 #define RTCIC_DRV_COMNO_RAM_READ                 (7U)                           /* RAM領域読み出し                                   */
+#define RTCIC_DRV_COMNO_VFLBIT_SET               (8U)                           /* VLF bit クリア                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define RTCIC_DRV_SUBPHASE_WRITE                 (0U)
-#define RTCIC_DRV_SUBPHASE_READ                  (1U)
-#define RTCIC_DRV_SUBPHASE_CLK                   (1U)
-#define RTCIC_DRV_SUBPHASE_CONTREG               (2U)
-#define RTCIC_DRV_SUBPHASE_BACKUP                (3U)
-#define RTCIC_DRV_SUBPHASE_RAM                   (4U)
-#define RTCIC_DRV_SUBPHASE_END                   (0xFFU)
+#define RTCIC_DRV_SUBPHASE_GRPCLK                (0x10U)
+#define RTCIC_DRV_SUBPHASE_CLKWRITE              (0x10U)
+#define RTCIC_DRV_SUBPHASE_CLK                   (0x11U)
+#define RTCIC_DRV_SUBPHASE_CONTREG               (0x12U)
+#define RTCIC_DRV_SUBPHASE_BACKUP                (0x13U)
+#define RTCIC_DRV_SUBPHASE_RAM                   (0x14U)
+#define RTCIC_DRV_SUBPHASE_VLFCLS                (0x15U)
 
-#define RTCIC_DRV_SUBPHASE_READ_FIRST            (0U)
-#define RTCIC_DRV_SUBPHASE_READ_SECOND           (1U)
+#define RTCIC_DRV_SUBPHASE_GRPDAY                (0x20U)
+#define RTCIC_DRV_SUBPHASE_DAYWRITE              (0x20U)
+#define RTCIC_DRV_SUBPHASE_READ                  (0x21U)
+
+#define RTCIC_DRV_SUBPHASE_GRPREAD               (0x30U)
+#define RTCIC_DRV_SUBPHASE_READ_FIRST            (0x30U)
+#define RTCIC_DRV_SUBPHASE_READ_SECOND           (0x31U)
+
+#define RTCIC_DRV_SUBPHASE_END                   (0xFFU)
+#define RTCIC_DRV_SUBPHASE_GRPMASK               (0xF0U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define RTCIC_DRV_TIME_NOREAD                    (0U)
 #define RTCIC_DRV_TIME_READ                      (1U)
@@ -97,11 +106,11 @@
 #define MCU_SYS_COUNTTIME_FIN                    (0xFFFFFFFFU)
 #define MCU_WRINUM_RTCIC_TIME_SET                (1U)
 #define MCU_WRINUM_RTCIC_DAY_SET                 (1U)
+#define MCU_WRINUM_RTCIC_VLF_SET                 (1U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define RTCIC_DRV_BASE_CYCLE                     (10U)
 #define RTCIC_DRV_INITIALWAIT_TIME               (3500U/RTCIC_DRV_BASE_CYCLE)
 #define RTCIC_DRV_READCYCLE_TIME                 (500U/RTCIC_DRV_BASE_CYCLE)
-#define RTCIC_DRV_VLFREADWAIT_TIME               (500U/RTCIC_DRV_BASE_CYCLE)
 #define RTCIC_DRV_IC2ERROR_TIME                  (2000U/RTCIC_DRV_BASE_CYCLE)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -118,8 +127,8 @@ static U4      u4_s_rtcic_drv_daycnt               __attribute__((section(".bss_
 static U1      u1_s_rtcic_drv_state                __attribute__((section(".bss_BACK")));
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U4      u4_s_rtcic_drv_initial_wait;
-static U4      u4_s_rtcic_drv_cycle_time;
+static U2      u2_s_rtcic_drv_initial_wait;
+static U1      u1_s_rtcic_drv_cycle_time;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U1      u1_s_rtcic_drv_rt_set_req;
 static U1      u1_s_rtcic_drv_rt_set_req_day;
@@ -169,6 +178,10 @@ static const ST_REG_WRI_REQ RTCIC_DAY_SET[MCU_WRINUM_RTCIC_DAY_SET] = {
     /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
     {        (U2)0U,         (U2)1U,         (U2)0U}
 };
+static const ST_REG_WRI_REQ RTCIC_VLF_SET[MCU_WRINUM_RTCIC_VLF_SET] = {
+    /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
+    {        (U2)0U,         (U2)1U,         (U2)0U}
+};
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
@@ -186,8 +199,8 @@ void    vd_g_RtcIcBonInit(void)
                                          RTCIC_DRV_DAT_SEC_REGISTA);
     u4_s_rtcic_drv_daycnt         = (U4)RTCIC_OFFSET_2000DAYCUNT;
 
-    u4_s_rtcic_drv_initial_wait   = (U4)0U;
-    u4_s_rtcic_drv_cycle_time     = (U4)0U;
+    u2_s_rtcic_drv_initial_wait   = (U2)0U;
+    u1_s_rtcic_drv_cycle_time     = (U1)0U;
 
     u1_s_rtcic_drv_i2c_comstate   = (U1)RTCIC_I2C_STATE_STOP;
     u1_s_rtcic_drv_i2c_type       = (U1)RTCIC_DRV_COMNO_NON;
@@ -217,8 +230,8 @@ void    vd_g_RtcIcBonInit(void)
 /*===================================================================================================================================*/
 void    vd_g_RtcIcRstwkInit(void)
 {
-    u4_s_rtcic_drv_initial_wait   = (U4)0U;
-    u4_s_rtcic_drv_cycle_time     = (U4)0U;
+    u2_s_rtcic_drv_initial_wait   = (U2)0U;
+    u1_s_rtcic_drv_cycle_time     = (U1)0U;
 
     u1_s_rtcic_drv_i2c_comstate   = (U1)RTCIC_I2C_STATE_STOP;
     u1_s_rtcic_drv_i2c_type       = (U1)RTCIC_DRV_COMNO_NON;
@@ -255,6 +268,7 @@ void    vd_g_RtcIc_MainTask(void)
 {
     U1                 u1_t_initwait;
     U1                 u1_t_state;
+    U1                 u1_t_grp;
 
     u1_t_state = (U1)0U;
 
@@ -274,7 +288,7 @@ void    vd_g_RtcIc_MainTask(void)
                 if (u1_t_state != (U1)RTCIC_DRV_STATE_EXECUTION) {
                     if (u1_t_state != (U1)RTCIC_DRV_STATE_NORMAL) {
                         u1_s_rtcic_drv_proc_phase   = (U1)RTCIC_DRV_PHASE_INITWAIT;
-                        u4_s_rtcic_drv_initial_wait = (U4)RTCIC_DRV_INITIALWAIT_TIME;
+                        u2_s_rtcic_drv_initial_wait = (U2)RTCIC_DRV_INITIALWAIT_TIME;
                         u1_s_rtcic_drv_rt_set_req   = (U1)RTCIC_DRV_INITIAL_REQ_ON;
                     }
                     else {
@@ -295,7 +309,7 @@ void    vd_g_RtcIc_MainTask(void)
                 u1_t_state = u1_s_RtcIc_RtclkStart();
                 if (u1_t_state == (U1)RTCIC_DRV_STATE_NORMAL) {
                     u1_s_rtcic_drv_proc_phase = (U1)RTCIC_DRV_PHASE_RTCLK_READWAIT;
-                    u4_s_rtcic_drv_cycle_time = (U4)RTCIC_DRV_READCYCLE_TIME;
+                    u1_s_rtcic_drv_cycle_time = (U1)RTCIC_DRV_READCYCLE_TIME;
                 }
                 else if (u1_t_state == (U1)RTCIC_DRV_STATE_ABNORMAL) {
                     u1_s_rtcic_drv_proc_phase = (U1)RTCIC_DRV_PHASE_VLFBIT_CHECK;
@@ -322,7 +336,7 @@ void    vd_g_RtcIc_MainTask(void)
                 u1_t_state = u1_s_RtcIc_RtclkRead();
                 if (u1_t_state == (U1)RTCIC_DRV_STATE_NORMAL) {
                     u1_s_rtcic_drv_proc_phase = (U1)RTCIC_DRV_PHASE_RTCLK_READWAIT;
-                    u4_s_rtcic_drv_cycle_time = (U4)RTCIC_DRV_READCYCLE_TIME;
+                    u1_s_rtcic_drv_cycle_time = (U1)RTCIC_DRV_READCYCLE_TIME;
                 }
                 break;
 
@@ -340,6 +354,19 @@ void    vd_g_RtcIc_MainTask(void)
                 break;
 
             default:
+                if (u1_s_rtcic_drv_i2c_type == (U1)RTCIC_DRV_COMNO_NON) {
+                    u1_s_rtcic_drv_proc_phase = (U1)RTCIC_DRV_PHASE_VLFBIT_CHECK;
+                    u1_t_grp = u1_s_rtcic_drv_proc_subphase & (U1)RTCIC_DRV_SUBPHASE_GRPMASK;
+                    if (u1_t_grp == (U1)RTCIC_DRV_SUBPHASE_GRPCLK) {
+                        u1_s_rtcic_drv_rt_set_req = (U1)RTCIC_DRV_INITIAL_REQ_ON;
+                    }
+                    else if (u1_t_grp == (U1)RTCIC_DRV_SUBPHASE_GRPDAY) {
+                        u1_s_rtcic_drv_rt_set_req = (U1)RTCIC_DRV_DAYSET_REQ_ON;
+                    }
+                    else {
+                        /* do nothing */
+                    }
+                }
                 break;
         }
     }
@@ -409,9 +436,17 @@ static void    vd_s_RtcIc_I2cComControl(void)
                                                 &Mcu_RegSet_BetWaitTime_Stub, (U1)MCU_I2C_WAIT_NON);
             break;
 
+        case RTCIC_DRV_COMNO_VFLBIT_SET:
+        /* レジスタ書込み処理 */
+            mcu_sts = Mcu_Dev_I2c_Ctrl_RegSet((uint8)MCU_I2C_ACK_RTC, &Mcu_RegStep_RtcIc, (uint16)MCU_WRINUM_RTCIC_VLF_SET,
+                                              (uint8)GP_I2C_MA_SLA_5_RTC, RTCIC_VLF_SET, &Mcu_OnStep_RtcIc_AckTime,
+                                              st_sp_MCU_SYS_MET_RTCIC_SETREG_VLF, &Mcu_RegSet_BetWaitTime_Stub);
+            break;
+
         case RTCIC_DRV_COMNO_NON:
         default:
-            u1_s_rtcic_drv_i2c_type = (U1)RTCIC_DRV_COMNO_NON;
+            u1_s_rtcic_drv_i2c_type     = (U1)RTCIC_DRV_COMNO_NON;
+            u1_s_rtcic_drv_i2c_comstate = (U1)RTCIC_I2C_STATE_STOP;
             break;
     }
     if (u1_s_rtcic_drv_i2c_type != (U1)RTCIC_DRV_COMNO_NON) {
@@ -463,8 +498,12 @@ static U1      u1_s_RtcIc_InitialWait(void)
 
     u1_t_stsbit = (U1)RTCIC_DRV_TIMEOUT;
 
-    if (u4_s_rtcic_drv_initial_wait != (U4)0) {
-        u4_s_rtcic_drv_initial_wait --;
+    if (u2_s_rtcic_drv_initial_wait > (U2)RTCIC_DRV_INITIALWAIT_TIME) {
+        u2_s_rtcic_drv_initial_wait = (U2)RTCIC_DRV_INITIALWAIT_TIME;
+    }
+
+    if (u2_s_rtcic_drv_initial_wait != (U2)0) {
+        u2_s_rtcic_drv_initial_wait --;
         u1_t_stsbit = (U1)RTCIC_DRV_TIMEWAIT;
     }
 
@@ -544,13 +583,13 @@ static U1      u1_s_RtcIc_RtclkStart(void)
             Mcu_Sys_Met_RtcIc_Clk_Init(u4_s_rtcic_drv_real_time, u4_s_rtcic_drv_daycnt);
             u1_s_rtcic_drv_i2c_type       = (U1)RTCIC_DRV_COMNO_CLK_SET;
             u1_s_rtcic_drv_rt_set_req     = (U1)RTCIC_DRV_INITIAL_REQ_OFF;
-            u1_s_rtcic_drv_proc_subphase  = (U1)RTCIC_DRV_SUBPHASE_WRITE;
+            u1_s_rtcic_drv_proc_subphase  = (U1)RTCIC_DRV_SUBPHASE_CLKWRITE;
             u1_s_rtcic_drv_rt_set_req_exc = u1_s_rtcic_drv_rt_set_req_day;
             u1_s_rtcic_drv_rt_set_req_day = (U1)RTCIC_DRV_INITIAL_REQ_OFF;
             break;
 
         case RTCIC_I2C_STATE_NORMAL:
-            if (u1_s_rtcic_drv_proc_subphase == (U1)RTCIC_DRV_SUBPHASE_WRITE) {
+            if (u1_s_rtcic_drv_proc_subphase == (U1)RTCIC_DRV_SUBPHASE_CLKWRITE) {
                 Mcu_Sys_Met_RtcIc_Clk_Rd_Init();
                 u1_s_rtcic_drv_i2c_type      = (U1)RTCIC_DRV_COMNO_CLK_READ;
                 u1_s_rtcic_drv_proc_subphase = (U1)RTCIC_DRV_SUBPHASE_CLK;
@@ -587,15 +626,21 @@ static U1      u1_s_RtcIc_RtclkStart(void)
                         break;
 
                     case RTCIC_DRV_SUBPHASE_RAM:
-                    default:
                         u1_t_cmp = Mcu_Sys_Met_RtcIc_Ram_Rd_Cmp();
                         if (u1_t_cmp == (U1)TRUE) {
-                            u1_s_rtcic_drv_state          = (U1)RTCIC_DEV_IC_NORMAL;
-                            u1_t_stsbit                   = (U1)RTCIC_DRV_STATE_NORMAL;
-                            u1_s_rtcic_drv_time_read      = (U1)RTCIC_DRV_TIME_READ;
-                            u1_s_rtcic_drv_proc_subphase  = (U1)RTCIC_DRV_SUBPHASE_END;
-                            u1_s_rtcic_drv_rt_set_req_exc = (U1)RTCIC_DRV_INITIAL_REQ_OFF;
+                            u1_s_rtcic_drv_i2c_type      = (U1)RTCIC_DRV_COMNO_VFLBIT_SET;
+                            u1_s_rtcic_drv_proc_subphase = (U1)RTCIC_DRV_SUBPHASE_VLFCLS;
                         }
+                        break;
+                    case RTCIC_DRV_SUBPHASE_VLFCLS:
+                        u1_s_rtcic_drv_state             = (U1)RTCIC_DEV_IC_NORMAL;
+                        u1_t_stsbit                      = (U1)RTCIC_DRV_STATE_NORMAL;
+                        u1_s_rtcic_drv_time_read         = (U1)RTCIC_DRV_TIME_READ;
+                        u1_s_rtcic_drv_proc_subphase     = (U1)RTCIC_DRV_SUBPHASE_END;
+                        u1_s_rtcic_drv_rt_set_req_exc    = (U1)RTCIC_DRV_INITIAL_REQ_OFF;
+                        break;
+                    default:
+                        /* do nothing */
                         break;
                 }
                 if (u1_s_rtcic_drv_proc_subphase == u1_t_phase_bak) {
@@ -633,11 +678,11 @@ static U1      u1_s_RtcIc_RtclkDayset(void)
             Mcu_Sys_Met_RtcIc_Day_Set(u4_s_rtcic_drv_daycnt);
             u1_s_rtcic_drv_i2c_type      = (U1)RTCIC_DRV_COMNO_DAY_SET;
             u1_s_rtcic_drv_rt_set_req    = (U1)RTCIC_DRV_INITIAL_REQ_OFF;
-            u1_s_rtcic_drv_proc_subphase = (U1)RTCIC_DRV_SUBPHASE_WRITE;
+            u1_s_rtcic_drv_proc_subphase = (U1)RTCIC_DRV_SUBPHASE_DAYWRITE;
             break;
 
         case RTCIC_I2C_STATE_NORMAL:
-            if (u1_s_rtcic_drv_proc_subphase == (U1)RTCIC_DRV_SUBPHASE_WRITE) {
+            if (u1_s_rtcic_drv_proc_subphase == (U1)RTCIC_DRV_SUBPHASE_DAYWRITE) {
                 Mcu_Sys_Met_RtcIc_Clk_Rd_Init();
                 u1_s_rtcic_drv_i2c_type      = (U1)RTCIC_DRV_COMNO_CLK_READ;
                 u1_s_rtcic_drv_proc_subphase = (U1)RTCIC_DRV_SUBPHASE_READ;
@@ -645,8 +690,9 @@ static U1      u1_s_RtcIc_RtclkDayset(void)
             else {
                 Mcu_Sys_Met_RtcIc_Clk_Rd_Read(&u4_t_real_time, &u4_t_daycnt);
                 if (u4_s_rtcic_drv_daycnt == u4_t_daycnt) {
-                    u1_s_rtcic_drv_state = (U1)RTCIC_DEV_IC_NORMAL;
-                    u1_t_stsbit          = (U1)RTCIC_DRV_STATE_NORMAL;
+                    u1_s_rtcic_drv_state         = (U1)RTCIC_DEV_IC_NORMAL;
+                    u1_s_rtcic_drv_proc_subphase = (U1)RTCIC_DRV_SUBPHASE_END;
+                    u1_t_stsbit                  = (U1)RTCIC_DRV_STATE_NORMAL;
                 }
                 else {
                     if (u1_s_rtcic_drv_rt_set_req != (U1)RTCIC_DRV_INITIAL_REQ_ON) {
@@ -700,8 +746,9 @@ static U1      u1_s_RtcIc_RtclkRead(void)
                     }
                     u1_s_rtcic_drv_time_read = (U1)RTCIC_DRV_TIME_READ;
                 }
-                u1_s_rtcic_drv_state = (U1)RTCIC_DEV_IC_NORMAL;
-                u1_t_stsbit = (U1)RTCIC_DRV_STATE_NORMAL;
+                u1_s_rtcic_drv_state         = (U1)RTCIC_DEV_IC_NORMAL;
+                u1_s_rtcic_drv_proc_subphase = (U1)RTCIC_DRV_SUBPHASE_END;
+                u1_t_stsbit                  = (U1)RTCIC_DRV_STATE_NORMAL;
             }
             else {
                 u4_s_rtcic_drv_real_time_bfr = u4_t_real_time;
@@ -731,8 +778,12 @@ static U1      u1_s_RtcIc_RtclkReadWait(void)
 
     u1_t_stsbit = (U1)RTCIC_DRV_TIMEOUT;
 
-    if (u4_s_rtcic_drv_cycle_time != (U4)0U) {
-        u4_s_rtcic_drv_cycle_time--;
+    if (u1_s_rtcic_drv_cycle_time > (U1)RTCIC_DRV_READCYCLE_TIME) {
+        u1_s_rtcic_drv_cycle_time = (U1)RTCIC_DRV_READCYCLE_TIME;
+    }
+
+    if (u1_s_rtcic_drv_cycle_time != (U1)0U) {
+        u1_s_rtcic_drv_cycle_time--;
         u1_t_stsbit = (U1)RTCIC_DRV_TIMEWAIT;
     }
 
@@ -810,13 +861,15 @@ U1      u1_g_RtcIc_RtclkStaProv(void)
             u1_t_stsbit = (U1)RTCLK_STSBIT_I2C_ERROR;
             break;
         case RTCIC_DEV_IC_NORMAL:
-        default:
             if (u1_s_rtcic_drv_time_read == (U1)RTCIC_DRV_TIME_READ) {
                 u1_t_stsbit = (U1)RTCLK_STSBIT_RTC_RUN;
             }
             else {
                 u1_t_stsbit = (U1)RTCLK_STSBIT_TIM_NOREAD;
             }
+            break;
+        default:
+            u1_t_stsbit = (U1)RTCLK_STSBIT_I2C_ERROR;
             break;
     }
 

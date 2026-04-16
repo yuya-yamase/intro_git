@@ -1,4 +1,4 @@
-/* 0.0.1 */
+/* 0.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,8 +13,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define DATESI_TIM_CFG_H_MAJOR                  (0)
-#define DATESI_TIM_CFG_H_MINOR                  (0)
-#define DATESI_TIM_CFG_H_PATCH                  (1)
+#define DATESI_TIM_CFG_H_MINOR                  (1)
+#define DATESI_TIM_CFG_H_PATCH                  (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -101,6 +101,7 @@ void            vd_g_DateSITimAvnBonInit(void);
 void            vd_g_DateSITimAvnWkupInit(void);
 U1              u1_g_DateSITimMainAvnTask(U4 * u4p_a_offstd_now);
 S4              s4_g_DateSITimTotalOffset(void);
+U1              u1_g_DateSITimClkRangeCheck(const ST_DATESI_TIM_RX st_a_TIM_RX);
 void            vd_g_DateSITimExecTmSet(void);
 void            vd_g_DateSITimAvnCanRxHk(void);
 U1              u1_g_DateSITimDiagEvCapt(const U1 u1_a_ODO_UPDT, U4 * const u4_ap_ss);
@@ -108,6 +109,7 @@ void            vd_g_DateSITimSetAdjStart(void);
 void            vd_g_DateSITimSetAdjEnd(void);
 void            vd_g_DateSITimAdjustClk(const U1 u1_a_UPDTRNK, const U1 u1_a_VAL, const U1 u1_a_SIGN);
 void            vd_g_DateSITimClockUpdate(void);
+U4              u4_g_DateSITimMakeHHMMSS(const U1 u1_a_HOUR, const U1 u1_a_MIN, const U1 u1_a_SEC);
 U4              u4_g_DateSITimGetAdjSetClk(void);
 
 void            vd_g_DateSITimCfgBonInit(void);

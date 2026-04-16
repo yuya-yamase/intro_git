@@ -1,4 +1,4 @@
-/* 5.4.0 */
+/* 5.5.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -287,6 +287,7 @@
 #define ALERT_REQ_C_ABS_TT_FLASH_4HZ             (0U)
 #define ALERT_REQ_C_ABS_TT_ON                    (1U)
 #define ALERT_REQ_C_ABS_TT_FLASH_1HZ             (2U)
+#define ALERT_REQ_C_ABS_TT_ASIL_ON               (3U)
 #define ALERT_REQ_C_ABS_PD_MALFUNC               (0U)
 #define ALERT_REQ_C_BRKHLD_STBY_ON               (0U)
 #define ALERT_REQ_C_BRKHLD_HLD_ON                (0U)
@@ -359,14 +360,13 @@
 #define ALERT_REQ_C_STEER_PD_NONSYNC_MOD         (18U)
 #define ALERT_REQ_C_STEER_PD_SELF_CALIB          (19U)
 #define ALERT_REQ_C_STEER_PD_RDY_DRIVE           (20U)
-#define ALERT_REQ_C_STEER_PD_SPDLIMIT            (21U)
-#define ALERT_REQ_C_STEER_PD_FURLMTSPD           (22U)
-#define ALERT_REQ_C_STEER_PD_CMAXSPDLMT          (23U)
-#define ALERT_REQ_C_STEER_PD_CMAXSPDFLMT         (24U)
-#define ALERT_REQ_C_STEER_PD_MAXLMTSOON          (25U)
-#define ALERT_REQ_C_STEER_PD_MAXFURLMT           (26U)
-#define ALERT_REQ_C_STEER_PD_STOPVEH             (27U)
-#define ALERT_REQ_C_STEER_PD_VEHUNAVAIL          (28U)
+#define ALERT_REQ_C_STEER_PD_FURLMTSPD           (21U)
+#define ALERT_REQ_C_STEER_PD_CMAXSPDLMT          (22U)
+#define ALERT_REQ_C_STEER_PD_CMAXSPDFLMT         (23U)
+#define ALERT_REQ_C_STEER_PD_MAXLMTSOON          (24U)
+#define ALERT_REQ_C_STEER_PD_MAXFURLMT           (25U)
+#define ALERT_REQ_C_STEER_PD_STOPVEH             (26U)
+#define ALERT_REQ_C_STEER_PD_VEHUNAVAIL          (27U)
 #define ALERT_REQ_H_ACCHOL_MALFUNC               (0U)
 #define ALERT_REQ_H_ACCHOL_HVSYSOVHT             (1U)
 #define ALERT_REQ_H_ACCHOL_EVSYSOVHT             (2U)
