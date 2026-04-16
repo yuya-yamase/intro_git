@@ -59,6 +59,7 @@
 #include "xspi_met.h"
 #include "datesi_met.h"
 #include "omavrchk.h"
+#include "asilchk.h"
 
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
@@ -113,6 +114,7 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_HudImgAdjInit,
         &vd_g_DateSIMETInit,
         &vd_g_CanTxAppInit,
+        &vd_g_AsilChkBonRstWkInit,
         &vd_g_FwushInit
     };
 
@@ -178,6 +180,7 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_HudImgAdjInit,
         &vd_g_DateSIMETInit,
         &vd_g_CanTxAppInit,
+        &vd_g_AsilChkBonRstWkInit,
         &vd_g_FwushInit
     };
 
@@ -243,6 +246,7 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_HudImgAdjInit,
         &vd_g_DateSIMETInit,
         &vd_g_CanTxAppInit,
+        &vd_g_AsilChkBonRstWkInit,
         &vd_g_FwushInit
     };
 

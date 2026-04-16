@@ -1,61 +1,84 @@
-/* 1.11.0 */
+/* 1.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Hmitt                                                                                                                            */
+/*  ASIL Telltale Drawing Monitoring Check                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
-#ifndef HMITT_IF_CFG_H
-#define HMITT_IF_CFG_H
+#ifndef ASILCHK_CFG_H
+#define ASILCHK_CFG_H
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define HMITT_IF_CFG_H_MAJOR                  (1)
-#define HMITT_IF_CFG_H_MINOR                  (11)
-#define HMITT_IF_CFG_H_PATCH                  (0)
+#define ASILCHK_CFG_H_MAJOR                     (1)
+#define ASILCHK_CFG_H_MINOR                     (0)
+#define ASILCHK_CFG_H_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "aip_common.h"
 
-#include "hmitt.h"
+#include "asilchk.h"
 
-#include "alert.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define ASILCHK_TASK_TIM             (10U)
+
+/* Request status of Telltale */
+#define ASILCHK_REQ_OFF              (0U)
+#define ASILCHK_REQ_ASIL_LIGHT       (1U)
+#define ASILCHK_REQ_ASIL_BLINK       (2U)
+
+/* PowerOn mask */
+#define ASILCHK_MASK_TIM             (24000U / ASILCHK_TASK_TIM)                        /* waiting time of PowerOn mask */
+
+/* Alive Counter */
+#define ASILCHK_ALIVECNT_NGJDGTIM    (3350U / ASILCHK_TASK_TIM)                         /* Alive Counter NG judge timer */
+#define ASILCHK_ALIVECNT_TIM_EXPIRED (0U)                                               /* Alive Counter NG judge timer expired */
+
+/* CRC Compare */
+#define ASILCHK_CRCCOMP_NGJDGTIM     (3350U / ASILCHK_TASK_TIM)                         /* CRC compare NG judge timer */
+#define ASILCHK_CRCCOMP_TIM_EXPIRED  (0U)                                               /* CRC compare NG judge timer expired */
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define HMITTCFG_IF_ASIL_NUM  (31U)
-#define HMITTCFG_IF_NUM       (13U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+typedef struct {
+    U1    (* const fp_u1_req)(void);
+    U1    (* const fp_u1_cyctime)(void);
+    U4    (* const fp_u4_oncrc)(void);
+} ST_ASILCHK_TTCRC;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-U2 u2_g_HmittSizeAsilReqbit(void);
-U2 u2_g_HmittSizeReqbit(void);
+void  vd_g_AsilChkCfgInit(void);
+
+U1    u1_g_AsilChkCfgGetPowSts(void);
+void  vd_g_AsilChkCfgGetTtSts(void);
+
+void  vd_g_AsilChkCfgCrcFailAct(void);
+void  vd_g_AsilChkCfgAliveCntFailAct(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-extern  const ST_ALERT_REQBIT        st_gp_HMITTASILREQBIT[HMITTCFG_IF_ASIL_NUM];
-extern  const ST_ALERT_REQBIT        st_gp_HMITTREQBIT[HMITTCFG_IF_NUM];
+extern const ST_ASILCHK_TTCRC  st_gp_ASILCHK_TT_TABLE[ASILCHK_TT_NUM];
 
-#endif      /* HMITT_IF_CFG_H */
+#endif      /* ASILCHK_CFG_H */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  hmitt_if_cfg.c                                                                                                */
+/*  Change History  :  asilchke.c                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

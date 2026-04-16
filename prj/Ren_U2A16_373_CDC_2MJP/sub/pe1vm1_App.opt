@@ -54,6 +54,7 @@
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Vehspd/scc
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Vptran/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Vptran/scc
+    -I../../src/PE1VM1/App/MET/IpcApplication/Vsv/AsilChk/scc
     -I../../src/PE1VM1/App/MET/IpcApplication/Vsv/Gauge/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Vsv/Gauge/scc
     -I../../src/PE1VM1/App/MET/IpcApplication/Vsv/Illumi/config

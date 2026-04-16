@@ -287,6 +287,7 @@
 #define ALERT_REQ_C_ABS_TT_FLASH_4HZ             (0U)
 #define ALERT_REQ_C_ABS_TT_ON                    (1U)
 #define ALERT_REQ_C_ABS_TT_FLASH_1HZ             (2U)
+#define ALERT_REQ_C_ABS_TT_ASIL_ON               (3U)
 #define ALERT_REQ_C_ABS_PD_MALFUNC               (0U)
 #define ALERT_REQ_C_BRKHLD_STBY_ON               (0U)
 #define ALERT_REQ_C_BRKHLD_HLD_ON                (0U)
