@@ -107,21 +107,21 @@ const ST_TYDC_NVM_DID    st_gp_TYDC_NVM_DID[] = {
         &st_sp_TYDC_NVM_IF[TYDC_NVM_IF_2E_N32],       /* stp_IF    */
 
         (U2)U2_MAX,                     /* u2_nid    */    /* BEV Diag provisionally */
-        (U2)OXDC_DATA_WRI_REQ_NB_2002                 /* u2_nbyte  */
+        (U2)U2_MAX                 /* u2_nbyte  */    /* BEV Diag provisionally */
     },
     /* TYDC_NVM_2E_2003 (1U) */
     {
         &st_sp_TYDC_NVM_IF[TYDC_NVM_IF_2E_B32],       /* stp_IF    */
 
         (U2)U2_MAX,                     /* u2_nid    */    /* BEV Diag provisionally */
-        (U2)OXDC_DATA_WRI_REQ_NB_2003                 /* u2_nbyte  */
+        (U2)U2_MAX                 /* u2_nbyte  */    /* BEV Diag provisionally */
     },
     /* TYDC_NVM_2E_2041 (2U) */
     {
         &st_sp_TYDC_NVM_IF[TYDC_NVM_IF_2E_B32],       /* stp_IF    */
 
         (U2)U2_MAX,                     /* u2_nid    */    /* BEV Diag provisionally */
-        (U2)OXDC_DATA_WRI_REQ_NB_2041                 /* u2_nbyte  */
+        (U2)U2_MAX                 /* u2_nbyte  */    /* BEV Diag provisionally */
     },
     /* TYDC_NVM_2E_20C2 (3U) */
     {

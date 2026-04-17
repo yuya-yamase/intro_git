@@ -65,11 +65,11 @@ static U1      u1_s_TyDoCANXidSup_Hud_Pri(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const U1    u1_g_TYDC_SSR_CH_22_10A1 = (U1)OXDC_DID_SSR_CH_10A1;
-const U1    u1_g_TYDC_SSR_CH_22_10A3 = (U1)OXDC_DID_SSR_CH_10A3;
-const U1    u1_g_TYDC_SSR_CH_22_10AB = (U1)OXDC_DID_SSR_CH_10AB;
-const U1    u1_g_TYDC_SSR_CH_22_10AF = (U1)OXDC_DID_SSR_CH_10AF;
-const U1    u1_g_TYDC_SSR_CH_22_11A2 = (U1)OXDC_DID_SSR_CH_11A2;
+const U1    u1_g_TYDC_SSR_CH_22_10A1 = (U1)U1_MAX;    /* BEV Diag provisionally */
+const U1    u1_g_TYDC_SSR_CH_22_10A3 = (U1)U1_MAX;    /* BEV Diag provisionally */
+const U1    u1_g_TYDC_SSR_CH_22_10AB = (U1)U1_MAX;    /* BEV Diag provisionally */
+const U1    u1_g_TYDC_SSR_CH_22_10AF = (U1)U1_MAX;    /* BEV Diag provisionally */
+const U1    u1_g_TYDC_SSR_CH_22_11A2 = (U1)U1_MAX;    /* BEV Diag provisionally */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -87,6 +87,7 @@ const U1    u1_g_TYDC_SSR_CH_22_11A2 = (U1)OXDC_DID_SSR_CH_11A2;
 /*===================================================================================================================================*/
 U1      u1_g_oXDoCANDidSup_OmMI(void)
 {
+#if 0    /* BEV Diag provisionally */
     U1                     u1_t_sup;
     U1                     u1_t_tmnt_sup;
 
@@ -97,6 +98,9 @@ U1      u1_g_oXDoCANDidSup_OmMI(void)
     }
 
     return(u1_t_sup);
+#else    /* BEV Diag provisionally */
+    return((U1)OXDC_XID_SUP_NOT);
+#endif    /* BEV Diag provisionally */
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_TyDoCANOmMI(void)                                                                                                   */

@@ -299,6 +299,7 @@ static U1   u1_s_TyDoCANDippiCfgDelTripcomChk(void)
 /*===================================================================================================================================*/
 static U1   u1_s_TyDoCANDippiCfgDelTriphisChk(void)
 {
+#if 0    /* BEV Diag provisionally */
     U1          u1_t_evt;
     U1          u1_t_rslt;
     U1          u1_t_sucrslt;
@@ -335,6 +336,9 @@ static U1   u1_s_TyDoCANDippiCfgDelTriphisChk(void)
         u1_t_evt = (U1)TYDOCAN_DIPPI_EVT_DELSTS_OTH;
     }
     return(u1_t_evt);
+#else    /* BEV Diag provisionally */
+    return((U1)TYDOCAN_DIPPI_EVT_DELSTS_FAI);
+#endif    /* BEV Diag provisionally */
 }
 /*===================================================================================================================================*/
 /*  static U1   u1_s_TyDoCANDippiCfgDelNicknameChk(void)                                                                             */

@@ -114,14 +114,14 @@ const ST_TYDC_IOC_B32             st_gp_TYDC_IOC_B32[TYDC_IOC_B32_NUM_DID] = {
     /* Not Use st_gp_TYDC_IOC_B32*/
 
     /* Speaker Sound file        */
-    {&st_sp_TYDC_IOC_B32_IF[TYDC_IOC_IF_SPKSF],  (U2)U2_MAX,                (U1)TRUE,   (U1)OXDC_DATA_IOC_REQ_NB_2829},
+    {&st_sp_TYDC_IOC_B32_IF[TYDC_IOC_IF_SPKSF],  (U2)U2_MAX,                (U1)TRUE,   (U1)U1_MAX},    /* BEV Diag provisionally */
 
     /* Multi-Information Display */
-    {&st_sp_TYDC_IOC_B32_IF[TYDC_IOC_IF_MID],    (U2)U2_MAX,                (U1)TRUE,   (U1)OXDC_DATA_IOC_REQ_NB_2831},
+    {&st_sp_TYDC_IOC_B32_IF[TYDC_IOC_IF_MID],    (U2)U2_MAX,                (U1)TRUE,   (U1)U1_MAX},    /* BEV Diag provisionally */
 
-    {&st_sp_TYDC_IOC_B32_IF[TYDC_IOC_IF_VSI],    (U2)U2_MAX,                (U1)TRUE,   (U1)OXDC_DATA_IOC_REQ_NB_2A01},
+    {&st_sp_TYDC_IOC_B32_IF[TYDC_IOC_IF_VSI],    (U2)U2_MAX,                (U1)TRUE,   (U1)U1_MAX},    /* BEV Diag provisionally */
 
-    {&st_sp_TYDC_IOC_B32_IF[TYDC_IOC_IF_HUD],    (U2)U2_MAX,                (U1)TRUE,   (U1)OXDC_DATA_IOC_REQ_NB_2B01}
+    {&st_sp_TYDC_IOC_B32_IF[TYDC_IOC_IF_HUD],    (U2)U2_MAX,                (U1)TRUE,   (U1)U1_MAX}     /* BEV Diag provisionally */
 };
 const U2                          u2_g_TYDC_IOC_B32_NUM_DID = (U2)TYDC_IOC_B32_NUM_DID;
 
