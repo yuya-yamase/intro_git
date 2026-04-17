@@ -42,7 +42,7 @@
 #define RTCIC_YEAR_CENTURY                       (100U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define RTCIC_EXTENSION_REG_MASK                 (0xFFU)
-#define RTCIC_FLAG_REG_MASK                      (0x03U)
+#define RTCIC_FLAG_REG_MASK                      (0x01U)
 #define RTCIC_CONTROL_REG_MASK                   (0xF9U)
 #define RTCIC_BACKUP_FUNC_MASK                   (0x0FU)
 #define RTCIC_RAM_DATANUM                        (6U)
@@ -65,29 +65,29 @@ static U1       u1_s_Mcu_Sys_Met_RtcIc_Memcmp(const U1 *u1_ap_data1, const U1 *u
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const U1 u1_sp_MCU_SYS_MET_RTCIC_SETREG_CLK_PDU1[MCU_SYS_MET_RTCIC_RWC_BYTE5] = {
     (U1)MCU_SYS_MET_RTCIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x0DU,    /* Write Address */
-    (U1)0x08U,    /* Write Data */
-    (U1)0x00U,    /* Write Data */
-    (U1)0x40U     /* Write Data */
+    (U1)0x0DU,                            /* Write Address */
+    (U1)0x08U,                            /* Write Data    */
+    (U1)0x02U,                            /* Write Data    */
+    (U1)0x40U                             /* Write Data    */
 };
 
 U1 u1_sp_MCU_SYS_MET_RTCIC_SETREG_CLK_PDU2[MCU_SYS_MET_RTCIC_RWC_BYTE9];
 
 const U1 u1_sp_MCU_SYS_MET_RTCIC_SETREG_CLK_PDU3[MCU_SYS_MET_RTCIC_RWC_BYTE8] = {
     (U1)MCU_SYS_MET_RTCIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x07U,    /* Write Address */
-    (U1)0x00U,    /* Write Data */
-    (U1)0x00U,    /* Write Data */
-    (U1)0x00U,    /* Write Data */
-    (U1)0x00U,    /* Write Data */
-    (U1)0x00U,    /* Write Data */
-    (U1)0x00U     /* Write Data */
+    (U1)0x07U,                            /* Write Address */
+    (U1)0x00U,                            /* Write Data    */
+    (U1)0x00U,                            /* Write Data    */
+    (U1)0x00U,                            /* Write Data    */
+    (U1)0x00U,                            /* Write Data    */
+    (U1)0x00U,                            /* Write Data    */
+    (U1)0x00U                             /* Write Data    */
 };
 
 const U1 u1_sp_MCU_SYS_MET_RTCIC_SETREG_CLK_PDU4[MCU_SYS_MET_RTCIC_RWC_BYTE3] = {
     (U1)MCU_SYS_MET_RTCIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x18U,    /* Write Address */
-    (U1)0x08U     /* Write Data */
+    (U1)0x18U,                            /* Write Address */
+    (U1)0x08U                             /* Write Data    */
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -132,6 +132,13 @@ const U1 u1_sp_MCU_SYS_MET_RTCIC_READREG_RAM_PDU1[MCU_SYS_MET_RTCIC_RWC_BYTE2] =
 };
 
 U1 u1_sp_MCU_SYS_MET_RTCIC_READREG_RAM_PDU2[MCU_SYS_MET_RTCIC_RWC_BYTE7];
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+const U1 u1_sp_MCU_SYS_MET_RTCIC_SETREG_VLF_PDU1[MCU_SYS_MET_RTCIC_RWC_BYTE6] = {
+    (U1)MCU_SYS_MET_RTCIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x0EU,                            /* Write Address */
+    (U1)0x00U                             /* Write Data    */
+};
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_MET_RTCIC_SETREG_CLK[MCU_SYS_MET_RTCIC_SETREG_CLK_NUM] = {
@@ -212,6 +219,13 @@ const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_MET_RTCIC_READREG_RAM[MCU_SYS_MET_RTCIC_REA
     {
         (U1 *)&u1_sp_MCU_SYS_MET_RTCIC_READREG_RAM_PDU2[0],
         (U4)0x503C0007U
+    }
+};
+
+const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_MET_RTCIC_SETREG_VLF[MCU_SYS_MET_RTCIC_SETREG_VLF_NUM] = {
+    {
+        (U1 *)&u1_sp_MCU_SYS_MET_RTCIC_SETREG_VLF_PDU1[0],
+        (U4)0x50400003U
     }
 };
 
@@ -425,6 +439,7 @@ U1      Mcu_Sys_Met_RtcIc_ContReg_Rd_Cmp(void)
 {
     U1      u1_t_ret;
     U1      u1_t_reg;
+    U1      u1_t_basereg;
 
     u1_t_ret = (U1)TRUE;
 
@@ -436,7 +451,9 @@ U1      Mcu_Sys_Met_RtcIc_ContReg_Rd_Cmp(void)
 
     u1_t_reg  = u1_sp_MCU_SYS_MET_RTCIC_READREG_CONT_PDU2[RTCIC_I2C_READ_DATA1];
     u1_t_reg &= (U1)RTCIC_FLAG_REG_MASK;
-    if (u1_sp_MCU_SYS_MET_RTCIC_SETREG_CLK_PDU1[RTCIC_I2C_WRITE_DATA1] != u1_t_reg) {
+    u1_t_basereg  = u1_sp_MCU_SYS_MET_RTCIC_SETREG_CLK_PDU1[RTCIC_I2C_WRITE_DATA1];
+    u1_t_basereg &= (U1)RTCIC_FLAG_REG_MASK;
+    if (u1_t_basereg != u1_t_reg) {
         u1_t_ret = (U1)FALSE;
     }
 

@@ -1,4 +1,4 @@
-/* 0.0.1 */
+/* 0.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define DATESI_CAL_C_MAJOR                      (0)
-#define DATESI_CAL_C_MINOR                      (0)
-#define DATESI_CAL_C_PATCH                      (1)
+#define DATESI_CAL_C_MINOR                      (1)
+#define DATESI_CAL_C_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -22,6 +22,7 @@
 #include "datesi_com.h"
 #include "rtime.h"
 #include "date_clk.h"
+#include "datesi_abs.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -96,8 +97,6 @@ static  U1                                      u1_s_datesi_cal_init_read_fin;
 static        void    vd_s_DateSICalInit(void);
 static        U1      u1_s_DateSICalInitReadiVDsh(void);
 static        void    vd_s_DateSICalSync(U4 * u4p_a_offstd_now);
-static        U1      u1_s_DateSICalAdjustOwnClk(const U4 u4_a_YYYYMMDD);
-static        U1      u1_s_DateSICalDateSyncChk(const ST_DATESI_CAL_RX st_a_CAL_RX, U4 * u4_ap_yymmdd);
 static        U4      u4_s_DateSICalToUpdtDate(const U4 u4_a_YYMMDD_DISP, const U1 u1_a_KIND);
 static        U4      u4_s_DateSICalAddDay(const U4 u4_a_YYMMDD_RAW, const U4 u4_a_HHMMSS_RAW, const S4 s4_a_SECOND_ADD, const U1 u1_a_KIND);
 static        void    vd_s_DateSICalWriteRtcDate(void);
@@ -244,7 +243,7 @@ static void     vd_s_DateSICalSync(U4 * u4p_a_offstd_now)
     st_t_cal_rx.u1p_date[YYMMDD_DATE_MO] = (U1)U1_MAX;
     st_t_cal_rx.u1p_date[YYMMDD_DATE_YR] = (U1)U1_MAX;
     (void)u1_g_DateSICalCfgCanRx(&st_t_cal_rx);
-    u1_t_calsync_act                     = u1_s_DateSICalDateSyncChk(st_t_cal_rx, &u4_t_yymmdd);
+    u1_t_calsync_act                     = u1_g_DateSICalDateSyncChk(st_t_cal_rx, &u4_t_yymmdd);
 
     if((u1_s_datesi_cal_timsync_act == (U1)TRUE) &&
        (u1_t_calsync_act            == (U1)TRUE)){
@@ -252,12 +251,15 @@ static void     vd_s_DateSICalSync(U4 * u4p_a_offstd_now)
         u4_t_adj = u4_t_yymmdd;
     }
     else{
-        u4_t_now = u4_g_DateclkYymmddwk();
+        u4_t_now = u4_g_DateSIAbsYymmddwk();
         u4_t_adj = (U4)YYMMDDWK_UNKNWN;
     }
 
     if(u4_t_adj != (U4)YYMMDDWK_UNKNWN){
-        u1_t_result = u1_s_DateSICalAdjustOwnClk(u4_t_adj);
+        u1_t_result = u1_g_DateSICalAdjustOwnClk(u4_t_adj);
+        if(u1_t_result == (U1)TRUE){
+            vd_g_DateSIAbsAdjYymmddwk(u4_t_now, u4_t_adj);
+        }
     }
     vd_g_DateSIComSetCmp(u1_t_result,(U1)DATESI_COM_KIND_CAL);
 
@@ -269,12 +271,12 @@ static void     vd_s_DateSICalSync(U4 * u4p_a_offstd_now)
 }
 
 /*===================================================================================================================================*/
-/* static U1     u1_s_DateSICalAdjustOwnClk(const U4 u4_a_YYYYMMDD)                                                                  */
+/* U1              u1_g_DateSICalAdjustOwnClk(const U4 u4_a_YYYYMMDD)                                                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static U1       u1_s_DateSICalAdjustOwnClk(const U4 u4_a_YYYYMMDD)
+U1              u1_g_DateSICalAdjustOwnClk(const U4 u4_a_YYYYMMDD)
 {
     U1  u1_t_ret;
     
@@ -287,12 +289,12 @@ static U1       u1_s_DateSICalAdjustOwnClk(const U4 u4_a_YYYYMMDD)
 }
 
 /*===================================================================================================================================*/
-/* static  U1      u1_s_DateSICalDateSyncChk(const ST_DATESI_CAL_RX st_a_CAL_RX, U4 * u4_ap_yymmdd)                                  */
+/* U1              u1_g_DateSICalDateSyncChk(const ST_DATESI_CAL_RX st_a_CAL_RX, U4 * u4_ap_yymmdd)                                  */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static U1       u1_s_DateSICalDateSyncChk(const ST_DATESI_CAL_RX st_a_CAL_RX, U4 * u4_ap_yymmdd)
+U1              u1_g_DateSICalDateSyncChk(const ST_DATESI_CAL_RX st_a_CAL_RX, U4 * u4_ap_yymmdd)
 {
     U1  u1_t_result;
     U1  u1_t_frm_is_ok;
@@ -350,7 +352,7 @@ void            vd_g_DateSICalExecTmSet(const U1 u1_a_ADD)
 
     u4_t_yymmddwk_zerorst = u4_g_DaycntToYymmddwk(u4_t_daycnt_zerorst);
     u4_t_abs_yymmdd       = u4_s_DateSICalToUpdtDate(u4_t_yymmddwk_zerorst, (U1)DATESI_CAL_ABS_DATE);
-    (void)u1_s_DateSICalAdjustOwnClk(u4_t_abs_yymmdd);
+    vd_g_DateSIAbsAdjYymmddwk(u4_t_abs_yymmdd, (U4)YYMMDDWK_UNKNWN);
 }
 
 /*===================================================================================================================================*/
@@ -364,7 +366,7 @@ void            vd_g_DateSICalClockUpdate(void)
     U4  u4_t_abs_yymmdd;
 
     u4_t_abs_yymmdd = u4_s_DateSICalToUpdtDate(u4_s_datesi_cal_now, (U1)DATESI_CAL_ABS_DATE);
-    (void)u1_s_DateSICalAdjustOwnClk(u4_t_abs_yymmdd);
+    vd_g_DateSIAbsAdjYymmddwk(u4_t_abs_yymmdd, (U4)YYMMDDWK_UNKNWN);
 }
 
 /*===================================================================================================================================*/
@@ -379,7 +381,7 @@ static U4       u4_s_DateSICalToUpdtDate(const U4 u4_a_YYMMDD_DISP, const U1 u1_
     S4  s4_t_total_offset;
     U4  u4_t_yymmddwk_abs;
 
-    u4_t_hhmmss_abs   = u4_g_DateclkHhmmss24h();
+    u4_t_hhmmss_abs   = u4_g_DateSIAbsHhmmss24h();
     s4_t_total_offset = s4_g_DateSITimTotalOffset();
     u4_t_yymmddwk_abs = u4_s_DateSICalAddDay(u4_a_YYMMDD_DISP, u4_t_hhmmss_abs, s4_t_total_offset, u1_a_KIND);
 
@@ -709,8 +711,8 @@ void            vd_g_DateSICalAdjustUpdate(void)
     if((u1_s_datesi_cal_adj_sts == (U1)DATESI_CAL_ADJ_ACT) &&
        (u1_t_sts                == (U1)FALSE             )){
         u4_t_abs_yymmdd     = u4_s_DateSICalToUpdtDate(u4_s_datesi_cal_adj_date, (U1)DATESI_CAL_ABS_DATE);
-        (void)u1_s_DateSICalAdjustOwnClk(u4_t_abs_yymmdd);
-        u4_t_abs_yymmdd     = u4_g_DateclkYymmddwk();
+        vd_g_DateSIAbsAdjYymmddwk(u4_t_abs_yymmdd, (U4)YYMMDDWK_UNKNWN);
+        u4_t_abs_yymmdd     = u4_g_DateSIAbsYymmddwk();
         u4_s_datesi_cal_now = u4_s_DateSICalToUpdtDate(u4_t_abs_yymmdd, (U1)DATESI_CAL_DISP_DATE);
     }
 }
@@ -803,7 +805,6 @@ void            vd_g_DateSICalAdjustdate(void)
     U4                u4_t_abs_yymmdd;
     U4                u4_t_yymmdd;
     U1                u1_t_range_is_ok;
-    U1                u1_t_result;
     ST_DATESI_CAL_RX  st_t_cal_rx;
 
     u4_t_yymmdd                          = (U4)YYMMDDWK_UNKNWN;
@@ -816,17 +817,26 @@ void            vd_g_DateSICalAdjustdate(void)
     u1_t_exsit = u1_g_DateSICfgCalExst();
     if(u1_t_exsit == (U1)DATESI_CALEXIST_ON){
         vd_g_DateSICalCfgRxUpdtdate(&st_t_cal_rx);
-        u1_t_range_is_ok = u1_s_DateSICalDateSyncChk(st_t_cal_rx, &u4_t_yymmdd);
+        u1_t_range_is_ok = u1_g_DateSICalDateSyncChk(st_t_cal_rx, &u4_t_yymmdd);
 
         if(u1_t_range_is_ok == (U1)TRUE){
             u4_t_abs_yymmdd     = u4_s_DateSICalToUpdtDate(u4_t_yymmdd, (U1)DATESI_CAL_ABS_DATE);
-            u1_t_result         = u1_s_DateSICalAdjustOwnClk(u4_t_abs_yymmdd);
-            if(u1_t_result == (U1)TRUE){
-                u4_t_abs_yymmdd     = u4_g_DateclkYymmddwk();
-                u4_s_datesi_cal_now = u4_s_DateSICalToUpdtDate(u4_t_abs_yymmdd, (U1)DATESI_CAL_DISP_DATE);
-            }
+            vd_g_DateSIAbsAdjYymmddwk(u4_t_abs_yymmdd, (U4)YYMMDDWK_UNKNWN);
+            u4_t_abs_yymmdd     = u4_g_DateSIAbsYymmddwk();
+            u4_s_datesi_cal_now = u4_s_DateSICalToUpdtDate(u4_t_abs_yymmdd, (U1)DATESI_CAL_DISP_DATE);
         }
     }
+}
+
+/*===================================================================================================================================*/
+/* U4              u4_g_DateSICalGetDaycntAbsMin(void)                                                                               */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         Lower bound date (for absolute dates)                                                                            */
+/*===================================================================================================================================*/
+U4              u4_g_DateSICalGetDaycntAbsMin(void)
+{
+    return(u4_s_datesi_cal_daycnt_absmin);
 }
 
 /*===================================================================================================================================*/
@@ -838,11 +848,9 @@ void            vd_g_DateSICalAdjustdate(void)
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  0.0.0    04/23/2025  MN       New.                                                                                               */
-/*  0.0.1    12/18/2025  MN       Change for BEV Pre_CV                                                                              */
+/*  0.0.1    12/18/2025  MN       Addressing issues.                                                                                 */
+/*  0.1.0    04/01/2026  MN       Fix:Change in RTC handling (do not reflect user operations)                                        */
 /*                                                                                                                                   */
-/*  Revision Date        Author   Change Description                                                                                 */
-/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  BEV-1    12/18/2025  MN       Addressing issues.                                                                                 */
 /*                                                                                                                                   */
 /*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*                                                                                                                                   */

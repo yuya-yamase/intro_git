@@ -1,4 +1,4 @@
-/* 5.2.0 */
+/* 5.3.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_C_SLIP_C_MAJOR                     (5)
-#define ALERT_C_SLIP_C_MINOR                     (2)
+#define ALERT_C_SLIP_C_MINOR                     (3)
 #define ALERT_C_SLIP_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -31,7 +31,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ALERT_C_SLIP_NUM_DST                     (64U)
+#define ALERT_C_SLIP_NUM_DST                     (32U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -83,39 +83,7 @@ static const U1  u1_sp_ALERT_C_SLIP_DST[ALERT_C_SLIP_NUM_DST] = {
     (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 28 MALFUNC                                         */
     (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 29 MALFUNC                                         */
     (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 30 MALFUNC                                         */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 31 MALFUNC                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 32 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 33 UNKNOWN                                         */
-    (U1)ALERT_REQ_C_SLIP_TESTMODE,                                             /* 34 TESTMODE                                        */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 35 UNKNOWN                                         */
-    (U1)ALERT_REQ_C_SLIP_OPERATING,                                            /* 36 OPERATING                                       */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 37 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 38 UNKNOWN                                         */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 39 MALFUNC                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 40 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 41 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 42 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 43 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 44 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 45 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 46 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 47 UNKNOWN                                         */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 48 MALFUNC                                         */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 49 MALFUNC                                         */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 50 MALFUNC                                         */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 51 MALFUNC                                         */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 52 MALFUNC                                         */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 53 MALFUNC                                         */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 54 MALFUNC                                         */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 55 MALFUNC                                         */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 56 MALFUNC                                         */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 57 MALFUNC                                         */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 58 MALFUNC                                         */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 59 MALFUNC                                         */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 60 MALFUNC                                         */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 61 MALFUNC                                         */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 62 MALFUNC                                         */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC                                               /* 63 MALFUNC                                         */
+    (U1)ALERT_REQ_C_SLIP_MALFUNC                                               /* 31 MALFUNC                                         */
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -146,7 +114,6 @@ static U4      u4_s_AlertC_slipSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
 {
     static const U2 u2_s_ALERT_C_SLIP_TO_THRESH   = ((U2)1000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_C_SLIP_LSB_DDM1S17 = (U1)3U;
-    static const U1 u1_s_ALERT_C_SLIP_LSB_DDRTWV  = (U1)5U;
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
@@ -160,10 +127,6 @@ static U4      u4_s_AlertC_slipSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
     u1_t_sgnl     = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_SLP_WL, &u1_t_sgnl);
     u4_t_src_chk |= (U4)u1_t_sgnl;
-
-    u1_t_sgnl     = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_DDRTWV, &u1_t_sgnl);
-    u4_t_src_chk |= ((U4)u1_t_sgnl   << u1_s_ALERT_C_SLIP_LSB_DDRTWV);
 
     return(u4_t_src_chk);
 }
@@ -181,10 +144,13 @@ static U4      u4_s_AlertC_slipSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
 /*  5.1.1     7/ 1/2021  SO       Update for 050D CV(Version update).                                                                */
 /*  5.2.0     1/13/2026  HT       Change for Full_function2 (MET-M_REMWAR-CSTD-2-04-A-C0)                                            */
 /*                                Removed "ALERT_REQ" in order to transfer signal transmission control from the MCU to the SoC       */
+/*  5.3.0     4/ 6/2026  HY       Change for Electronic CV (MET-M_REMWAR-CSTD-2-05-A-C0)                                             */
+/*                                Remove the remote warning signal receiving process.                                                */
 /*                                                                                                                                   */
 /*  * SM   = Shingo Miyamoto, NTTD MSE                                                                                               */
 /*  * RI   = Ren Ito, NTTD MSE                                                                                                       */
 /*  * SO   = Syuhei Ooshima, NTTD MSE                                                                                                */
 /*  * HT   = Hibiki Tanii, KSE                                                                                                       */
+/*  * HY   = Haruki Yagi, KSE                                                                                                        */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

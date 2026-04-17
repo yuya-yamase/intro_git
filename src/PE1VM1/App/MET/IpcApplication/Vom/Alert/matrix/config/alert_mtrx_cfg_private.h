@@ -1,4 +1,4 @@
-/* 5.4.0 */
+/* 5.5.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -206,7 +206,6 @@ void    vd_g_AlertB_tdoorInit(void);
 void    vd_g_AlertB_tpwsrInit(void);
 void    vd_g_AlertC_brlv_2Init(void);
 void    vd_g_AlertC_epbInit(void);
-void    vd_g_AlertC_steerInit(void);
 void    vd_g_AlertD_sbwInit(void);
 void    vd_g_AlertM_bglfspdInit(void);
 void    vd_g_AlertB_fmseatInit(void);

@@ -12,7 +12,7 @@ echo -- Generate Binary from ELF files --                                       
 echo ------------------------------------------------------------------------------------- >> build.log
 rem ---------------------------------------------------------------------------------------------
 gmemfile -fill1 0x00210000 0x003bffff 0xff -start 0x00210000 -end 0x003bffff -o dst\pe0vm0_ac.bin dst\pe0vm0.elf
-gmemfile -fill1 0x0001c000 0x0020ffff 0xff -start 0x0001c000 -end 0x0020ffff -o dst\pe1vm1_ac.bin dst\pe1vm1.elf
+gmemfile -fill1 0x00020000 0x0020ffff 0xff -start 0x00020000 -end 0x0020ffff -o dst\pe1vm1_ac.bin dst\pe1vm1.elf
 gmemfile -fill1 0x00400000 0x005effff 0xff -start 0x00400000 -end 0x005effff -o dst\pe2vm2_ac.bin dst\pe2vm2.elf
 gmemfile -fill1 0x005f0000 0x007bfddf 0xff -start 0x005f0000 -end 0x007bfddf -o dst\pe3vm3_ac.bin dst\pe3vm3.elf
 gmemfile -fill1 0x003c0000 0x003fffff 0xff -start 0x003c0000 -end 0x003fffff -o dst\ehvm_ac.bin dst\ehvm.elf
