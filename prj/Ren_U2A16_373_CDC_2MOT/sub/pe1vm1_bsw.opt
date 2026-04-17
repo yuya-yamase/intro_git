@@ -205,6 +205,9 @@
     -I../../src/PE1VM1/BSW/ComplexDriver/Vehopemd/scc
     -I../../src/PE1VM1/BSW/Diagnosis/oXDoCAN/lib/config
     -I../../src/PE1VM1/BSW/Diagnosis/oXDoCAN/lib/scc
+    -I../../src/PE1VM1/BSW/Diagnosis/oXDoCAN/sal/Inspection/scc
+    -I../../src/PE1VM1/BSW/Diagnosis/oXDoCAN/sal/phase6/core/config
+    -I../../src/PE1VM1/BSW/Diagnosis/oXDoCAN/sal/phase6/core/scc
     -I../../src/PE1VM1/BSW/ehvm_if/include/ehvm
 ###    -I../../src/PE1VM1/BSW/IoHwAbstract/iohw_adc/config_CDC_JP
     -I../../src/PE1VM1/BSW/IoHwAbstract/iohw_adc/config_CDC_OT

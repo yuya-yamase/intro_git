@@ -64,36 +64,72 @@ const U2                        u2_g_OXDC_IOC_RDBK_DLY_MAX = (U2)20U / (U2)OXDC_
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const ST_OXDC_IOC_IF            st_gp_OXDC_IOC_IF[] = {
 /*   fp_u1_CSM_CHK                  fp_vd_ACT                       fp_vd_DEACT                    u2_sec     */
-    {vdp_PTR_NA,                    vdp_PTR_NA,                     vdp_PTR_NA,                    (U2)0xFFFFU}
+    {&u1_g_oXDoCANIocCsmchk_280B,   &vd_g_oXDoCANIocAct_280B,       &vd_g_oXDoCANIocDeAct_280B,    (U2)0xFFFFU},
+    {&u1_g_oXDoCANIocCsmchk_280C,   &vd_g_oXDoCANIocAct_280C,       &vd_g_oXDoCANIocDeAct_280C,    (U2)0xFFFFU}
 };
 const U2                        u2_g_OXDC_NUM_IOC = (U2)(sizeof(st_gp_OXDC_IOC_IF) / sizeof(ST_OXDC_IOC_IF));
 
 const ST_OXDC_XID               st_gp_OXDC_DATA_XID[] = {
 /*   fp_u1_SUP                      u2_xid          u2_rd_ses          u2_rd_sec           u2_wr_ses          u2_wr_sec */
-    {vdp_PTR_NA,                    (U2)0xA001U,    (U2)0x0005U,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU},
-    {vdp_PTR_NA,                    (U2)0xA002U,    (U2)0x0005U,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU},
-    {vdp_PTR_NA,                    (U2)0xA003U,    (U2)0x0005U,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU},
+    {vdp_PTR_NA,                    (U2)0x1041U,    (U2)0x000DU,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU},
+    {&u1_g_oXDoCANDidSup_1044,      (U2)0x1044U,    (U2)0x000DU,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU},
+    {vdp_PTR_NA,                    (U2)0x1081U,    (U2)0x000DU,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU},
+    {vdp_PTR_NA,                    (U2)0x10C1U,    (U2)0x000DU,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU},
+    {&u1_g_oXDoCANDidSup_1142,      (U2)0x1142U,    (U2)0x000DU,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU},
+    {&u1_g_oXDoCANDidSup_12A1,      (U2)0x12A1U,    (U2)0x000DU,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU},
+    {&u1_g_oXDoCANDidSup_280B,      (U2)0x280BU,    (U2)0x000DU,       (U2)0xFFFFU,       (U2)0x0004U,        (U2)0xFFFFU},
+    {&u1_g_oXDoCANDidSup_280C,      (U2)0x280CU,    (U2)0x000DU,       (U2)0xFFFFU,       (U2)0x0004U,        (U2)0xFFFFU},
+    {vdp_PTR_NA,                    (U2)0xA001U,    (U2)0x000DU,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU},
+    {vdp_PTR_NA,                    (U2)0xA002U,    (U2)0x000DU,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU},
+    {vdp_PTR_NA,                    (U2)0xA003U,    (U2)0x000DU,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU},
     {vdp_PTR_NA,                    (U2)0xA005U,    (U2)0x000DU,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU},
     {vdp_PTR_NA,                    (U2)0xA006U,    (U2)0x000DU,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU},
+    {vdp_PTR_NA,                    (U2)0xA007U,    (U2)0x000DU,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU},
+    {vdp_PTR_NA,                    (U2)0xA008U,    (U2)0x000DU,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU},
+    {vdp_PTR_NA,                    (U2)0xA00AU,    (U2)0x000DU,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU},
     {vdp_PTR_NA,                    (U2)0xA100U,    (U2)0x000DU,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU},
+    {vdp_PTR_NA,                    (U2)0xA110U,    (U2)0x000DU,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU},
+    {vdp_PTR_NA,                    (U2)0xA111U,    (U2)0x000DU,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU},
+    {vdp_PTR_NA,                    (U2)0xA112U,    (U2)0x000DU,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU},
+    {vdp_PTR_NA,                    (U2)0xA128U,    (U2)0x000DU,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU},
     {vdp_PTR_NA,                    (U2)0xA1A0U,    (U2)0x000DU,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU},
     {vdp_PTR_NA,                    (U2)0xA1A1U,    (U2)0x000DU,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU},
     {vdp_PTR_NA,                    (U2)0xA1A8U,    (U2)0x000DU,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU},
     {vdp_PTR_NA,                    (U2)0xA1A9U,    (U2)0x000DU,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU},
     {vdp_PTR_NA,                    (U2)0xA1F1U,    (U2)0x000DU,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU},
-    {vdp_PTR_NA,                    (U2)0xA800U,    (U2)0x0005U,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU},
+    {vdp_PTR_NA,                    (U2)0xA800U,    (U2)0x000DU,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU},
     {vdp_PTR_NA,                    (U2)0xA901U,    (U2)0x000DU,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU},
-    {vdp_PTR_NA,                    (U2)0xF186U,    (U2)0x0005U,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU}
+    {vdp_PTR_NA,                    (U2)0xF186U,    (U2)0x000DU,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU},
+    {vdp_PTR_NA,                    (U2)0xF188U,    (U2)0x000DU,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU},
+    {vdp_PTR_NA,                    (U2)0xF18AU,    (U2)0x000DU,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU},
+    {vdp_PTR_NA,                    (U2)0xF18CU,    (U2)0x000DU,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU},
+    {vdp_PTR_NA,                    (U2)0xF191U,    (U2)0x000DU,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU},
+    {vdp_PTR_NA,                    (U2)0xF1A0U,    (U2)0x000DU,       (U2)0xFFFFU,       (U2)0x0000U,        (U2)0xFFFFU}
 };
 
 const ST_OXDC_XID_ML            st_gp_OXDC_DATA_XID_ML[] = {
 /*   u2_req_nbyte                   u2_ans_nbyte */
+    {(U2)0U,                        (U2)OXDC_DATA_REA_ANS_NB_1041},
+    {(U2)0U,                        (U2)OXDC_DATA_REA_ANS_NB_1044},
+    {(U2)0U,                        (U2)OXDC_DATA_REA_ANS_NB_1081},
+    {(U2)0U,                        (U2)OXDC_DATA_REA_ANS_NB_10C1},
+    {(U2)0U,                        (U2)OXDC_DATA_REA_ANS_NB_1142},
+    {(U2)0U,                        (U2)OXDC_DATA_REA_ANS_NB_12A1},
+    {(U2)OXDC_DATA_IOC_REQ_NB_280B, (U2)OXDC_DATA_REA_ANS_NB_280B},
+    {(U2)OXDC_DATA_IOC_REQ_NB_280C, (U2)OXDC_DATA_REA_ANS_NB_280C},
     {(U2)0U,                        (U2)OXDC_DATA_REA_ANS_NB_A001},
     {(U2)0U,                        (U2)OXDC_DATA_REA_ANS_NB_A002},
     {(U2)0U,                        (U2)OXDC_DATA_REA_ANS_NB_A003},
     {(U2)0U,                        (U2)OXDC_DATA_REA_ANS_NB_A005},
     {(U2)0U,                        (U2)OXDC_DATA_REA_ANS_NB_A006},
+    {(U2)0U,                        (U2)OXDC_DATA_REA_ANS_NB_A007},
+    {(U2)0U,                        (U2)OXDC_DATA_REA_ANS_NB_A008},
+    {(U2)0U,                        (U2)OXDC_DATA_REA_ANS_NB_A00A},
     {(U2)0U,                        (U2)OXDC_DATA_REA_ANS_NB_A100},
+    {(U2)0U,                        (U2)OXDC_DATA_REA_ANS_NB_A1XX},     /* DID:0xA110 */
+    {(U2)0U,                        (U2)OXDC_DATA_REA_ANS_NB_A1XX},     /* DID:0xA111 */
+    {(U2)0U,                        (U2)OXDC_DATA_REA_ANS_NB_A1XX},     /* DID:0xA112 */
+    {(U2)0U,                        (U2)OXDC_DATA_REA_ANS_NB_A1XX},     /* DID:0xA128 */
     {(U2)0U,                        (U2)OXDC_DATA_REA_ANS_NB_A1XX},     /* DID:0xA1A0 */
     {(U2)0U,                        (U2)OXDC_DATA_REA_ANS_NB_A1XX},     /* DID:0xA1A1 */
     {(U2)0U,                        (U2)OXDC_DATA_REA_ANS_NB_A1XX},     /* DID:0xA1A8 */
@@ -101,17 +137,37 @@ const ST_OXDC_XID_ML            st_gp_OXDC_DATA_XID_ML[] = {
     {(U2)0U,                        (U2)OXDC_DATA_REA_ANS_NB_A1XX},     /* DID:0xA1F1 */
     {(U2)0U,                        (U2)OXDC_DATA_REA_ANS_NB_A800},
     {(U2)0U,                        (U2)OXDC_DATA_REA_ANS_NB_A901},
-    {(U2)0U,                        (U2)OXDC_DATA_REA_ANS_NB_F186} 
+    {(U2)0U,                        (U2)OXDC_DATA_REA_ANS_NB_F186},
+    {(U2)0U,                        (U2)OXDC_DATA_REA_ANS_NB_F188},
+    {(U2)0U,                        (U2)OXDC_DATA_REA_ANS_NB_F18A},
+    {(U2)0U,                        (U2)OXDC_DATA_REA_ANS_NB_F18C},
+    {(U2)0U,                        (U2)OXDC_DATA_REA_ANS_NB_F191},
+    {(U2)0U,                        (U2)OXDC_DATA_REA_ANS_NB_F1A0} 
 };
 
 const ST_OXDC_DATA_IF           st_gp_OXDC_DATA_CFG[] = {
 /*   fp_u1_READ                     fp_u1_WRITE                     stp_IOC */
+    {&u1_g_oXDoCANRebyId_1041,      vdp_PTR_NA,                     vdp_PTR_NA                    },    /* DID:0x1041 */
+    {&u1_g_oXDoCANRebyId_1044,      vdp_PTR_NA,                     vdp_PTR_NA                    },    /* DID:0x1044 */
+    {&u1_g_oXDoCANRebyId_1081,      vdp_PTR_NA,                     vdp_PTR_NA                    },    /* DID:0x1081 */
+    {&u1_g_oXDoCANRebyId_10C1,      vdp_PTR_NA,                     vdp_PTR_NA                    },    /* DID:0x10C1 */
+    {&u1_g_oXDoCANRebyId_1142,      vdp_PTR_NA,                     vdp_PTR_NA                    },    /* DID:0x1142 */
+    {&u1_g_oXDoCANRebyId_12A1,      vdp_PTR_NA,                     vdp_PTR_NA                    },    /* DID:0x12A1 */
+    {&u1_g_oXDoCANRebyId_280B,      vdp_PTR_NA,                     &st_gp_OXDC_IOC_IF[0]         },    /* DID:0x280B */
+    {&u1_g_oXDoCANRebyId_280C,      vdp_PTR_NA,                     &st_gp_OXDC_IOC_IF[1]         },    /* DID:0x280C */
     {&u1_g_oXDoCANRebyId_A001,      vdp_PTR_NA,                     vdp_PTR_NA                    },    /* DID:0xA001 */
     {&u1_g_oXDoCANRebyId_A002,      vdp_PTR_NA,                     vdp_PTR_NA                    },    /* DID:0xA002 */
     {&u1_g_oXDoCANRebyId_A003,      vdp_PTR_NA,                     vdp_PTR_NA                    },    /* DID:0xA003 */
     {&u1_g_oXDoCANRebyId_A005,      vdp_PTR_NA,                     vdp_PTR_NA                    },    /* DID:0xA005 */
     {&u1_g_oXDoCANRebyId_A006,      vdp_PTR_NA,                     vdp_PTR_NA                    },    /* DID:0xA006 */
+    {&u1_g_oXDoCANRebyId_A007,      vdp_PTR_NA,                     vdp_PTR_NA                    },    /* DID:0xA007 */
+    {&u1_g_oXDoCANRebyId_A008,      vdp_PTR_NA,                     vdp_PTR_NA                    },    /* DID:0xA008 */
+    {&u1_g_oXDoCANRebyId_A00A,      vdp_PTR_NA,                     vdp_PTR_NA                    },    /* DID:0xA00A */
     {&u1_g_oXDoCANRebyId_A100,      vdp_PTR_NA,                     vdp_PTR_NA                    },    /* DID:0xA100 */
+    {&u1_g_oXDoCANRebyId_A1XX,      vdp_PTR_NA,                     vdp_PTR_NA                    },    /* DID:0xA110 */
+    {&u1_g_oXDoCANRebyId_A1XX,      vdp_PTR_NA,                     vdp_PTR_NA                    },    /* DID:0xA111 */
+    {&u1_g_oXDoCANRebyId_A1XX,      vdp_PTR_NA,                     vdp_PTR_NA                    },    /* DID:0xA112 */
+    {&u1_g_oXDoCANRebyId_A1XX,      vdp_PTR_NA,                     vdp_PTR_NA                    },    /* DID:0xA128 */
     {&u1_g_oXDoCANRebyId_A1XX,      vdp_PTR_NA,                     vdp_PTR_NA                    },    /* DID:0xA1A0 */
     {&u1_g_oXDoCANRebyId_A1XX,      vdp_PTR_NA,                     vdp_PTR_NA                    },    /* DID:0xA1A1 */
     {&u1_g_oXDoCANRebyId_A1XX,      vdp_PTR_NA,                     vdp_PTR_NA                    },    /* DID:0xA1A8 */
@@ -119,7 +175,12 @@ const ST_OXDC_DATA_IF           st_gp_OXDC_DATA_CFG[] = {
     {&u1_g_oXDoCANRebyId_A1XX,      vdp_PTR_NA,                     vdp_PTR_NA                    },    /* DID:0xA1F1 */
     {&u1_g_oXDoCANRebyId_A800,      vdp_PTR_NA,                     vdp_PTR_NA                    },    /* DID:0xA800 */
     {&u1_g_oXDoCANRebyId_A901,      vdp_PTR_NA,                     vdp_PTR_NA                    },    /* DID:0xA901 */
-    {&u1_g_oXDoCANRebyId_F186,      vdp_PTR_NA,                     vdp_PTR_NA                    }     /* DID:0xF186 */
+    {&u1_g_oXDoCANRebyId_F186,      vdp_PTR_NA,                     vdp_PTR_NA                    },    /* DID:0xF186 */
+    {&u1_g_oXDoCANRebyId_F188,      vdp_PTR_NA,                     vdp_PTR_NA                    },    /* DID:0xF188 */
+    {&u1_g_oXDoCANRebyId_F18A,      vdp_PTR_NA,                     vdp_PTR_NA                    },    /* DID:0xF18A */
+    {&u1_g_oXDoCANRebyId_F18C,      vdp_PTR_NA,                     vdp_PTR_NA                    },    /* DID:0xF18C */
+    {&u1_g_oXDoCANRebyId_F191,      vdp_PTR_NA,                     vdp_PTR_NA                    },    /* DID:0xF191 */
+    {&u1_g_oXDoCANRebyId_F1A0,      vdp_PTR_NA,                     vdp_PTR_NA                    }     /* DID:0xF1A0 */
 };
 
 const U2                        u2_g_OXDC_DATA_NUM_XID = (U2)(sizeof(st_gp_OXDC_DATA_XID) / sizeof(ST_OXDC_XID));
@@ -127,9 +188,12 @@ const U2                        u2_g_OXDC_DATA_NUM_XID = (U2)(sizeof(st_gp_OXDC_
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const ST_OXDC_XID               st_gp_OXDC_ROUT_XID[] = {
 /*   fp_u1_SUP                 u2_xid          u2_rd_ses         u2_rd_sec           u2_wr_ses          u2_wr_sec */
-    {vdp_PTR_NA,               (U2)0xD000U,    (U2)0x0005U,     (U2)0xFFFFU,         (U2)0x0000U,       (U2)0xFFFFU},
-    {vdp_PTR_NA,               (U2)0xD001U,    (U2)0x0005U,     (U2)0xFFFFU,         (U2)0x0000U,       (U2)0xFFFFU},
+    {&u1_g_oXDoCANRidSup_1103, (U2)0x1103U,    (U2)0x000DU,     (U2)0xFFFFU,         (U2)0x0000U,       (U2)0xFFFFU},
+    {&u1_g_oXDoCANRidSup_11FF, (U2)0x11FFU,    (U2)0x000DU,     (U2)0xFFFFU,         (U2)0x0000U,       (U2)0xFFFFU},
+    {vdp_PTR_NA,               (U2)0xD000U,    (U2)0x000DU,     (U2)0xFFFFU,         (U2)0x0000U,       (U2)0xFFFFU},
+    {vdp_PTR_NA,               (U2)0xD001U,    (U2)0x000DU,     (U2)0xFFFFU,         (U2)0x0000U,       (U2)0xFFFFU},
     {vdp_PTR_NA,               (U2)0xD100U,    (U2)0x000DU,     (U2)0xFFFFU,         (U2)0x0000U,       (U2)0xFFFFU},
+    {vdp_PTR_NA,               (U2)0xD111U,    (U2)0x000DU,     (U2)0xFFFFU,         (U2)0x0000U,       (U2)0xFFFFU},
     {vdp_PTR_NA,               (U2)0xD1D0U,    (U2)0x000DU,     (U2)0xFFFFU,         (U2)0x0000U,       (U2)0xFFFFU},
     {vdp_PTR_NA,               (U2)0xD1D1U,    (U2)0x000DU,     (U2)0xFFFFU,         (U2)0x0000U,       (U2)0xFFFFU},
     {vdp_PTR_NA,               (U2)0xD1D9U,    (U2)0x000DU,     (U2)0xFFFFU,         (U2)0x0000U,       (U2)0xFFFFU},
@@ -140,9 +204,12 @@ const ST_OXDC_XID               st_gp_OXDC_ROUT_XID[] = {
 
 const ST_OXDC_XID_ML            st_gp_OXDC_ROUT_XID_ML_SF_01[] = {
 /*   u2_req_nbyte                   u2_ans_nbyte */
+    {(U2)OXDC_ROUT_STA_REQ_NB_1103, (U2)OXDC_ROUT_STA_ANS_NB_1103},     /* RID:0x1103 */
+    {(U2)OXDC_ROUT_STA_REQ_NB_11FF, (U2)OXDC_ROUT_STA_ANS_NB_11FF},     /* RID:0x11FF */
     {(U2)OXDC_ROUT_STA_REQ_NB_D000, (U2)OXDC_ROUT_STA_ANS_NB_D000},     /* RID:0xD000 */
     {(U2)OXDC_ROUT_STA_REQ_NB_D001, (U2)OXDC_ROUT_STA_ANS_NB_D001},     /* RID:0xD001 */
     {(U2)OXDC_ROUT_STA_REQ_NB_D100, (U2)OXDC_ROUT_STA_ANS_NB_D100},     /* RID:0xD100 */
+    {(U2)OXDC_ROUT_STA_REQ_NB_D1XX, (U2)OXDC_ROUT_STA_ANS_NB_D1XX},     /* RID:0xD111 */
     {(U2)OXDC_ROUT_STA_REQ_NB_D1XX, (U2)OXDC_ROUT_STA_ANS_NB_D1XX},     /* RID:0xD1D0 */
     {(U2)OXDC_ROUT_STA_REQ_NB_D1XX, (U2)OXDC_ROUT_STA_ANS_NB_D1XX},     /* RID:0xD1D1 */
     {(U2)OXDC_ROUT_STA_REQ_NB_D1XX, (U2)OXDC_ROUT_STA_ANS_NB_D1XX},     /* RID:0xD1D9 */
@@ -153,9 +220,12 @@ const ST_OXDC_XID_ML            st_gp_OXDC_ROUT_XID_ML_SF_01[] = {
 
 const ST_OXDC_XID_ML            st_gp_OXDC_ROUT_XID_ML_SF_02[] = {
 /*   u2_req_nbyte                   u2_ans_nbyte */
+    {(U2)0U,                        (U2)0U                       },     /* RID:0x1103 */
+    {(U2)0U,                        (U2)0U                       },     /* RID:0x11FF */
     {(U2)0U,                        (U2)0U                       },     /* RID:0xD000 */
     {(U2)0U,                        (U2)0U                       },     /* RID:0xD001 */
     {(U2)0U,                        (U2)0U                       },     /* RID:0xD100 */
+    {(U2)0U,                        (U2)0U                       },     /* RID:0xD111 */
     {(U2)0U,                        (U2)0U                       },     /* RID:0xD1D0 */
     {(U2)0U,                        (U2)0U                       },     /* RID:0xD1D1 */
     {(U2)0U,                        (U2)0U                       },     /* RID:0xD1D9 */
@@ -166,9 +236,12 @@ const ST_OXDC_XID_ML            st_gp_OXDC_ROUT_XID_ML_SF_02[] = {
 
 const ST_OXDC_XID_ML            st_gp_OXDC_ROUT_XID_ML_SF_03[] = {
 /*   u2_req_nbyte                   u2_ans_nbyte */
+    {(U2)OXDC_ROUT_RES_REQ_NB_1103, (U2)OXDC_ROUT_RES_ANS_NB_1103},     /* RID:0x1103 */
+    {(U2)0U,                        (U2)0U                       },     /* RID:0x11FF */
     {(U2)0U,                        (U2)0U                       },     /* RID:0xD000 */
     {(U2)OXDC_ROUT_RES_REQ_NB_D001, (U2)OXDC_ROUT_RES_ANS_NB_D001},     /* RID:0xD001 */
     {(U2)0U,                        (U2)0U                       },     /* RID:0xD100 */
+    {(U2)0U,                        (U2)0U                       },     /* RID:0xD111 */
     {(U2)0U,                        (U2)0U                       },     /* RID:0xD1D0 */
     {(U2)0U,                        (U2)0U                       },     /* RID:0xD1D1 */
     {(U2)0U,                        (U2)0U                       },     /* RID:0xD1D9 */
@@ -179,9 +252,12 @@ const ST_OXDC_XID_ML            st_gp_OXDC_ROUT_XID_ML_SF_03[] = {
 
 const ST_OXDC_ROUT_IF           st_gp_OXDC_ROUT_CFG[] = {
 /*   fp_u1_COR_CHK                  fp_u1_START                         fp_u1_STOP                    fp_u1_RESULT */
+    {&u1_g_oXDoCANRoutCorchk_1103,  &u1_g_oXDoCANRoutStart_1103,        vdp_PTR_NA,                   &u1_g_oXDoCANRoutRslt_1103     },   /* RID:0x1103 */
+    {vdp_PTR_NA,                    &u1_g_oXDoCANRoutStart_11FF,        vdp_PTR_NA,                   vdp_PTR_NA                     },   /* RID:0x11FF */
     {&u1_g_oXDoCANRoutCorchk_D000,  &u1_g_oXDoCANRoutStart_D000,        vdp_PTR_NA,                   vdp_PTR_NA                     },   /* RID:0xD000 */
     {vdp_PTR_NA,                    &u1_g_oXDoCANRoutStart_D001,        vdp_PTR_NA,                   &u1_g_oXDoCANRoutRslt_D001     },   /* RID:0xD001 */
     {vdp_PTR_NA,                    &u1_g_oXDoCANRoutStart_D100,        vdp_PTR_NA,                   vdp_PTR_NA                     },   /* RID:0xD100 */
+    {vdp_PTR_NA,                    &u1_g_oXDoCANRoutStart_D1XX,        vdp_PTR_NA,                   vdp_PTR_NA                     },   /* RID:0xD111 */
     {vdp_PTR_NA,                    &u1_g_oXDoCANRoutStart_D1XX,        vdp_PTR_NA,                   vdp_PTR_NA                     },   /* RID:0xD1D0 */
     {vdp_PTR_NA,                    &u1_g_oXDoCANRoutStart_D1XX,        vdp_PTR_NA,                   vdp_PTR_NA                     },   /* RID:0xD1D1 */
     {vdp_PTR_NA,                    &u1_g_oXDoCANRoutStart_D1XX,        vdp_PTR_NA,                   vdp_PTR_NA                     },   /* RID:0xD1D9 */
