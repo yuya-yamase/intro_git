@@ -27,12 +27,16 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VEH_OPEMD_MDBIT_ACC                      (0x00000002U)  /* BDC1S81.VPSINFOx =         0x06 or 0x16 or 0x1e */
-#define VEH_OPEMD_MDBIT_IG_P                     (0x00000004U)  /* BDC1S81.VPSINFOx =                         0x1e */
-#define VEH_OPEMD_MDBIT_PBA                      (0x00000008U)  /* BDC1S81.VPSINFOx = 0x02 or 0x06 or 0x16 or 0x1e */
-#define VEH_OPEMD_MDBIT_IG_R                     (0x00000010U)  /* BDC1S81.VPSINFOx =                 0x16 or 0x1e */
+#define VEH_OPEMD_MDBIT_ACC                      (0x00000002U)  /* BDC1S81.VPSINFOx =                 0x06 or 0x16 or 0x1e           */
+#define VEH_OPEMD_MDBIT_IG_P                     (0x00000004U)  /* BDC1S81.VPSINFOx =                                 0x1e           */
+#define VEH_OPEMD_MDBIT_PBA                      (0x00000008U)  /* BDC1S81.VPSINFOx = 0x02 or 0x06 or 0x16 or 0x1e                   */
+#define VEH_OPEMD_MDBIT_IG_R                     (0x00000010U)  /* BDC1S81.VPSINFOx =                         0x16 or 0x1e           */
 
-#define VEH_OPEMD_MDBIT_FIELDS                   (0x0000001eU)
+#define VEH_OPEMD_MDBIT_DIAG                     (0x00000080U)  /* BDC1S81.VPSINFOx =                                       0x1e     */
+                                                                /* BDC1S81.VPSINFOS = 0x00                                           */
+
+#define VEH_OPEMD_MDBIT_FIELDS                   (0x0000001eU)  /* "VEH_OPEMD_MDBIT_DIAG" does not retain the previous value.        */
+                                                                /* It is not included in "VEH_OPEMD_MDBIT_FIELDS".                   */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VEH_OPEMD_EVBIT_ACC_TO_ON                (0x00000002U)
@@ -57,6 +61,7 @@
 #define u1_g_VehopemdBaOn()                      (u1_g_VehopemdMdchk((U4)VEH_OPEMD_MDBIT_PBA,  (U4)VEH_OPEMD_MDBIT_PBA ))
 #define u1_g_VehopemdAccOn()                     (u1_g_VehopemdMdchk((U4)VEH_OPEMD_MDBIT_ACC,  (U4)VEH_OPEMD_MDBIT_ACC ))
 #define u1_g_VehopemdIgnOn()                     (u1_g_VehopemdMdchk((U4)VEH_OPEMD_MDBIT_IG_R, (U4)VEH_OPEMD_MDBIT_IG_R))
+#define u1_g_VehopemdDiagOn()                    (u1_g_VehopemdMdchk((U4)VEH_OPEMD_MDBIT_DIAG, (U4)VEH_OPEMD_MDBIT_DIAG))
 #define u1_g_VehopemdIgnpOn()                    (u1_g_VehopemdMdchk((U4)VEH_OPEMD_MDBIT_IG_P, (U4)VEH_OPEMD_MDBIT_IG_P))
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

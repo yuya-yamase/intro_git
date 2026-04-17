@@ -99,8 +99,6 @@ const U4                    u4_gp_OXCAN_RXD_SYS_BY_PDU[] = {
 /* #define OXCAN_SYS_PNC_43                         (0x00040000U) */
 /* #define OXCAN_SYS_PNC_44                         (0x00080000U) */
 
-    (U4)0x00000014U, /* IGR, IGP,                                     */       /* OXCAN_RXD_PDU_CAN_BDC1S52_CH0 */
-    (U4)0x00000014U, /* IGR, IGP,                                     */       /* OXCAN_RXD_PDU_CAN_BDC1S60_CH0 */
     (U4)0x00090016U, /* IGR, IGP, ACC, PNC_16,                 PNC_44 */       /* OXCAN_RXD_PDU_CAN_BDC1S81_CH0 */
     (U4)0x00090016U  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */       /* OXCAN_RXD_PDU_CAN_BDC1S91_CH1 */
 };
@@ -108,8 +106,6 @@ const U2                    u2_g_OXCAN_RXD_NUM_PDU = (U2)OXCAN_RXD_NUM_PDU;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static const U2             u2_sp_OXCAN_RXD_BY_ACK[] = {
-    (U2)OXCAN_RXD_PDU_CAN_BDC1S52_CH0,                                                     /* MSG_BDC1S52_RXCH0             */
-    (U2)OXCAN_RXD_PDU_CAN_BDC1S60_CH0,                                                     /* MSG_BDC1S60_RXCH0             */
     (U2)OXCAN_RXD_PDU_CAN_BDC1S81_CH0,                                                     /* MSG_BDC1S81_RXCH0             */
     (U2)OXCAN_RXD_PDU_CAN_BDC1S91_CH1                                                      /* MSG_BDC1S91_RXCH1             */
 };
@@ -118,7 +114,7 @@ static const U2             u2_sp_OXCAN_RXD_BY_ACK[] = {
 const ST_OXCAN_RXD_ACK      st_gp_OXCAN_RXD_ACK_BY_GR[OXCAN_RXD_NUM_GR] = {
     {
         &u2_sp_OXCAN_RXD_BY_ACK[0],    /* u2p_RXD_BY_ACK */
-        (U2)MSG_BDC1S52_RXCH0,         /* u2_ack_min     */
+        (U2)MSG_BDC1S81_RXCH0,         /* u2_ack_min     */
         (U2)MSG_BDC1S91_RXCH1          /* u2_ack_max     */
     }
 };

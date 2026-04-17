@@ -26,6 +26,8 @@
 #include <cs/bsw_cs_common.h>
 #include <cs/bsw_cs_system.h>
 #include "can_lpr.h"
+#include "memcpy_u4.h"
+
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -42,10 +44,11 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define OXSEC_MAC_MESSAGE_SIZE_MAX                      (64U)
-#define OXSEC_KZK_SIZE                                  (4U)
-#define OXSEC_MAC_MESSAGE_SIZE_32                       (32U)
-#define OXSEC_MAC_MESSAGE_SIZE_64                       (64U)
+#define OXSEC_MAX_MSGSIZE                           (64U)
+#define OXSEC_MAX_MSGSIZE_NWORD                     (16U)
+#define OXSEC_KZKSIZE                               (4U)
+#define OXSEC_ALIGN_MSK                             (3U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -86,35 +89,36 @@ void vd_g_oXSECAubIfSecVerifFinAck( SecOC_VerificationStatusType verificationSta
 
 #ifdef CAN_LPR_H
     
-    PduInfoType            st_t_pduinfo;
-    uint32                 u4_t_lpcnt;
-    uint32                 u4_t_datasize;
-    PduIdType              u2_t_udPduId;
-    uint8                  u1_tp_sduData[OXSEC_MAC_MESSAGE_SIZE_MAX];
+    PduInfoType        st_t_pduinfo;
+    U4                 u4_t_num_word;
+    U4                 u4_t_pos;
+    U4                 u4_tp_sdudata[OXSEC_MAX_MSGSIZE_NWORD];
+    U1*                u1_tp_data;
+    PduIdType          u2_t_udpduid;
     
-    if( SduDataPtr != NULL_PTR ){
-    
-        u4_t_datasize = SduLength - (U4)OXSEC_KZK_SIZE;
-        for(u4_t_lpcnt = (U1)0; u4_t_lpcnt < u4_t_datasize; u4_t_lpcnt++){
-            u1_tp_sduData[u4_t_lpcnt] = SduDataPtr[u4_t_lpcnt];
-        }
-        u1_tp_sduData[u4_t_lpcnt] = (U1)verificationStatus.verificationStatus;
-        u4_t_lpcnt++;
-        u1_tp_sduData[u4_t_lpcnt] = (U1)((verificationStatus.Ab_SecOCDataId >> 8U) & (U1)0xFFU);
-        u4_t_lpcnt++;
-        u1_tp_sduData[u4_t_lpcnt] = (U1)(verificationStatus.Ab_SecOCDataId & 0xFF);
+    if((SduDataPtr != NULL_PTR                           ) &&
+       (((U4)SduDataPtr & (U4)OXSEC_ALIGN_MSK) == (U4)0U ) &&
+       (SduLength >= (U4)OXSEC_KZKSIZE                   ) &&
+       (SduLength <= (U4)OXSEC_MAX_MSGSIZE               )){
 
-        u2_t_udPduId = verificationStatus.freshnessValueID;
-        st_t_pduinfo.SduDataPtr  = &u1_tp_sduData[0U];
+        u4_t_num_word = SduLength >> 2U;
+        vd_g_MemcpyU4(&u4_tp_sdudata[0], (const U4 *)SduDataPtr, u4_t_num_word);
+
+        u4_t_pos = SduLength - (U4)OXSEC_KZKSIZE;
+        u1_tp_data = (U1*)u4_tp_sdudata;
+        u1_tp_data[u4_t_pos] = (U1)verificationStatus.verificationStatus;
+
+        u2_t_udpduid = verificationStatus.freshnessValueID;
+        st_t_pduinfo.SduDataPtr  = (U1*)&u4_tp_sdudata[0U];
         st_t_pduinfo.MetaDataPtr = NULL_PTR;
         st_t_pduinfo.SduLength   = SduLength;
 
-        (void)u1_g_CANLpRIngSecOCTRx(u2_t_udPduId, &st_t_pduinfo, (uint8)CAN_LPR_ING_SECOC_RX);
+        (void)u1_g_CANLpRIngSecOCTRx(u2_t_udpduid, &st_t_pduinfo, (uint8)CAN_LPR_ING_SECOC_RX);
     }
     
     return;
 
-#endif
+#endif /* #ifdef CAN_LPR_H */
 }
 
 
@@ -159,7 +163,7 @@ FUNC(Std_ReturnType, SECOC_CODE) SecOC_Connector_PduR_SecOCTransmit
     }
 
     return ud_stdRet;
-#endif
+#endif /* #ifdef CAN_LPR_H */
 }
 
 /****************************************************************************/
@@ -177,7 +181,11 @@ FUNC(Std_ReturnType, SECOC_CODE) SecOC_Connector_PduR_SecOCCancelTransmit
     PduIdType udPduId
 )
 {
+#ifdef CAN_LPR_H
+    return(E_OK);
+#else
     return PduR_SecOCCancelTransmit( udPduId );
+#endif /* #ifdef CAN_LPR_H */
 }
 
 /****************************************************************************/
@@ -195,9 +203,13 @@ FUNC(void, SECOC_CODE) SecOC_Connector_PduR_SecOCIfTxConfirmation
     Std_ReturnType udResult
 )
 {
+#ifdef CAN_LPR_H
+    return ;
+#else
     PduR_SecOCIfTxConfirmation( udPduId, udResult );
     
     return ;
+#endif /* #ifdef CAN_LPR_H */
 }
 
 /****************************************************************************/
@@ -215,9 +227,13 @@ FUNC(void, SECOC_CODE) SecOC_Connector_PduR_SecOCTpTxConfirmation
     Std_ReturnType udResult
 )
 {
+#ifdef CAN_LPR_H
+    return ;
+#else
     PduR_SecOCTpTxConfirmation( udPduId, udResult );
     
     return ;
+#endif /* #ifdef CAN_LPR_H */
 }
 
 /****************************************************************************/
@@ -242,7 +258,12 @@ FUNC(BufReq_ReturnType, SECOC_CODE) SecOC_Connector_PduR_SecOCTpCopyTxData
     P2VAR(PduLengthType, AUTOMATIC, SECOC_APPL_DATA) ptAvailableDataSize
 )
 {
+#ifdef CAN_LPR_H
+    return(BUFREQ_E_NOT_OK);
+#else
     return PduR_SecOCTpCopyTxData( udPduId, ptPduInfo, ptRetryInfo, ptAvailableDataSize );
+#endif /* #ifdef CAN_LPR_H */
+
 }
 
 /****************************************************************************/
@@ -305,7 +326,11 @@ FUNC(BufReq_ReturnType, SECOC_CODE) SecOC_Connector_PduR_SecOCTpStartOfReception
     P2VAR(PduLengthType, AUTOMATIC, SECOC_APPL_DATA) ptBufferSize
 )
 {
+#ifdef CAN_LPR_H
+    return(BUFREQ_E_NOT_OK);
+#else
     return PduR_SecOCTpStartOfReception( udPduId, ptPduInfo, udSduLength, ptBufferSize );
+#endif /* #ifdef CAN_LPR_H */
 }
 
 /****************************************************************************/
@@ -329,7 +354,7 @@ FUNC(void, SECOC_CODE) SecOC_Connector_PduR_SecOCIfRxIndication
     PduR_SecOCIfRxIndication( udPduId, ptPduInfo );
 
     return ;
-#endif
+#endif /* #ifdef CAN_LPR_H */
 }
 
 /****************************************************************************/
@@ -347,9 +372,13 @@ FUNC(void, SECOC_CODE) SecOC_Connector_PduR_SecOCTpRxIndication
     Std_ReturnType udResult
 )
 {
+#ifdef CAN_LPR_H
+    return ;
+#else
     PduR_SecOCTpRxIndication( udPduId, udResult );
     
     return ;
+#endif /* #ifdef CAN_LPR_H */
 }
 
 /****************************************************************************/
@@ -371,7 +400,11 @@ FUNC(BufReq_ReturnType, SECOC_CODE) SecOC_Connector_PduR_SecOCTpCopyRxData
     P2VAR(PduLengthType, AUTOMATIC, SECOC_APPL_DATA) ptBufferSize
 )
 {
+#ifdef CAN_LPR_H
+    return(BUFREQ_E_NOT_OK);
+#else
     return PduR_SecOCTpCopyRxData( udPduId, ptPduInfo, ptBufferSize );
+#endif /* #ifdef CAN_LPR_H */
 }
 
 /****************************************************************************/

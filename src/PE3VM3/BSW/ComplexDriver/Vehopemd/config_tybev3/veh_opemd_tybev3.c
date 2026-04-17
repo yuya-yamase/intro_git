@@ -123,18 +123,20 @@ U4      u4_g_VehopemdCfgMdupdt(const U4 u4_a_MDBIT, U4 * u4_ap_evbit)
     /* |                     |               BDC1S91                  |                                   */
     /* |         Msg State   | COM_NO_RX   | COM_TIMEOUT |   OTHER    |                                   */
     /* |---------------------|-------------|-------------|------------|                                   */
-    /* |BDC1S81  COM_NO_RX   | Prev Value  | Prev Value  | BDC1S91    |                                   */
+    /* |BDC1S81  COM_NO_RX   | Prev Value  | Prev Value  | Prev Value |                                   */
     /* |         COM_TIMEOUT | Prev Value  | Prev Value  | BDC1S91    |                                   */
     /* |         OTHER       | BDC1S81     | BDC1S81     | BDC1S81    |                                   */
     /* -------------------------------------------------------------------------------------------------- */
  
     if(u1_t_ipdu_st == (U1)0U){
         u2_t_vps_rx = u2_s_VehopemdReadbdc1s81();
-    } else {
+    } else if((u1_t_ipdu_st & (U1)COM_TIMEOUT) != (U1)0U) {
         u1_t_ipdu_st = (U1)Com_GetIPDUStatus((U2)MSG_BDC1S91_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
         if(u1_t_ipdu_st == (U1)0U){
             u2_t_vps_rx = u2_s_VehopemdReadbdc1s91();
         }
+    } else {
+        /* do nothing */
     }
 
     if(u1_t_ipdu_st == (U1)0U){

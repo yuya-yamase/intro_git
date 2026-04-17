@@ -16,6 +16,8 @@
 /* Include Files                                                            */
 /*--------------------------------------------------------------------------*/
 #include "oxcan_aubif.h"
+#include <Dcm_ComM.h>
+#include <Dcm.h>
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
@@ -29,15 +31,15 @@
 #define BSW_BSWM_CS_CFG_FN_BSWM_COMMCHP       (bsw_bswm_cs_BswMComMCrntChPnc_dummy)
 
 /* Dcm API Name */
-#define BSW_BSWM_CS_CFG_FN_DCM_NOCOM          (bsw_bswm_cs_DcmNoComMode_dummy)
-#define BSW_BSWM_CS_CFG_FN_DCM_SILCOM         (bsw_bswm_cs_DcmSilentComMode_dummy)
-#define BSW_BSWM_CS_CFG_FN_DCM_FULCOM         (bsw_bswm_cs_DcmFullComMode_dummy)
-#define BSW_BSWM_CS_CFG_FN_DCM_SOR            (bsw_bswm_cs_DcmStartOfRecept_dummy)
-#define BSW_BSWM_CS_CFG_FN_DCM_CPRXD          (bsw_bswm_cs_DcmCopyRxData_dummy)
-#define BSW_BSWM_CS_CFG_FN_DCM_CPTXD          (bsw_bswm_cs_DcmCopyTxData_dummy)
-#define BSW_BSWM_CS_CFG_FN_DCM_TPRXIN         (bsw_bswm_cs_DcmTpRxIndication_dummy)
-#define BSW_BSWM_CS_CFG_FN_DCM_TPTXCN         (bsw_bswm_cs_DcmTpTxConfirm_dummy)
-#define BSW_BSWM_CS_CFG_FN_DCM_TXCN           (bsw_bswm_cs_DcmTxConfirm_dummy)
+#define BSW_BSWM_CS_CFG_FN_DCM_NOCOM          (Dcm_ComM_NoComModeEntered)
+#define BSW_BSWM_CS_CFG_FN_DCM_SILCOM         (Dcm_ComM_SilentComModeEntered)
+#define BSW_BSWM_CS_CFG_FN_DCM_FULCOM         (Dcm_ComM_FullComModeEntered)
+#define BSW_BSWM_CS_CFG_FN_DCM_SOR            (Dcm_StartOfReception)
+#define BSW_BSWM_CS_CFG_FN_DCM_CPRXD          (Dcm_CopyRxData)
+#define BSW_BSWM_CS_CFG_FN_DCM_CPTXD          (Dcm_CopyTxData)
+#define BSW_BSWM_CS_CFG_FN_DCM_TPRXIN         (Dcm_TpRxIndication)
+#define BSW_BSWM_CS_CFG_FN_DCM_TPTXCN         (Dcm_TpTxConfirmation)
+#define BSW_BSWM_CS_CFG_FN_DCM_TXCN           (Dcm_TxConfirmation)
 
 /* EcuM API Name */
 #define BSW_BSWM_CS_CFG_FN_ECUM_SWUE          (Aubist_UsrSetWakeupEvent)
