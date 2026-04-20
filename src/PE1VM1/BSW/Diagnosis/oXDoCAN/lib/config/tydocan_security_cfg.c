@@ -19,9 +19,7 @@
 #include "oxdocan_cfg_private.h"
 #include "tydocan_security_cfg_private.h"
 #include "oxdocan_aubif.h"
-#ifdef ES_INSPECT_H  
 #include "es_inspect.h"
-#endif
 
 #include "NvM.h"
 #include "memfill_u2.h"
@@ -130,9 +128,7 @@ U1     u1_g_TyDoCANSecurityCfgCompareKey(const U1 u1_a_ID, const U1 * u1_ap_KEY)
     if(u1_t_result == (U1)TRUE){
         u1_t_ret    = (U1)E_OK;
         if(u1_a_ID == (U1)OXDC_SECURITY_ID01){
-#ifdef ES_INSPECT_H           
-            vd_g_ESInspectReqRx((U1)ES_INSPECT_REQ_RUN, (U1)ES_INSPECT_MD_ACT);
-#endif
+            vd_g_ESInspectReqRx((U1)ES_INSPECT_REQ_RUN, (U1)ES_INSPECT_MD_CHK);
         }
     }
 

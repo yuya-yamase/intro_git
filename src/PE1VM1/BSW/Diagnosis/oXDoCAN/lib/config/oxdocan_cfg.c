@@ -41,7 +41,11 @@
 
 #include "Dcm_Dsp_SID28_Cfg.h"
 #include "oxdocan_rout_cfg.h"
+#include "es_inspect.h"
 
+#include "tydocan_ivdshif.h"
+#include "tydocan_xpn.h"
+/*#include "tydocan_dippi.h"*//* BEV Diag provisionally */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -130,6 +134,9 @@ void    vd_g_oXDoCANCfgWkupPreInit(void)
 /*===================================================================================================================================*/
 void    vd_g_oXDoCANCfgBonInit(void)
 {
+    vd_g_TyDoCANiVDshIfInit();
+    vd_g_TyDoCANXpnInit();
+/*    vd_g_TyDoCANDippiInit(); *//* BEV Diag provisionally */
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_oXDoCANCfgRstInit(void)                                                                                             */
@@ -139,6 +146,9 @@ void    vd_g_oXDoCANCfgBonInit(void)
 /*===================================================================================================================================*/
 void    vd_g_oXDoCANCfgRstInit(void)
 {
+    vd_g_TyDoCANiVDshIfInit();
+    vd_g_TyDoCANXpnInit();
+/*    vd_g_TyDoCANDippiInit(); *//* BEV Diag provisionally */
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_oXDoCANCfgWkupInit(void)                                                                                            */
@@ -148,6 +158,9 @@ void    vd_g_oXDoCANCfgRstInit(void)
 /*===================================================================================================================================*/
 void    vd_g_oXDoCANCfgWkupInit(void)
 {
+    vd_g_TyDoCANiVDshIfInit();
+    vd_g_TyDoCANXpnInit();
+/*    vd_g_TyDoCANDippiInit(); *//* BEV Diag provisionally */
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_oXDoCANCfgServiceInit(void)                                                                                         */
@@ -182,6 +195,10 @@ void    vd_g_oXDoCANCfgMainStart(const ST_OXDC_REQ * st_ap_REQ, const U2 u2_a_TS
             (void)BswM_CS_ResumeTxPdu(u1_t_ch);
         }
     }
+
+    vd_g_TyDoCANiVDshIfMainTask();
+    vd_g_TyDoCANXpnMainTask(st_ap_REQ->u1_eom_aft);
+/*    vd_g_TyDoCANDippiMainTask(st_ap_REQ->u1_eom_aft, u2_a_TSLOT);*//* BEV Diag provisionally */
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_oXDoCANCfgServiceMain(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_ANS * st_ap_ans, const U2 u2_a_TSLOT)                  */
@@ -342,9 +359,6 @@ U1      u1_g_oXDoCANCfgEomchk(void)
 #if (OXDC_EOM_IGN_ON != TRUE)
 #error "oxdocan_cfg.c : OXDC_EOM_IGN_ON shall be equal to TRUE."
 #endif
-
-#ifdef ES_INSPECT_H
-
 #if ((ES_INSPECT_MDBF_NUO_DI != (OXDC_EOM_NUO_DI >> 2)) || \
      (ES_INSPECT_MDBF_SI_ACT != (OXDC_EOM_SI_ACT >> 2)))
 #error "oxdocan_cfg.c : OXDC_EOM_NUO_DI and/or OXDC_EOM_SI_ACT shall be compabile with ES_INSPECT_MDBF_XXX."
@@ -357,14 +371,6 @@ U1      u1_g_oXDoCANCfgEomchk(void)
     u1_t_eom |= (u1_g_VehopemdIgnOn() & (U1)OXDC_EOM_IGN_ON);
 
     return(u1_t_eom);
-#else  /* #ifdef ES_INSPECT_H */
-    U1                      u1_t_eom;
-
-    u1_t_eom  = ((u1_g_VehopemdDiagOn() << 1U) & (U1)OXDC_EOM_DIAG_ON);
-    u1_t_eom |= (u1_g_VehopemdIgnOn() & (U1)OXDC_EOM_IGN_ON);
-
-    return(u1_t_eom);
-#endif /* #ifdef ES_INSPECT_H */
 }
 /*===================================================================================================================================*/
 /*  uint8   u1_g_oXDoCANComCtrlChk(uint8 * u1_ap_err)                                                                                */
