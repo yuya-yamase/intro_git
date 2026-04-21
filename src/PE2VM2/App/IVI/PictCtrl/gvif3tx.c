@@ -1367,6 +1367,7 @@ static U1       u1_s_GvifTx_Pwrno_HDCP( void )
             u1_t_return = (U1)TRUE;
             Mcu_OnStep_GVIF3TX_HDCP = (U2)MCU_STEP_GVIF3TX_HDCP_FIN;
         }
+        break;
 
     case MCU_STEP_GVIF3TX_HDCP_24:
         /* レジスタ書込み処理 */
