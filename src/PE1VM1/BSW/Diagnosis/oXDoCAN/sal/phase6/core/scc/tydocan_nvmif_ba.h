@@ -24,7 +24,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define OXDC_DATA_WRI_REQ_NB_20C2       (4U)   /* Number of bytes to write for DID 0x20C2.  */
 #define OXDC_DATA_WRI_REQ_NB_SKN        (16U)  /* Number of bytes for SafeKey Number.       */
-#define OXDC_DATA_WRI_REQ_NB_GMA        (6U)   /* Number of bytes for Global MAC Address.   */
+#define OXDC_DATA_WRI_REQ_NB_GMA        (8U)   /* Number of bytes for Global MAC Address.   */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
