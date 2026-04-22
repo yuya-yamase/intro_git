@@ -50,6 +50,7 @@ static U2 u2_s_PwrCtrlObservePgdVsysSeq( void );
 /* リセット要求検知 */
 static U2 u2_s_PwrCtrlObserveSoCResetReqSeq( void );
 static U2 u2_s_PwrCtrlObserveNMDiagResetSeq( void );
+static U2 u2_s_PwrCtrlObserveVMResetSeq( void );
 
 /*--------------------------------------------------------------------------*/
 /* Data                                                                     */
@@ -74,6 +75,7 @@ static U2 u2_s_PwrCtrl_Observe_Err_Sts;             /* 監視異常発生内容 */
 static U1 u1_s_PwrCtrl_Observe_SoCResetErr_Sts;     /* SoCリセット要求(異常)監視状態 */
 static U1 u1_s_PwrCtrl_Observe_PreSoCResetReq;      /* SoCリセット要求前回値 */
 static U1 u1_s_PwrCtrl_Observe_PreNMDiagReset;      /* NMダイアグリセット前回値 */
+static U1 u1_s_PwrCtrl_Observe_PreVMResetReq;       /* VMリセット準備要求前回値 */
 static U2 u2_s_PwrCtrl_Observe_Reset_Sts;           /* リセット要求内容 */
 
 #if (PWRCTRL_CFG_PRIVATE_ERR_CHK == PWRCTRL_CFG_PRIVATE_ERR_CHK_ENABLE)
@@ -124,6 +126,8 @@ void vd_g_PwrCtrlObserveInit( void )
     u1_s_PwrCtrl_Observe_SoCResetErr_Sts = (U1)PWRCTRL_OBSERVE_OFF;
     u1_s_PwrCtrl_Observe_PreSoCResetReq = (U1)PWRCTRL_COM_SOCRESET_NON;
     u1_s_PwrCtrl_Observe_PreNMDiagReset = (U1)PWRCTRL_COM_NMDIAGRESET_NON;
+    u1_s_PwrCtrl_Observe_PreVMResetReq = (U1)PWRCTRL_COM_VMRESETREQ_NON;
+
     return;
 }
 
@@ -171,6 +175,7 @@ void vd_g_PwrCtrlObserveMainFunc( void )
     /* リセット要求検知 */
     u2_t_resetreq |= u2_s_PwrCtrlObserveSoCResetReqSeq();   /* SoCリセット要求監視 */
     u2_t_resetreq |= u2_s_PwrCtrlObserveNMDiagResetSeq();   /* NMダイアグリセット監視 */
+    u2_t_resetreq |= u2_s_PwrCtrlObserveVMResetSeq();       /* VMリセット準備要求監視 */
 
     u2_s_PwrCtrl_Observe_Err_Sts = u2_t_obserr;             /* 監視異常発生内容を更新 */
 #if (PWRCTRL_CFG_PRIVATE_ERR_CHK == PWRCTRL_CFG_PRIVATE_ERR_CHK_ENABLE)
@@ -431,6 +436,18 @@ U2 u2_g_PwrCtrlObserveGetErrSts(void)
 U2 u2_g_PwrCtrlObserveGetResetSts(void)
 {
     return(u2_s_PwrCtrl_Observe_Reset_Sts);
+}
+
+/*****************************************************************************
+  Function      : u1_g_PwrCtrlObserveGetSoCPower
+  Description   : SoC起動状態取得処理
+  param[in/out] : none
+  return        : SoC起動状態
+  Note          : none
+*****************************************************************************/
+U1 u1_g_PwrCtrlObserveGetSoCPower(void)
+{
+    return(u1_s_PwrCtrl_Observe_SocPower_Sts);
 }
 
 /*****************************************************************************
@@ -880,6 +897,60 @@ static U2 u2_s_PwrCtrlObserveNMDiagResetSeq( void )
 
     /* NMダイアグリセットの前回値を更新 */
     u1_s_PwrCtrl_Observe_PreNMDiagReset = u1_t_read_req;
+
+    return(u2_t_ret);
+}
+
+/*****************************************************************************
+  Function      : u2_s_PwrCtrlObserveVMResetSeq
+  Description   : VMリセット準備要求検知処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static U2 u2_s_PwrCtrlObserveVMResetSeq( void )
+{
+    U2 u2_t_ret;
+    U1 u1_t_read_req;
+    U1 u1_t_fullinit_sts;
+
+    u2_t_ret = (U2)PWRCTRL_OBSERVE_ERR_NON;
+
+    /* VMリセット準備要求を取得 */
+    u1_t_read_req = u1_g_PwrCtrlComGetVMResetReq();
+    /* 完全初期化要求受付状態を取得 */
+    u1_t_fullinit_sts = u1_g_PwrCtrlComGetFullInitSts();
+    
+    /* 取得内容がVMリセット準備要求の場合 */
+    if(u1_t_read_req == (U1)PWRCTRL_COM_VMRESETREQ_ON)
+    {
+        /* SoC起動状態 かつ 前回値がVMリセット準備要求以外の場合 */
+        if((u1_s_PwrCtrl_Observe_SocPower_Sts == (U1)PWRCTRL_OBSERVE_SOCPOWER_ON)
+        && (u1_s_PwrCtrl_Observe_PreVMResetReq != (U1)PWRCTRL_COM_VMRESETREQ_ON))
+        {
+            /* 完全初期化要求ありの場合 */
+            if(u1_t_fullinit_sts == (U1)PWRCTRL_COM_FULLINITSTS_ON)
+            {
+                u2_t_ret = (U2)PWRCTRL_OBSERVE_RESET_VMRESET;
+                vd_g_PwrCtrlComTxSetVMResetRes((U1)PWRCTRL_COM_VMRESETRES_FULLINIT);
+            }
+            else
+            {
+                vd_g_PwrCtrlComTxSetVMResetRes((U1)PWRCTRL_COM_VMRESETRES_FULLINITNON);
+            }
+        }
+    }
+    else if(u1_t_read_req == (U1)PWRCTRL_COM_VMRESETREQ_NON)
+    {
+        vd_g_PwrCtrlComTxSetVMResetRes((U1)PWRCTRL_COM_VMRESETRES_NON);
+    }
+    else
+    {
+        /* 処理なし */
+    }
+
+    /* VMリセット準備要求の前回値を更新 */
+    u1_s_PwrCtrl_Observe_PreVMResetReq = u1_t_read_req;
 
     return(u2_t_ret);
 }

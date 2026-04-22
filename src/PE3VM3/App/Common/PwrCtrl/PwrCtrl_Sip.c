@@ -1319,6 +1319,41 @@ void vd_g_PwrCtrlSipSoCOnError(void)
     return;
 }
 
+/*****************************************************************************/
+/*  Function      : vd_g_PwrCtrlSipFullInitStart                             */
+/*  Description   : SIP共通 完全初期化開始時のWAKEUP-STAT1,2,3設定関数       */
+/*  param[in/out] : -                                                        */
+/*  return        : -                                                        */
+/*  Note          : none                                                     */
+/*****************************************************************************/
+void vd_g_PwrCtrlSipFullInitStart(void)
+{
+    /* 完全初期化(WAKEUP-STAT1,2,3=High)を端子設定 */
+    (void)Dio_WriteChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_WAKEUP_STAT1], (U1)MCU_DIO_HIGH);
+    (void)Dio_WriteChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_WAKEUP_STAT2], (U1)MCU_DIO_HIGH);
+    (void)Dio_WriteChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_WAKEUP_STAT3], (U1)MCU_DIO_HIGH);
+
+    return;
+}
+
+/*****************************************************************************/
+/*  Function      : vd_g_PwrCtrlSipFullInitEnd                               */
+/*  Description   : SIP共通 完全初期化終了時のWAKEUP-STAT1,2,3設定関数       */
+/*  param[in/out] : -                                                        */
+/*  return        : -                                                        */
+/*  Note          : none                                                     */
+/*****************************************************************************/
+void vd_g_PwrCtrlSipFullInitEnd(void)
+{
+    /* MCUホットスタート(WALEUP-STAT1=High)/SoC異常起動以外を設定 */
+    u1_s_PwrCtrl_Sip_WAKEUP_STAT1 = (U1)MCU_DIO_HIGH;
+    u1_s_PwrCtrl_Sip_WAKEUP_STAT2 = (U1)MCU_DIO_LOW;
+    u1_s_PwrCtrl_Sip_WAKEUP_STAT3 = (U1)MCU_DIO_LOW;
+    vd_g_Rim_WriteU1((U2)RIMID_U1_PWCTR_SOC_WU_STAT1, u1_s_PwrCtrl_Sip_WAKEUP_STAT1);
+
+    return;
+}
+
 /*****************************************************************************
   Function      : u1_g_PwrCtrlSipSoCRstSts
   Description   : SIP共通 SoCリセット起動要因通知関数

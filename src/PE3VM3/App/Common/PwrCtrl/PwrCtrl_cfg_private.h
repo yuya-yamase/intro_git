@@ -49,6 +49,7 @@
 #include "PwrCtrl_Observe.h"
 #include "PwrCtrl_Com.h"
 #include "PwrCtrl_ObserveSAIL.h"
+#include "PwrCtrl_FullInit.h"
 
 /*--------------------------------------------------------------------------*/
 /*  Literal Definitions                                                     */

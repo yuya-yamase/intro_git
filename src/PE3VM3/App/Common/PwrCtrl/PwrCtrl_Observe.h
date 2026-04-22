@@ -40,6 +40,7 @@
 #define PWRCTRL_OBSERVE_RESET_SOCERR            (0x0002U)   /* SoCリセット要求(異常) */
 #define PWRCTRL_OBSERVE_RESET_CDC               (0x0004U)   /* CDCリセット要求 */
 #define PWRCTRL_OBSERVE_RESET_NMDIAG            (0x0008U)   /* NMダイアグリセット */
+#define PWRCTRL_OBSERVE_RESET_VMRESET           (0x0010U)   /* VMリセット準備要求 */
 
 #define PWRCTRL_OBSERVE_SOCPOWER_OFF            (PWRCTRL_COM_SOCPOWER_OFF)   /* SoC停止 */
 #define PWRCTRL_OBSERVE_SOCPOWER_ON             (PWRCTRL_COM_SOCPOWER_ON)    /* SoC起動 */
@@ -49,6 +50,7 @@
 /*--------------------------------------------------------------------------*/
 void vd_g_PwrCtrlObserveInit( void );
 void vd_g_PwrCtrlObserveMainFunc( void );
+void vd_g_PwrCtrlObserveFullInitChk( void );
 /* 起動検知/スタンバイ要求検知 */
 U1 u1_g_PwrCtrlObserveOnOffTrigger( void );
 void vd_g_PwrCtrlObserveVm3StbyInfo( const U1 u1_a_ProhibitSleep );
@@ -68,6 +70,7 @@ void vd_g_PwrCtrlObserveSoCResetErrReq( const U1 u1_a_req );
 U2 u2_g_PwrCtrlObserveGetResetSts(void);
 
 void vd_g_PwrCtrlObserveSetSocPower(const U1 u1_a_sts );
+U1 u1_g_PwrCtrlObserveGetSoCPower( void );
 
 #endif /* PWRCTRL_OBSERVE_H */
 

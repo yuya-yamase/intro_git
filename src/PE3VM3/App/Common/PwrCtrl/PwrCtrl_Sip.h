@@ -89,6 +89,10 @@ U1 u1_g_PwrCtrlSipStbyStepGetSts( const U1 u1_a_stby );
 void vd_g_PwrCtrlSipSoCOnComp( void );
 /* SoC異常検知通知関数 */
 void vd_g_PwrCtrlSipSoCOnError( void );
+/* 完全初期化開始時のWAKEUP-STAT1,2,3設定関数 */
+void vd_g_PwrCtrlSipFullInitStart( void );
+/* 完全初期化終了時のWAKEUP-STAT1,2,3設定関数 */
+void vd_g_PwrCtrlSipFullInitEnd( void );
 
 /* SoCリセット起動要因通知関数 */
 U1 u1_g_PwrCtrlSipSoCRstSts( void );

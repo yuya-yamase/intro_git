@@ -36,6 +36,7 @@
 #define PWRCTRL_MAIN_SIP_STS_CHK_AOSS   (0x03U)  /* AOSS_SLEEP_ENTRY_EXIT変化待ち */
 #define PWRCTRL_MAIN_SIP_STS_CHK_WAKE   (0x04U)  /* 起動要因判定中 */
 #define PWRCTRL_MAIN_SIP_STS_CHK_SAILERR (0x05U) /* SAILERR判定中 */
+#define PWRCTRL_MAIN_SIP_STS_FULLINIT   (0x06U)  /* 完全初期化実行中 */
 #define PWRCTRL_MAIN_SIP_STS_COMP       (0xFFU)  /* 完了 */
 
 /* SIP強制電源OFF状態 */
@@ -80,8 +81,10 @@ static void vd_s_PwrCtrlMainStbyCancelSt1Req( void );
 static void vd_s_PwrCtrlMainStbyCancelSt2Req( const U1 u1_a_pre_seq );
 static void vd_s_PwrCtrlMainPmPsailFsReq( void );
 static void vd_s_PwrCtrlMainPmaPsFsReq( void );
+static void vd_s_PwrCtrlMainFullInitExeChk( void );
 static void vd_s_PwrCtrlMainObserveFsJudge( void );
 static void vd_s_PwrCtrlMainOnOffJudge( void );
+static void vd_s_PwrCtrlMainFullInitReqJudge( void );
 
 /* シーケンス動作用処理 */
 static void vd_s_PwrCtrlMainBonSeq( void );
@@ -227,6 +230,9 @@ void vd_g_PwrCtrlMainBonReq( void )
     /* VM間通信処理初期化 */
     vd_g_PwrCtrlComBonInit();
 
+    /* 完全初期化処理初期化 */
+    vd_g_PwrCtrlFullInitInit();
+
     /* PGOOD_VB監視 開始 */
     vd_g_PwrCtrlObservePgdVbReq((U1)PWRCTRL_OBSERVE_ON);
 
@@ -252,6 +258,7 @@ static void vd_s_PwrCtrlMainBonDDconvOnReq( void )
 
     vd_g_PwrCtrlObserveSoCResetErrReq((U1)PWRCTRL_OBSERVE_OFF);        /* SoCリセット要求(異常)検知 終了 */
     vd_g_PwrCtrlObserveSetSocPower((U1)PWRCTRL_OBSERVE_SOCPOWER_OFF);  /* SoC起動状態：SoC停止設定 */
+    vd_s_PwrCtrlMainFullInitExeChk();                                  /* 完全初期化実施判定処理 */
 
     return;
 }
@@ -275,6 +282,7 @@ static void vd_s_PwrCtrlMainBonPwrOnReq( void )
 
     vd_g_PwrCtrlObserveSoCResetErrReq((U1)PWRCTRL_OBSERVE_OFF);        /* SoCリセット要求(異常)検知 終了 */
     vd_g_PwrCtrlObserveSetSocPower((U1)PWRCTRL_OBSERVE_SOCPOWER_OFF);  /* SoC起動状態：SoC停止設定 */
+    vd_s_PwrCtrlMainFullInitExeChk();                                  /* 完全初期化実施判定処理 */
 
     return;
 }
@@ -615,6 +623,33 @@ static void vd_s_PwrCtrlMainPmaPsFsReq( void )
     return;
 }
 
+/*****************************************************************************/
+/*  Function      : vd_s_PwrCtrlMainFullInitExeChk                           */
+/*  Description   : 完全初期化実施判定要求                                   */
+/*  param[in/out] : none                                                     */
+/*  return        : none                                                     */
+/*  Note          : none                                                     */
+/*****************************************************************************/
+static void vd_s_PwrCtrlMainFullInitExeChk( void )
+{
+    U1 u1_t_fullinitsts;
+    
+    u1_t_fullinitsts = u1_g_PwrCtrlComGetFullInitSts();
+    
+    if(u1_t_fullinitsts == (U1)PWRCTRL_COM_FULLINITSTS_ON)
+    {
+        u1_s_PwrCtrl_Main_SipPwrSts = (U1)PWRCTRL_MAIN_SIP_STS_FULLINIT;             /* SIP電源状態：実行中→完全初期化実行中 */
+        vd_g_PwrCtrlComTxSetInitStart((U1)PWRCTRL_COM_FULLINITSTART_ON);             /* VM2初期化開始通知 */
+        vd_g_PwrCtrlFullInitStartReq();                                              /* 完全初期化シーケンス実行要求 */
+    }
+    else
+    {
+        /* 【todo】SAIL完全初期化要求通知：要求無し */
+    }
+
+    return;
+}
+
 /*****************************************************************************
   Function      : vd_g_PwrCtrlMainTask
   Description   : 
@@ -641,6 +676,9 @@ void vd_g_PwrCtrlMainTask( void )
 
     /* スタンバイ/スタンバイ中断(再起動)開始判定 */
     vd_s_PwrCtrlMainOnOffJudge();
+
+    /* 完全初期化要求判定 */
+    vd_s_PwrCtrlMainFullInitReqJudge();
 
     u1_g_PwrCtrl_Main_DbgFailOffFlag = u1_g_PwrCtrl_PinMonitor_GetPinInfo((U1)PWRCTRL_CFG_PRIVATE_KIND_DBG_FAIL_OFF);    /* DBG-FAIL-OFF端子の状態を取得 */
 
@@ -784,11 +822,13 @@ static void vd_s_PwrCtrlMainObserveFsJudge( void )
     /* または、SoCリセット要求(正常) 検知 */
     /* または、SoCリセット要求(異常) 検知 */
     /* または、NMダイアグリセット 検知 */
+    /* または、VMリセット準備要求 検知 */
     else if( ((u2_t_observe_sts & (U2)PWRCTRL_OBSERVE_ERR_SPI) == (U2)PWRCTRL_OBSERVE_ERR_SPI)
           || ((u2_t_observe_sts & (U2)PWRCTRL_OBSERVE_ERR_SAILUART) == (U2)PWRCTRL_OBSERVE_ERR_SAILUART)
           || ((u2_t_resetreq_sts & (U2)PWRCTRL_OBSERVE_RESET_SOCNORM) == (U2)PWRCTRL_OBSERVE_RESET_SOCNORM)
           || ((u2_t_resetreq_sts & (U2)PWRCTRL_OBSERVE_RESET_SOCERR) == (U2)PWRCTRL_OBSERVE_RESET_SOCERR)
-          || ((u2_t_resetreq_sts & (U2)PWRCTRL_OBSERVE_RESET_NMDIAG) == (U2)PWRCTRL_OBSERVE_RESET_NMDIAG) )
+          || ((u2_t_resetreq_sts & (U2)PWRCTRL_OBSERVE_RESET_NMDIAG) == (U2)PWRCTRL_OBSERVE_RESET_NMDIAG)
+          || ((u2_t_resetreq_sts & (U2)PWRCTRL_OBSERVE_RESET_VMRESET) == (U2)PWRCTRL_OBSERVE_RESET_VMRESET) )
     {
         /* 同時に異常を検知した場合 */
         /* SAIL UART Message監視 異常検知 */
@@ -924,6 +964,68 @@ static void vd_s_PwrCtrlMainOnOffJudge( void )
 }
 
 /*****************************************************************************
+  Function      : vd_s_PwrCtrlMainFullInitReqJudge
+  Description   : 完全初期化要求判定
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static void vd_s_PwrCtrlMainFullInitReqJudge( void )
+{
+    U1 u1_t_req;
+    U1 u1_t_power;
+    U1 u1_t_res;
+    U1 u1_t_mcuresult;
+    /* U1 u1_t_sailresult; */
+    
+    /* 完全初期化要求の取得 */
+    u1_t_req = u1_g_PwrCtrlComGetFullInitReq();
+    /* SoC起動状態の取得 */
+    u1_t_power = u1_g_PwrCtrlObserveGetSoCPower();
+    
+    /* 完全初期化要求(開始)の場合 */
+    if(u1_t_req == (U1)PWRCTRL_COM_FULLINITREQ_START)
+    {
+        /* SoC起動状態の場合 */
+        if(u1_t_power == (U1)PWRCTRL_OBSERVE_SOCPOWER_ON)
+        {
+            u1_t_res = (U1)PWRCTRL_COM_FULLINITRES_STARTOK;
+        }
+        else
+        {
+            u1_t_res = (U1)PWRCTRL_COM_FULLINITRES_STARTNG;
+        }
+    }
+    /* 完全初期化要求(終了)の場合 */
+    else if(u1_t_req == (U1)PWRCTRL_COM_FULLINITREQ_END)
+    {
+        /* MCU完全初期化結果の取得 */
+        u1_t_mcuresult = u1_g_PwrCtrlFullInitGetResult();
+        /* 【todo】SAIL完全初期化結果の取得、判定 */
+        /* u1_t_sailresult = u1_g_VISPwrGetSailCompInitRes(); */
+        /* SoC起動状態 かつ MCU完全初期化成功 かつ SAIL完全初期化成功の場合 */
+        if((u1_t_power == (U1)PWRCTRL_OBSERVE_SOCPOWER_ON)
+         &&(u1_t_mcuresult == (U1)PWRCTRL_FULLINIT_RESULT_OK))
+        /* &&(u1_t_sailresult == (U1)VIS_SAILCOMPINIT_OK) */
+        {
+            u1_t_res = (U1)PWRCTRL_COM_FULLINITRES_ENDOK;
+            /* 完全初期化終了時のWAKEUP-STAT1,2,3設定 */
+            vd_g_PwrCtrlSipFullInitEnd();
+        }
+        else
+        {
+            u1_t_res = (U1)PWRCTRL_COM_FULLINITRES_ENDNG;
+        }
+    }
+    else
+    {
+        u1_t_res = (U1)PWRCTRL_COM_FULLINITRES_NON;
+    }
+    /* 完全初期化応答通知データ設定 */
+    vd_g_PwrCtrlComTxSetFullInitRes(u1_t_res);
+}
+
+/*****************************************************************************
   Function      : vd_s_PwrCtrlMainStartSet
   Description   : シーケンス開始処理
   param[in/out] : none
@@ -960,6 +1062,7 @@ static void vd_s_PwrCtrlMainBonSeq( void )
     U1 u1_t_foff_req;                                                          /* SIP電源強制OFFシーケンス要求確認結果 */
     U1 u1_t_socrst;                                                            /* SoCリセット起動要因取得 */
     U1 u1_t_socwkupcond;                                                       /* SoC起動条件通知取得 */
+    U1 u1_t_mcu_result;                                                        /* MCU完全初期化結果 */
 
     u1_t_foff_req = (U1)PWRCTRL_MAIN_FORCEDOFF_STS_INIT;
 /* /BU-DET =Hi? */
@@ -991,6 +1094,24 @@ static void vd_s_PwrCtrlMainBonSeq( void )
             u1_s_PwrCtrl_Main_SysPwrSts = (U1)PWRCTRL_MAIN_SYS_STS_COMP;       /* SYS電源状態：実行中→完了 */
             u1_s_PwrCtrl_Main_SipPwrSts = (U1)PWRCTRL_MAIN_SIP_STS_INPRC;      /* SIP電源状態：初期状態→実行中 */
             vd_g_PwrCtrlSipOnReq();                                            /* SIP電源ON要求(+B ON) */
+            vd_s_PwrCtrlMainFullInitExeChk();                                  /* 完全初期化実施判定処理 */
+        }
+    }
+
+    /* 完全初期化処理 */
+    if ( u1_s_PwrCtrl_Main_SipPwrSts == (U1)PWRCTRL_MAIN_SIP_STS_FULLINIT )
+    {
+        vd_g_PwrCtrlFullInitSeq();                                             /* 完全初期化シーケンス */
+        u1_t_mcu_result = u1_g_PwrCtrlFullInitGetResult();                     /* 完全初期化結果問い合わせ */
+        /* MCU完全初期化結果が成功 または 失敗の場合 */
+        if (( u1_t_mcu_result == (U1)PWRCTRL_FULLINIT_RESULT_OK )
+          ||( u1_t_mcu_result == (U1)PWRCTRL_FULLINIT_RESULT_NG ))
+        {
+            vd_g_PwrCtrlSipFullInitStart();                                    /* 完全初期化開始時のWAKEUP-STAT1,2,3設定 */
+            vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_FULLINIT);   /* SoC正常起動(完全初期化要因)の設定 */
+            /* 【todo】SAIL完全初期化要求通知：要求あり */
+            /* vd_g_VISPwrSailCompInitReqNotify((U1)STD_ON); */
+            u1_s_PwrCtrl_Main_SipPwrSts = (U1)PWRCTRL_MAIN_SIP_STS_INPRC;      /* SIP電源状態：完全初期化実行中→実行中 */
         }
     }
 
