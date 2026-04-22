@@ -35,6 +35,7 @@
 #include "drec_tx.h"
 #include "sound_cri_mgr.h"
 #include "fwush.h"
+#include "es_inspect.h"
 
 /* Application           */
 #include "dimmer.h"
@@ -65,6 +66,7 @@
 #include "asilchk.h"
 #include "nvmc_if_ivi.h"
 #include "nvmc_if_cen.h"
+#include "product.h"
 
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
@@ -93,6 +95,7 @@
 void vd_g_22SSCallout_StaBonInit(void)
 {
     static const FP_VD_FVD             fp_sp_vd_ECU_M_CFG_BON_INIT[] = {
+    	&vd_g_ProductInit,
         &vd_g_VardefBonInit,
         &vd_g_McstBonInit,
         &vd_g_LocaleBonInit,
@@ -146,6 +149,7 @@ void vd_g_22SSCallout_StaBonInit(void)
     vd_g_oXDoCANPreInit();      /* vd_g_oXDoCANPreInit shall be called before vd_g_oXCANRstInit */
     vd_g_oXCANRstInit();
     vd_g_oXDoCANBonInit();
+    vd_g_ESInspectBonInit();
     vd_g_VehopemdRstInit();
     vd_g_iVDshInit();
     vd_g_vCryCl_Init();
@@ -169,6 +173,7 @@ void vd_g_22SSCallout_StaBonInit(void)
 void vd_g_22SSCallout_StaRstInit(void)
 {
     static const FP_VD_FVD             fp_sp_vd_ECU_M_CFG_RST_INIT[] = {
+        &vd_g_ProductInit,
         &vd_g_VardefRstwkInit,
         &vd_g_McstRstwkInit,
         &vd_g_LocaleRstWkupInit,
@@ -221,6 +226,7 @@ void vd_g_22SSCallout_StaRstInit(void)
     vd_g_oXDoCANPreInit();      /* vd_g_oXDoCANPreInit shall be called before vd_g_oXCANRstInit */
     vd_g_oXCANRstInit();
     vd_g_oXDoCANRstInit();
+    vd_g_ESInspectRstwkInit();
     vd_g_VehopemdRstInit();
     vd_g_iVDshInit();
     vd_g_vCryCl_Init();
@@ -244,6 +250,7 @@ void vd_g_22SSCallout_StaRstInit(void)
 void vd_g_22SSCallout_StaWkupInit(void)
 {
     static const FP_VD_FVD             fp_sp_vd_ECU_M_CFG_WKUP_INIT[] = {
+        &vd_g_ProductInit,
         &vd_g_VardefRstwkInit,
         &vd_g_McstRstwkInit,
         &vd_g_LocaleRstWkupInit,
@@ -297,6 +304,7 @@ void vd_g_22SSCallout_StaWkupInit(void)
     vd_g_oXDoCANPreInit();      /* vd_g_oXDoCANPreInit shall be called before vd_g_oXCANWkupInit */
     vd_g_oXCANWkupInit();
     vd_g_oXDoCANWkupInit();
+    vd_g_ESInspectRstwkInit();
     vd_g_VehopemdWkupInit();
     vd_g_iVDshInit();
     vd_g_vCryCl_Init();

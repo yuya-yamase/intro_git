@@ -18,6 +18,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "vardef_cfg_private.h"
 #include "vardef_dest_cfg_private.h"
+#include "vardef_ds2e.h"
 #include "vardef_hcs_cfg_private.h"
 #include "vardef_omus_cfg_private.h"
 #include "vardef_autop_cfg_private.h"
@@ -103,6 +104,7 @@ void    vd_g_VardefCfgBonInit(void)
     vd_g_VardefEsOptBonInit();
     vd_g_VardefDestBonInit();
 
+    vd_g_VardefDs2EInit();
     vd_g_VardefHcsBonInit();
     vd_g_VardefOmusBonInit();
 }
@@ -117,6 +119,7 @@ void    vd_g_VardefCfgRstwkInit(void)
     vd_g_VardefEsOptRstwkInit();
     vd_g_VardefDestRstwkInit();
 
+    vd_g_VardefDs2EInit();
     vd_g_VardefHcsRstwkInit();
     vd_g_VardefOmusRstwkInit();
 }
@@ -151,6 +154,7 @@ void    vd_g_VardefCfgMainTask(const U2 u2_a_EOM, const U1 u1_a_TSLOT)
     else{
         /* do nothing */
     }
+    vd_g_VardefDs2EMainTask();
 }
 /*===================================================================================================================================*/
 /*  U2      u2_g_VardefCfgEomchk(void)                                                                                               */

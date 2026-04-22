@@ -50,6 +50,7 @@
 #include "ivdsh.h"
 #include "vCryCl.h"
 #include "fwush.h"
+#include "es_inspect.h"
 
 #include "gpt_drv_ost.h"
 #include "wdg_drv.h"
@@ -86,6 +87,7 @@
 #include "asilchk.h"
 #include "nvmc_if_ivi.h"
 #include "nvmc_if_cen.h"
+#include "product.h"
 /*---------------------------------------------------------------------------*/
 /* Platform Header                                                           */
 /*---------------------------------------------------------------------------*/
@@ -93,6 +95,7 @@
 #include "sound_cri_mgr.h"
 #include "xspi_met.h"
 #include "xspi_met_calib.h"
+#include "xspi_met_dsal.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -290,6 +293,7 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*-------------------------------------------------------------------*/
     {&vd_g_VardefMainTask,              (U4)SCHDLR_TASKBIT__20MS_B  },
     {&vd_g_McstMainTask,                (U4)SCHDLR_TASKBIT__20MS_B  },
+    {&vd_g_ProductNvmSynTask,           (U4)SCHDLR_TASKBIT_100MS_B  },
     /*-------------------------------------------------------------------*/
     /*                                                                   */
     /*                                                                   */
@@ -367,6 +371,8 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     {&vd_g_oXDoCANMainTask,             (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_oXCANMainPosTask,            (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_oXSECMainPosMid,             (U4)SCHDLR_TASKBIT___5MS    },
+    {&vd_g_XSpiDsalMainTask,            (U4)SCHDLR_TASKBIT___5MS    },      /* This task shall be called after vd_g_oXDoCANMainTask           */
+                                                                            /* and before vd_g_XSpiMETPduTx.                                  */
     {&vd_g_XSpiMETPduTx,                (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_XSpiCalibMainTask,           (U4)SCHDLR_TASKBIT_100MS_A  },      /* This task is not needed to be called before vd_g_XSpiMETPduTx  */
     {&vd_g_iVDshMainWriTask,            (U4)SCHDLR_TASKBIT___5MS    },
@@ -376,6 +382,7 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*  10ms A Platform Post Task                                        */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
+    {&vd_g_ESInspectMainTask,           (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_Rim_Task,                    (U4)SCHDLR_TASKBIT__10MS_A  },
 
     /*-------------------------------------------------------------------*/
@@ -454,6 +461,7 @@ void    vd_g_SchdlrCfgIdleToRun(void)
     /*------------------------------------------------------------------------------*/
     vd_g_Gpt_OstStart((U1)GPT_OST_CH_06_SCHDLR_TICK, &u4_sp_SCHDLR_OST_START[0]);
 
+    vd_g_ESInspectRunInit();
     SuspendAllInterrupts();
     xspi_Init( XSPI_CH_02 );
     ResumeAllInterrupts();
