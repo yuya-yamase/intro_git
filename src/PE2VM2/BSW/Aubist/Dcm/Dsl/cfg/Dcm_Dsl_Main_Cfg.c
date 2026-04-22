@@ -1,7 +1,7 @@
-/* Dcm_Dsl_Main_cfg_c(v5-5-0)                                               */
+/* Dcm_Dsl_Main_cfg_c(v5-10-0)                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -21,6 +21,9 @@
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
+#define DCM_DSL_DEFAULT_P2SERVER          ((uint16)50U)      /* P2Server */
+#define DCM_DSL_DEFAULT_P2STARSERVER_MAX  ((uint16)5000U)    /* P2StarServerMax */
+#define DCM_DSL_DEFAULT_P2STARSERVER_MIN  ((uint16)1500U)    /* P2StarServerMin */
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -352,25 +355,21 @@ CONST(AB_83_ConstV Dcm_Dsl_MainConnectionType, DCM_CONFIG_DATA) Dcm_Dsl_R0_C3_st
 /* Connection */
 CONST(AB_83_ConstV Dcm_Dsl_ConnectionType, DCM_CONFIG_DATA) Dcm_Dsl_R0_stConnection[DCM_DSL_R0_CONNECTION_NUM] =
 {
-
     {
         &Dcm_Dsl_R0_C0_stMainConnection[0],    /* ptMainConnection */
         NULL_PTR,                              /* ptPeriodicTransmission */
         NULL_PTR                               /* ptResponseOnEvent */
     },
-
     {
         &Dcm_Dsl_R0_C1_stMainConnection[0],    /* ptMainConnection */
         NULL_PTR,                              /* ptPeriodicTransmission */
         NULL_PTR                               /* ptResponseOnEvent */
     },
-
     {
         &Dcm_Dsl_R0_C2_stMainConnection[0],    /* ptMainConnection */
         NULL_PTR,                              /* ptPeriodicTransmission */
         NULL_PTR                               /* ptResponseOnEvent */
     },
-
     {
         &Dcm_Dsl_R0_C3_stMainConnection[0],    /* ptMainConnection */
         NULL_PTR,                              /* ptPeriodicTransmission */
@@ -440,7 +439,7 @@ CONST(AB_83_ConstV uint16, DCM_CONFIG_DATA) Dcm_Dsl_ConnectionIdMapTable[DCM_DSL
     (uint16)0U,
     (uint16)2U,
     (uint16)4U,
-    (uint16)6U,
+    (uint16)6U
 };
 
 CONST(AB_83_ConstV Dcm_Dsl_KALBufferType, DCM_CONFIG_DATA) Dcm_Dsl_stKALBufferTable[DCM_DSL_FUNCADDR_NUM] =
@@ -526,7 +525,8 @@ FUNC(Std_ReturnType, DCM_CODE) Dcm_Dsl_IndicateSecLevelChange
 /* Function Name | Dcm_Dsl_GetP2ServerValue                                 */
 /* Description   | Get P2Server/P2StarServerMax/P2StarServerMin value       */
 /* Preconditions | none                                                     */
-/* Parameters    | [in]  u1Level : session control type value               */
+/* Parameters    | [in]  u1SesCtrlType : session control type value         */
+/*               | [in]  u1ProtocolType : protocol type value               */
 /*               | [out] ptP2Server : P2Server value                        */
 /*               | [out] ptP2StarServerMax : P2StarServerMax value          */
 /*               | [out] ptP2StarServerMin : P2StarServerMin value          */
@@ -535,26 +535,21 @@ FUNC(Std_ReturnType, DCM_CODE) Dcm_Dsl_IndicateSecLevelChange
 /****************************************************************************/
 FUNC(void, DCM_CODE) Dcm_Dsl_GetP2ServerValue
 (
-    const Dcm_SesCtrlType u1Level,
+    const Dcm_SesCtrlType u1SesCtrlType,
+    const Dcm_ProtocolType u1ProtocolType,
     P2VAR(uint16, AUTOMATIC, DCM_APPL_DATA) ptP2Server,
     P2VAR(uint16, AUTOMATIC, DCM_APPL_DATA) ptP2StarServerMax,
     P2VAR(uint16, AUTOMATIC, DCM_APPL_DATA) ptP2StarServerMin
 )
 {
-    uint8 u1_SessionRow;
-    uint8 u1_SessionRowMax;
+    Std_ReturnType u1_RetGetP2ServerValue;
 
-    u1_SessionRowMax = Dcm_P_u1SessionRow_N;
-
-    for( u1_SessionRow = (uint8)0U; u1_SessionRow < u1_SessionRowMax; u1_SessionRow++ )
+    u1_RetGetP2ServerValue = Dcm_Dsp_GetP2ServerValue( u1SesCtrlType, u1ProtocolType, ptP2Server, ptP2StarServerMax, NULL_PTR, ptP2StarServerMin );
+    if( u1_RetGetP2ServerValue != (Std_ReturnType)E_OK )
     {
-        if( Dcm_P_SID10_stSessionRow_Tbl[u1_SessionRow].u1Level == u1Level )
-        {
-            *ptP2Server = Dcm_P_SID10_stSessionRow_Tbl[u1_SessionRow].u2P2ServerMax;
-            *ptP2StarServerMax = Dcm_P_SID10_stSessionRow_Tbl[u1_SessionRow].u2P2StarServerMax;
-            *ptP2StarServerMin = Dcm_P_SID10_stSessionRow_Tbl[u1_SessionRow].u2P2StarServerTimeoutMin;
-            break;
-        }
+        *ptP2Server = DCM_DSL_DEFAULT_P2SERVER;
+        *ptP2StarServerMax = DCM_DSL_DEFAULT_P2STARSERVER_MAX;
+        *ptP2StarServerMin = DCM_DSL_DEFAULT_P2STARSERVER_MIN;
     }
     return;
 }
@@ -613,6 +608,7 @@ FUNC(Std_ReturnType, DCM_CODE) SchM_Call_Dcm_IocM_SetFullComMode
     return Dcm_SetFullComMode(NetworkId);
 }
 
+
 #define DCM_STOP_SEC_CODE
 #include <Dcm_MemMap.h>
 
@@ -626,12 +622,15 @@ FUNC(Std_ReturnType, DCM_CODE) SchM_Call_Dcm_IocM_SetFullComMode
 /*  v5-0-0         :2021-12-24                                              */
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
-/*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-02-27                                              */
+/*  v5-8-0         :2024-10-29                                              */
+/*  v5-9-0         :2025-02-26                                              */
+/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v5-5-1                                              */
+/*  BSW plug-in        :v5-10-0                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

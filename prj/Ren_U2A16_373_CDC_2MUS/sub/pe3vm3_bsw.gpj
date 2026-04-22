@@ -271,6 +271,7 @@
 ../../src/PE3VM3/BSW/System/Throughput/config/throughput_cfg.c
 ../../src/PE3VM3/BSW/System/Throughput/config/throughput_sched.c
 ../../src/PE3VM3/BSW/System/Throughput/scc/throughput.c
+../../src/PE3VM3/LIB/Common/scc/bcd.c
 ../../src/PE3VM3/LIB/Common/scc/bitcnt.c
 ../../src/PE3VM3/LIB/Common/scc/crc32.c
 ../../src/PE3VM3/LIB/Common/scc/fpcall_u1_and.c
@@ -281,6 +282,7 @@
 ../../src/PE3VM3/LIB/Common/scc/memfill_u1.c
 ../../src/PE3VM3/LIB/Common/scc/memfill_u2.c
 ../../src/PE3VM3/LIB/Common/scc/memfill_u4.c
+../../src/PE3VM3/LIB/Common/scc/mtrxsrch.c
 ../../src/PE3VM3/LIB/Common/scc/trpl_rdndnt.c
 ../../src/PE3VM3/LIB/Ren_G4MH/scc/bswlib.c
 
@@ -297,6 +299,6 @@
 
 # ----------------------------------------------------------------------------------------------------------------------------------
 # ghsprj version 1-1-0
-# Date generated: 2026/02/26 15:33:34
+# Date generated: 2026/04/09 08:34:58
 # ----------------------------------------------------------------------------------------------------------------------------------
 

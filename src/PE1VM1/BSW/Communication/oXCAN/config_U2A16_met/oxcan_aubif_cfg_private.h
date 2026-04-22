@@ -26,11 +26,14 @@
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* #include "tydocan_dtc_nmgbl.h" */
-/* #include "oxdocan_aubif_ma.h" */
+#include "oxdocan_aubif_ma.h"
+
+#include "oxsec.h"                     /* vd_g_oXSECIedOmaRslt is defined in oxsec.h      */
+                                       /* OXSEC_AUB_EN_IDSM is defined in oxsec_aub_cfg.h */
 
 /* #include "can_lpr.h"     */
 /* #include "can_qsev_rx.h" */
-/* #include "vcan_tx_ack.h" */
+#include "vcan_tx_ack.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -77,13 +80,13 @@ extern const U2                           u2_gp_OXCAN_E2E_REC_BY_IPDU[];
 extern const U1                           u1_gp_OXCAN_E2E_REC_LEN[OXCAN_E2E_NUM_REC];
 #endif /* #if (OXCAN_E2E_NUM_REC > 0U) */
 
-#endif      /* OXCAN_AUBIF_CFG_H */
-
 /* OMA = On-Board MAC Authentication */
 #if (OXCAN_OMA_NUM_REC > 0U)
 extern const U2                           u2_gp_OXCAN_OMA_REC_BY_IPDU[];
 extern const U1                           u1_gp_OXCAN_OMA_REC_LEN[OXCAN_OMA_NUM_REC];
 #endif /* #if (OXCAN_OMA_NUM_REC > 0U) */
+
+#endif      /* OXCAN_AUBIF_CFG_H */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */

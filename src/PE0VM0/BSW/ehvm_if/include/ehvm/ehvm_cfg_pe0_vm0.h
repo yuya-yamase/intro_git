@@ -80,6 +80,7 @@
 #define EHVM_RX_VCCID_VCC_SHARED_TX_VM2 ((ehvm_uint32_t)18U)
 #define EHVM_RX_VCCID_VCC_SHARED_TX_VM3 ((ehvm_uint32_t)19U)
 #define EHVM_RX_VCCID_VCC_VCRYCL_TX_VM1 ((ehvm_uint32_t)21U)
+#define EHVM_RX_VCCID_VCC_OXSEC_TX_VM1 ((ehvm_uint32_t)23U)
 
 #define EHVM_RX_VCCID_VCCBUFFER_1_SLEEPSTATUS_VM1_TOMASTER_MAX ((ehvm_uint32_t)0x00000004U)
 #define EHVM_RX_VCCID_VCCBUFFER_2_SLEEPSTATUS_VM2_TOMASTER_MAX ((ehvm_uint32_t)0x00000004U)
@@ -94,6 +95,7 @@
 #define EHVM_RX_VCCID_VCC_SHARED_TX_VM2_MAX ((ehvm_uint32_t)0x00000100U)
 #define EHVM_RX_VCCID_VCC_SHARED_TX_VM3_MAX ((ehvm_uint32_t)0x00000100U)
 #define EHVM_RX_VCCID_VCC_VCRYCL_TX_VM1_MAX ((ehvm_uint32_t)0x00000020U)
+#define EHVM_RX_VCCID_VCC_OXSEC_TX_VM1_MAX ((ehvm_uint32_t)0x00000008U)
 
 /* ehvm_vmm_clear_wakeup_factor,ehvm_vmm_enable_wakeup_factor,ehvm_vmm_disable_wakeup_factor */
 #define EHVM_PE0_VM0_CTL_WAKEUP_FACTOR_A0_BIT_NUM_0  ((ehvm_uint32_t)0U)

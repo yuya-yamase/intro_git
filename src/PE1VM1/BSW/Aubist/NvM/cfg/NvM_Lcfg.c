@@ -38085,6 +38085,4538 @@ CONST(AB_83_ConstV NvM_BlockDescriptorType, NVM_CONFIG_DATA) NvMBlockDescriptors
         NULL_PTR    /* NvMInitBlockCallback */
 #endif
     },
+    {
+        /* ID.865 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        4U,    /* NvMNvBlockLength */
+        865U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.866 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        4U,    /* NvMNvBlockLength */
+        866U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.867 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        4U,    /* NvMNvBlockLength */
+        867U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.868 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        4U,    /* NvMNvBlockLength */
+        868U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.869 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        4U,    /* NvMNvBlockLength */
+        869U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.870 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        4U,    /* NvMNvBlockLength */
+        870U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.871 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        4U,    /* NvMNvBlockLength */
+        871U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.872 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        4U,    /* NvMNvBlockLength */
+        872U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.873 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        4U,    /* NvMNvBlockLength */
+        873U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.874 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        4U,    /* NvMNvBlockLength */
+        874U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.875 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        4U,    /* NvMNvBlockLength */
+        875U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.876 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        4U,    /* NvMNvBlockLength */
+        876U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.877 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        4U,    /* NvMNvBlockLength */
+        877U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.878 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        4U,    /* NvMNvBlockLength */
+        878U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.879 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        4U,    /* NvMNvBlockLength */
+        879U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.880 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        4U,    /* NvMNvBlockLength */
+        880U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.881 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        4U,    /* NvMNvBlockLength */
+        881U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.882 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        4U,    /* NvMNvBlockLength */
+        882U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.883 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        4U,    /* NvMNvBlockLength */
+        883U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.884 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        4U,    /* NvMNvBlockLength */
+        884U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.885 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        8U,    /* NvMNvBlockLength */
+        885U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.886 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        8U,    /* NvMNvBlockLength */
+        886U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.887 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        8U,    /* NvMNvBlockLength */
+        887U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.888 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        8U,    /* NvMNvBlockLength */
+        888U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.889 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        8U,    /* NvMNvBlockLength */
+        889U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.890 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        8U,    /* NvMNvBlockLength */
+        890U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.891 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        8U,    /* NvMNvBlockLength */
+        891U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.892 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        8U,    /* NvMNvBlockLength */
+        892U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.893 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        8U,    /* NvMNvBlockLength */
+        893U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.894 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        8U,    /* NvMNvBlockLength */
+        894U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.895 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        8U,    /* NvMNvBlockLength */
+        895U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.896 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        8U,    /* NvMNvBlockLength */
+        896U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.897 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        8U,    /* NvMNvBlockLength */
+        897U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.898 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        8U,    /* NvMNvBlockLength */
+        898U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.899 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        8U,    /* NvMNvBlockLength */
+        899U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.900 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        8U,    /* NvMNvBlockLength */
+        900U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.901 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        8U,    /* NvMNvBlockLength */
+        901U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.902 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        8U,    /* NvMNvBlockLength */
+        902U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.903 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        8U,    /* NvMNvBlockLength */
+        903U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.904 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        8U,    /* NvMNvBlockLength */
+        904U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.905 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        905U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.906 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        906U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.907 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        907U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.908 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        908U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.909 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        909U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.910 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        910U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.911 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        911U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.912 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        912U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.913 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        913U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.914 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        914U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.915 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        915U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.916 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        916U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.917 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        917U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.918 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        918U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.919 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        919U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.920 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        920U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.921 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        921U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.922 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        922U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.923 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        923U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.924 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        924U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.925 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        925U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.926 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        926U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.927 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        927U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.928 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        928U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.929 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        929U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.930 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        930U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.931 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        931U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.932 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        932U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.933 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        933U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.934 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        934U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.935 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        935U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.936 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        936U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.937 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        937U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.938 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        938U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.939 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        939U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.940 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        940U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.941 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        941U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.942 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        942U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.943 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        943U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.944 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        944U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.945 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        945U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.946 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        946U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.947 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        947U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.948 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        948U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.949 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        949U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.950 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        950U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.951 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        951U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.952 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        952U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.953 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        953U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.954 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        954U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.955 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        955U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.956 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        956U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.957 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        957U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.958 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        958U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.959 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        959U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.960 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        960U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.961 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        961U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.962 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        962U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.963 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        963U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.964 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        964U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.965 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        965U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.966 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        966U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
+    {
+        /* ID.967 */
+        NVM_BLOCK_NATIVE,    /* NvMBlockManagementType */
+#if ( NVM_VALID_BLOCK_JOB_PRIORITY == STD_ON )
+        1U,    /* NvMBlockJobPriority */
+#endif
+        0U,    /* NvMNvramDeviceId */
+        1U,    /* NvMNvBlockNum */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_NUM == STD_ON )
+        0U,    /* NvMRomBlockNum */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_READ_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfReadRetries */
+#endif
+#if ( NVM_VALID_BLOCK_MAX_NUM_OF_WRITE_RETRIES == STD_ON )
+        0U,    /* NvMMaxNumOfWriteRetries */
+#endif
+#if ( NVM_VALID_BLOCK_CRC_TYPE == STD_ON )
+        NVM_CRC16,    /* NvMBlockCrcType */
+#endif
+        NVM_RAM_BLOCK_TYPE_SHARED,    /* RamBlockType */
+        32U,    /* NvMNvBlockLength */
+        967U,    /* NvMNvBlockBaseNumber */
+#if ( NVM_VALID_BLOCK_WRITE_VERIFICATION_DATA_SIZE == STD_ON )
+        1U,    /* NvMWriteVerificationDataSize */
+#endif
+        NVM_BLOCK_FLAGS_ALL_FALSE,    /* NvMBlockFlags */
+        u1_gp_nvmc_dtf_default,    /* NvMRamBlockDataAddress */
+#if ( NVM_VALID_BLOCK_ROM_BLOCK_DATA_ADDRESS == STD_ON )
+        NULL_PTR,    /* NvMRomBlockDataAddress */
+#endif
+#if ( NVM_VALID_BLOCK_SINGLE_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMSingleBlockCallback */
+#endif
+#if ( NVM_VALID_BLOCK_READ_RAM_BLOCK_FROM_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMReadRamBlockFromNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_WRITE_RAM_BLOCK_TO_NV_CALLBACK == STD_ON )
+        NULL_PTR,    /* NvMWriteRamBlockToNvCallback */
+#endif
+#if ( NVM_VALID_BLOCK_INIT_BLOCK_CALLBACK == STD_ON )
+        NULL_PTR    /* NvMInitBlockCallback */
+#endif
+    },
 };
 CONST(AB_83_ConstV uint16, NVM_CONFIG_DATA) NvMBlockDescriptorsSize = sizeof(NvMBlockDescriptors) / sizeof(NvMBlockDescriptors[0]);
 

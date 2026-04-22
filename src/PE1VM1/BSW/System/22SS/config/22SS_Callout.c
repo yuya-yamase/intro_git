@@ -20,6 +20,7 @@
 
 #include "veh_opemd.h"
 #include "oxcan.h"
+#include "oxdocan.h"
 #include "oxsec.h"
 #include "ivdsh.h"
 
@@ -27,11 +28,14 @@
 #include "rim_ctl.h"
 #include "nvmc_mgr.h"
 
+#include "vCryCl.h"
+
 #include "fpcall_vd_fvd.h"
 /* Complex Device Driver */
 #include "drec_tx.h"
 #include "sound_cri_mgr.h"
 #include "fwush.h"
+#include "es_inspect.h"
 
 /* Application           */
 #include "dimmer.h"
@@ -62,6 +66,7 @@
 #include "asilchk.h"
 #include "nvmc_if_ivi.h"
 #include "nvmc_if_cen.h"
+#include "product.h"
 
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
@@ -90,6 +95,7 @@
 void vd_g_22SSCallout_StaBonInit(void)
 {
     static const FP_VD_FVD             fp_sp_vd_ECU_M_CFG_BON_INIT[] = {
+    	&vd_g_ProductInit,
         &vd_g_VardefBonInit,
         &vd_g_McstBonInit,
         &vd_g_LocaleBonInit,
@@ -130,14 +136,23 @@ void vd_g_22SSCallout_StaBonInit(void)
     vd_g_Rim_BonInit();
 
     vd_g_Nvmc_BonInit();
+    
+    vd_g_oXSECInit();
+    vd_g_oXSECFvRead((U4)OXSEC_BOOT_CAUSE_BON);
+    
     do{
         u1_t_rslt = u1_g_Nvmc_BonRead();
     }while(u1_t_rslt != (U1)FALSE);
 
-    vd_g_oXSECInit();
+    vd_g_oXSECFvWrite();
+
+    vd_g_oXDoCANPreInit();      /* vd_g_oXDoCANPreInit shall be called before vd_g_oXCANRstInit */
     vd_g_oXCANRstInit();
+    vd_g_oXDoCANBonInit();
+    vd_g_ESInspectBonInit();
     vd_g_VehopemdRstInit();
     vd_g_iVDshInit();
+    vd_g_vCryCl_Init();
 
     /* vv User Hook start vv */
     vd_g_Fpcall_vd_Fvd(&fp_sp_vd_ECU_M_CFG_BON_INIT[0], u2_NC_VD_FVD(fp_sp_vd_ECU_M_CFG_BON_INIT));
@@ -158,6 +173,7 @@ void vd_g_22SSCallout_StaBonInit(void)
 void vd_g_22SSCallout_StaRstInit(void)
 {
     static const FP_VD_FVD             fp_sp_vd_ECU_M_CFG_RST_INIT[] = {
+        &vd_g_ProductInit,
         &vd_g_VardefRstwkInit,
         &vd_g_McstRstwkInit,
         &vd_g_LocaleRstWkupInit,
@@ -198,14 +214,22 @@ void vd_g_22SSCallout_StaRstInit(void)
     vd_g_Rim_WkupInit();
 
     vd_g_Nvmc_WkupInit();
+
+    vd_g_oXSECInit();
+    vd_g_oXSECFvRead((U4)OXSEC_BOOT_CAUSE_RST_WKUP);
+    
     do{
         u1_t_rslt = u1_g_Nvmc_WkupRead();
     }while(u1_t_rslt != (U1)FALSE);
 
-    vd_g_oXSECInit();
+    vd_g_oXSECFvWrite();
+    vd_g_oXDoCANPreInit();      /* vd_g_oXDoCANPreInit shall be called before vd_g_oXCANRstInit */
     vd_g_oXCANRstInit();
+    vd_g_oXDoCANRstInit();
+    vd_g_ESInspectRstwkInit();
     vd_g_VehopemdRstInit();
     vd_g_iVDshInit();
+    vd_g_vCryCl_Init();
 
     /* vv User Hook start vv */
     vd_g_Fpcall_vd_Fvd(&fp_sp_vd_ECU_M_CFG_RST_INIT[0], u2_NC_VD_FVD(fp_sp_vd_ECU_M_CFG_RST_INIT));
@@ -226,6 +250,7 @@ void vd_g_22SSCallout_StaRstInit(void)
 void vd_g_22SSCallout_StaWkupInit(void)
 {
     static const FP_VD_FVD             fp_sp_vd_ECU_M_CFG_WKUP_INIT[] = {
+        &vd_g_ProductInit,
         &vd_g_VardefRstwkInit,
         &vd_g_McstRstwkInit,
         &vd_g_LocaleRstWkupInit,
@@ -266,14 +291,23 @@ void vd_g_22SSCallout_StaWkupInit(void)
     vd_g_Rim_WkupInit();
 
     vd_g_Nvmc_WkupInit();
+
+    vd_g_oXSECInit();
+    vd_g_oXSECFvRead((U4)OXSEC_BOOT_CAUSE_RST_WKUP);
+    
     do{
         u1_t_rslt = u1_g_Nvmc_WkupRead();
     }while(u1_t_rslt != (U1)FALSE);
 
-    vd_g_oXSECInit();
+    vd_g_oXSECFvWrite();
+
+    vd_g_oXDoCANPreInit();      /* vd_g_oXDoCANPreInit shall be called before vd_g_oXCANWkupInit */
     vd_g_oXCANWkupInit();
+    vd_g_oXDoCANWkupInit();
+    vd_g_ESInspectRstwkInit();
     vd_g_VehopemdWkupInit();
     vd_g_iVDshInit();
+    vd_g_vCryCl_Init();
 
     /* vv User Hook start vv */
     vd_g_Fpcall_vd_Fvd(&fp_sp_vd_ECU_M_CFG_WKUP_INIT[0], u2_NC_VD_FVD(fp_sp_vd_ECU_M_CFG_WKUP_INIT));

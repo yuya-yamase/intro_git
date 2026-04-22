@@ -51,6 +51,7 @@ static ehvm_uint32_t   CH19_Vcc_Msg_Buffer[VCC_NUM_OF_RING_ELEMENT_CH19][VCC_SIZ
 static ehvm_uint32_t   CH20_Vcc_Msg_Buffer[VCC_NUM_OF_RING_ELEMENT_CH20][VCC_SIZE_OF_MESSAGE_BUFFER_CH20];
 static ehvm_uint32_t   CH21_Vcc_Msg_Buffer[VCC_NUM_OF_RING_ELEMENT_CH21][VCC_SIZE_OF_MESSAGE_BUFFER_CH21];
 static ehvm_uint32_t   CH22_Vcc_Msg_Buffer[VCC_NUM_OF_RING_ELEMENT_CH22][VCC_SIZE_OF_MESSAGE_BUFFER_CH22];
+static ehvm_uint32_t   CH23_Vcc_Msg_Buffer[VCC_NUM_OF_RING_ELEMENT_CH23][VCC_SIZE_OF_MESSAGE_BUFFER_CH23];
 
 #pragma ghs section bss=default
 
@@ -79,6 +80,7 @@ static ehvm_uint8_t   CH19_Vcc_Receive_SPID[VCC_MAX_VALUE_OF_SPID];
 static ehvm_uint8_t   CH20_Vcc_Receive_SPID[VCC_MAX_VALUE_OF_SPID];
 static ehvm_uint8_t   CH21_Vcc_Receive_SPID[VCC_MAX_VALUE_OF_SPID];
 static ehvm_uint8_t   CH22_Vcc_Receive_SPID[VCC_MAX_VALUE_OF_SPID];
+static ehvm_uint8_t   CH23_Vcc_Receive_SPID[VCC_MAX_VALUE_OF_SPID];
 
 static ehvm_vcc_ring_buffer_t   CH0_Vcc_Ring_Buffer[VCC_NUM_OF_RECEIVER_CHANNEL_CH0];
 static ehvm_vcc_ring_buffer_t   CH1_Vcc_Ring_Buffer[VCC_NUM_OF_RECEIVER_CHANNEL_CH1];
@@ -103,6 +105,7 @@ static ehvm_vcc_ring_buffer_t   CH19_Vcc_Ring_Buffer[VCC_NUM_OF_RECEIVER_CHANNEL
 static ehvm_vcc_ring_buffer_t   CH20_Vcc_Ring_Buffer[VCC_NUM_OF_RECEIVER_CHANNEL_CH20];
 static ehvm_vcc_ring_buffer_t   CH21_Vcc_Ring_Buffer[VCC_NUM_OF_RECEIVER_CHANNEL_CH21];
 static ehvm_vcc_ring_buffer_t   CH22_Vcc_Ring_Buffer[VCC_NUM_OF_RECEIVER_CHANNEL_CH22];
+static ehvm_vcc_ring_buffer_t   CH23_Vcc_Ring_Buffer[VCC_NUM_OF_RECEIVER_CHANNEL_CH23];
 
 static ehvm_vcc_ring_element_t   CH0_Vcc_Ring_Element_Info[VCC_NUM_OF_RING_ELEMENT_CH0];
 static ehvm_vcc_ring_element_t   CH1_Vcc_Ring_Element_Info[VCC_NUM_OF_RING_ELEMENT_CH1];
@@ -127,6 +130,7 @@ static ehvm_vcc_ring_element_t   CH19_Vcc_Ring_Element_Info[VCC_NUM_OF_RING_ELEM
 static ehvm_vcc_ring_element_t   CH20_Vcc_Ring_Element_Info[VCC_NUM_OF_RING_ELEMENT_CH20];
 static ehvm_vcc_ring_element_t   CH21_Vcc_Ring_Element_Info[VCC_NUM_OF_RING_ELEMENT_CH21];
 static ehvm_vcc_ring_element_t   CH22_Vcc_Ring_Element_Info[VCC_NUM_OF_RING_ELEMENT_CH22];
+static ehvm_vcc_ring_element_t   CH23_Vcc_Ring_Element_Info[VCC_NUM_OF_RING_ELEMENT_CH23];
 
 #pragma ghs section bss=default
 
@@ -155,7 +159,8 @@ static ehvm_uint32_t* EhvmConst VccMsgBufferManagement[VCC_NUM_OF_VCCID] = {
     CH19_Vcc_Msg_Buffer[0],
     CH20_Vcc_Msg_Buffer[0],
     CH21_Vcc_Msg_Buffer[0],
-    CH22_Vcc_Msg_Buffer[0]
+    CH22_Vcc_Msg_Buffer[0],
+    CH23_Vcc_Msg_Buffer[0]
 };
 
 static ehvm_uint8_t* EhvmConst VccReceiveSPIDManagement[VCC_NUM_OF_VCCID] = {
@@ -181,7 +186,8 @@ static ehvm_uint8_t* EhvmConst VccReceiveSPIDManagement[VCC_NUM_OF_VCCID] = {
     &CH19_Vcc_Receive_SPID[0],
     &CH20_Vcc_Receive_SPID[0],
     &CH21_Vcc_Receive_SPID[0],
-    &CH22_Vcc_Receive_SPID[0]
+    &CH22_Vcc_Receive_SPID[0],
+    &CH23_Vcc_Receive_SPID[0]
 };
 
 static ehvm_vcc_ring_buffer_t* EhvmConst VccRingBufferManagement[VCC_NUM_OF_VCCID] = {
@@ -207,7 +213,8 @@ static ehvm_vcc_ring_buffer_t* EhvmConst VccRingBufferManagement[VCC_NUM_OF_VCCI
     &CH19_Vcc_Ring_Buffer[0],
     &CH20_Vcc_Ring_Buffer[0],
     &CH21_Vcc_Ring_Buffer[0],
-    &CH22_Vcc_Ring_Buffer[0]
+    &CH22_Vcc_Ring_Buffer[0],
+    &CH23_Vcc_Ring_Buffer[0]
 };
 
 static ehvm_vcc_ring_element_t* EhvmConst VccRingElementManagement[VCC_NUM_OF_VCCID] = {
@@ -233,7 +240,8 @@ static ehvm_vcc_ring_element_t* EhvmConst VccRingElementManagement[VCC_NUM_OF_VC
     &CH19_Vcc_Ring_Element_Info[0],
     &CH20_Vcc_Ring_Element_Info[0],
     &CH21_Vcc_Ring_Element_Info[0],
-    &CH22_Vcc_Ring_Element_Info[0]
+    &CH22_Vcc_Ring_Element_Info[0],
+    &CH23_Vcc_Ring_Element_Info[0]
 };
 
 #pragma ghs section rodata=default
@@ -900,6 +908,14 @@ static EhvmConst ehvm_vcc_receiver_channel_t s_VccReceiver_CH22[VCC_NUM_OF_RECEI
         NOUSE_VCC_EDGE_DETECTION         /* VccEdgeRequest */
     }
 };
+static EhvmConst ehvm_vcc_receiver_channel_t s_VccReceiver_CH23[VCC_NUM_OF_RECEIVER_CHANNEL_CH23] = {
+    {
+        0x00000001U,    /* VccReceiverSpid */
+        NOUSE_VCC_INTERRUPT,           /* VccReceiveInterruptNumber */
+        NOUSE_VCC_INTERRUPT,           /* VccOverwriteInterruptNumber */
+        NOUSE_VCC_EDGE_DETECTION         /* VccEdgeRequest */
+    }
+};
 
 static EhvmConst ehvm_vcc_channel_t s_VccChannelData[VCC_NUM_OF_VCCID] = {
     /* VCCID:0 */
@@ -1177,11 +1193,23 @@ static EhvmConst ehvm_vcc_channel_t s_VccChannelData[VCC_NUM_OF_VCCID] = {
         VCC_SIZE_OF_PACKET_CH22,            /* VccPacketSize */
         VCC_NUM_OF_RING_ELEMENT_CH22,       /* VccNumOfRingElement */
         VCC_OVERWRITE_ENABLE              /* VccOverwriteConfiguration */
+    },
+    /* VCCID:23 */
+    {
+        0x00000010U,                       /* VccTransmitVMMask */
+        NOUSE_VCC_INTERRUPT,               /* VccTransmitInterruptNumber */
+        VCC_EDGE_DETECTION_DISABLE,        /* VccEdgeEnable */
+        VCC_NUM_OF_RECEIVER_CHANNEL_CH23,   /* VccNumOfReceiveVM */
+        &s_VccReceiver_CH23[0],             /* VccReceiverChannel */
+        0x00000002U,                       /* VccReceiveVMMask */
+        VCC_SIZE_OF_PACKET_CH23,            /* VccPacketSize */
+        VCC_NUM_OF_RING_ELEMENT_CH23,       /* VccNumOfRingElement */
+        VCC_OVERWRITE_ENABLE              /* VccOverwriteConfiguration */
     }
 };
 
 static EhvmConst ehvm_vcc_config_t ehvmVccConfigData = {
-    23U,                     /* VccNumOfVccId */
+    24U,                     /* VccNumOfVccId */
     &s_VccChannelData[0],   /* VccChannel */
     &ring_buffer_list[0]    /* VccRingBufferList */
 };

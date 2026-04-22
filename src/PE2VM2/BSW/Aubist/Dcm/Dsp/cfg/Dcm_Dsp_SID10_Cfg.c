@@ -1,7 +1,7 @@
-/* Dcm_Dsp_SID10_Cfg_c(v5-5-0)                                              */
+/* Dcm_Dsp_SID10_Cfg_c(v5-8-0)                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -46,15 +46,16 @@
 /* DcmDspSession */
 CONST ( AB_83_ConstV Dcm_Dsp_SessionRowType, DCM_CONFIG_DATA ) Dcm_P_SID10_stSessionRow_Tbl[ DCM_P_SESSIONROW_T ] =
 {
-    /* ForBoot */   /* Level */    /* P2ServerMax */ /* P2StarServerMax */ /* P2StarServerMin *//* P2StarServerLsb */
-    { DCM_NO_BOOT,  (uint8)0x01U,  (uint16)50U,      (uint16)5000U,        (uint16)4500U,       (uint16)500U          },
-    { DCM_NO_BOOT,  (uint8)0x03U,  (uint16)50U,      (uint16)5000U,        (uint16)4500U,       (uint16)500U          },
-    { (uint8)0U,    (uint8)0U,     (uint16)0U,       (uint16)0U,           (uint16)0U,          (uint16)0U            } /* no parameter */
+    /* ForBoot */   /* Level */    /* P2ServerMax */ /* P2StarServerMax */ /* P2StarServerMin */ /* P2StarServerLsb */ /* Protocol */
+    { DCM_NO_BOOT,  (uint8)0x01U,  (uint16)50U,      (uint16)5000U,        (uint16)4500U,        (uint16)500U,         DCM_DSP_SID10_NOSUP_PROTOCOL },
+    { DCM_NO_BOOT,  (uint8)0x03U,  (uint16)50U,      (uint16)5000U,        (uint16)4500U,        (uint16)500U,         DCM_DSP_SID10_NOSUP_PROTOCOL },
+    { (uint8)0U,    (uint8)0U,     (uint16)0U,       (uint16)0U,           (uint16)0U,           (uint16)0U,           (Dcm_ProtocolType)0U      } /* no parameter */
 };
 
 CONST ( AB_83_ConstV uint8, DCM_CONFIG_DATA ) Dcm_P_SID10_u1SessionSetTiming = DCM_DSP_SID10_SETSES_CNF;
 CONST( AB_83_ConstV uint8, DCM_CONFIG_DATA ) Dcm_P_u1SessionRow_N = DCM_P_SESSIONROW_N ;
 CONST( AB_83_ConstV boolean, DCM_CONFIG_DATA ) Dcm_P_SID10_bNoSetSPREC = (boolean)FALSE;
+CONST( AB_83_ConstV boolean, DCM_CONFIG_DATA ) Dcm_P_SID10_bSupportProtocolInfo = (boolean)FALSE;
 #endif /* DCM_SUPPORT_SID10 == STD_ON */
 
 #define DCM_STOP_SEC_CONST_CONFIG
@@ -130,12 +131,13 @@ FUNC( Std_ReturnType, DCM_CODE ) Dcm_SID10_Sub03
 /*  v3-2-0         :2020-08-27                                              */
 /*  v4-0-0         :2020-12-23                                              */
 /*  v5-0-0         :2022-03-29                                              */
-/*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-02-27                                              */
+/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v5-5-1                                              */
+/*  BSW plug-in        :v5-10-0                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

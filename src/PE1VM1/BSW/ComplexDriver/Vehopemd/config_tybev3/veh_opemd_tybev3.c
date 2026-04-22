@@ -67,6 +67,7 @@ static U1      u1_s_veh_opemd_apofrq_onoff;
 static inline U2      u2_s_VehopemdVpschk(const U2 u2_a_RX, const ST_VEH_OPEMD_VPS_CHK * st_ap_CHK, const U2 u2_a_NUM_CHK);
 static U2             u2_s_VehopemdReadbdc1s81(void);
 static U2             u2_s_VehopemdReadbdc1s91(void);
+static U1             u1_s_VehopemdDiagPowOn(void);
 static        void     vd_s_VehopemdPtschk(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT);
 static        U1       u1_s_VehopemdPtschk_RDYIND(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT);
 static void            vd_s_VehopemdApofrqchk(void);
@@ -126,6 +127,7 @@ U4      u4_g_VehopemdCfgMdupdt(const U4 u4_a_MDBIT, U4 * u4_ap_evbit)
     U2                                   u2_t_vps_chk;
     U2                                   u2_t_vps_rx;
     U1                                   u1_t_ipdu_st;
+    U1                                   u1_t_diag_pon;
 
     u4_t_mdbit   = u4_a_MDBIT & (U4)VEH_OPEMD_MDBIT_FIELDS;
     u1_t_ipdu_st = (U1)Com_GetIPDUStatus((U2)MSG_BDC1S81_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
@@ -138,18 +140,20 @@ U4      u4_g_VehopemdCfgMdupdt(const U4 u4_a_MDBIT, U4 * u4_ap_evbit)
     /* |                     |               BDC1S91                  |                                   */
     /* |         Msg State   | COM_NO_RX   | COM_TIMEOUT |   OTHER    |                                   */
     /* |---------------------|-------------|-------------|------------|                                   */
-    /* |BDC1S81  COM_NO_RX   | Prev Value  | Prev Value  | BDC1S91    |                                   */
+    /* |BDC1S81  COM_NO_RX   | Prev Value  | Prev Value  | Prev Value |                                   */
     /* |         COM_TIMEOUT | Prev Value  | Prev Value  | BDC1S91    |                                   */
     /* |         OTHER       | BDC1S81     | BDC1S81     | BDC1S81    |                                   */
     /* -------------------------------------------------------------------------------------------------- */
  
     if(u1_t_ipdu_st == (U1)0U){
         u2_t_vps_rx = u2_s_VehopemdReadbdc1s81();
-    } else {
+    } else if((u1_t_ipdu_st & (U1)COM_TIMEOUT) != (U1)0U) {
         u1_t_ipdu_st = (U1)Com_GetIPDUStatus((U2)MSG_BDC1S91_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
         if(u1_t_ipdu_st == (U1)0U){
             u2_t_vps_rx = u2_s_VehopemdReadbdc1s91();
         }
+    } else {
+        /* do nothing */
     }
 
     if(u1_t_ipdu_st == (U1)0U){
@@ -177,6 +181,11 @@ U4      u4_g_VehopemdCfgMdupdt(const U4 u4_a_MDBIT, U4 * u4_ap_evbit)
     else{
      /* u4_t_mdbit = (U4)VEH_OPEMD_MDBIT_UNK; */
         u2_s_veh_opemd_unk_tocnt = (U2)U2_MAX;
+    }
+
+    u1_t_diag_pon = u1_s_VehopemdDiagPowOn();
+    if(u1_t_diag_pon == (U1)TRUE){
+        u4_t_mdbit = u4_t_mdbit | (U4)VEH_OPEMD_MDBIT_DIAG;
     }
 
     u4_t_evbit  = u4_a_MDBIT ^ u4_t_mdbit;
@@ -385,6 +394,45 @@ U1      u1_g_VehopemdApofrqOn(void)
 {
     return(u1_s_veh_opemd_apofrq_onoff);
 }
+/*===================================================================================================================================*/
+/*  static U1      u1_s_VehopemdDiagPowOn(void)                                                                                      */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         Diag Power Stataus  (TRUE/FALSE)                                                                                 */
+/*===================================================================================================================================*/
+static U1      u1_s_VehopemdDiagPowOn(void)
+{
+    U1                             u1_t_vps_rx;
+    U1                             u1_t_vps_inf;
+    U1                             u1_t_pow_sts;
+    U1                             u1_t_ipdu_st;
+ 
+    u1_t_vps_inf = (U1)0U;   
+    u1_t_pow_sts = (U1)FALSE;
+
+    u1_t_ipdu_st = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BDC1S81_CH0,(U4)0x00090016U,u2_OXCAN_RXTO_THRSH((U2)2000U));
+    if((u1_t_ipdu_st & (U1)(~OXCAN_RXD_TOM_EN)) == (U1)0U){
+        Com_ReceiveSignal(ComConf_ComSignal_VPSINFO1, &u1_t_vps_inf);
+        u1_t_vps_rx  = (U1)u1_t_vps_inf;
+        Com_ReceiveSignal(ComConf_ComSignal_VPSINFO2, &u1_t_vps_inf);
+        u1_t_vps_rx |= (U1)u1_t_vps_inf << 1U;
+        Com_ReceiveSignal(ComConf_ComSignal_VPSINFO3, &u1_t_vps_inf);
+        u1_t_vps_rx |= (U1)u1_t_vps_inf << 2U;
+        Com_ReceiveSignal(ComConf_ComSignal_VPSINFO4, &u1_t_vps_inf);
+        u1_t_vps_rx |= (U1)u1_t_vps_inf << 3U;
+        Com_ReceiveSignal(ComConf_ComSignal_VPSINFO5, &u1_t_vps_inf);
+        u1_t_vps_rx |= (U1)u1_t_vps_inf << 4U;
+
+        Com_ReceiveSignal(ComConf_ComSignal_VPSINFOS, &u1_t_vps_inf);
+    
+        if((u1_t_vps_rx == (U1)0x1eU) && (u1_t_vps_inf == (U1)0x00U)){
+            u1_t_pow_sts = (U1)TRUE;
+        }
+    }
+
+    return(u1_t_pow_sts);
+}
+
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
