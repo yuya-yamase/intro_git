@@ -534,14 +534,18 @@ static inline void    vd_s_XSpiCfgTxOdo(           U4 * u4_ap_pdu_tx) {
     U4  u4_t_odo_km_dat;                                                /* ODO_KM                                         */
     U1  u1_t_tmnt_reset_sts;
     U4  u4_t_tmnt_reset_dat;
+    U1  u1_t_tripa_sts_rslt;
+    U1  u1_t_tripb_sts_rslt;
 
 
     u4_t_odo_dat       = (U4)0U;
     u1_t_odo_sts = u1_g_OdoKmMileByUnit(&u4_t_odo_dat);
     u4_t_tripa_dat     = (U4)0U;
     u1_t_tripa_sts = u1_g_OdoTripKmMileByUnit((U1)ODO_TRIP_CH_A, &u4_t_tripa_dat);
+    u1_t_tripa_sts_rslt = (U1)0x00U;                                   /* BEV E-CV provisionally                         */
     u4_t_tripb_dat     = (U4)0U;
     u1_t_tripb_sts = u1_g_OdoTripKmMileByUnit((U1)ODO_TRIP_CH_B, &u4_t_tripb_dat);
+    u1_t_tripb_sts_rslt = (U1)0x00U;                                   /* BEV E-CV provisionally                         */
     u4_t_odo_km_dat    = (U4)0U;
     (void)u1_g_OdoKm(&u4_t_odo_km_dat);
 
@@ -553,9 +557,11 @@ static inline void    vd_s_XSpiCfgTxOdo(           U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[0]   = u1_t_tmnt_reset_sts;                           /* TMNT_RESET_RESULT                              */
     u4_ap_pdu_tx[0]  |= ((U4)u1_t_odo_sts   << XSPI_STS_SHIFT);        /* ODO_STS                                        */
     u4_ap_pdu_tx[1]   = u4_t_odo_dat;                                  /* ODO_DSP                                        */
-    u4_ap_pdu_tx[2]   = ((U4)u1_t_tripa_sts << XSPI_STS_SHIFT);        /* TRIPA_STS                                      */
+    u4_ap_pdu_tx[2]   = (U4)u1_t_tripa_sts_rslt;                       /* TRIPA_STS_RSLT                                 */
+    u4_ap_pdu_tx[2]  |= ((U4)u1_t_tripa_sts << XSPI_STS_SHIFT);        /* TRIPA_STS                                      */
     u4_ap_pdu_tx[3]   = u4_t_tripa_dat;                                /* TRIP_A                                         */
-    u4_ap_pdu_tx[4]   = ((U4)u1_t_tripb_sts << XSPI_STS_SHIFT);        /* TRIPB_STS                                      */
+    u4_ap_pdu_tx[4]   = (U4)u1_t_tripb_sts_rslt;                       /* TRIPB_STS_RSLT                                 */
+    u4_ap_pdu_tx[4]  |= ((U4)u1_t_tripb_sts << XSPI_STS_SHIFT);        /* TRIPB_STS                                      */
     u4_ap_pdu_tx[5]   = u4_t_tripb_dat;                                /* TRIP_B                                         */
     u4_ap_pdu_tx[6]   = u4_t_odo_km_dat;                               /* ODO_KM                                         */
     u4_ap_pdu_tx[8]   = u4_t_tmnt_reset_dat;                           /* TMNT_RESET_ODO_VALUE                           */
@@ -1234,7 +1240,8 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-42    03/17/2026 SH       Change for BEV Full_Function_2. (Add SYS_CPBBSW_CUSTOM_P and DISTEMPTY_EV_KM_DIFF)                 */
 /*  BEV-43    04/06/2026 TB       Change for BEV FF2.(Remove switching information for time and unit)                                */
 /*  BEV-44    04/08/2026 KO       Change for BEV Electronic CV. (Add TT abnormality monitoring)                                      */
-/*  BEV-45    04/01/2026 TK       Add power status for diagnostics                                                                   */
+/*  BEV-45    04/16/2026 KH       Change for BEV Electronic_CV. (Add SYS_DM**)                                                       */
+/*  BEV-46    04/16/2026 SH       Change for BEV E-CV. (Add TRIPA_STS_RSLT and TRIPB_STS_RSLT)                                       */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
