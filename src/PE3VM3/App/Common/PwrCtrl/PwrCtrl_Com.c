@@ -307,6 +307,9 @@ void vd_g_PwrCtrlComRxTask( void )
     /* VMリセット準備要求受信 */
     vd_s_PwrCtrlComRxVMResetReq();
 
+    /* OTA用データ受信 */
+    vd_g_PwrCtrlOtaComRx();
+
     return;
 }
 
@@ -493,6 +496,9 @@ void vd_g_PwrCtrlComTxTask( void )
 
     /* VMリセット準備応答 */
     vd_g_iVDshWribyDid((U2)PWRCTRL_COM_VMTXID_VM2_VMRESET, &u4_s_PwrCtrl_Com_Tx_VMResetRes, (U2)PWRCTRL_COM_VMRESET_LEN);
+
+    /* OTA用データ送信 */
+    vd_g_PwrCtrlOtaComTx();
 
     return;
 }

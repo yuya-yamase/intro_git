@@ -87,6 +87,8 @@ void vd_g_PwrCtrlSipEthReqJudge( void );
 U1 u1_g_PwrCtrlSipStbyStepGetSts( const U1 u1_a_stby );
 /* SoC起動完了通知関数 */
 void vd_g_PwrCtrlSipSoCOnComp( void );
+/* WAKEUP-STAT1(RAM/RIM)設定関数 */
+void vd_g_PwrCtrlSipSetWakeupStat1( const U1 u1_a_data);
 /* SoC異常検知通知関数 */
 void vd_g_PwrCtrlSipSoCOnError( void );
 /* 完全初期化開始時のWAKEUP-STAT1,2,3設定関数 */

@@ -1302,6 +1302,21 @@ void vd_g_PwrCtrlSipSoCOnComp(void)
 }
 
 /*****************************************************************************
+  Function      : vd_g_PwrCtrlSipSetWakeupStat1
+  Description   : SIP共通 WAKEUP-STAT1(RAM/RIM)設定関数
+  param[in/out] : [in] u1_a_data: WAKEUP-STAT1設定値
+  return        : -
+  Note          : none
+*****************************************************************************/
+void vd_g_PwrCtrlSipSetWakeupStat1( const U1 u1_a_data)
+{
+    u1_s_PwrCtrl_Sip_WAKEUP_STAT1 = u1_a_data;
+    vd_g_Rim_WriteU1((U2)RIMID_U1_PWCTR_SOC_WU_STAT1, u1_s_PwrCtrl_Sip_WAKEUP_STAT1);
+
+    return;
+}
+
+/*****************************************************************************
   Function      : vd_g_PwrCtrlSipSoCOnError
   Description   : SIP共通 SoC異常検知時の状態設定関数
   param[in/out] : -
@@ -2681,6 +2696,8 @@ static void vd_s_PwrCtrlSipForcedOffMainFunc( void )
 *****************************************************************************/
 static void vd_s_PwrCtrlSipForcedOffStep1( void )
 {
+    U1 u1_t_otareq;  /* OTAアクティベート要求有無 */
+
     if(u1_s_PwrCtrl_Sip_ForcedOff_Step == (U1)PWRCTRL_COMMON_PROCESS_STEP1){
         /* STEP1-1 */
         vd_s_PwrCtrl_Sip_DioWriteCheck(&u4_s_PwrCtrl_Sip_ForcedOff_PMICFASTPOFF_Tim,
@@ -2698,8 +2715,19 @@ static void vd_s_PwrCtrlSipForcedOffStep1( void )
         /* STEP1-1とSTEP1-2が完了していればSTEPを完了して起動要因判定に進める */
         if((u4_s_PwrCtrl_Sip_ForcedOff_PMICFASTPOFF_Tim == (U4)PWRCTRL_SIP_TIME_INVALID) &&
            (u4_s_PwrCtrl_Sip_ForcedOff_POFF_COMPLETE_N_Chk_Tim == (U4)PWRCTRL_SIP_TIME_INVALID)){
-            u1_s_PwrCtrl_Sip_ForcedOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
-            u1_s_PwrCtrl_Sip_Pwr_Sts        = (U1)PWRCTRL_SIP_STS_NON;
+
+            u1_t_otareq = u1_g_PwrCtrlOta_GetReqSts();     /* OTAアクティベート要求取得 */
+            /* OTAアクティベート要求無し */
+            if(u1_t_otareq == (U1)PWRCTRL_OTA_OTAREQ_OFF)
+            {
+                u1_s_PwrCtrl_Sip_ForcedOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+                u1_s_PwrCtrl_Sip_Pwr_Sts        = (U1)PWRCTRL_SIP_STS_NON;
+            }
+            /* OTAアクティベート要求有り */
+            else
+            {
+                u1_s_PwrCtrl_Sip_ForcedOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP4;
+            }
         }
 
         else{

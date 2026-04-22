@@ -29,6 +29,7 @@
 #include "ivdsh.h"
 #include "VIS.h"
 #include "rim_ctl.h"
+#include "mcu_drv.h"
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
@@ -50,6 +51,7 @@
 #include "PwrCtrl_Com.h"
 #include "PwrCtrl_ObserveSAIL.h"
 #include "PwrCtrl_FullInit.h"
+#include "PwrCtrl_Ota.h"
 
 /*--------------------------------------------------------------------------*/
 /*  Literal Definitions                                                     */

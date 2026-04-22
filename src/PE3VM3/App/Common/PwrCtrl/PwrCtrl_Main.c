@@ -236,6 +236,9 @@ void vd_g_PwrCtrlMainBonReq( void )
     /* PGOOD_VB監視 開始 */
     vd_g_PwrCtrlObservePgdVbReq((U1)PWRCTRL_OBSERVE_ON);
 
+    /* OTA制御初期化処理 */
+    vd_g_PwrCtrlOtaInit();
+
     return;
 }
 
@@ -352,6 +355,9 @@ void vd_g_PwrCtrlMainWakeupReq( void )
 
     /* PGOOD_VB監視 開始 */
     vd_g_PwrCtrlObservePgdVbReq((U1)PWRCTRL_OBSERVE_ON);
+
+    /* OTA制御初期化処理 */
+    vd_g_PwrCtrlOtaInit();
 
     return;
 }
@@ -821,12 +827,14 @@ static void vd_s_PwrCtrlMainObserveFsJudge( void )
     /* または、SAIL UART Message監視 異常検知 */
     /* または、SoCリセット要求(正常) 検知 */
     /* または、SoCリセット要求(異常) 検知 */
+    /* または、CDCリセット要求 検知 */
     /* または、NMダイアグリセット 検知 */
     /* または、VMリセット準備要求 検知 */
     else if( ((u2_t_observe_sts & (U2)PWRCTRL_OBSERVE_ERR_SPI) == (U2)PWRCTRL_OBSERVE_ERR_SPI)
           || ((u2_t_observe_sts & (U2)PWRCTRL_OBSERVE_ERR_SAILUART) == (U2)PWRCTRL_OBSERVE_ERR_SAILUART)
           || ((u2_t_resetreq_sts & (U2)PWRCTRL_OBSERVE_RESET_SOCNORM) == (U2)PWRCTRL_OBSERVE_RESET_SOCNORM)
           || ((u2_t_resetreq_sts & (U2)PWRCTRL_OBSERVE_RESET_SOCERR) == (U2)PWRCTRL_OBSERVE_RESET_SOCERR)
+          || ((u2_t_resetreq_sts & (U2)PWRCTRL_OBSERVE_RESET_CDC) == (U2)PWRCTRL_OBSERVE_RESET_CDC)
           || ((u2_t_resetreq_sts & (U2)PWRCTRL_OBSERVE_RESET_NMDIAG) == (U2)PWRCTRL_OBSERVE_RESET_NMDIAG)
           || ((u2_t_resetreq_sts & (U2)PWRCTRL_OBSERVE_RESET_VMRESET) == (U2)PWRCTRL_OBSERVE_RESET_VMRESET) )
     {
@@ -863,6 +871,12 @@ static void vd_s_PwrCtrlMainObserveFsJudge( void )
                 vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_RESUMEERR);
             }
         }
+        /* CDCリセット要求 検知 */
+        if((u2_t_resetreq_sts & (U2)PWRCTRL_OBSERVE_RESET_CDC) == (U2)PWRCTRL_OBSERVE_RESET_CDC)
+        {
+            vd_g_PwrCtrlOta_SetOtaReqNvmcWrite((U1)PWRCTRL_OTA_WRITE_OTA);            /* "OTAアクティベート要求有り"不揮発書き込み要求 */
+            vd_g_PwrCtrlOta_SetReqSts((U1)PWRCTRL_OTA_OTAREQ_ON);                     /* OTAアクティベート要求有り設定 */
+        }
         /* NMダイアグリセット 検知 */
         if((u2_t_resetreq_sts & (U2)PWRCTRL_OBSERVE_RESET_NMDIAG) == (U2)PWRCTRL_OBSERVE_RESET_NMDIAG)
         {
@@ -883,7 +897,7 @@ static void vd_s_PwrCtrlMainObserveFsJudge( void )
         vd_s_PwrCtrlMainForcedOffReq((U1)PWRCTRL_MAIN_FORCEDOFF_STS_SOCERR);
     }
 
-    /* 異常検知によるフェールセーフ処理無しの場合 */
+    /* リセット要求、異常検知無しの場合 */
     else
     {
         /* 何もしない */
@@ -1063,6 +1077,7 @@ static void vd_s_PwrCtrlMainBonSeq( void )
     U1 u1_t_socrst;                                                            /* SoCリセット起動要因取得 */
     U1 u1_t_socwkupcond;                                                       /* SoC起動条件通知取得 */
     U1 u1_t_mcu_result;                                                        /* MCU完全初期化結果 */
+    U1 u1_t_ota_req;                                                           /* OTAアクティベート要求 */
 
     u1_t_foff_req = (U1)PWRCTRL_MAIN_FORCEDOFF_STS_INIT;
 /* /BU-DET =Hi? */
@@ -1091,6 +1106,16 @@ static void vd_s_PwrCtrlMainBonSeq( void )
         {
             u1_s_PwrCtrl_Main_SysPwrInfo = (U1)TRUE;                           /* PGOOD_ASIL_VB端子モニタ条件(SYS電源ON制御完了)設定 */
             vd_g_PwrCtrlObservePgdAsilVbSysPwrReq((U1)PWRCTRL_OBSERVE_ON);     /* PGOOD_ASIL_VB監視 開始(SYS電源ON制御完了条件成立) */
+            u1_t_ota_req = u1_g_PwrCtrlOta_GetOtaReqNvmcRead();                /* OTAアクティベート要求不揮発読み出し値取得 */
+
+            /* OTAアクティベート要求有り時の処理 */
+            if(u1_t_ota_req == (U1)PWRCTRL_OTA_OTAREQ_ON)
+            {
+                vd_g_PwrCtrlSipSetWakeupStat1((U1)MCU_DIO_HIGH);                 /* リプロ時：MCUホットスタートを設定 */
+                vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_CDCNORM);  /* CDC正常リセットの設定 */
+                vd_g_PwrCtrlOta_SetOtaReqNvmcWrite((U1)PWRCTRL_OTA_WRITE_NOOTA); /* "OTAアクティベート要求無し"不揮発書き込み要求 */
+            }
+
             u1_s_PwrCtrl_Main_SysPwrSts = (U1)PWRCTRL_MAIN_SYS_STS_COMP;       /* SYS電源状態：実行中→完了 */
             u1_s_PwrCtrl_Main_SipPwrSts = (U1)PWRCTRL_MAIN_SIP_STS_INPRC;      /* SIP電源状態：初期状態→実行中 */
             vd_g_PwrCtrlSipOnReq();                                            /* SIP電源ON要求(+B ON) */
@@ -1160,6 +1185,9 @@ static void vd_s_PwrCtrlMainBonSeq( void )
             vd_g_PwrCtrlSipClrSoCWkupCond();
             /* ユーザーリセット抑止解除受付状態：有効 */
             vd_g_PwrCtrlComSetURMaskOffSts((U1)PWRCTRL_COM_URMASKOFF_ENABLED);
+
+            /* VM間通信の通知クリア */
+            vd_g_PwrCtrlOta_SetOtaReqNvmcWrite((U1)PWRCTRL_OTA_WRITE_NOWRITEREQ);  /* 不揮発書き込み要求なし(VM間通信の書き込み要求クリア) */
         }
 
         else{
@@ -1449,21 +1477,31 @@ static void vd_s_PwrCtrlMainSipOffMcuStandbySeq( void )
     U1 u1_t_step_chk;                                                        /* 現在STEP問い合わせ結果 */
     U1 u1_t_wkup_req;                                                        /* 起動トリガ判定結果 */
     U1 u1_t_stbycancel;
+    U1 u1_t_ota_req;
 
     u1_t_stbycancel = (U1)FALSE;
 
+    u1_t_ota_req = u1_g_PwrCtrlOta_GetReqSts();    /* OTAアクティベート要求取得 */
 #ifndef PWRCTRL_CFG_PRIVATE_DBG_FAIL_OFF
-    /* 起動トリガ取得 */
-    u1_t_wkup_req = u1_g_PwrCtrlObserveOnOffTrigger();
+    if(u1_t_ota_req == (U1)PWRCTRL_OTA_OTAREQ_OFF)
+    {
+        /* 起動トリガ取得 */
+        u1_t_wkup_req = u1_g_PwrCtrlObserveOnOffTrigger();
+    }
+    else{
+        /* OTAアクティベート要求有り時は起動トリガ検知しない */
+        u1_t_wkup_req = (U1)PWRCTRL_OBSERVE_POWER_OFF;
+    }
 #else
-    if(u1_g_PwrCtrl_Main_DbgFailOffFlag == (U1)MCU_DIO_HIGH)
+    if( (u1_g_PwrCtrl_Main_DbgFailOffFlag == (U1)MCU_DIO_HIGH)
+     && (u1_t_ota_req == (U1)PWRCTRL_OTA_OTAREQ_OFF))
     {
         /* 起動トリガ取得 */
         u1_t_wkup_req = u1_g_PwrCtrlObserveOnOffTrigger();
     }
     else
     {
-        /* DBG-FAIL-OFF=Lo時は起動トリガ検知しない */
+        /* DBG-FAIL-OFF=Lo時、またはOTAアクティベート要求有り時は起動トリガ検知しない */
         u1_t_wkup_req = (U1)PWRCTRL_OBSERVE_POWER_OFF;
     }
 #endif
@@ -1513,10 +1551,19 @@ static void vd_s_PwrCtrlMainSipOffMcuStandbySeq( void )
                   && ( u1_s_PwrCtrl_Main_SipPwrSts     == (U1)PWRCTRL_MAIN_SIP_STS_COMP ))
                 {
                     u1_s_PwrCtrl_Main_Sts          = (U1)PWRCTRL_MAIN_NO_REQ;            /* 処理完了 */
-                    u1_s_PwrCtrl_Main_ShtdwnOkFlag = (U1)PWRCTRL_COMMON_SYS_PWR_ON;
+                    /* OTAアクティベート要求無しの場合 */
+                    if(u1_t_ota_req == (U1)PWRCTRL_OTA_OTAREQ_OFF)
+                    {
+                        u1_s_PwrCtrl_Main_ShtdwnOkFlag = (U1)PWRCTRL_COMMON_SYS_PWR_ON;
 #if (PWRCTRL_CFG_PRIVATE_ERR_CHK == PWRCTRL_CFG_PRIVATE_ERR_CHK_ENABLE)
-                    u1_s_pwrctrl_common_err_dbg_state = (U1)PWRCTRL_COMMON_ERR_NON;      /* 異常系エラーなし */
+                        u1_s_pwrctrl_common_err_dbg_state = (U1)PWRCTRL_COMMON_ERR_NON;      /* 異常系エラーなし */
 #endif
+                    }
+                    /* OTAアクティベート要求有りの場合 */
+                    else
+                    {
+                        vd_g_Mcu_PerformReset((U1)MCU_RESET_TYPE_HARD);                      /* MCUリセット */
+                    }
                 }
             }
         }
@@ -1846,7 +1893,8 @@ static void vd_s_PwrCtrlMainForcedOffSeq( void )
     U1 u1_t_sipstb_seq;                                                /* SIP電源強制OFFシーケンス状態問い合わせ結果 */
     U1 u1_t_sipfoff_seq;                                               /* SIP入力DDコン電源OFF処理実施要否取得結果 */
     U1 u1_t_wake_factor;                                               /* 起動要因 */
-    
+    U1 u1_t_ota_req;                                                   /* OTAアクティベート要求 */
+
     /* SIP電源強制OFF処理開始 */
     if(u1_s_PwrCtrl_Main_SipPwrSts == (U1)PWRCTRL_MAIN_SIP_STS_INPRC){
         vd_g_PwrCtrlSipMainFunc();                                     /* SIP電源 定期処理 */
@@ -1860,10 +1908,12 @@ static void vd_s_PwrCtrlMainForcedOffSeq( void )
     
     /* SIP電源強制OFFシーケンス実施後動作の決定 */
     if(u1_s_PwrCtrl_Main_SipPwrSts == (U1)PWRCTRL_MAIN_SIP_STS_COMP){
-        /* 起動要因が成立しているかの判定 */
-        u1_t_wake_factor = u1_g_PwrCtrlObserveOnOffTrigger();
-        if(u1_t_wake_factor == (U1)PWRCTRL_OBSERVE_POWER_ON)
+        u1_t_wake_factor = u1_g_PwrCtrlObserveOnOffTrigger();          /* 起動要因有無取得 */
+        u1_t_ota_req = u1_g_PwrCtrlOta_GetReqSts();                    /* OTAアクティベート要求取得 */
+        if( (u1_t_wake_factor == (U1)PWRCTRL_OBSERVE_POWER_ON)
+         && (u1_t_ota_req == (U1)PWRCTRL_OTA_OTAREQ_OFF))
         {
+            /* 起動要因有り かつ OTAアクティベート要求無し */
             /* SIP電源再起動通知設定 */
             vd_g_PwrCtrlComTxSetPwrOn((U1)PWRCTRL_COM_PWRON_FRCOFF_TO_ON); /* 電源再起動開始(SIP電源強制OFF) */
 
@@ -1887,7 +1937,7 @@ static void vd_s_PwrCtrlMainForcedOffSeq( void )
             }
         }
         else{
-            /* 起動要因非成立時 */
+            /* 起動要因非成立時 または OTAアクティベート要求有り */
            u1_s_PwrCtrl_Main_Sts = (U1)PWRCTRL_MAIN_NO_REQ;            /* 処理完了 */
            vd_s_PwrCtrlMainSipOffMcuStandbySysDevReq();                /* SIP電源OFF&MCUスタンバイシーケンス SYS系電源OFF、MCUスタンバイ処理開始要求 */
         }
