@@ -21,6 +21,7 @@
 #include "xspi_met_ch0.h"
 #include "xspi_met_ch1.h"
 #include "xspi_met_calib.h"
+#include "xspi_met_dsal.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -95,6 +96,7 @@ void    vd_g_XSpiMETInit(void)
     vd_g_XSpiCfgInitCh0();
     vd_g_XSpiCfgInitCh1();
     vd_g_XSpiCalibInit();
+    vd_g_XSpiDsalInit();
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_XSpiMETPduRx(void)                                                                                                  */
@@ -113,6 +115,7 @@ void    vd_g_XSpiMETPduRx(void)
         u4_s_xspi_met_rx_rd_access_sts = u4p_t_data[2];
         vd_g_XSpiCfgPduRxCh0(&u4p_t_data[0]);
         vd_g_XSpiCfgPduRxCh1(&u4p_t_data[700]);
+        vd_g_XSpiDsalRx(&u4p_t_data[0]);
     }
     else{
         /* ALL Status INVALID */
@@ -156,6 +159,7 @@ void    vd_g_XSpiMETPduTx(void)
     u1_t_xspi_condition = xspi_GetCondition((U1)XSPI_CH_02);
 
     vd_g_XSpiCfgPduTxCh0(&u4_sp_xspi_met_db_tra[0]);
+    vd_g_XSpiDsalTx(&u4_sp_xspi_met_db_tra[0]);
     vd_g_XSpiMETTxSCL(&u4_sp_xspi_met_db_tra[660]);
     vd_g_XSpiMETPduTxoXCANSts(&u4_sp_xspi_met_db_tra[666], &st_sp_XSPIMET_CAN_OXCANTXCFG[XSPIMETCANGW_OXCAN_BLOCK]);
     vd_g_XSpiMETPduTxCAN(&u4_sp_xspi_met_db_tra[670], &st_sp_XSPIMET_CAN_TXCFG[XSPIMETCANGW_BLOCK]);
