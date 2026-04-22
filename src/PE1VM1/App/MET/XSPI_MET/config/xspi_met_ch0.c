@@ -281,6 +281,8 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
 
     u4_ap_pdu_tx[2] |= (U4)TRUE << 31;                                 /*  SYS_CPBBSW_CUSTOM_P      */ /* BEV FF2 provisionally */
 
+    u4_ap_pdu_tx[3] = u4_g_TripcomVarAva();                            /*  M_DM PTSYSVARI                                       */
+
     for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)XSPI_VDF_AREA_SIZE; u4_t_loop++){
         u4_ap_pdu_tx[4U + u4_t_loop] = (U4)0x00U;
     }

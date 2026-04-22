@@ -1,4 +1,4 @@
-/* 2.6.0 */
+/* 2.7.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define TRIPCOM_C_MAJOR                         (2)
-#define TRIPCOM_C_MINOR                         (6)
+#define TRIPCOM_C_MINOR                         (7)
 #define TRIPCOM_C_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -70,6 +70,7 @@ static  U2                                      u2_s_tripcom_dmreset;
 static  U2                                      u2_s_tripcom_immw_dmreset;
 static  U2                                      u2_s_tripcom_grphreset;
 static  U2                                      u2_s_tripcom_grphresetbk;
+static  U4                                      u4_s_tripcom_var_ava;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -155,6 +156,7 @@ void            vd_g_TripcomMainTask(void)
 
     u2_t_vehmode = u2_g_TripsnsrVehstsChk();
     u2_t_varbit  = u2_g_TripcomCfgGetVariation();
+    u4_s_tripcom_var_ava = u4_g_TripcomCfgVarAvaJdg(u2_t_varbit);
 
     vd_s_TripcomCalcTask(u2_t_vehmode, u2_t_varbit);
     vd_s_TripcomCanTx(u2_t_varbit);
@@ -254,6 +256,17 @@ void            vd_g_TripcomGrphRstRq(const U2 u2_a_RSTRQBIT)
 }
 
 /*===================================================================================================================================*/
+/* U4              u4_g_TripcomVarAva(void)                                                                                          */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U4              u4_g_TripcomVarAva(void)
+{
+    return (u4_s_tripcom_var_ava);
+}
+
+/*===================================================================================================================================*/
 /* static  void    vd_s_TripcomInit(void)                                                                                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -266,6 +279,8 @@ static  void    vd_s_TripcomInit(void)
     u2_s_tripcom_immw_dmreset           = (U2)0U;
     u2_s_tripcom_grphreset              = (U2)0U;
     u2_s_tripcom_grphresetbk            = (U2)0U;
+
+    u4_s_tripcom_var_ava                = (U4)TRIPCOM_VAR_INIT;
 
     vd_g_TripcomCfgApplInit();
 
@@ -510,6 +525,7 @@ static  void    vd_s_TripcomCanTx(const U2 u2_a_VARBIT)
 /*  2.4.1    04/22/2025  KM       Add posttask for tripcom application                                                               */
 /*  2.5.0    06/23/2025  RS       tripcom_comtx.c v2.4.1 -> v2.5.0.(Change for BEV System_Consideration_2)                           */
 /*  2.6.0    02/11/2026  DT       Change for BEV FF2                                                                                 */
+/*  2.7.0    04/16/2026  KH       Add function variation judgement process (u4_g_TripcomCfgVarAvaJdg).                               */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
@@ -530,5 +546,6 @@ static  void    vd_s_TripcomCanTx(const U2 u2_a_VARBIT)
 /*  * RS   = Ryuki Sako, Denso Techno                                                                                                */
 /*  * DT   = Dj Tutanes, DTPH                                                                                                        */
 /*  * PG   = Patrick Garcia, DTPH                                                                                                    */
+/*  * KH   = Kiko Huerte, DTPH                                                                                                       */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -1,4 +1,4 @@
-/* 2.6.0 */
+/* 2.7.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define TRIPCOM_CFG_C_MAJOR                     (2)
-#define TRIPCOM_CFG_C_MINOR                     (6)
+#define TRIPCOM_CFG_C_MINOR                     (7)
 #define TRIPCOM_CFG_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -326,6 +326,48 @@ U1              u1_g_TripcomEvDteKmIgOffAcOff(U4 * u4p_a_km)
 }
 
 /*===================================================================================================================================*/
+/* U4              u4_g_TripcomCfgVarAvaJdg(const U2 u2_a_VARBIT)                                                                    */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U4              u4_g_TripcomCfgVarAvaJdg(const U2 u2_a_VARBIT)
+{
+    static const U2 u2_s_AVGEE_AVA            = (U2)0x0100U;
+    static const U2 u2_s_INSTEE_AVA           = (U2)0x0200U;
+    static const U2 u2_s_EVDTE_AVA            = (U2)0x0400U;
+    static const U2 u2_s_AVGVEHSPD_PTSRUN_AVA = (U2)0x8000U;
+    U4              u4_t_ava;
+
+    u4_t_ava      = (U4)0x00000000U;
+
+    if ((u2_a_VARBIT & u2_s_AVGEE_AVA) != (U2)0U) {
+        u4_t_ava |= ((U4)TRUE << 13);                     /* SYS_DMTOEC   */
+        u4_t_ava |= ((U4)TRUE << 14);                     /* SYS_DMASEC   */
+        u4_t_ava |= ((U4)TRUE << 15);                     /* SYS_DMM1EC   */
+    }
+
+    if ((u2_a_VARBIT & u2_s_INSTEE_AVA) != (U2)0U) {
+        u4_t_ava |= ((U4)TRUE << 12);                      /* SYS_DMINEC   */
+    }
+
+    if ((u2_a_VARBIT & u2_s_EVDTE_AVA) != (U2)0U) {
+        u4_t_ava |= ((U4)TRUE << 16);                      /* SYS_DMEVRNGE */
+    }
+
+    if ((u2_a_VARBIT & u2_s_AVGVEHSPD_PTSRUN_AVA) != (U2)0U) {
+        u4_t_ava |= ((U4)TRUE << 5);                       /* SYS_DMTOSP   */
+        u4_t_ava |= ((U4)TRUE << 6);                       /* SYS_DMASSP   */
+        u4_t_ava |= ((U4)TRUE << 7);                       /* SYS_DMASDT   */
+        u4_t_ava |= ((U4)TRUE << 8);                       /* SYS_DMTOTM   */
+        u4_t_ava |= ((U4)TRUE << 9);                       /* SYS_DMASTM   */
+        u4_t_ava |= ((U4)TRUE << 11);                      /* SYS_DMTODT   */
+    }
+
+    return (u4_t_ava);
+}
+
+/*===================================================================================================================================*/
 /* static void     u1_s_TripcomCfgJdgEvDteSts(void)                                                                                  */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -386,6 +428,7 @@ void             vd_s_TripomCfgPostAppTask(void)
 /*  2.4.1     04/22/2025  KM       tripcom.c v2.4.0 -> v2.4.1.                                                                       */
 /*  2.5.0     06/23/2025  RS       tripcom_comtx.c v2.4.1 -> v2.5.0.(Change for BEV System_Consideration_2)                          */
 /*  2.6.0     02/11/2026  DT       tripcom_comtx.c v2.5.0 -> v2.6.0.(Change for BEV FF2)                                             */
+/*  2.7.0     04/16/2026  KH       tripcom.c v2.6.0 -> v2.7.0.                                                                       */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision  Date        Author   Change Description                                                                                */
@@ -416,6 +459,7 @@ void             vd_s_TripomCfgPostAppTask(void)
 /*  BEV-03    02/12/2026  DT       Deleted unapplied parameter for BEV FF2                                                           */
 /*  BEV-04    02/12/2026  EA       Deleted/Deactivated other than BEV Powertrain processes                                           */
 /*  BEV-05    02/23/2026  PG       Deleted memory app access initialization function                                                 */
+/*  BEV-06    04/16/2026  KH       Add function variation judgement process (u4_g_TripcomCfgVarAvaJdg).                              */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * YA   = Yuhei Aoyama, DensoTechno                                                                                               */
