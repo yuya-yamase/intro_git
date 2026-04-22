@@ -233,7 +233,7 @@ static const ST_XSPI_MET_MSG2POSLEN st_sp_XSPI_MET_MSG2POSLEN[] = {
         { (U2)542U, (U2)MSG_BDB1S08_RXCH0,     (U1)XSPI_MET_CAN_DLC_32, (U2)126} /* Index125 */
 };
 static const ST_XSPI_MET_OXCANMSG2POSLEN st_sp_XSPI_MET_OXCANMSG2POSLEN[XSPI_MET_OXCANCFG_NUM] = {
-       /* u2_stspos     u2_oxcanid                           u2_timenout                           u2_syschk                                                */
+       /* u2_stspos     u2_oxcanid                           u2_timenout                           u2_syschk                                                              */
         { (U2)0U,   (U2)OXCAN_RXD_PDU_CAN_SCS1S11_CH0,       (U2)10000U / (U2)OXCAN_MAIN_TICK,                         (U2)OXCAN_SYS_IGR | (U2)OXCAN_SYS_IGP},/* Index  0 */
         { (U2)1U,   (U2)OXCAN_RXD_PDU_CAN_BSR1S01_CH0,       (U2)5000U  / (U2)OXCAN_MAIN_TICK,                         (U2)OXCAN_SYS_IGR | (U2)OXCAN_SYS_IGP},/* Index  1 */
         { (U2)2U,   (U2)OXCAN_RXD_PDU_CAN_DDM1S17_CH0,       (U2)3600U  / (U2)OXCAN_MAIN_TICK,                         (U2)OXCAN_SYS_IGR | (U2)OXCAN_SYS_IGP},/* Index  2 */
