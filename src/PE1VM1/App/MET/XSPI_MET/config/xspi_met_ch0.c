@@ -1214,7 +1214,8 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-42    03/17/2026 SH       Change for BEV Full_Function_2. (Add SYS_CPBBSW_CUSTOM_P and DISTEMPTY_EV_KM_DIFF)                 */
 /*  BEV-43    04/06/2026 TB       Change for BEV FF2.(Remove switching information for time and unit)                                */
 /*  BEV-44    04/08/2026 KO       Change for BEV Electronic CV. (Add TT abnormality monitoring)                                      */
-/*  BEV-45    04/16/2026 SH       Change for BEV E-CV. (Add TRIPA_STS_RSLT and TRIPB_STS_RSLT)                                       */
+/*  BEV-45    04/16/2026 KH       Change for BEV Electronic_CV. (Add SYS_DM**)                                                       */
+/*  BEV-46    04/16/2026 SH       Change for BEV E-CV. (Add TRIPA_STS_RSLT and TRIPB_STS_RSLT)                                       */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
