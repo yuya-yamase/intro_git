@@ -1041,7 +1041,7 @@ void vd_g_PwrCtrlComTxSetInitStart( const U1 u1_a_req )
 {
     /* VM2èâä˙âªäJéní ímê›íË */
     u4_s_PwrCtrl_Com_Tx_FullInit3to2 &= PWRCTRL_COM_1BYTEMASK;
-    u4_s_PwrCtrl_Com_Tx_FullInit3to2 |= (U4)(u1_a_req) << (U4)PWRCTRL_COM_1BYTESHIFT;
+    u4_s_PwrCtrl_Com_Tx_FullInit3to2 |= ((U4)u1_a_req) << (U4)PWRCTRL_COM_1BYTESHIFT;
 
     return;
 }

@@ -154,9 +154,9 @@ void    vd_g_NvmcIfCENMainTask(void)
         if(u1_t_vm_data == (U1)PWRCTRL_OTA_WRITE_NOOTA)
         {
             /* 現在の送信値(不揮発値)と書き込み要求が異なる場合 */
-            if(u4_s_PwrCtrl_OtaReq != (U1)PWRCTRL_OTA_NOREQ)
+            if(u4_s_PwrCtrl_OtaReq != (U4)PWRCTRL_OTA_NOREQ)
             {
-                u4_s_PwrCtrl_OtaReq = (U1)PWRCTRL_OTA_NOREQ;                                 /* VM間通信の送信値を更新 */
+                u4_s_PwrCtrl_OtaReq = (U4)PWRCTRL_OTA_NOREQ;                                 /* VM間通信の送信値を更新 */
                 vd_g_Nvmc_WriteU4((U2)NVMCID_U4_PWCTRL_OTAACT_REQ, u4_s_PwrCtrl_OtaReq);     /* 不揮発更新 */
             }
         }
@@ -164,9 +164,9 @@ void    vd_g_NvmcIfCENMainTask(void)
         else if(u1_t_vm_data == (U1)PWRCTRL_OTA_WRITE_OTA)
         {
             /* 現在の送信値(不揮発値)と書き込み要求が異なる場合 */
-            if(u4_s_PwrCtrl_OtaReq != (U1)PWRCTRL_OTA_REQ)
+            if(u4_s_PwrCtrl_OtaReq != (U4)PWRCTRL_OTA_REQ)
             {
-                u4_s_PwrCtrl_OtaReq = (U1)PWRCTRL_OTA_REQ;                                   /* VM間通信の送信値を更新 */
+                u4_s_PwrCtrl_OtaReq = (U4)PWRCTRL_OTA_REQ;                                   /* VM間通信の送信値を更新 */
                 vd_g_Nvmc_WriteU4((U2)NVMCID_U4_PWCTRL_OTAACT_REQ, u4_s_PwrCtrl_OtaReq);     /* 不揮発更新 */
             }
         }

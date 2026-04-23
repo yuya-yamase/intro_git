@@ -50,7 +50,7 @@ void vd_g_PwrCtrlOtaInit(void)
 {
     u1_s_PwrCtrl_Ota_ReqSts = (U1)PWRCTRL_OTA_OTAREQ_OFF;          /* OTAアクティベート要求無し */
     u1_s_PwrCtrl_Ota_ReqRead = (U1)PWRCTRL_OTA_READ_NOOTA;         /* OTAアクティベート要求無し */
-    u4_s_PwrCtrl_Ota_ReqWrite = (U1)PWRCTRL_OTA_WRITE_NOWRITEREQ;  /* 書き込み要求無し */
+    u4_s_PwrCtrl_Ota_ReqWrite = (U4)PWRCTRL_OTA_WRITE_NOWRITEREQ;  /* 書き込み要求無し */
 
     return;
 }

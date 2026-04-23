@@ -874,7 +874,7 @@ static U2 u2_s_PwrCtrlObserveSoCResetReqSeq( void )
     {
         /* SoCリセット要求(異常)検知実行状態 かつ 前回値がSoCリセット要求(異常)以外の場合 */
         if((u1_s_PwrCtrl_Observe_SoCResetErr_Sts == (U1)PWRCTRL_OBSERVE_ON)
-        && (u1_s_PwrCtrl_Observe_PreSoCResetReq != (U1)PWRCTRL_OBSERVE_RESET_SOCERR))
+        && (u1_s_PwrCtrl_Observe_PreSoCResetReq != (U1)PWRCTRL_COM_SOCRESET_SOCERR))
         {
             u2_t_ret = (U2)PWRCTRL_OBSERVE_RESET_SOCERR;
         }
@@ -883,9 +883,8 @@ static U2 u2_s_PwrCtrlObserveSoCResetReqSeq( void )
     /* 取得内容がCDCリセット要求の場合 */
     if(u1_t_read_req == (U1)PWRCTRL_COM_SOCRESET_CDC)
     {
-        /* SoC起動状態 かつ 前回値がCDCリセット要求以外の場合 */
-        if((u1_s_PwrCtrl_Observe_SocPower_Sts == (U1)PWRCTRL_OBSERVE_SOCPOWER_ON)
-        && (u1_s_PwrCtrl_Observe_PreSoCResetReq != (U1)PWRCTRL_OBSERVE_RESET_CDC))
+        /* SoC起動状態以外の場合 */
+        if(u1_s_PwrCtrl_Observe_SocPower_Sts == (U1)PWRCTRL_OBSERVE_SOCPOWER_ON)
         {
             u2_t_ret = (U2)PWRCTRL_OBSERVE_RESET_CDC;
         }
