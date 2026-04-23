@@ -215,7 +215,7 @@ static U1 u1_s_FwushDetectresponseEvent(U1 u1_a_req_subtype)
                 u1_t_event = (U1)FWUSH_EVENT_PREP_ACCEPT;
             }
             else if((u1_a_req_subtype == (U1)FWUSH_REQ_SUBTYPE_ACT) &&
-                    (u1_g_fwush_seq_progress & (U1)FWUSH_PROGRESS_ACT_DONE) != (U1)0U){
+                    ((u1_g_fwush_seq_progress & (U1)FWUSH_PROGRESS_ACT_DONE) != (U1)0U)){
                 /* ACT + ACT_DONE bit set -> RES_OK (priority over NEW_REQUEST) */
                 u1_t_event = (U1)FWUSH_EVENT_RES_OK;
             }
