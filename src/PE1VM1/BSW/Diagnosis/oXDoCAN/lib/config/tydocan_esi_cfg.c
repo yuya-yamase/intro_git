@@ -20,9 +20,7 @@
 
 #include "mtrxsrch.h"
 
-#ifdef ES_INSPECT_H
 #include "es_inspect.h"
-#endif /* #ifdef ES_INSPECT_H */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -75,23 +73,47 @@ const U2               u2_g_TYDC_ESI_SEC_LVL_BIT = (U2)0x0001U;     /* Security 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const ST_TYDC_ESI      st_gp_TYDC_ESI_CFG[] = {
 /*   fp_u1_TRX                      u2_req_nbyte                    u2_ans_nbyte */
-    {vdp_PTR_NA,                    (U2)0U,                         (U2)0U                      }         /* Dummy */
+    {&u1_g_oXDoCANEsiTRx_22FD11XX,  (U2)OXDC_ESI_REQ_NB_22FD11XX,   (U2)OXDC_ESI_ANS_NB_22FD11XX},
+    {&u1_g_oXDoCANEsiTRx_2EFD41XX,  (U2)OXDC_ESI_REQ_NB_2EFD41XX,   (U2)OXDC_ESI_ANS_NB_2EFD41XX},
+    {&u1_g_oXDoCANEsiTRx_2EFD42XX,  (U2)OXDC_ESI_REQ_NB_2EFD42XX,   (U2)OXDC_ESI_ANS_NB_2EFD42XX},
+    {&u1_g_oXDoCANEsiTRx_22FD60XX,  (U2)OXDC_ESI_REQ_NB_22FD60XX,   (U2)OXDC_ESI_ANS_NB_22FD60XX},
+    {&u1_g_oXDoCANEsiTRx_22FDC0XX,  (U2)OXDC_ESI_REQ_NB_22FDC0XX,   (U2)OXDC_ESI_ANS_NB_22FDC0XX},
+    {&u1_g_oXDoCANEsiTRx_2EFDD0XX,  (U2)OXDC_ESI_REQ_NB_2EFDD0XX,   (U2)OXDC_ESI_ANS_NB_2EFDD0XX},
+    {&u1_g_oXDoCANEsiTRx_22FDD1XX,  (U2)OXDC_ESI_REQ_NB_22FDD1XX,   (U2)OXDC_ESI_ANS_NB_22FDD1XX},
+    {&u1_g_oXDoCANEsiTRx_ABXXXXXX,  (U2)OXDC_ESI_REQ_NB_ABXXXXXX,   (U2)OXDC_ESI_ANS_NB_ABXXXXXX},
+    {&u1_g_oXDoCANEsiTRx_1101XXXX,  (U2)OXDC_ESI_REQ_NB_1101XXXX,   (U2)OXDC_ESI_ANS_NB_1101XXXX}
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static const U4        u4_sp_TYDC_ESI_CID_MASK[] = {
-    (U4)0x00000000U         /* Dummy */
+    (U4)0xFFFFFF00U,
+    (U4)0xFFFFFF00U,
+    (U4)0xFFFFFF00U,
+    (U4)0xFFFFFF00U,
+    (U4)0xFFFFFF00U,
+    (U4)0xFFFFFF00U,
+    (U4)0xFFFFFF00U,
+    (U4)0xFF000000U,
+    (U4)0xFFFF0000U
 };
 
 static const U4        u4_sp_TYDC_ESI_CID_CRIT[] = {
-    (U4)0x00000000U         /* Dummy */
+    (U4)0x22FD1100U,        /* ROM / RAM CHECK : MAIN CPU                                                                            */
+    (U4)0x2EFD4100U,        /* SAFEKEY NUMBER WRITE                                                                                  */
+    (U4)0x2EFD4200U,        /* GROBAL MAC ADDRESS WRITE                                                                              */
+    (U4)0x22FD6000U,        /* VERSION RESPONSE                                                                                      */
+    (U4)0x22FDC000U,        /* MEMORY ACCESS BY ID : READ BY ID                                                                      */
+    (U4)0x2EFDD000U,        /* NVM DATA CLEAR/CHECK : 2EFDD000 = Compare Check : 2EFDD001 = Clear                                    */
+    (U4)0x22FDD100U,        /* NVM DATA CLEAR/CHECK : 22FDD100 = Read Status(Compare Check) : 22FDD101 = Read Status(Clear)          */
+    (U4)0xAB000000U,        /* RECORD ON BEHAVIOR : HARD REQUIREMENT DIAG                                                            */
+    (U4)0x11010000U         /* INSPECTION COMPLETE : COMMAND                                                                         */
 };
 
 const ST_MTRX_SRCH     st_g_TYDC_ESI_CID = {
     &u4_sp_TYDC_ESI_CID_MASK[0],    /* u4p_MASK    */
     &u4_sp_TYDC_ESI_CID_CRIT[0],    /* u4p_CRIT    */
     (U2)1U,                         /* u2_len_inst */
-    (U2)0U                          /* u2_num_srch */
+    (U2)9U                          /* u2_num_srch */
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -105,9 +127,7 @@ const ST_MTRX_SRCH     st_g_TYDC_ESI_CID = {
 /*===================================================================================================================================*/
 void    vd_g_TyDoCANEsiCfgRxEvhk(void)
 {
-#ifdef ES_INSPECT_H
     vd_g_ESInspectReqRx((U1)ES_INSPECT_REQ_RUN, (U1)ES_INSPECT_MD_RUN);
-#endif /* #ifdef ES_INSPECT_H */
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_TyDoCANEsiInit(void)                                                                                                */
