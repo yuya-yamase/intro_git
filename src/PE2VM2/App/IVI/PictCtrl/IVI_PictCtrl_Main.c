@@ -18,9 +18,7 @@
 #include    "IVI_PictCtrl_Main.h"
 #include    "PictCtl.h"
 
-#include    "gvif3tx.h"
 #include    "gvif3rx.h"
-#include    "pictic.h"
 #include    "CXD4984ERCtl.h"
 #include    "ML86294Ctl.h"
 #include    "CXD4937Ctl.h"
@@ -72,9 +70,7 @@ void            vd_g_Ivi_PictCtrl_Main_Bon_init(void)
     vd_g_PictCtl_Init();
     vd_g_Gvif3RxInit();
 
-    gvif3tx_Init();
     gvif3rx_Init();
-    pictic_Init();
     vd_g_Pict_Ml86294_Init();
     vd_g_Pict_GvifSndrInit();
     vd_g_PictMute_Init();
@@ -93,9 +89,7 @@ void            vd_g_Ivi_PictCtrl_Main_Wkup_init(void)
     vd_g_PictCtl_Init();
     vd_g_Gvif3RxInit();
 
-    gvif3tx_Init();
     gvif3rx_Init();
-    pictic_Init();
     vd_g_Pict_Ml86294_Init();
     vd_g_Pict_GvifSndrInit();
     vd_g_PictMute_Init();
@@ -114,9 +108,7 @@ void            vd_g_Ivi_PictCtrl_Main_Rst_init(void)
     vd_g_PictCtl_Init();
     vd_g_Gvif3RxInit();
 
-    gvif3tx_Init();
     gvif3rx_Init();
-    pictic_Init();
     vd_g_Pict_Ml86294_Init();
     vd_g_Pict_GvifSndrInit();
     vd_g_PictMute_Init();
@@ -132,10 +124,8 @@ void            vd_g_Ivi_PictCtrl_Main_Rst_init(void)
 /*===================================================================================================================================*/
 void            vd_g_Ivi_PictCtrl_Main_1ms(void)
 {
-    gvif3tx_main();
     gvif3rx_main();
-    pictic_main();
-    
+
     vd_g_PictCtl_MainTask();
     vd_g_Gvif3RxMainTask();
     vd_g_Pict_Ml86294_Routine();
@@ -152,7 +142,7 @@ void            vd_g_Ivi_PictCtrl_Main_1ms(void)
 /*===================================================================================================================================*/
 void            vd_g_Ivi_PictCtrl_Main_5ms(void)
 {
-    
+
 }
 
 /*===================================================================================================================================*/

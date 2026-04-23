@@ -34,6 +34,11 @@
 #define RIMID_U1_IVI_STR_MODE                    (0x0004U)
 #define RIMID_U1_TIME_FORMAT                     (0x0005U)
 #define RIMID_U1_RTC_STS                         (0x0006U)
+#define RIMID_U1_PMIC_EXEC_FLG                   (0x0007U)
+#define RIMID_U1_GYRO_STS                        (0x0008U)
+#define RIMID_U1_GYRO_CYCCHK_STS                 (0x0009U)
+#define RIMID_U1_GYRO_RST                        (0x000AU)
+#define RIMID_U1_GSENS_RST                       (0x000BU)
 /* END : ##TOOL_OUT#RIM_ID_MOD_3B_U1## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_3B_U2## */
 #define RIMID_U2_SAMPLE_BBB_2                    (0x4000U)
@@ -41,6 +46,10 @@
 #define RIMID_U2_CAL_DEF                         (0x4002U)
 #define RIMID_U2_OFFSET_TIME                     (0x4003U)
 #define RIMID_U2_CAL_DATE                        (0x4004U)
+#define RIMID_U2_GYRO_MAX_ERR                    (0x4005U)
+#define RIMID_U2_GYRO_MIN_ERR                    (0x4006U)
+#define RIMID_U2_GSENS_MAX_ERR                   (0x4007U)
+#define RIMID_U2_GSENS_MIN_ERR                   (0x4008U)
 /* END : ##TOOL_OUT#RIM_ID_MOD_3B_U2## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_3B_U4## */
 #define RIMID_U4_SAMPLE_BBB_4                    (0x8000U)
@@ -50,9 +59,12 @@
 #define RIMID_U4_ABSTIM                          (0x8004U)
 #define RIMID_U4_PRE_RTCCAL                      (0x8005U)
 #define RIMID_U4_ABSCAL                          (0x8006U)
+#define RIMID_U4_GYRO_CYCCHK_TIMER               (0x8007U)
 /* END : ##TOOL_OUT#RIM_ID_MOD_3B_U4## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_3B_OTR## */
 #define RIMID_OTR_SAMPLE_BBB_OTH                 (0xC000U)
+#define RIMID_OTR_GYRODEV_NOTIFCOND              (0xC001U)
+#define RIMID_OTR_GYRODEV_CTRLOUT                (0xC002U)
 /* END : ##TOOL_OUT#RIM_ID_MOD_3B_OTR## */
 
 /* START : ##TOOL_OUT#RIM_ID_MOD_1B2C_U1## */

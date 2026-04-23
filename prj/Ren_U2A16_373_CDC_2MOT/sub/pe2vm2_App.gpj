@@ -57,8 +57,6 @@
 ../../src/PE2VM2/App/IVI/ExtSigCtrl/USBCtl.c
 ../../src/PE2VM2/App/IVI/FwuPx/fwupx.c
 ../../src/PE2VM2/App/IVI/GyrCtrl/CarSpdPls.c
-../../src/PE2VM2/App/IVI/GyrCtrl/config/Mcu_Sys_Pwr_Gyr.c
-../../src/PE2VM2/App/IVI/GyrCtrl/gyro.c
 ../../src/PE2VM2/App/IVI/GyrCtrl/GyroDevCtl.c
 ../../src/PE2VM2/App/IVI/GyrCtrl/IVI_GyrCtrl_Main.c
 ../../src/PE2VM2/App/IVI/I2cCtrl/Mcu_I2c_Ctrl.c
@@ -66,15 +64,12 @@
 ../../src/PE2VM2/App/IVI/iVDTr/iVDTr_SlpCtrl.c
 ../../src/PE2VM2/App/IVI/PictCtrl/config/Mcu_Sys_Pwr_EizoIc.c
 ../../src/PE2VM2/App/IVI/PictCtrl/config/Mcu_Sys_Pwr_Gvif3Rx.c
-../../src/PE2VM2/App/IVI/PictCtrl/config/Mcu_Sys_Pwr_GvifSndr.c
 ../../src/PE2VM2/App/IVI/PictCtrl/CXD4937Ctl.c
 ../../src/PE2VM2/App/IVI/PictCtrl/CXD4984ERCtl.c
 ../../src/PE2VM2/App/IVI/PictCtrl/gvif3rx.c
-../../src/PE2VM2/App/IVI/PictCtrl/gvif3tx.c
 ../../src/PE2VM2/App/IVI/PictCtrl/IVI_PictCtrl_Main.c
 ../../src/PE2VM2/App/IVI/PictCtrl/ML86294Ctl.c
 ../../src/PE2VM2/App/IVI/PictCtrl/PictCtl.c
-../../src/PE2VM2/App/IVI/PictCtrl/pictic.c
 ../../src/PE2VM2/App/IVI/PictCtrl/PictLogCtl.c
 ../../src/PE2VM2/App/IVI/PictCtrl/PictMuteCtl.c
 ../../src/PE2VM2/App/IVI/PwrCtrl/DDFreq/IVI_PwrCtrl_DDFreq.c

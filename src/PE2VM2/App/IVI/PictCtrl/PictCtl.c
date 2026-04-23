@@ -14,7 +14,6 @@
 #include "CXD4984ERCtl.h"
 #include "x_spi_ivi_sub1_camera.h"
 #include "x_spi_ivi_sub1_power.h"
-#include "pictic.h"
 #include "ML86294Ctl.h"
 #include "PictMuteCtl.h"
 #include "SysEcDrc.h"
