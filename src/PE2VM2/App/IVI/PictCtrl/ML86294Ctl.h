@@ -11,7 +11,7 @@
 #include "Dio.h"
 #include "gpi2c_ma.h"
 #include "Mcu_I2c_Ctrl_private.h"
-#include "pictic.h"
+#include "ML86294Ctl.h"
 #include "PictCtl.h"
 #include "SysEcDrc.h"
 
@@ -81,11 +81,15 @@
 #define PICT_ML_DEVRST_ACT                      (1U)
 
 #define PICT_ML_CAMERASIZE_RSV_DREC_CNT_MAX     (3U)
+#define PICT_ML_MLDEVRESET_CHK_CNT_MAX          (3U)
+#define PICT_ML_MLAUXTIMEOUT_NOTIF_DREC_CNT_MAX (3U)
+#define PICT_ML_MLHPDPLUG_NOTIF_DREC_CNT_MAX    (3U)
+#define PICT_ML_MLVICFRZ_CAUSE_CNT_MAX          (10U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define PICT_ML_PWRON_COMP                      (MCU_STEP_EIZOIC_OVERALL_FIN) 
+#define PICT_ML_PWRON_COMP                      (MCU_STEP_EIZOIC_OVERALL_FIN)
 
 #define PICT_ML_IO_STS_LOW                      (0U)
 #define PICT_ML_IO_STS_HIGH                     (1U)
@@ -112,7 +116,7 @@
 
 
 #define u1_PICT_ML_I2C_CTRL_REGSET(u, v, w, x, y, z)    (Mcu_Dev_I2c_Ctrl_RegSet((U1)MCU_I2C_ACK_VIDEO_IC, (u), (v), (U1)GP_I2C_MA_SLA_1_VIDEO_IC, (w), (x), (y), (z)))
-#define u1_PICT_ML_I2C_CTRL_REGREAD(w, x, y, z)         (Mcu_Dev_I2c_Ctrl_RegRead((U1)MCU_I2C_ACK_VIDEO_IC, (w), (U1)GP_I2C_MA_SLA_1_VIDEO_IC, (x), (y), (z), (U1)MCU_I2C_WAIT_NON))
+#define u1_PICT_ML_I2C_CTRL_REGREAD(u, v, w, x, y, z)   (Mcu_Dev_I2c_Ctrl_RegSet((U1)MCU_I2C_ACK_VIDEO_IC, (u), (v), (U1)GP_I2C_MA_SLA_1_VIDEO_IC, (w), (x), (y), (z)))
 
 #define vd_PICT_ML_DREC_REQ(x, y, z)                    (vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_EIZOIC, (x), (y), (z)))
 
@@ -134,6 +138,18 @@
 #define vd_PICT_MLFAILCYCCHK_V_IC_RST_L()               (Dio_WriteChannel(DIO_ID_PORT3_CH3, (Dio_LevelType)PICT_ML_IO_STS_LOW))
 #define vd_PICT_MLFAILCYCCHK_V_IC_RST_H()               (Dio_WriteChannel(DIO_ID_PORT3_CH3, (Dio_LevelType)PICT_ML_IO_STS_HIGH))
 
+
+/* フロー */
+#define MCU_STEP_EIZOIC_OVERALL_0       (0U)    /* GVIF3TX処理待ち */
+#define MCU_STEP_EIZOIC_OVERALL_1       (1U)    /* 6.2 初期化処理 */
+#define MCU_STEP_EIZOIC_OVERALL_2       (2U)    /* 6.3 SiP映像表示に関する処理 */
+#define MCU_STEP_EIZOIC_OVERALL_3       (3U)    /* 6.5.1.1 起動時のカメラ映像表示に関する設定 */
+#define MCU_STEP_EIZOIC_OVERALL_4       (4U)    /* 6.4.1 別体センターディスプレイへの映像出力ON ( HPD= H設定済み確認 ) */
+#define MCU_STEP_EIZOIC_OVERALL_5       (5U)    /* 6.4.1 別体センターディスプレイへの映像出力ON ( wait t10 ) */
+#define MCU_STEP_EIZOIC_OVERALL_6       (6U)    /* 6.4.1 別体センターディスプレイへの映像出力ON ( eDP-TX自動リンクトレーニングモードOFF～映像送信開始 ) */
+#define MCU_STEP_EIZOIC_OVERALL_7       (7U)    /* 6.4.1 別体センターディスプレイへの映像出力ON ( HPD_PLUG通知read ) */
+#define MCU_STEP_EIZOIC_OVERALL_8       (8U)    /* 6.4.1 別体センターディスプレイへの映像出力ON ( HPD_PLUG通知write ) */
+#define MCU_STEP_EIZOIC_OVERALL_FIN     (9U)    /* 6-4. 定期監視  */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
@@ -165,6 +181,7 @@ U1    u1_g_Pict_MlDevRstGet(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+extern uint8    Mcu_OnStep_EIZOIC_OVRALL;
 
 #endif      /* ML86294CTL_H */
 /*===================================================================================================================================*/
