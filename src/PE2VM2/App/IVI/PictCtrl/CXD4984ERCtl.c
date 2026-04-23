@@ -15,7 +15,7 @@
 #include "Mcu_I2c_Ctrl_private.h"
 #include "Mcu_Sys_Pwr_Gvif3Rx.h"
 #include "gvif3rx.h"
-#include "pictic.h"
+#include "ML86294Ctl.h"
 #include "SysEcDrc.h"
 #include "RobCtl.h"
 #include "PwrCtl.h"

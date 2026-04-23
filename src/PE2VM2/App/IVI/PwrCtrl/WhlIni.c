@@ -52,6 +52,7 @@
 static U1 u1_s_whlini_state;                                /* WHLINI Sequence State */
 static U1 u1_s_whlini_req;                                  /* WHLINI Wholly Initialization Request */
 static U4 u4_s_vmcom_req_vm3;                               /* VM2->VM3 WHLINI info/request word (contains REQ/CMP fields) */
+static U4 u4_s_whlini_req;                                  /* （provisional）WHLINI Request */
 #if 0  /* （provisional）VM1未対応のため無効化 */
 static U4 u4_s_vmcom_req_vm1;                               /* VM2->VM1 WHLINI request word (WRITE1/WRITE0/NON) */
 #endif
@@ -92,6 +93,9 @@ void    vd_g_WhlIni_Init(void)
     for (u1_t_cnt = 0U; u1_t_cnt < (U1)WHLINI_SOCREQ_FIFO_SIZE; u1_t_cnt++) {
         u1_s_socreq_fifo[u1_t_cnt] = (U1)0U;
     }
+
+    /* （provisional）WHLINI Request */
+    u4_s_whlini_req = (U4)FALSE;
 
     u4_s_vmcom_req_vm3 = (U4)0U;
     vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO3_WHLINI_INF, &u4_s_vmcom_req_vm3, (U2)WHLINI_VMCOM_WORD_1);
@@ -187,9 +191,15 @@ void    vd_g_WhlIni_Routine(void)
             if(u1_t_vmcom_sts != (U1)IVDSH_NO_REA){
                 u1_t_vmcom_rcv_sts = (U1)(u4_t_vmcom_rcv_sts_vm3 & (U4)WHLINI_MASK_BYTE);
                 if(u1_t_vmcom_rcv_sts == (U1)WHLINI_VMCOM_FROMVM3_RES_START_ACCEPT){
+                    /* （provisional）Store the Wholly Initialization request in RAM */
+                    u4_s_whlini_req = (U4)TRUE;
+
                     /* VM Communication : Clear REQ command field */
                     u4_s_vmcom_req_vm3 &= ~((U4)WHLINI_MASK_BYTE);
                     u4_s_vmcom_req_vm3 |= (U4)WHLINI_VMCOM_TOVM3_REQ_NON;
+                    /* （provisional）VM Communication : Update request-notification flag from RAM state */
+                    u4_s_vmcom_req_vm3 &= ~((U4)WHLINI_MASK_BYTE << WHLINI_SHIFT_2BYTE);
+                    u4_s_vmcom_req_vm3 |=  u4_s_whlini_req << WHLINI_SHIFT_2BYTE;
                     vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO3_WHLINI_INF, &u4_s_vmcom_req_vm3, (U2)WHLINI_VMCOM_WORD_1);
 
 #if 0  /* （provisional）VM1未対応のため無効化 */
@@ -222,9 +232,15 @@ void    vd_g_WhlIni_Routine(void)
             if(u1_t_vmcom_sts != (U1)IVDSH_NO_REA){
                 u1_t_vmcom_rcv_sts = (U1)(u4_t_vmcom_rcv_sts_vm3 & (U4)WHLINI_MASK_BYTE);
                 if(u1_t_vmcom_rcv_sts == (U1)WHLINI_VMCOM_FROMVM3_RES_END_ACCEPT){
+                    /* （provisional）Delete the Wholly Initialization request from RAM */
+                    u4_s_whlini_req = (U4)FALSE;
+
                     /* VM Communication : Clear REQ command field */
                     u4_s_vmcom_req_vm3 &= ~((U4)WHLINI_MASK_BYTE);
                     u4_s_vmcom_req_vm3 |= (U4)WHLINI_VMCOM_TOVM3_REQ_NON;
+                    /* （provisional）VM Communication : Update request-notification flag from RAM state */
+                    u4_s_vmcom_req_vm3 &= ~((U4)WHLINI_MASK_BYTE << WHLINI_SHIFT_2BYTE);
+                    u4_s_vmcom_req_vm3 |=  u4_s_whlini_req << WHLINI_SHIFT_2BYTE;
                     vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO3_WHLINI_INF, &u4_s_vmcom_req_vm3, (U2)WHLINI_VMCOM_WORD_1);
 
 #if 0  /* （provisional）VM1未対応のため無効化 */

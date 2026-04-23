@@ -87,8 +87,14 @@ void vd_g_PwrCtrlSipEthReqJudge( void );
 U1 u1_g_PwrCtrlSipStbyStepGetSts( const U1 u1_a_stby );
 /* SoC起動完了通知関数 */
 void vd_g_PwrCtrlSipSoCOnComp( void );
+/* WAKEUP-STAT1(RAM/RIM)設定関数 */
+void vd_g_PwrCtrlSipSetWakeupStat1( const U1 u1_a_data);
 /* SoC異常検知通知関数 */
 void vd_g_PwrCtrlSipSoCOnError( void );
+/* 完全初期化開始時のWAKEUP-STAT1,2,3設定関数 */
+void vd_g_PwrCtrlSipFullInitStart( void );
+/* 完全初期化終了時のWAKEUP-STAT1,2,3設定関数 */
+void vd_g_PwrCtrlSipFullInitEnd( void );
 
 /* SoCリセット起動要因通知関数 */
 U1 u1_g_PwrCtrlSipSoCRstSts( void );
@@ -101,6 +107,9 @@ void vd_g_PwrCtrlSipSetSoCWkupCond( const U1 u1_a_socwkupcond );
 U1 u1_g_PwrCtrlSipGetSoCWkupCond( void );
 /* SoC起動条件通知クリア関数 */
 void vd_g_PwrCtrlSipClrSoCWkupCond( void );
+
+/* SPI通信途絶監視開始条件の初期化処理 */
+void vd_g_PwrCtrlSpiFsOnInit( void );
 
 #endif /* PWRCTRL_SIP_H */
 

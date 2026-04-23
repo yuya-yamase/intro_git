@@ -16,11 +16,10 @@
 #define MCU_SYS_PWR_EIZOIC_RWC_BYTE1                        (1U)
 #define MCU_SYS_PWR_EIZOIC_RWC_BYTE2                        (2U)
 #define MCU_SYS_PWR_EIZOIC_RWC_BYTE3                        (3U)
-#define MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_NUM                (498U)
+#define MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_NUM                (484U)
 #define MCU_SYS_PWR_EIZOIC_MlSETREG_SIP_NUM                 (4U)
 #define MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_NUM         (151U)
 #define MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_NUM        (143U)
-#define MCU_SYS_PWR_EIZOIC_MlSETREG_CENTERDISP_ON_NUM       (4U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -34,6 +33,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+void            vd_g_EizoIcSysPwrInit(void);
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -42,6 +43,8 @@ extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_SIP[];
 extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON[];
 extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080[];
 extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CENTERDISP_ON[];
+extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_HPD_PLUG_CLR_RD_TBL[];
+extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_HPD_PLUG_CLR_SET_TBL[];
 
 #endif      /* MCU_SYS_PWR_EIZOIC_H */
 /*===================================================================================================================================*/

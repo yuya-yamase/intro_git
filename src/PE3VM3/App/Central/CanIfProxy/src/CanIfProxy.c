@@ -966,7 +966,7 @@ static uint8 CanIfProxy_TransmitCF( void )
 	/* Set Throughput */
 	CanIfProxy_CalcCfThroughput();
 
-	if ( t_u1IsPowerOn == (uint8)FALSE )
+	if ( t_u1IsPowerOn == (uint8)FALSE ) /* TRUE: STD_ON, FALSE: STD_OFF */
 	{
 		t_u1CfPeriod = CanIfProxy_stMfReqStatus.u1CfPeriodPwrOn;
 		t_u1CfTxNum = CanIfProxy_stMfReqStatus.u1CfTxNumPwrOn;
@@ -1324,7 +1324,7 @@ static void CanIfProxy_CalcCfThroughput( void )
 		&& ( t_u1StMin <= (uint8)CANIFPROXY_STMIN_MAX_US ) )
 	{
 		t_u1PeriodPwrOn = CanIfProxy_cu1CfPeriodDef + (uint8)CANIFPROXY_STMIN_MARGIN;
-		t_u1PeriodPwrOff = CanIfProxy_cu1CfPeriodDef + (uint8)CANIFPROXY_STMIN_MARGIN;
+		t_u1PeriodPwrOff = CanIfProxy_cu1CfPeriodDef;
 		t_u1TxNumPwrOn = CanIfProxy_cu1CfTxNumDef;
 		t_u1TxNumPwrOff = CanIfProxy_cu1CfTxNumDef;
 	}
@@ -1342,11 +1342,12 @@ static void CanIfProxy_CalcCfThroughput( void )
 		if ( t_u1StMin > t_u1FrameTransInt )
 		{
 			/* STmin > FrameTransInt: use STmin */
+			t_u1PeriodPwrOn = t_u1StMin + (uint8)CANIFPROXY_STMIN_MARGIN;
 		}
 		else
 		{
 			/* otherwise: use FrameTransInt */
-			t_u1PeriodPwrOn = t_u1FrameTransInt;
+			t_u1PeriodPwrOn = t_u1FrameTransInt + (uint8)CANIFPROXY_STMIN_MARGIN;
 		}
 	}
 	

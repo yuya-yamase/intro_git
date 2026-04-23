@@ -254,7 +254,7 @@ U4      u4_g_oXCANCfgVomchk(void)
 
     /* check : DTC detection inhibiton conditions */
     u1_t_diag_pon = u1_g_VehopemdDiagOn();
-    u1_t_pb2_10p5v = u1_g_IoHwDifltSwitch((U2)IOHW_DISGNL_BMON2_10P5V);
+    u1_t_pb2_10p5v = u1_g_IoHwDifltSwitch((U2)IOHW_DISGNL_B_MONI2_10P5V);
     if((u1_t_diag_pon == (U1)TRUE) &&
        (u1_t_pb2_10p5v == (U1)IOHW_DIFLT_SWITCH_ACT)){
         u4_t_vom_chk |= (U4)OXCAN_SYS_DIC;

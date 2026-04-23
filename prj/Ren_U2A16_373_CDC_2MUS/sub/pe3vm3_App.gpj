@@ -64,6 +64,8 @@
 ../../src/PE3VM3/App/Common/PwrCtrl/PwrCtrl_Sip.c
 ../../src/PE3VM3/App/Common/PwrCtrl/PwrCtrl_Sys.c
 ../../src/PE3VM3/App/Common/PwrCtrl/PwrCtrl_ObserveSAIL.c
+../../src/PE3VM3/App/Common/PwrCtrl/PwrCtrl_FullInit.c
+../../src/PE3VM3/App/Common/PwrCtrl/PwrCtrl_Ota.c
 ../../src/PE3VM3/App/Common/xspi/xspi.c
 ../../src/PE3VM3/App/Common/xspi/xspi_sub.c
 ###../../src/PE3VM3/App/Product/config_2MJP/product_cfg.c

@@ -94,6 +94,43 @@
 #define PWRCTRL_COM_URMASKOFF_DISABLED      (0U)  /* ユーザーリセット抑止解除受付：無効 */
 #define PWRCTRL_COM_URMASKOFF_ENABLED       (1U)  /* ユーザーリセット抑止解除受付：有効 */
 
+/* 完全初期化データ定義 */
+/* 受信 */
+/* 完全初期化要求 */
+#define PWRCTRL_COM_FULLINITREQ_NON          (0U)  /* 要求無し */
+#define PWRCTRL_COM_FULLINITREQ_START        (1U)  /* 開始要求 */
+#define PWRCTRL_COM_FULLINITREQ_END          (2U)  /* 終了要求 */
+#define PWRCTRL_COM_FULLINITREQ_NUM          (3U)  /* 定義数 */
+/* 初期化完了通知 */
+#define PWRCTRL_COM_FULLINITCOMP_NON         (0U)  /* 初期値 */
+#define PWRCTRL_COM_FULLINITCOMP_OK          (1U)  /* 初期化成功 */
+#define PWRCTRL_COM_FULLINITCOMP_NG          (2U)  /* 初期化失敗 */
+#define PWRCTRL_COM_FULLINITCOMP_NUM         (3U)  /* 定義数 */
+/* 完全初期化要求受付状態 */
+#define PWRCTRL_COM_FULLINITSTS_OFF          (0U)  /* 完全初期化要求無し */
+#define PWRCTRL_COM_FULLINITSTS_ON           (1U)  /* 完全初期化要求有り */
+#define PWRCTRL_COM_FULLINITSTS_NUM          (2U)  /* 定義数 */
+/* 送信 */
+#define PWRCTRL_COM_FULLINITINFO_NON         (0U)  /* 送信データ初期値 */
+/* 完全初期化応答 */
+#define PWRCTRL_COM_FULLINITRES_NON          (0U)  /* 応答無し */
+#define PWRCTRL_COM_FULLINITRES_STARTOK      (1U)  /* 開始受付 */
+#define PWRCTRL_COM_FULLINITRES_STARTNG      (2U)  /* 開始拒否 */
+#define PWRCTRL_COM_FULLINITRES_ENDOK        (3U)  /* 終了受付 */
+#define PWRCTRL_COM_FULLINITRES_ENDNG        (4U)  /* 終了拒否 */
+/* 初期化開始通知 */
+#define PWRCTRL_COM_FULLINITSTART_NON        (0U)  /* 初期値 */
+#define PWRCTRL_COM_FULLINITSTART_ON         (1U)  /* 初期化開始 */
+
+/* VMリセット準備要求 */
+#define PWRCTRL_COM_VMRESETREQ_NON           (0U)  /* 要求無し */
+#define PWRCTRL_COM_VMRESETREQ_ON            (1U)  /* VMリセット準備要求 */
+#define PWRCTRL_COM_VMRESETREQ_NUM           (2U)  /* 定義数 */
+/* VMリセット準備応答 */
+#define PWRCTRL_COM_VMRESETRES_NON           (0U)  /* 要求無し */
+#define PWRCTRL_COM_VMRESETRES_FULLINITNON   (1U)  /* 完全初期化実施無し */
+#define PWRCTRL_COM_VMRESETRES_FULLINIT      (2U)  /* 完全初期化実施有り */
+
 /*--------------------------------------------------------------------------*/
 /* Function Prototypes                                                      */
 /*--------------------------------------------------------------------------*/
@@ -111,6 +148,10 @@ U1 u1_g_PwrCtrlComGetSoCResetReq( void );
 U1 u1_g_PwrCtrlComGetSTRMode( void );
 U1 u1_g_PwrCtrlComGetSpiFail( void );
 U1 u1_g_PwrCtrlComGetNMDiagReset( void );
+U1 u1_g_PwrCtrlComGetFullInitSts( void );
+U1 u1_g_PwrCtrlComGetFullInitReq( void );
+U1 u1_g_PwrCtrlComGetFullInitCompVm2( void );
+U1 u1_g_PwrCtrlComGetVMResetReq( void );
 
 /* 送信 */
 void vd_g_PwrCtrlComTxTask( void );
@@ -123,6 +164,9 @@ void vd_g_PwrCtrlComTxClrBootLog( const U1 u1_a_req );
 void vd_g_PwrCtrlComTxSetSoCPower( const U1 u1_a_data );
 void vd_g_PwrCtrlComTxSetSoCWkupCond( const U1 u1_a_data );
 void vd_g_PwrCtrlComTxSetUsrRstMask( const U1 u1_a_data );
+void vd_g_PwrCtrlComTxSetFullInitRes( const U1 u1_a_ret );
+void vd_g_PwrCtrlComTxSetInitStart( const U1 u1_a_req );
+void vd_g_PwrCtrlComTxSetVMResetRes( const U1 u1_a_ret );
 void vd_g_PwrCtrlComEthLinkup( const U1 u1_a_det );
 
 void vd_g_PwrCtrlComSetURMaskOffSts( const U1 u1_a_req );

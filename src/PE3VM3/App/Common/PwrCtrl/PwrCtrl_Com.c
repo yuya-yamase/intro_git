@@ -26,6 +26,8 @@
 #define PWRCTRL_COM_VMRXID_VM2_STR         (IVDSH_DID_REA_VM2TO3_STRMODE) /* STRモード状態通知 */
 #define PWRCTRL_COM_VMRXID_VM1_SPIFAIL     (IVDSH_DID_REA_VM1TO3_SPI_FAIL) /* SPI通信途絶監視結果 */
 #define PWRCTRL_COM_VMRXID_VM1_NMDIAG      (IVDSH_DID_REA_VM1TO3_NMDIAG)  /* NMダイアグリセット */
+#define PWRCTRL_COM_VMRXID_VM2_FULLINI2TO3 (IVDSH_DID_REA_VM2TO3_WHLINI_INF)   /* 完全初期化VM2to3通知 */
+#define PWRCTRL_COM_VMRXID_VM2_VMRESET     (IVDSH_DID_REA_VM2TO3_VMRESET_REQ)  /* VMリセット準備要求 */
 
 /* データ長(word) */
 #define PWRCTRL_COM_STBY_LEN               (1U)         /* スタンバイ条件成立有無データ長 */
@@ -34,6 +36,8 @@
 #define PWRCTRL_COM_STR_LEN                (1U)         /* STRモード状態通知データ長 */
 #define PWRCTRL_COM_SPIFAIL_LEN            (1U)         /* STRモード状態通知データ長 */
 #define PWRCTRL_COM_NMDIAG_LEN             (1U)         /* NMダイアグリセット検知状態データ長 */
+#define PWRCTRL_COM_FULLINI2TO3_LEN        (1U)         /* 完全初期化VM2to3通知データ長 */
+#define PWRCTRL_COM_VMRESET_LEN            (1U)         /* VMリセット準備要求データ長 */
 
 /* SoC動作状態 */
 #define PWRCTRL_COM_SOCSTS_INIT            (0x00U)      /* SoC動作状態:未設定 */
@@ -50,6 +54,8 @@
 #define PWRCTRL_COM_VMTXID_VM1_SOCPOWER    (IVDSH_DID_WRI_VM3TO1_SOC_POW_STS) /* SoC起動状態 */
 #define PWRCTRL_COM_VMTXID_VM1_SOCWKUPCOND (IVDSH_DID_WRI_VM3TO2_WKUP_COND)   /* SoC起動条件通知 */
 #define PWRCTRL_COM_VMTXID_VM1_USRRSTMASK  (IVDSH_DID_WRI_VM3TO2_USRRST_MASK) /* ユーザーリセット抑止区間通知 */
+#define PWRCTRL_COM_VMTXID_VM2_FULLINI3TO2 (IVDSH_DID_WRI_VM3TO2_WHLINI_INF)  /* 完全初期化VM3to2通知 */
+#define PWRCTRL_COM_VMTXID_VM2_VMRESET     (IVDSH_DID_WRI_VM3TO2_VMRESET_RES) /* VMリセット準備応答 */
 
 /* データ長(word) */
 #define PWRCTRL_COM_PWRON_LEN              (1U)         /* SIP電源再起動通知データ長 */
@@ -60,6 +66,8 @@
 #define PWRCTRL_COM_SOCPOWER_LEN           (1U)         /* SoC起動状態データ長 */
 #define PWRCTRL_COM_SOCWKUPCOND_LEN        (1U)         /* SoC起動条件通知データ長 */
 #define PWRCTRL_COM_USRRSTMASK_LEN         (1U)         /* ユーザーリセット抑止区間通知データ長 */
+#define PWRCTRL_COM_FULLINI3TO2_LEN        (1U)         /* 完全初期化VM3to2通知データ長 */
+#define PWRCTRL_COM_VMRESET_LEN            (1U)         /* VMリセット準備応答データ長 */
 
 /* SoC起動回数カウンタ */
 #define PWRCTRL_COM_SOCONCOUNT_MAX         (0xFFFFU)    /* 最大値 */
@@ -80,8 +88,10 @@
 /* 共通 */
 #define PWRCTRL_COM_1BYTEMASK              (0x000000FF) /* 1Byte目マスク */
 #define PWRCTRL_COM_2BYTEMASK              (0x0000FF00) /* 2Byte目マスク */
+#define PWRCTRL_COM_3BYTEMASK              (0x00FF0000) /* 3Byte目マスク */
 #define PWRCTRL_COM_LOW2BMASK              (0x0000FFFF) /* 下位2Byteマスク */
 #define PWRCTRL_COM_1BYTESHIFT             (8)          /* 1Byteシフト */
+#define PWRCTRL_COM_2BYTESHIFT             (16)         /* 2Byteシフト */
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -98,6 +108,8 @@ static void vd_s_PwrCtrlComRxSTR( void );
 static void vd_s_PwrCtrlComRxSpiFail( void );
 static void vd_s_PwrCtrlComRxNMDiagReset( void );
 static void vd_s_PwrCtrlComEthLinkupStsSet( void );
+static void vd_s_PwrCtrlComRxFullInit2to3( void );
+static void vd_s_PwrCtrlComRxVMResetReq( void );
 
 /*--------------------------------------------------------------------------*/
 /* Data                                                                     */
@@ -110,6 +122,10 @@ static U1 u1_s_PwrCtrl_Com_Rx_SoCResetReq;   /* SoCリセット要求 */
 static U1 u1_s_PwrCtrl_Com_Rx_STRModeInfo;   /* STRモード状態 */
 static U1 u1_s_PwrCtrl_Com_Rx_SpiFail;       /* SPI通信途絶監視結果 */
 static U1 u1_s_PwrCtrl_Com_Rx_NMDiagReset;   /* NMダイアグリセット */
+static U1 u1_s_PwrCtrl_Com_Rx_FullInitReq;    /* 完全初期化要求 */
+static U1 u1_s_PwrCtrl_Com_Rx_FullInitCompVm2; /* VM2初期化完了通知 */
+static U1 u1_s_PwrCtrl_Com_Rx_FullInitSts;    /* 完全初期化要求受付状態 */
+static U1 u1_s_PwrCtrl_Com_Rx_VMResetReq;    /* VMリセット準備要求 */
 static U4 u4_s_PwrCtrl_Com_Tx_PwrOn;         /* SIP電源再起動通知 */
 static U4 u4_s_PwrCtrl_Com_Tx_PwrErr;        /* SIP異常検知通知 */
 static U4 u4_s_PwrCtrl_Com_Tx_SoCOnCount;    /* SoC起動回数カウンタ */
@@ -118,6 +134,8 @@ static U4 u4_s_PwrCtrl_Com_Tx_BootLog;       /* 起動ログ計測点通知 */
 static U4 u4_s_PwrCtrl_Com_Tx_SoCPower;      /* SoC起動状態 */
 static U4 u4_s_PwrCtrl_Com_Tx_SoCWkupCond;   /* SoC起動条件通知 */
 static U4 u4_s_PwrCtrl_Com_Tx_UsrRstMask;    /* ユーザーリセット抑止区間通知 */
+static U4 u4_s_PwrCtrl_Com_Tx_FullInit3to2;  /* 完全初期化VM3to2通知 */
+static U4 u4_s_PwrCtrl_Com_Tx_VMResetRes;    /* VMリセット準備応答 */
 static U1 u1_s_PwrCtrl_Com_Eth_LinkupSts;    /* Ethリンクアップ状態 */
 static U1 u1_s_PwrCtrl_Com_URMaskOffSts;     /* ユーザーリセット抑止解除受付状態 */
 
@@ -149,6 +167,10 @@ void vd_g_PwrCtrlComBonInit( void )
     u1_s_PwrCtrl_Com_Rx_STRModeInfo = (U1)PWRCTRL_COM_STR_OFF;      /* STRモード状態 */
     u1_s_PwrCtrl_Com_Rx_SpiFail = (U1)PWRCTRL_COM_SPIFAIL_OK;       /* SPI通信途絶監視結果 */
     u1_s_PwrCtrl_Com_Rx_NMDiagReset = (U1)PWRCTRL_COM_NMDIAGRESET_NON;  /* NMダイアグリセット検知 */
+    u1_s_PwrCtrl_Com_Rx_FullInitReq = (U1)PWRCTRL_COM_FULLINITREQ_NON;      /* 完全初期化要求 */
+    u1_s_PwrCtrl_Com_Rx_FullInitCompVm2 = (U1)PWRCTRL_COM_FULLINITCOMP_NON; /* VM2初期化完了通知 */
+    u1_s_PwrCtrl_Com_Rx_FullInitSts = (U1)PWRCTRL_COM_FULLINITSTS_OFF;      /* 完全初期化要求受付状態 */
+    u1_s_PwrCtrl_Com_Rx_VMResetReq = (U1)PWRCTRL_COM_VMRESETREQ_NON;        /* VMリセット準備要求 */
     u4_s_PwrCtrl_Com_Tx_PwrOn = (U4)PWRCTRL_COM_PWRON_NOINFO;       /* SIP電源再起動通知 */
     u4_s_PwrCtrl_Com_Tx_PwrErr = (U4)PWRCTRL_COM_PWRERR_NOERR;      /* SIP異常検知通知 */
     u4_s_PwrCtrl_Com_Tx_SoCOnCount = (U4)PWRCTRL_COM_SOCONCOUNT_INIT;   /* SoC起動回数カウンタ */
@@ -163,6 +185,8 @@ void vd_g_PwrCtrlComBonInit( void )
     vd_g_Rim_WriteU4((U2)RIMID_U4_PWCTR_SOC_USRRSTMASK, u4_s_PwrCtrl_Com_Tx_UsrRstMask);
 
     vd_g_PwrCtrlComTxClrBootLog((U1)PWRCTRL_COM_BOOTLOG_INITREQ);       /* 起動ログ計測点をクリア */
+    u4_s_PwrCtrl_Com_Tx_FullInit3to2 = (U4)PWRCTRL_COM_FULLINITINFO_NON; /* 完全初期化VM3to2通知 */
+    u4_s_PwrCtrl_Com_Tx_VMResetRes = (U4)PWRCTRL_COM_VMRESETRES_NON;     /* VMリセット準備応答 */
     u1_s_PwrCtrl_Com_Eth_LinkupSts = (U1)PWRCTRL_COM_ETH_LINKUP_NODETECT; /* Ethリンクアップ未検知を設定 */
     u1_s_PwrCtrl_Com_URMaskOffSts = (U1)PWRCTRL_COM_URMASKOFF_DISABLED; /* ユーザーリセット抑止解除受付状態 */
 
@@ -193,6 +217,10 @@ void vd_g_PwrCtrlComWkupInit( void )
     u1_s_PwrCtrl_Com_Rx_STRModeInfo = (U1)PWRCTRL_COM_STR_OFF;      /* STRモード状態 */
     u1_s_PwrCtrl_Com_Rx_SpiFail = (U1)PWRCTRL_COM_SPIFAIL_OK;       /* SPI通信途絶監視結果 */
     u1_s_PwrCtrl_Com_Rx_NMDiagReset = (U1)PWRCTRL_COM_NMDIAGRESET_NON;  /* NMダイアグリセット検知 */
+    u1_s_PwrCtrl_Com_Rx_FullInitReq = (U1)PWRCTRL_COM_FULLINITREQ_NON;      /* 完全初期化要求 */
+    u1_s_PwrCtrl_Com_Rx_FullInitCompVm2 = (U1)PWRCTRL_COM_FULLINITCOMP_NON; /* VM2初期化完了通知 */
+    u1_s_PwrCtrl_Com_Rx_FullInitSts = (U1)PWRCTRL_COM_FULLINITSTS_OFF;      /* 完全初期化要求受付状態 */
+    u1_s_PwrCtrl_Com_Rx_VMResetReq = (U1)PWRCTRL_COM_VMRESETREQ_NON;        /* VMリセット準備要求 */
     u4_s_PwrCtrl_Com_Tx_PwrOn = (U4)PWRCTRL_COM_PWRON_NOINFO;       /* SIP電源再起動通知 */
     u4_s_PwrCtrl_Com_Tx_PwrErr = (U4)PWRCTRL_COM_PWRERR_NOERR;      /* SIP異常検知通知 */
     u4_s_PwrCtrl_Com_Tx_SoCPower = (U4)PWRCTRL_COM_SOCPOWER_OFF;    /* SoC起動状態 */
@@ -237,6 +265,9 @@ void vd_g_PwrCtrlComWkupInit( void )
         u4_s_PwrCtrl_Com_Tx_UsrRstMask = (U4)PWRCTRL_COM_USRRSTMASK_OFF;
     }
 
+    u4_s_PwrCtrl_Com_Tx_FullInit3to2 = (U4)PWRCTRL_COM_FULLINITINFO_NON; /* 完全初期化VM3to2通知 */
+    u4_s_PwrCtrl_Com_Tx_VMResetRes = (U4)PWRCTRL_COM_VMRESETRES_NON;     /* VMリセット準備応答 */
+
     return;
 }
 
@@ -269,6 +300,15 @@ void vd_g_PwrCtrlComRxTask( void )
 
     /* NMダイアグリセット要求受信 */
     vd_s_PwrCtrlComRxNMDiagReset();
+
+    /* 完全初期化VM2to3通知受信 */
+    vd_s_PwrCtrlComRxFullInit2to3();
+
+    /* VMリセット準備要求受信 */
+    vd_s_PwrCtrlComRxVMResetReq();
+
+    /* OTA用データ受信 */
+    vd_g_PwrCtrlOtaComRx();
 
     return;
 }
@@ -369,6 +409,54 @@ U1 u1_g_PwrCtrlComGetNMDiagReset( void )
     return(u1_s_PwrCtrl_Com_Rx_NMDiagReset);
 }
 
+/*****************************************************************************/
+/*  Function      : u1_g_PwrCtrlComGetFullInitReq                            */
+/*  Description   : 完全初期化要求取得処理                                   */
+/*  param[in/out] : none                                                     */
+/*  return        : 完全初期化要求                                           */
+/*  Note          : none                                                     */
+/*****************************************************************************/
+U1 u1_g_PwrCtrlComGetFullInitReq( void )
+{
+    return(u1_s_PwrCtrl_Com_Rx_FullInitReq);
+}
+
+/*****************************************************************************/
+/*  Function      : u1_g_PwrCtrlComGetFullInitCompVm2                        */
+/*  Description   : VM2初期化完了通知取得処理                                */
+/*  param[in/out] : none                                                     */
+/*  return        : VM2初期化完了通知                                        */
+/*  Note          : none                                                     */
+/*****************************************************************************/
+U1 u1_g_PwrCtrlComGetFullInitCompVm2( void )
+{
+    return(u1_s_PwrCtrl_Com_Rx_FullInitCompVm2);
+}
+
+/*****************************************************************************/
+/*  Function      : u1_g_PwrCtrlComGetFullInitSts                            */
+/*  Description   : 完全初期化要求受付状態取得処理                           */
+/*  param[in/out] : none                                                     */
+/*  return        : 完全初期化要求受付状態                                   */
+/*  Note          : none                                                     */
+/*****************************************************************************/
+U1 u1_g_PwrCtrlComGetFullInitSts( void )
+{
+    return(u1_s_PwrCtrl_Com_Rx_FullInitSts);
+}
+
+/*****************************************************************************/
+/*  Function      : u1_g_PwrCtrlComGetVMResetReq                             */
+/*  Description   : VMリセット準備要求取得処理                               */
+/*  param[in/out] : none                                                     */
+/*  return        : VMリセット準備要求                                       */
+/*  Note          : none                                                     */
+/*****************************************************************************/
+U1 u1_g_PwrCtrlComGetVMResetReq( void )
+{
+    return(u1_s_PwrCtrl_Com_Rx_VMResetReq);
+}
+
 /*****************************************************************************
   Function      : vd_g_PwrCtrlComTxTask
   Description   : VM間通信送信定期処理
@@ -402,6 +490,15 @@ void vd_g_PwrCtrlComTxTask( void )
 
     /* ユーザーリセット抑止区間通知 */
     vd_g_iVDshWribyDid((U2)PWRCTRL_COM_VMTXID_VM1_USRRSTMASK, &u4_s_PwrCtrl_Com_Tx_UsrRstMask, (U2)PWRCTRL_COM_USRRSTMASK_LEN);
+
+    /* 完全初期化VM3to2通知 */
+    vd_g_iVDshWribyDid((U2)PWRCTRL_COM_VMTXID_VM2_FULLINI3TO2, &u4_s_PwrCtrl_Com_Tx_FullInit3to2, (U2)PWRCTRL_COM_FULLINI3TO2_LEN);
+
+    /* VMリセット準備応答 */
+    vd_g_iVDshWribyDid((U2)PWRCTRL_COM_VMTXID_VM2_VMRESET, &u4_s_PwrCtrl_Com_Tx_VMResetRes, (U2)PWRCTRL_COM_VMRESET_LEN);
+
+    /* OTA用データ送信 */
+    vd_g_PwrCtrlOtaComTx();
 
     return;
 }
@@ -698,6 +795,78 @@ static void vd_s_PwrCtrlComRxNMDiagReset( void )
     return;
 }
 
+/*****************************************************************************/
+/*  Function      : vd_s_PwrCtrlComRxFullInit2to3                             */
+/*  Description   : 完全初期化VM2to3通知データ設定処理                       */
+/*  param[in/out] : none                                                     */
+/*  return        : none                                                     */
+/*  Note          : none                                                     */
+/*****************************************************************************/
+static void vd_s_PwrCtrlComRxFullInit2to3( void )
+{
+    U4 u4_t_buf;        /* VM間通信受信データ格納バッファ */
+    U1 u1_t_vm_data1;   /* VM間通信受信データ：1byte目 */
+    U1 u1_t_vm_data2;   /* VM間通信受信データ：2byte目 */
+    U1 u1_t_vm_data3;   /* VM間通信受信データ：3byte目 */
+    U1 u1_t_vm_ret;     /* VM間通信戻り値 */
+    
+    u4_t_buf = (U4)PWRCTRL_COM_RCVBUF_CLR;
+    
+    /* VM間通信で取得 */
+    u1_t_vm_ret = u1_g_iVDshReabyDid((U2)PWRCTRL_COM_VMRXID_VM2_FULLINI2TO3, &u4_t_buf, (U2)PWRCTRL_COM_FULLINI2TO3_LEN);
+
+    /* 受信OK */
+    if(u1_t_vm_ret != (U1)IVDSH_NO_REA){
+        u1_t_vm_data1 = (U1)(u4_t_buf & (U4)PWRCTRL_COM_1BYTEMASK);
+        u1_t_vm_data2 = (U1)((u4_t_buf & (U4)PWRCTRL_COM_2BYTEMASK) >> (U1)PWRCTRL_COM_1BYTESHIFT);
+        u1_t_vm_data3 = (U1)((u4_t_buf & (U4)PWRCTRL_COM_3BYTEMASK) >> (U1)PWRCTRL_COM_2BYTESHIFT);
+
+        /* 有効値受信時のみ更新 */
+        if((u1_t_vm_data1 < (U1)PWRCTRL_COM_FULLINITREQ_NUM)
+        && (u1_t_vm_data2 < (U1)PWRCTRL_COM_FULLINITCOMP_NUM)
+        && (u1_t_vm_data3 < (U1)PWRCTRL_COM_FULLINITSTS_NUM)){
+            u1_s_PwrCtrl_Com_Rx_FullInitReq = u1_t_vm_data1;
+            u1_s_PwrCtrl_Com_Rx_FullInitCompVm2 = u1_t_vm_data2;
+            u1_s_PwrCtrl_Com_Rx_FullInitSts = u1_t_vm_data3;
+        }
+    }
+
+    return;
+}
+
+/*****************************************************************************/
+/*  Function      : vd_s_PwrCtrlComRxVMResetReq                              */
+/*  Description   : VMリセット準備要求データ設定処理                         */
+/*  param[in/out] : none                                                     */
+/*  return        : none                                                     */
+/*  Note          : none                                                     */
+/*****************************************************************************/
+static void vd_s_PwrCtrlComRxVMResetReq( void )
+{
+    U4 u4_t_buf;        /* VM間通信受信データ格納バッファ */
+    U1 u1_t_vm_data;   /* VM間通信受信データ */
+    U1 u1_t_vm_ret;     /* VM間通信戻り値 */
+    
+    u4_t_buf = (U4)PWRCTRL_COM_RCVBUF_CLR;
+    
+    /* VM間通信で取得 */
+    u1_t_vm_ret = u1_g_iVDshReabyDid((U2)PWRCTRL_COM_VMRXID_VM2_VMRESET, &u4_t_buf, (U2)PWRCTRL_COM_VMRESET_LEN);
+
+    /* 受信OK */
+    if(u1_t_vm_ret != (U1)IVDSH_NO_REA)
+    {
+        u1_t_vm_data = (U1)(u4_t_buf & (U4)PWRCTRL_COM_1BYTEMASK);
+
+        /* 有効値受信時のみ更新 */
+        if(u1_t_vm_data < (U1)PWRCTRL_COM_VMRESETREQ_NUM)
+        {
+            u1_s_PwrCtrl_Com_Rx_VMResetReq = u1_t_vm_data;
+        }
+    }
+
+    return;
+}
+
 /*****************************************************************************
   Function      : vd_g_PwrCtrlComEthLinkup
   Description   : Ethリンクアップ状態通知処理
@@ -841,6 +1010,52 @@ void vd_g_PwrCtrlComTxSetUsrRstMask( const U1 u1_a_data )
 {
     u4_s_PwrCtrl_Com_Tx_UsrRstMask = (U4)u1_a_data;
     vd_g_Rim_WriteU4((U2)RIMID_U4_PWCTR_SOC_USRRSTMASK, u4_s_PwrCtrl_Com_Tx_UsrRstMask);
+
+    return;
+}
+
+/*****************************************************************************/
+/*  Function      : vd_g_PwrCtrlComTxSetFullInitRes                          */
+/*  Description   : 完全初期化応答通知データ設定処理                         */
+/*  param[in/out] : [In] const U1 u1_a_ret 完全初期化応答結果                */
+/*  return        : none                                                     */
+/*  Note          : none                                                     */
+/*****************************************************************************/
+void vd_g_PwrCtrlComTxSetFullInitRes( const U1 u1_a_ret )
+{
+    /* 完全初期化応答通知設定 */
+    u4_s_PwrCtrl_Com_Tx_FullInit3to2 &= PWRCTRL_COM_2BYTEMASK;
+    u4_s_PwrCtrl_Com_Tx_FullInit3to2 |= (U4)u1_a_ret;
+
+    return;
+}
+
+/*****************************************************************************/
+/*  Function      : vd_g_PwrCtrlComTxSetFullInitStart                        */
+/*  Description   : VM2初期化開始通知データ設定処理                          */
+/*  param[in/out] : [In] const U1 u1_a_req 完全初期化開始通知                */
+/*  return        : none                                                     */
+/*  Note          : none                                                     */
+/*****************************************************************************/
+void vd_g_PwrCtrlComTxSetInitStart( const U1 u1_a_req )
+{
+    /* VM2初期化開始通知設定 */
+    u4_s_PwrCtrl_Com_Tx_FullInit3to2 &= PWRCTRL_COM_1BYTEMASK;
+    u4_s_PwrCtrl_Com_Tx_FullInit3to2 |= ((U4)u1_a_req) << (U4)PWRCTRL_COM_1BYTESHIFT;
+
+    return;
+}
+
+/*****************************************************************************/
+/*  Function      : vd_g_PwrCtrlComTxSetVMResetRes                           */
+/*  Description   : VMリセット準備応答データ設定処理                         */
+/*  param[in/out] : [In] const U1 u1_a_ret VMリセット準備応答データ          */
+/*  return        : none                                                     */
+/*  Note          : none                                                     */
+/*****************************************************************************/
+void vd_g_PwrCtrlComTxSetVMResetRes( const U1 u1_a_ret )
+{
+    u4_s_PwrCtrl_Com_Tx_VMResetRes = (U4)u1_a_ret;
 
     return;
 }
