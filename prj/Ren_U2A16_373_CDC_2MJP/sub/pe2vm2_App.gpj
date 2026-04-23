@@ -64,11 +64,9 @@
 ../../src/PE2VM2/App/IVI/iVDTr/iVDTr_SlpCtrl.c
 ../../src/PE2VM2/App/IVI/PictCtrl/config/Mcu_Sys_Pwr_EizoIc.c
 ../../src/PE2VM2/App/IVI/PictCtrl/config/Mcu_Sys_Pwr_Gvif3Rx.c
-../../src/PE2VM2/App/IVI/PictCtrl/config/Mcu_Sys_Pwr_GvifSndr.c
 ../../src/PE2VM2/App/IVI/PictCtrl/CXD4937Ctl.c
 ../../src/PE2VM2/App/IVI/PictCtrl/CXD4984ERCtl.c
 ../../src/PE2VM2/App/IVI/PictCtrl/gvif3rx.c
-../../src/PE2VM2/App/IVI/PictCtrl/gvif3tx.c
 ../../src/PE2VM2/App/IVI/PictCtrl/IVI_PictCtrl_Main.c
 ../../src/PE2VM2/App/IVI/PictCtrl/ML86294Ctl.c
 ../../src/PE2VM2/App/IVI/PictCtrl/PictCtl.c
