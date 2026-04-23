@@ -260,6 +260,7 @@ static void vd_s_PwrCtrlMainBonDDconvOnReq( void )
     u4_s_PwrCtrl_Main_MmStby    = (U4)PWRCTRL_MAIN_TIME_INIT;
 
     vd_g_PwrCtrlObserveSoCResetErrReq((U1)PWRCTRL_OBSERVE_OFF);        /* SoCリセット要求(異常)検知 終了 */
+    vd_g_PwrCtrlObserveSpiFailReq((U1)PWRCTRL_OBSERVE_OFF);            /* SPI通信途絶監視 停止 */
     vd_g_PwrCtrlObserveSetSocPower((U1)PWRCTRL_OBSERVE_SOCPOWER_OFF);  /* SoC起動状態：SoC停止設定 */
     vd_s_PwrCtrlMainFullInitExeChk();                                  /* 完全初期化実施判定処理 */
 
@@ -284,6 +285,7 @@ static void vd_s_PwrCtrlMainBonPwrOnReq( void )
     u4_s_PwrCtrl_Main_MmStby    = (U4)PWRCTRL_MAIN_TIME_INIT;
 
     vd_g_PwrCtrlObserveSoCResetErrReq((U1)PWRCTRL_OBSERVE_OFF);        /* SoCリセット要求(異常)検知 終了 */
+    vd_g_PwrCtrlObserveSpiFailReq((U1)PWRCTRL_OBSERVE_OFF);            /* SPI通信途絶監視 停止 */
     vd_g_PwrCtrlObserveSetSocPower((U1)PWRCTRL_OBSERVE_SOCPOWER_OFF);  /* SoC起動状態：SoC停止設定 */
     vd_s_PwrCtrlMainFullInitExeChk();                                  /* 完全初期化実施判定処理 */
 
@@ -383,6 +385,7 @@ static void vd_s_PwrCtrlMainSipOffMcuStandbyReq( void )
     vd_g_PwrCtrlNoRedunPwrOffStart();                                 /* 非冗長電源OFF要求 */
 
     vd_g_PwrCtrl_ObserveSAIL_ObserveReq((U1)PWRCTRL_OBSERVESAIL_REQ_OFF_ALL); /* UART監視/SAIL-ERR監視 停止要求 */
+    vd_g_PwrCtrlObserveSpiFailReq((U1)PWRCTRL_OBSERVE_OFF);           /* SPI通信途絶監視 停止 */
     vd_g_PwrCtrlComTxSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_NON);     /* SoC起動条件通知をクリア */
 
 }
@@ -408,6 +411,7 @@ static void vd_s_PwrCtrlMainSipOffMcuStandbySysDevReq( void )
     vd_g_PwrCtrlNoRedunPwrOffStart();                                   /* 非冗長電源OFF要求 */
 
     vd_g_PwrCtrl_ObserveSAIL_ObserveReq((U1)PWRCTRL_OBSERVESAIL_REQ_OFF_ALL); /* UART監視/SAIL-ERR監視 停止要求 */
+    vd_g_PwrCtrlObserveSpiFailReq((U1)PWRCTRL_OBSERVE_OFF);           /* SPI通信途絶監視 停止 */
     vd_g_PwrCtrlComTxSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_NON);     /* SoC起動条件通知をクリア */
 
 }
@@ -433,6 +437,7 @@ static void vd_s_PwrCtrlMainStandbyReq( void )
     vd_g_PwrCtrlNoRedunPwrOffStart();                                 /* 非冗長電源OFF要求 */
 
     vd_g_PwrCtrl_ObserveSAIL_ObserveReq((U1)PWRCTRL_OBSERVESAIL_REQ_OFF_ALL); /* UART監視/SAIL-ERR監視 停止要求 */
+    vd_g_PwrCtrlObserveSpiFailReq((U1)PWRCTRL_OBSERVE_OFF);           /* SPI通信途絶監視 停止 */
     vd_g_PwrCtrlComTxSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_NON);     /* SoC起動条件通知をクリア */
     vd_g_PwrCtrlComSetURMaskOffSts((U1)PWRCTRL_COM_URMASKOFF_DISABLED); /* ユーザーリセット抑止解除受付状態：無効 */
 }
@@ -476,6 +481,7 @@ static void vd_s_PwrCtrlMainForcedOffReq( const U1 u1_s_evtype )
         vd_g_PwrCtrlObservePsailReq((U1)PWRCTRL_OBSERVE_OFF);            /* PM_PSAIL_ERR_N監視 終了 */
         vd_g_PwrCtrlObservePsHoldReq((U1)PWRCTRL_OBSERVE_OFF);           /* PMA_PS_HOLD監視 終了 */
         vd_g_PwrCtrlObserveSoCResetErrReq((U1)PWRCTRL_OBSERVE_OFF);      /* SoCリセット要求(異常)検知 終了 */
+        vd_g_PwrCtrlObserveSpiFailReq((U1)PWRCTRL_OBSERVE_OFF);           /* SPI通信途絶監視 停止 */
         vd_g_PwrCtrlObserveSetSocPower((U1)PWRCTRL_OBSERVE_SOCPOWER_OFF); /* SoC起動状態：SoC停止設定 */
         vd_g_PwrCtrlSipForcedOffSTEP1Req();                              /* SIP強制OFFシーケンス STEP1から開始 */
         vd_g_PwrCtrlComTxSetPwrErr((U1)PWRCTRL_COM_PWRERR_FOFF_SOCERR);  /* 異常検知(SIP電源強制OFF:SOC異常系) */
@@ -489,6 +495,7 @@ static void vd_s_PwrCtrlMainForcedOffReq( const U1 u1_s_evtype )
         vd_g_PwrCtrlObservePsailReq((U1)PWRCTRL_OBSERVE_OFF);            /* PM_PSAIL_ERR_N監視 終了 */
         vd_g_PwrCtrlObservePsHoldReq((U1)PWRCTRL_OBSERVE_OFF);           /* PMA_PS_HOLD監視 終了 */
         vd_g_PwrCtrlObserveSoCResetErrReq((U1)PWRCTRL_OBSERVE_OFF);      /* SoCリセット要求(異常)検知 終了 */
+        vd_g_PwrCtrlObserveSpiFailReq((U1)PWRCTRL_OBSERVE_OFF);           /* SPI通信途絶監視 停止 */
         vd_g_PwrCtrlObserveSetSocPower((U1)PWRCTRL_OBSERVE_SOCPOWER_OFF); /* SoC起動状態：SoC停止設定 */
         vd_g_PwrCtrlSipForcedOffSTEP2Req();                              /* SIP強制OFFシーケンス STEP2から開始 */
         vd_g_PwrCtrlComTxSetPwrErr((U1)PWRCTRL_COM_PWRERR_FOFF_PMICERR); /* 異常検知(SIP電源強制OFF:SOC異常系) */
@@ -502,6 +509,7 @@ static void vd_s_PwrCtrlMainForcedOffReq( const U1 u1_s_evtype )
         vd_g_PwrCtrlObservePsailReq((U1)PWRCTRL_OBSERVE_OFF);            /* PM_PSAIL_ERR_N監視 終了 */
         vd_g_PwrCtrlObservePsHoldReq((U1)PWRCTRL_OBSERVE_OFF);           /* PMA_PS_HOLD監視 終了 */
         vd_g_PwrCtrlObserveSoCResetErrReq((U1)PWRCTRL_OBSERVE_OFF);      /* SoCリセット要求(異常)検知 終了 */
+        vd_g_PwrCtrlObserveSpiFailReq((U1)PWRCTRL_OBSERVE_OFF);           /* SPI通信途絶監視 停止 */
         vd_g_PwrCtrlObserveSetSocPower((U1)PWRCTRL_OBSERVE_SOCPOWER_OFF); /* SoC起動状態：SoC停止設定 */
         vd_g_PwrCtrlSipForcedOffSTEP4Req();                              /* SIP強制OFFシーケンス STEP4から開始 */
         vd_g_PwrCtrlComTxSetPwrErr((U1)PWRCTRL_COM_PWRERR_FOFF_DDERR);   /* 異常検知(SIP電源強制OFF:PMIC異常系/DDコンOFF) */
@@ -532,6 +540,7 @@ static void vd_s_PwrCtrlMainStbyCancelSt1Req( void )
     vd_g_PwrCtrlObservePsailReq((U1)PWRCTRL_OBSERVE_OFF);           /* PM_PSAIL_ERR_N監視 終了 */
     vd_g_PwrCtrlObservePsHoldReq((U1)PWRCTRL_OBSERVE_OFF);          /* PMA_PS_HOLD監視 終了 */
     vd_g_PwrCtrlObserveSoCResetErrReq((U1)PWRCTRL_OBSERVE_OFF);     /* SoCリセット要求(異常)検知 終了 */
+    vd_g_PwrCtrlObserveSpiFailReq((U1)PWRCTRL_OBSERVE_OFF);           /* SPI通信途絶監視 停止 */
     vd_g_PwrCtrlObserveSetSocPower((U1)PWRCTRL_OBSERVE_SOCPOWER_OFF); /* SoC起動状態：SoC停止設定 */
 
     vd_g_PwrCtrlComTxSetPwrOn((U1)PWRCTRL_COM_PWRON_CANCEL_START);  /* SIP電源再起動通知設定 */
@@ -565,6 +574,7 @@ static void vd_s_PwrCtrlMainStbyCancelSt2Req( const U1 u1_a_pre_seq )
     vd_g_PwrCtrlObservePsailReq((U1)PWRCTRL_OBSERVE_OFF);               /* PM_PSAIL_ERR_N監視 終了 */
     vd_g_PwrCtrlObservePsHoldReq((U1)PWRCTRL_OBSERVE_OFF);              /* PMA_PS_HOLD監視 終了 */
     vd_g_PwrCtrlObserveSoCResetErrReq((U1)PWRCTRL_OBSERVE_OFF);         /* SoCリセット要求(異常)検知 終了 */
+    vd_g_PwrCtrlObserveSpiFailReq((U1)PWRCTRL_OBSERVE_OFF);             /* SPI通信途絶監視 停止 */
     vd_g_PwrCtrlObserveSetSocPower((U1)PWRCTRL_OBSERVE_SOCPOWER_OFF);   /* SoC起動状態：SoC停止設定 */
 
     /* スタンバイ処理中の起動トリガ時シーケンス要求(SIP電源強制OFF処理開始)以外 */
@@ -777,6 +787,7 @@ static void vd_s_PwrCtrlMainObserveFsJudge( void )
         vd_g_PwrCtrlObservePsailReq((U1)PWRCTRL_OBSERVE_OFF);           /* PM_PSAIL_ERR_N監視 終了 */
         vd_g_PwrCtrlObservePsHoldReq((U1)PWRCTRL_OBSERVE_OFF);          /* PMA_PS_HOLD監視 終了 */
         vd_g_PwrCtrlObserveSoCResetErrReq((U1)PWRCTRL_OBSERVE_OFF);     /* SoCリセット要求(異常)検知 終了 */
+        vd_g_PwrCtrlObserveSpiFailReq((U1)PWRCTRL_OBSERVE_OFF);           /* SPI通信途絶監視 停止 */
         vd_g_PwrCtrlObserveSetSocPower((U1)PWRCTRL_OBSERVE_SOCPOWER_OFF); /* SoC起動状態：SoC停止設定 */
         vd_g_PwrCtrlComTxSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_NON);    /* SoC起動条件通知をクリア */
 
@@ -799,6 +810,7 @@ static void vd_s_PwrCtrlMainObserveFsJudge( void )
         vd_g_PwrCtrlObservePsailReq((U1)PWRCTRL_OBSERVE_OFF);           /* PM_PSAIL_ERR_N監視 終了 */
         vd_g_PwrCtrlObservePsHoldReq((U1)PWRCTRL_OBSERVE_OFF);          /* PMA_PS_HOLD監視 終了 */
         vd_g_PwrCtrlObserveSoCResetErrReq((U1)PWRCTRL_OBSERVE_OFF);     /* SoCリセット要求(異常)検知 終了 */
+        vd_g_PwrCtrlObserveSpiFailReq((U1)PWRCTRL_OBSERVE_OFF);           /* SPI通信途絶監視 停止 */
         vd_g_PwrCtrlObserveSetSocPower((U1)PWRCTRL_OBSERVE_SOCPOWER_OFF); /* SoC起動状態：SoC停止設定 */
         vd_g_PwrCtrlComTxSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_NON);    /* SoC起動条件通知をクリア */
 
@@ -815,6 +827,7 @@ static void vd_s_PwrCtrlMainObserveFsJudge( void )
         vd_g_PwrCtrlObservePsailReq((U1)PWRCTRL_OBSERVE_OFF);             /* PM_PSAIL_ERR_N監視 終了 */
         vd_g_PwrCtrlObservePsHoldReq((U1)PWRCTRL_OBSERVE_OFF);            /* PMA_PS_HOLD監視 終了 */
         vd_g_PwrCtrlObserveSoCResetErrReq((U1)PWRCTRL_OBSERVE_OFF);       /* SoCリセット要求(異常)検知 終了 */
+        vd_g_PwrCtrlObserveSpiFailReq((U1)PWRCTRL_OBSERVE_OFF);           /* SPI通信途絶監視 停止 */
         vd_g_PwrCtrlObserveSetSocPower((U1)PWRCTRL_OBSERVE_SOCPOWER_OFF); /* SoC起動状態：SoC停止設定 */
         vd_g_PwrCtrlComTxSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_NON);    /* SoC起動条件通知をクリア */
 
@@ -890,6 +903,7 @@ static void vd_s_PwrCtrlMainObserveFsJudge( void )
         vd_g_PwrCtrlObservePsailReq((U1)PWRCTRL_OBSERVE_OFF);                     /* PM_PSAIL_ERR_N監視 終了 */
         vd_g_PwrCtrlObservePsHoldReq((U1)PWRCTRL_OBSERVE_OFF);                    /* PMA_PS_HOLD監視 終了 */
         vd_g_PwrCtrlObserveSoCResetErrReq((U1)PWRCTRL_OBSERVE_OFF);               /* SoCリセット要求(異常)検知 終了 */
+        vd_g_PwrCtrlObserveSpiFailReq((U1)PWRCTRL_OBSERVE_OFF);                   /* SPI通信途絶監視 停止 */
         vd_g_PwrCtrlObserveSetSocPower((U1)PWRCTRL_OBSERVE_SOCPOWER_OFF);         /* SoC起動状態：SoC停止設定 */
         vd_g_PwrCtrlComTxSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_NON);             /* SoC起動条件通知をクリア */
 

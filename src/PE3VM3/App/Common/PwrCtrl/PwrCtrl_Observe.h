@@ -57,6 +57,7 @@ void vd_g_PwrCtrlObserveVm3StbyInfo( const U1 u1_a_ProhibitSleep );
 /* àŸèÌäƒéã */
 void vd_g_PwrCtrlObservePsailReq( const U1 u1_a_req );
 void vd_g_PwrCtrlObservePsHoldReq( const U1 u1_a_req );
+void vd_g_PwrCtrlObserveSpiFailReq(const U1 u1_a_req );
 void vd_g_PwrCtrlObservePgdAsilVbLowPwrReq( const U1 u1_a_req );
 void vd_g_PwrCtrlObservePgdAsilVbSysPwrReq( const U1 u1_a_req );
 void vd_g_PwrCtrlObservePgdAsilVsysReq( const U1 u1_a_req );

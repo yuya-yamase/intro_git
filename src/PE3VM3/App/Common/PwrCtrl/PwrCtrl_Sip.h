@@ -108,6 +108,9 @@ U1 u1_g_PwrCtrlSipGetSoCWkupCond( void );
 /* SoC起動条件通知クリア関数 */
 void vd_g_PwrCtrlSipClrSoCWkupCond( void );
 
+/* SPI通信途絶監視開始条件の初期化処理 */
+void vd_g_PwrCtrlSpiFsOnInit( void );
+
 #endif /* PWRCTRL_SIP_H */
 
 /**** End of File ***********************************************************/

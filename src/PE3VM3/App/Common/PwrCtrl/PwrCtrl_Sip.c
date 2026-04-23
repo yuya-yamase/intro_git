@@ -134,6 +134,11 @@
 #define PWRCTRL_SIP_PMAPSFS_WAIT_SAIL_RESOUT_N     ( 100U / PWRCTRL_CFG_TASK_TIME)   /* SAIL_RESOUT_N   =Loチェック待機時間:100ms                    */
 #define PWRCTRL_SIP_PMAPSFS_WAIT_POFF_COMP         ( 100U / PWRCTRL_CFG_TASK_TIME)   /* POFF_COMPLETE_N =Loチェック待機時間:100ms                    */
 
+/* SPI通信途絶監視 */
+#define PWRCTRL_SIP_SPIFS_CHK_T   (1U)                          /* SPI通信途絶監視開始条件の時間計測実行 */
+#define PWRCTRL_SIP_SPIFS_CHK_F   (0U)                          /* SPI通信途絶監視開始条件の時間計測未実行 */
+#define PWRCTRL_SIP_ON_T_SPIFS    (15U / PWRCTRL_CFG_TASK_TIME) /* +B起動シーケンスにおける端子操作後の待ち時間 PM_PWR_EN_N=Loから15ms */
+
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
 /*--------------------------------------------------------------------------*/
@@ -281,6 +286,10 @@ static U4 u4_s_PwrCtrl_Sip_PmaPsFs_SAIL_RESOUT_N_Chk_Tim;
 static U4 u4_s_PwrCtrl_Sip_PmaPsFs_SAIL_RESOUT_N_Wait_Tim;
 static U4 u4_s_PwrCtrl_Sip_PmaPsFs_POFF_COMPLETE_N_Chk_Tim;
 static U4 u4_s_PwrCtrl_Sip_PmaPsFs_POFF_COMPLETE_N_Wait_Tim;
+
+/* SPI通信途絶監視 */
+static U1 u1_s_PwrCtrl_sip_on_SpiFsOn_Chk;
+static U4 u4_s_PwrCtrl_Sip_on_SpiFsOn_Tim;
 
 #if (PWRCTRL_CFG_PRIVATE_ERR_CHK == PWRCTRL_CFG_PRIVATE_ERR_CHK_ENABLE)
 /* 異常系チェック用STB定義 */
@@ -631,6 +640,9 @@ void vd_g_PwrCtrlSipBonInit( void )
     u4_s_PwrCtrl_Sip_PmaPsFs_POFF_COMPLETE_N_Chk_Tim    = (U4)PWRCTRL_SIP_TIME_INIT;
     u4_s_PwrCtrl_Sip_PmaPsFs_POFF_COMPLETE_N_Wait_Tim   = (U4)PWRCTRL_SIP_TIME_INIT;
 
+    /* SPI通信途絶監視開始条件の初期化 */
+    vd_g_PwrCtrlSpiFsOnInit();
+
     return;
 }
 
@@ -891,6 +903,9 @@ void vd_g_PwrCtrlSipOnReq( void )
     /* 計測点⑮⑬Ethリンクアップ状態に未検知を設定 */
     vd_g_PwrCtrlComEthLinkup((U1)PWRCTRL_COM_ETH_LINKUP_NODETECT);
 
+    /* SPI通信途絶監視開始条件の初期化 */
+    vd_g_PwrCtrlSpiFsOnInit();
+
     return;
 }
 
@@ -954,6 +969,9 @@ void vd_g_PwrCtrlSipOnPwrOnReq( void )
     vd_g_PwrCtrlComTxClrBootLog((U1)PWRCTRL_COM_BOOTLOG_BONREQ);
     /* 計測点⑮⑬Ethリンクアップ状態に未検知を設定 */
     vd_g_PwrCtrlComEthLinkup((U1)PWRCTRL_COM_ETH_LINKUP_NODETECT);
+
+    /* SPI通信途絶監視開始条件の初期化 */
+    vd_g_PwrCtrlSpiFsOnInit();
 
     return;
 }
@@ -1442,6 +1460,21 @@ void vd_g_PwrCtrlSipClrSoCWkupCond( void )
 }
 
 /*****************************************************************************
+  Function      : vd_g_PwrCtrlSpiFsOnInit
+  Description   : SPI通信途絶監視開始条件の初期化処理
+  param[in/out] : -
+  return        : -
+  Note          : none
+*****************************************************************************/
+void vd_g_PwrCtrlSpiFsOnInit( void )
+{
+    u1_s_PwrCtrl_sip_on_SpiFsOn_Chk = (U1)PWRCTRL_SIP_SPIFS_CHK_F;
+    u4_s_PwrCtrl_Sip_on_SpiFsOn_Tim = (U4)PWRCTRL_SIP_TIME_INIT;
+
+    return;
+}
+
+/*****************************************************************************
   Function      : vd_s_PwrCtrlSipForcedOffInitReq
   Description   : 5-6.SIP電源強制OFFシーケンス 共通部分の初期化
   param[in/out] : none
@@ -1749,12 +1782,24 @@ static void vd_s_PwrCtrlSipOnStep3( void )
 
         /* STEP3-1が完了していれば次のSTEPに進める */
         if(u4_s_PwrCtrl_Sip_On_PM_PWR_EN_N_Step3_Tim == (U4)PWRCTRL_SIP_TIME_INVALID){
+            /* SPI通信途絶監視 開始条件の時間計測開始 */
+            u1_s_PwrCtrl_sip_on_SpiFsOn_Chk = (U1)PWRCTRL_SIP_SPIFS_CHK_T;
             u1_s_PwrCtrl_Sip_On_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP4;
             /* SoC起動通知(PM_PWR_EN_N = Lo) */
             vd_g_PwrCtrlComTxSetSoCOnStart();
         }
     }
-        
+    /* 条件成立時にSPI通信途絶監視の監視開始を通知する */
+    if(u1_s_PwrCtrl_sip_on_SpiFsOn_Chk == (U1)PWRCTRL_SIP_SPIFS_CHK_T){
+        if(u4_s_PwrCtrl_Sip_on_SpiFsOn_Tim >= (U4)PWRCTRL_SIP_ON_T_SPIFS){
+            vd_g_PwrCtrlObserveSpiFailReq((U1)PWRCTRL_OBSERVE_ON);                /* SPI通信途絶監視開始 */
+            vd_g_PwrCtrlSpiFsOnInit();
+        }
+        else{
+            u4_s_PwrCtrl_Sip_on_SpiFsOn_Tim++;
+        }
+    }
+    
     if(u1_s_PwrCtrl_Sip_On_Step >= (U1)PWRCTRL_COMMON_PROCESS_STEP3){
         /* STEP3以降のSTEP時に並行して処理を行い、シーケンスの完了判定前(STEP9)に完了しているか確認する */
         /* AOSS_SLEEP_NETRY_EXIT,POFF_COMPLETE_N初期値チェックからtPMIC_FAST_POFF_EN_N_HI経過後にPMIC_FAST_POFF_EN_N = Hi */
@@ -2106,6 +2151,8 @@ static void vd_s_PwrCtrlSipRsmMainFunc( void )
         /* STEP3-1とSTEP3-2が完了していれば次のSTEPに進める */
         if((u4_s_PwrCtrl_Sip_Rsm_MM_SUSPEND_REQ_N_Tim == (U4)PWRCTRL_SIP_TIME_INVALID)&&
            (u4_s_PwrCtrl_Sip_Rsm_STR_WAKE_Tim == (U4)PWRCTRL_SIP_TIME_INVALID)){
+            /* SPI通信途絶監視 開始 */
+            vd_g_PwrCtrlObserveSpiFailReq((U1)PWRCTRL_OBSERVE_ON);
             u1_s_PwrCtrl_Sip_Rsm_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
             u1_s_PwrCtrl_Sip_Pwr_Sts  = (U1)PWRCTRL_SIP_STS_NON;
             /* SoC起動通知(STR_WAKE = Hi) */

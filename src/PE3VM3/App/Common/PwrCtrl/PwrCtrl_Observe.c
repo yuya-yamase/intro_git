@@ -62,6 +62,7 @@ static U4 u4_s_PwrCtrl_Observe_SleepTime;     /* スリープ条件継続時間 */
 /* 異常監視 */
 static U1 u1_s_PwrCtrl_Observe_Psail_Sts;           /* PM_PSAIL_ERR_N監視状態 */
 static U1 u1_s_PwrCtrl_Observe_PsHold_Sts;          /* PMA_PS_HOLD監視状態 */
+static U1 u1_s_PwrCtrl_Observe_Spifail_Sts;         /* SPI通信途絶監視状態 */
 static U1 u1_s_PwrCtrl_Observe_PgdAsilVbLowPwr_Sts; /* PGOOD_ASIL_VB監視(LOW-POWER-ON)状態 */
 static U1 u1_s_PwrCtrl_Observe_PgdAsilVbSysPwr_Sts; /* PGOOD_ASIL_VB監視(SYS電源制御)状態 */
 static U1 u1_s_PwrCtrl_Observe_PgdAsilVsys_Sts;     /* PGOOD_ASIL_VSYS監視状態 */
@@ -110,6 +111,7 @@ void vd_g_PwrCtrlObserveInit( void )
     u2_s_PwrCtrl_Observe_Err_Sts = (U2)PWRCTRL_OBSERVE_ERR_NON;
     u1_s_PwrCtrl_Observe_Psail_Sts = (U1)PWRCTRL_OBSERVE_OFF;
     u1_s_PwrCtrl_Observe_PsHold_Sts = (U1)PWRCTRL_OBSERVE_OFF;
+    u1_s_PwrCtrl_Observe_Spifail_Sts = (U1)PWRCTRL_OBSERVE_OFF;
     u1_s_PwrCtrl_Observe_PgdAsilVbLowPwr_Sts = (U1)PWRCTRL_OBSERVE_OFF;
     u1_s_PwrCtrl_Observe_PgdAsilVbSysPwr_Sts = (U1)PWRCTRL_OBSERVE_OFF;
     u1_s_PwrCtrl_Observe_PgdAsilVsys_Sts = (U1)PWRCTRL_OBSERVE_OFF;
@@ -303,6 +305,24 @@ void vd_g_PwrCtrlObservePsHoldReq(const U1 u1_a_req )
 }
 
 /*****************************************************************************
+  Function      : vd_g_PwrCtrlObserveSpiFailReq
+  Description   : SPI通信途絶監視開始/終了要求通知処理
+  param[in/out] :[ in ] u1_a_req:開始/終了要求
+  return        : none
+  Note          : none
+*****************************************************************************/
+void vd_g_PwrCtrlObserveSpiFailReq(const U1 u1_a_req )
+{
+    u1_s_PwrCtrl_Observe_Spifail_Sts = u1_a_req;
+    vd_g_PwrCtrlComTxSetSoCPower(u1_a_req);        /* VM間通信送信設定 */
+    
+    if(u1_a_req == (U1)PWRCTRL_OBSERVE_OFF){
+        vd_g_PwrCtrlSpiFsOnInit();
+    }
+
+    return;
+}
+/*****************************************************************************
   Function      : vd_g_PwrCtrlObservePgdAsilVbSysPwrReq
   Description   : PGOOD_ASIL_VB監視開始/終了要求(SYS電源制御状態)通知処理
   param[in/out] :[ in ] u1_a_req:開始/終了要求
@@ -460,7 +480,6 @@ U1 u1_g_PwrCtrlObserveGetSoCPower(void)
 void vd_g_PwrCtrlObserveSetSocPower(const U1 u1_a_sts )
 {
     u1_s_PwrCtrl_Observe_SocPower_Sts = u1_a_sts;  /* 監視制御用に設定内容保存 */
-    vd_g_PwrCtrlComTxSetSoCPower(u1_a_sts);        /* VM間通信送信設定 */
     
     return;
 }
@@ -618,8 +637,8 @@ static U2 u2_g_PwrCtrlObserveSpiFailSeq( void )
 
     u2_t_ret = (U2)PWRCTRL_OBSERVE_ERR_NON;
 
-    /* SoC起動状態の場合 */
-    if(u1_s_PwrCtrl_Observe_SocPower_Sts == (U1)PWRCTRL_OBSERVE_SOCPOWER_ON)
+    /* SPI通信途絶監視実行状態の場合 */
+    if(u1_s_PwrCtrl_Observe_Spifail_Sts == (U1)PWRCTRL_OBSERVE_ON)
     {
         /* SPI通信途絶結果を取得 */
         u1_t_spifail = u1_g_PwrCtrlComGetSpiFail();
