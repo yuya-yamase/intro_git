@@ -101,6 +101,7 @@ TASK(eMCOS_TASK_High)
     VCanAck_MainFunction();
     CanIfProxy_MainFunction();
     EthSW_HighTask();
+    ChipCom_MainFunctionPreTx();
 
 /* Task hook end */
 #if (PROCESSING_LOAD_MEASURE_TIME > 0)
