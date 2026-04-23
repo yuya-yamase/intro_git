@@ -104,6 +104,8 @@ static U1 u1_s_gvifsnd_videoerr_drec_cnt;               /* GVIF Sender Input Vid
 static U1 u1_s_gvifsnd_loadererr_drec_cnt;              /* GVIF Sender Loader Error Drec Counter */
 static U1 u1_s_gvifsnd_cncterr_drec_cnt;                /* GVIF Sender Connection Error Drec Counter */
 
+static U1 u1_s_gvifsnd_hpd_flag;                        /* GVIF Sender Hot Plug Detect Flag */
+       U1 u1_g_gvifsnd_gvif3tx_overall_step;      /* 100-4-1.(C-Disp) 全体フロー 仮置き中はexternするためstaticなし */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -1200,4 +1202,15 @@ static void vd_s_Pict_GvifSndrGvifLinkChk(void)
             u1_s_gvifsnd_linkchk_sts = (U1)GVIFSENDER_LINKCHK_STEP0;
             break;
     }
+}
+/*===================================================================================================================================*/
+/*  void            vd_g_GvifTx_HADC_Act_Hook( void )                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    eDP用レジスタ設定                                                                                                 */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1 u1_g_Pict_GvifSndrHdpSet( void )
+{
+    return(u1_s_gvifsnd_hpd_flag);
 }

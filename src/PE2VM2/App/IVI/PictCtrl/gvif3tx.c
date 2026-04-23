@@ -10,7 +10,7 @@
 #include "Mcu_I2c_Ctrl_private.h"
 #include "Mcu_Sys_Pwr_GvifSndr.h"
 
-#include "pictic.h"
+#include "ML86294Ctl.h"
 #include "x_spi_ivi_sub1_power.h"
 #include "x_spi_ivi_sub1_hdmi.h"
 #include "memcpy_u1.h"

@@ -9,8 +9,12 @@
 #include "Dio.h"
 #include "gpi2c_ma.h"
 #include "Mcu_I2c_Ctrl_private.h"
-#include "pictic.h"
 
+#include "Dio_Symbols.h"
+#include "Mcu_Sys_Pwr_EizoIc.h"
+
+#include "CXD4937Ctl.h"
+#include "x_spi_ivi_sub1_power.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -46,6 +50,7 @@
 #define ML86294_PROC_RESERVE        (0xFFFF0000U)
 
 #define ML86294_BANKSET_WRINUM  (1U)
+#define ML86294_WRINUM_I2C_READ (2U)
 
 #define ML86294_CYCCHK_STEP0    (0U)
 #define ML86294_CYCCHK_STEP1    (1U)
@@ -58,7 +63,11 @@
 #define ML86294_CYCCHK_STEP8    (8U)
 #define ML86294_CYCCHK_STEP9    (9U)
 #define ML86294_CYCCHK_STEP10   (10U)
-
+#define ML86294_CYCCHK_STEP11   (11U)
+#define ML86294_CYCCHK_STEP12   (12U)
+#define ML86294_CYCCHK_STEP13   (13U)
+#define ML86294_CYCCHK_STEP14   (14U)
+#define ML86294_CYCCHK_STEP15   (15U)
 
 #define ML86294_FRZDAT_CYCCHK_STEP0    (0U)
 #define ML86294_FRZDAT_CYCCHK_STEP1    (1U)
@@ -82,28 +91,44 @@
 
 
 #define ML86294_IRQHPD_CYCCHK_STEP0    (0U)
-#define ML86294_IRQHPD_CYCCHK_STEP1    (1U)
-#define ML86294_IRQHPD_CYCCHK_STEP2    (2U)
-#define ML86294_IRQHPD_CYCCHK_STEP3    (3U)
-#define ML86294_IRQHPD_CYCCHK_STEP4    (4U)
-#define ML86294_IRQHPD_CYCCHK_STEP5    (5U)
-#define ML86294_IRQHPD_CYCCHK_STEP6    (6U)
-#define ML86294_IRQHPD_CYCCHK_STEP7    (7U)
-#define ML86294_IRQHPD_CYCCHK_STEP8    (8U)
-#define ML86294_IRQHPD_CYCCHK_STEP9    (9U)
-#define ML86294_IRQHPD_CYCCHK_STEP10   (10U)
-#define ML86294_IRQHPD_CYCCHK_STEP11   (11U)
-#define ML86294_IRQHPD_CYCCHK_STEP12   (12U)
-#define ML86294_IRQHPD_CYCCHK_STEP13   (13U)
-#define ML86294_IRQHPD_CYCCHK_STEP14   (14U)
+#define ML86294_IRQHPD_CYCCHK_STEP1    (1U)    /* BANK8セット */
+#define ML86294_IRQHPD_CYCCHK_STEP2    (2U)    /* IRQ_HPD通知/HPD_PLUG通知/AUX通信タイムアウトエラー通知の確認 0x0804リード */
+#define ML86294_IRQHPD_CYCCHK_STEP3    (3U)    /* IRQ_HPD通知/HPD_PLUG通知/AUX通信タイムアウトエラー通知はあったか? */
+#define ML86294_IRQHPD_CYCCHK_STEP4    (4U)    /* AUX通信タイムアウトエラー通知有り、HPD_PLUG状態の確認 */
+#define ML86294_IRQHPD_CYCCHK_STEP5    (5U)    /* AUX通信タイムアウトエラー通知有り、HPD状態はH ～ 映像ICの再起動  */
+#define ML86294_IRQHPD_CYCCHK_STEP6    (6U)    /* AUX通信タイムアウトエラー通知有り、HPD状態はH、eDP-TX自動リンクトレーニングモードOFF */
+#define ML86294_IRQHPD_CYCCHK_STEP7    (7U)    /* AUX通信タイムアウトエラー通知有り、HPD状態はH、eDP-TX設定 ～ 再リンクトレーニング実施フラグ=ON */
+#define ML86294_IRQHPD_CYCCHK_STEP8    (8U)    /* AUX通信タイムアウトエラー通知のクリア */
+#define ML86294_IRQHPD_CYCCHK_STEP9    (9U)    /* AUX通信タイムアウトエラー通知のクリア(Write) */
+#define ML86294_IRQHPD_CYCCHK_STEP10   (10U)   /* HPD_PLUG通知、HPD_PLUG状態の確認 */
+#define ML86294_IRQHPD_CYCCHK_STEP11   (11U)   /* HPD_PLUG通知、HPD状態はH? */
+#define ML86294_IRQHPD_CYCCHK_STEP12   (12U)   /* 【再リンクトレーニング判定処理】DPCDアドレス#00202hの設定 */
+#define ML86294_IRQHPD_CYCCHK_STEP13   (13U)   /* 【再リンクトレーニング判定処理】DPCDリード設定 */
+#define ML86294_IRQHPD_CYCCHK_STEP14   (14U)   /* 【再リンクトレーニング判定処理】DPCDリード設定(Write) */
+#define ML86294_IRQHPD_CYCCHK_STEP15   (15U)   /* 【再リンクトレーニング判定処理】アクセスするDPCDレジスタ数の設定 */
+#define ML86294_IRQHPD_CYCCHK_STEP16   (16U)   /* 【再リンクトレーニング判定処理】AUX送信バイト数の設定 */
+#define ML86294_IRQHPD_CYCCHK_STEP17   (17U)   /* 【再リンクトレーニング判定処理】AUX送信バイト数の設定(Write) */
+#define ML86294_IRQHPD_CYCCHK_STEP18   (18U)   /* 【再リンクトレーニング判定処理】AUX通信 でリードした値の確認(0x0828) */
+#define ML86294_IRQHPD_CYCCHK_STEP19   (19U)   /* 【再リンクトレーニング判定処理】AUX通信 でリードした値の確認(0x0829) */
+#define ML86294_IRQHPD_CYCCHK_STEP20   (20U)   /* 【再リンクトレーニング判定処理】GVIF3-TX側で映像SYNCロス発生していない? */
+#define ML86294_IRQHPD_CYCCHK_STEP21   (21U)   /* 【再リンクトレーニング判定処理】eDP-TX自動リンクトレーニングモードOFF */
+#define ML86294_IRQHPD_CYCCHK_STEP22   (22U)   /* 【再リンクトレーニング判定処理】eDP-TX設定 再リンクトレーニング実施フラグ=ON */
+#define ML86294_IRQHPD_CYCCHK_STEP23   (23U)   /* HPD_PLUG通知のクリア */
+#define ML86294_IRQHPD_CYCCHK_STEP24   (24U)   /* HPD_PLUG通知のクリア(Write) */
+#define ML86294_IRQHPD_CYCCHK_STEP25   (25U)   /* IRQ_HPD通知のクリア */
+#define ML86294_IRQHPD_CYCCHK_STEP26   (26U)   /* IRQ_HPD通知のクリア(Write) */
+#define ML86294_IRQHPD_CYCCHK_STEP27   (27U)   /* 再リンクトレーニングは実施要? ～ eDP-TX自動リンクトレーニングモードへ移行 */
+#define ML86294_IRQHPD_CYCCHK_STEP28   (28U)   /* 映像送信開始 ～ 再リンクトレーニング実施フラグ=OFF */
 
 #define ML86294_IRQHPD_DPCD_SET1_WRINUM    (1U)
 #define ML86294_IRQHPD_DPCD_READSET_SET_WRINUM    (1U)
 #define ML86294_IRQHPD_DPCD_REGNUM_SET_WRINUM    (1U)
 #define ML86294_IRQHPD_DPCD_AUXSND_READSET_SET_WRINUM    (1U)
-#define ML86294_IRQHPD_DPCD_SET2_WRINUM    (1U)
-#define ML86294_IRQHPD_DPCD_SET3_WRINUM    (19U)
-
+#define ML86294_IRQHPD_DPCD_EDPTX_AUTO_LT_OFF_SET_WRINUM    (2U)
+#define ML86294_IRQHPD_DPCD_EDPTX_CONFIG_SET_WRINUM    (11U)
+#define ML86294_IRQHPDAUX_NOTIF_SET_WRINUM    (1U)
+#define ML86294_IRQHPD_DPCD_EDPTX_AUTO_LT_ON_SET_WRINUM    (2U)
+#define ML86294_IRQHPD_DPCD_VIDEO_TX_START_SET_WRINUM    (2U)
 
 #define ML86294_CAMAREA_SET_STEP0    (0U)
 #define ML86294_CAMAREA_SET_STEP1    (1U)
@@ -187,6 +212,23 @@
 #define ML86294_DEV_RST_STEP0    (0U)
 #define ML86294_DEV_RST_STEP1    (1U)
 
+
+/* Port */
+#define MCU_PORT_V_IC_RST               (DIO_ID_PORT3_CH3)      /* /V-IC-RST */
+
+/* カウンタ最大値 */
+#define MCU_SYS_COUNTTIME_FIN           (0xFFFFFFFFU)
+
+/* 映像IC制御仕様 */
+#define MCU_WRINUM_EIZOIC_INISET        (147U)  /* 6.2 初期化処理 レジスタ書込み回数 */
+#define MCU_WRINUM_EIZOIC_SIPSET        (4U)    /* 6.3 SiP映像表示に関する処理 レジスタ書込み回数 */
+#define MCU_WRINUM_EIZOIC_CAMSET        (45U)   /* 6.5.1.1 起動時のカメラ映像表示に関する設定 レジスタ書込み回数 */
+#define MCU_WRINUM_EIZOIC_CNTDSPSET     (17U)   /* 6.4.1 別体センターディスプレイへの映像出力ON ( eDP出力ON ) レジスタ書込み回数 */
+#define MCU_WRINUM_EIZOIC_HPDPLUGSET    (1U)    /* 6.4.1 別体センターディスプレイへの映像出力ON ( eDP出力ON ) HPD_PLUG通知のクリア */
+
+#define MCU_BIT0_MASK (0x01U)
+
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -239,6 +281,10 @@ static U1 u1_s_pict_mlfrzdatcyc_gpio0_sts;      /* Freeze Cycle Check DISP-REQ-G
 static U1 u1_s_pict_mlirqhpdcycchk_sts;         /* IRQ_HPD Cycle Check Function Status */
 static U2 u2_s_pict_ml_irqhpd_cycchk_timer;     /* IRQ_HPD Cycle Check Poling Timer */
 static U1 u1_s_pict_mlirqhpdcyc_assert_drec_cnt; /* IRQ_HPD Cycle Assert Drec Counter */
+static U1 u1_s_pict_mlrelinktrn_exec_flg;        /* Re-Link Training Execution Flag */
+static U1 u1_s_pict_mldevreset_chk_cnt;          /* Device Reset Check Counter */
+static U1 u1_s_pict_mlauxtimeoutcyc_notif_drec_cnt; /* AUXTIMEOUT Cycle Notif Drec Counter */
+static U1 u1_s_pict_mlhpdplugcyc_notif_drec_cnt; /* HPD_PLUG Cycle Notif Drec Counter */
 
 static U1 u1_s_pict_mlcamarea_set_sts;          /* Camera Area Set Function Status */
 
@@ -263,6 +309,20 @@ static U1 u1_s_pict_mlregget_sts;               /* MIPI Synchronize Function Sta
 static U1 u1_s_pict_mlregget_result;            /* MIPI Synchronize Read Result */
 
 static U1 u1_s_pict_mldevrst_notif;             /* Device Restart Notification */
+static U1 u1_s_pict_mlvicfrz_cause_cnt;         /* Video IC Freeze Cause Counter */
+
+static U1 u1_s_pict_irqhpd_notif_step;          /* AUXCOM OK後に進む通知生成STEP */
+
+
+/* デバイス起動用カウンタ */
+static U2   u2_s_pict_polling_vicrst;
+static U2   u2_s_pict_polling_wait;
+
+/* 映像IC制御仕様 */
+       U1   Mcu_OnStep_EIZOIC_OVRALL;       /* 6-1. 全体フロー 6.1.1 映像IC起動処理 仮置き中はexternするためstaticなし */
+
+static const U2 WAITTIME_T4  =   (10U / ML86294_TASK_TIME);    /* min:10ms */
+static const U2 WAITTIME_T10 =   (2U / ML86294_TASK_TIME);     /* min:2ms */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -287,6 +347,12 @@ static U1   u1_s_Pict_MlI2cMuteRegSetOff(void);
 static U1   u1_s_Pict_MlNoAisMuteRegSetOn(void);
 static U1   u1_s_Pict_MlNoAisMuteRegSetOff(void);
 static void vd_s_Pict_MLDevRst(void);
+static void vd_s_Pict_MLSeqIdle(void);
+static void vd_s_Pict_MLSeqCyc(void);
+
+static void vd_s_Pict_Polling_VIcRst(void);
+static void vd_s_Pict_RegSetting(void);
+static void vd_s_Pict_SetReg(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -294,6 +360,19 @@ static void vd_s_Pict_MLDevRst(void);
 static const ST_REG_WRI_REQ ML86294_BANKSET[ML86294_BANKSET_WRINUM] = {
     /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
     {        0,         1,         0}
+};
+
+static const ST_REG_WRI_REQ ML86294_I2C_READ[ML86294_WRINUM_I2C_READ] = {
+    /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
+    {        0,         1,         0},
+    {        1,         1,         0}
+};
+
+/* GVIF送信向け Bank8,9アクセス時のWait時間 */
+static const ST_REG_WRI_REQ ML86294_I2C_READ_B89[ML86294_WRINUM_I2C_READ] = {
+    /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
+    {        0,         1,         7U/ML86294_TASK_TIME},
+    {        1,         1,         7U/ML86294_TASK_TIME}
 };
 
 static U1 u1_sp_ML86294_SET_BANK12[ML86294_I2C_RWC_BYTE3] = {
@@ -390,276 +469,6 @@ static U1 u1_sp_MLIRQHPD_DPCD_AUXCOM_RD2_PDU1[ML86294_I2C_RWC_BYTE2] = {
 };
 
 static U1 u1_sp_MLIRQHPD_DPCD_AUXCOM_RD2_PDU2[ML86294_I2C_RWC_BYTE2];
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET2_CLEAR_SET1[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x04U,    /* Write Address */
-    (U1)0xFFU     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET2_CLEAR_SET2[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x05U,    /* Write Address */
-    (U1)0xFFU     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET2_CLEAR_SET3[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x06U,    /* Write Address */
-    (U1)0xFFU     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_ALTMOFF_SET1[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0xFFU,    /* Write Address */
-    (U1)0x48U     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_ALTMOFF_SET2[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x00U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET1[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0xFFU,    /* Write Address */
-    (U1)0x40U     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET2[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x20U,    /* Write Address */
-    (U1)0x0DU     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET3[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x21U,    /* Write Address */
-    (U1)0x01U     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET4[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x80U,    /* Write Address */
-    (U1)0x12U     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET5[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x92U,    /* Write Address */
-    (U1)0x20U     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET6[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0xFFU,    /* Write Address */
-    (U1)0x48U     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET7[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x06U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET8[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x07U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET9[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x08U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET10[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x09U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET11[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x03U,    /* Write Address */
-    (U1)0xFCU     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET12[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0xFFU,    /* Write Address */
-    (U1)0x50U     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET13[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x02U,    /* Write Address */
-    (U1)0x7FU     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET14[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x21U,    /* Write Address */
-    (U1)0x04U     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET15[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x22U,    /* Write Address */
-    (U1)0x05U     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET16[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x23U,    /* Write Address */
-    (U1)0x06U     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET17[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x24U,    /* Write Address */
-    (U1)0x07U     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET18[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x25U,    /* Write Address */
-    (U1)0x14U     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET19[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x26U,    /* Write Address */
-    (U1)0x15U     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET20[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x27U,    /* Write Address */
-    (U1)0x16U     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET21[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x28U,    /* Write Address */
-    (U1)0x16U     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET22[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x29U,    /* Write Address */
-    (U1)0x24U     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET23[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x2AU,    /* Write Address */
-    (U1)0x25U     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET24[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x2BU,    /* Write Address */
-    (U1)0x25U     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET25[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x2CU,    /* Write Address */
-    (U1)0x25U     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET26[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x2DU,    /* Write Address */
-    (U1)0x34U     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET27[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x2EU,    /* Write Address */
-    (U1)0x34U     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET28[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x2FU,    /* Write Address */
-    (U1)0x34U     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET29[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x30U,    /* Write Address */
-    (U1)0x34U     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET30[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x31U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET31[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x32U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET32[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x33U,    /* Write Address */
-    (U1)0x04U     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_CLEAR_SET1[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0xFFU,    /* Write Address */
-    (U1)0x40U     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_CLEAR_SET2[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x04U,    /* Write Address */
-    (U1)0xFFU     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_CLEAR_SET3[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x05U,    /* Write Address */
-    (U1)0xFFU     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_CLEAR_SET4[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x06U,    /* Write Address */
-    (U1)0xFFU     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_ALTMON_SET1[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0xFFU,    /* Write Address */
-    (U1)0x48U     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_ALTMON_SET2[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x00U,    /* Write Address */
-    (U1)0x03U     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_VTSTART_SET1[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0xFFU,    /* Write Address */
-    (U1)0x40U     /* Write Data */
-};
-
-static U1 u1_sp_MLIRQHPD_DPCD_SET3_VTSTART_SET2[ML86294_I2C_RWC_BYTE3] = {
-    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x80U,    /* Write Address */
-    (U1)0x92U     /* Write Data */
-};
 
 static U1 u1_sp_ML86294_CAMAREA_MOV_UNSTOW_ADC_1920X1080_SET1[ML86294_I2C_RWC_BYTE3] = {
     (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
@@ -40898,6 +40707,263 @@ static U1 u1_sp_ML86294_CAMAREA_FIXED_UNUSED_SET151[ML86294_I2C_RWC_BYTE3] = {
     (U1)0x00U     /* Write Data */
 };
 
+static U1 u1_sp_ML86294_MLHPDPLUG_STS_RD_PDU1[ML86294_I2C_RWC_BYTE2] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x08U     /* Write Address */
+};
+
+static U1 u1_sp_ML86294_MLHPDPLUG_STS_RD_PDU2[ML86294_I2C_RWC_BYTE2];
+
+static U1 u1_sp_ML86294_DPCD_EDPTX_AUTO_LT_OFF_SET1[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0xFFU,    /* Write Address */
+    (U1)0x48U     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_DPCD_EDPTX_AUTO_LT_OFF_SET2[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x00U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET1[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0xFFU,    /* Write Address */
+    (U1)0x40U     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET2[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x20U,    /* Write Address */
+    (U1)0x0DU     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET3[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x21U,    /* Write Address */
+    (U1)0x01U     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET4[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x80U,    /* Write Address */
+    (U1)0x12U     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET5[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x92U,    /* Write Address */
+    (U1)0x20U     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET6[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0xFFU,    /* Write Address */
+    (U1)0x48U     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET7[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x06U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET8[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x07U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET9[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x08U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET10[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x09U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET11[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x03U,    /* Write Address */
+    (U1)0xFCU     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET12[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0xFFU,    /* Write Address */
+    (U1)0x50U     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET13[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x02U,    /* Write Address */
+    (U1)0x7FU     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET14[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x21U,    /* Write Address */
+    (U1)0x04U     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET15[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x22U,    /* Write Address */
+    (U1)0x05U     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET16[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x23U,    /* Write Address */
+    (U1)0x06U     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET17[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x24U,    /* Write Address */
+    (U1)0x07U     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET18[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x25U,    /* Write Address */
+    (U1)0x14U     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET19[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x26U,    /* Write Address */
+    (U1)0x15U     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET20[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x27U,    /* Write Address */
+    (U1)0x16U     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET21[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x28U,    /* Write Address */
+    (U1)0x16U     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET22[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x29U,    /* Write Address */
+    (U1)0x24U     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET23[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x2AU,    /* Write Address */
+    (U1)0x25U     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET24[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x2BU,    /* Write Address */
+    (U1)0x25U     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET25[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x2CU,    /* Write Address */
+    (U1)0x25U     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET26[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x2DU,    /* Write Address */
+    (U1)0x34U     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET27[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x2EU,    /* Write Address */
+    (U1)0x34U     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET28[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x2FU,    /* Write Address */
+    (U1)0x34U     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET29[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x30U,    /* Write Address */
+    (U1)0x34U     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET30[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x31U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET31[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x32U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET32[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x33U,    /* Write Address */
+    (U1)0x04U     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_MLIRQHPDAUX_NOTIF_SET_PDU[ML86294_I2C_RWC_BYTE3];
+
+static U1 u1_sp_ML86294_MLFRZEVCYCCHK_RD_PDU1[ML86294_I2C_RWC_BYTE2] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x88U     /* Write Address */
+};
+
+static U1 u1_sp_ML86294_MLFRZEVCYCCHK_RD_PDU2[ML86294_I2C_RWC_BYTE2];
+
+static U1 u1_sp_ML86294_SET_BANK25[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0xFFU,    /* Write Address */
+    (U1)0xC8U     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_MLFRZMEMCYCCHK_RD_PDU1[ML86294_I2C_RWC_BYTE2] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x28U     /* Write Address */
+};
+
+static U1 u1_sp_ML86294_MLFRZMEMCYCCHK_RD_PDU2[ML86294_I2C_RWC_BYTE2];
+
+static U1 u1_sp_ML86294_DPCD_EDPTX_AUTO_LT_ON_SET1[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0xFFU,    /* Write Address */
+    (U1)0x48U     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_DPCD_EDPTX_AUTO_LT_ON_SET2[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x00U,    /* Write Address */
+    (U1)0x03U     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_DPCD_VIDEO_TX_START_SET1[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0xFFU,    /* Write Address */
+    (U1)0x40U     /* Write Data */
+};
+
+static U1 u1_sp_ML86294_DPCD_VIDEO_TX_START_SET2[ML86294_I2C_RWC_BYTE3] = {
+    (U1)ML86294_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x80U,    /* Write Address */
+    (U1)0x92U     /* Write Data */
+};
+
 static const ST_GP_I2C_MA_REQ st_sp_ML86294_SET_BANK12_TBL[1] = {
     {
         (U1 *)&u1_sp_ML86294_SET_BANK12[0],
@@ -41029,192 +41095,6 @@ static const ST_GP_I2C_MA_REQ st_sp_MLIRQHPD_DPCD_AUXCOM_RD2_TBL[2] = {
     {
         (U1 *)&u1_sp_MLIRQHPD_DPCD_AUXCOM_RD2_PDU2[0],
         (U4)0x10000002U
-    }
-};
-
-static const ST_GP_I2C_MA_REQ st_sp_MLIRQHPD_DPCD_SET2_TBL[3] = {
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET2_CLEAR_SET1[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET2_CLEAR_SET2[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET2_CLEAR_SET3[0],
-        (U4)0x10000003U
-    }
-};
-
-static const ST_GP_I2C_MA_REQ st_sp_MLIRQHPD_DPCD_SET3_TBL[42] = {
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_ALTMOFF_SET1[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_ALTMOFF_SET2[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET1[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET2[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET3[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET4[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET5[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET6[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET7[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET8[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET9[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET10[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET11[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET12[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET13[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET14[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET15[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET16[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET17[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET18[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET19[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET20[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET21[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET22[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET23[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET24[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET25[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET26[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET27[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET28[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET29[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET30[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET31[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_EDPTX_SET32[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_CLEAR_SET1[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_CLEAR_SET2[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_CLEAR_SET3[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_CLEAR_SET4[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_ALTMON_SET1[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_ALTMON_SET2[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_VTSTART_SET1[0],
-        (U4)0x10000003U
-    },
-    {
-        (U1 *)&u1_sp_MLIRQHPD_DPCD_SET3_VTSTART_SET2[0],
-        (U4)0x10000003U
     }
 };
 
@@ -68246,6 +68126,217 @@ static const ST_GP_I2C_MA_REQ st_sp_ML86294_CAMAREA_FIXED_UNUSED[151] = {
     }
 };
 
+static const ST_GP_I2C_MA_REQ st_sp_ML86294_MLHPDPLUG_STS_RD_TBL[2] = {
+    {
+        (U1 *)&u1_sp_ML86294_MLHPDPLUG_STS_RD_PDU1[0],
+        (U4)0x10000002U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_MLHPDPLUG_STS_RD_PDU2[0],
+        (U4)0x10000002U
+    }
+};
+
+static const ST_GP_I2C_MA_REQ st_sp_MLIRQHPD_DPCD_EDPTX_AUTO_LT_OFF_SET_TBL[2] = {
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_EDPTX_AUTO_LT_OFF_SET1[0],
+        (U4)0x10000003U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_EDPTX_AUTO_LT_OFF_SET2[0],
+        (U4)0x10000003U
+    }
+};
+
+static const ST_GP_I2C_MA_REQ st_sp_MLIRQHPD_DPCD_EDPTX_CONFIG_SET_TBL[32] = {
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET1[0],
+        (U4)0x10000003U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET2[0],
+        (U4)0x10000003U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET3[0],
+        (U4)0x10000003U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET4[0],
+        (U4)0x10000003U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET5[0],
+        (U4)0x10000003U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET6[0],
+        (U4)0x10000003U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET7[0],
+        (U4)0x10000003U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET8[0],
+        (U4)0x10000003U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET9[0],
+        (U4)0x10000003U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET10[0],
+        (U4)0x10000003U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET11[0],
+        (U4)0x10000003U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET12[0],
+        (U4)0x10000003U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET13[0],
+        (U4)0x10000003U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET14[0],
+        (U4)0x10000003U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET15[0],
+        (U4)0x10000003U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET16[0],
+        (U4)0x10000003U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET17[0],
+        (U4)0x10000003U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET18[0],
+        (U4)0x10000003U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET19[0],
+        (U4)0x10000003U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET20[0],
+        (U4)0x10000003U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET21[0],
+        (U4)0x10000003U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET22[0],
+        (U4)0x10000003U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET23[0],
+        (U4)0x10000003U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET24[0],
+        (U4)0x10000003U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET25[0],
+        (U4)0x10000003U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET26[0],
+        (U4)0x10000003U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET27[0],
+        (U4)0x10000003U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET28[0],
+        (U4)0x10000003U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET29[0],
+        (U4)0x10000003U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET30[0],
+        (U4)0x10000003U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET31[0],
+        (U4)0x10000003U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_EDPTX_CONFIG_SET32[0],
+        (U4)0x10000003U
+    }
+};
+
+static const ST_GP_I2C_MA_REQ st_sp_ML86294_MLIRQHPDAUX_NOTIF_SET_TBL[1] = {
+    {
+        (U1 *)&u1_sp_ML86294_MLIRQHPDAUX_NOTIF_SET_PDU[0],
+        (U4)0x10000003U
+    }
+};
+
+static const ST_GP_I2C_MA_REQ st_sp_ML86294_MLFRZEVCYCCHK_RD_TBL[2] = {
+    {
+        (U1 *)&u1_sp_ML86294_MLFRZEVCYCCHK_RD_PDU1[0],
+        (U4)0x10000002U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_MLFRZEVCYCCHK_RD_PDU2[0],
+        (U4)0x10000002U
+    }
+};
+
+static const ST_GP_I2C_MA_REQ st_sp_ML86294_SET_BANK25_TBL[1] = {
+    {
+        (U1 *)&u1_sp_ML86294_SET_BANK25[0],
+        (U4)0x10000003U
+    }
+};
+
+static const ST_GP_I2C_MA_REQ st_sp_ML86294_MLFRZMEMCYCCHK_RD_TBL[2] = {
+    {
+        (U1 *)&u1_sp_ML86294_MLFRZMEMCYCCHK_RD_PDU1[0],
+        (U4)0x10000002U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_MLFRZMEMCYCCHK_RD_PDU2[0],
+        (U4)0x10000002U
+    }
+};
+
+static const ST_GP_I2C_MA_REQ st_sp_MLIRQHPD_DPCD_EDPTX_AUTO_LT_ON_SET_TBL[2] = {
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_EDPTX_AUTO_LT_ON_SET1[0],
+        (U4)0x10000003U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_EDPTX_AUTO_LT_ON_SET2[0],
+        (U4)0x10000003U
+    }
+};
+
+static const ST_GP_I2C_MA_REQ st_sp_MLIRQHPD_DPCD_VIDEO_TX_START_SET_TBL[2] = {
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_VIDEO_TX_START_SET1[0],
+        (U4)0x10000003U
+    },
+    {
+        (U1 *)&u1_sp_ML86294_DPCD_VIDEO_TX_START_SET2[0],
+        (U4)0x10000003U
+    }
+};
+
 /*===================================================================================================================================*/
 /*  void    vd_g_Pict_Ml86294_Init(void)                                                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -68295,6 +68386,10 @@ void    vd_g_Pict_Ml86294_Init(void)
     u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP0;
     u2_s_pict_ml_irqhpd_cycchk_timer = (U2)0U;
     u1_s_pict_mlirqhpdcyc_assert_drec_cnt = (U1)0U;
+    u1_s_pict_mlrelinktrn_exec_flg = (U1)FALSE;
+    u1_s_pict_mldevreset_chk_cnt = (U1)0U;
+    u1_s_pict_mlauxtimeoutcyc_notif_drec_cnt = (U1)0U;
+    u1_s_pict_mlhpdplugcyc_notif_drec_cnt = (U1)0U;
 
     u1_s_pict_mlcamarea_set_sts = (U1)ML86294_CAMAREA_SET_STEP0;
 
@@ -68316,6 +68411,18 @@ void    vd_g_Pict_Ml86294_Init(void)
     u1_s_pict_mlregget_sts = (U1)ML86294_REGGET_STEP0;
     u1_s_pict_mlregget_result = (U1)PICT_ML_MIPI_SYNC_OFF;
     u1_s_pict_mldevrst_notif = (U1)PICT_ML_DEVRST_NON;
+    u1_s_pict_mlvicfrz_cause_cnt = (U1)0U;
+    u1_s_pict_irqhpd_notif_step = (U1)ML86294_IRQHPD_CYCCHK_STEP23;
+
+
+    /* I2C書込み/読出し用バッファクリア */
+    vd_g_EizoIcSysPwrInit();
+
+    u2_s_pict_polling_vicrst    = (U2)0U;
+    u2_s_pict_polling_wait      = (U2)0U;
+
+    Mcu_OnStep_EIZOIC_OVRALL    = (U1)MCU_STEP_EIZOIC_OVERALL_0;
+
 
     /*  データリード用テーブル初期化 */
     u1_sp_ML86294_MLFRZDATCYCFRZBIT_RD_PDU2[0] = (U1)ML86294_I2C_SLAVEADR_RD;    /* Slave Address */
@@ -68335,7 +68442,7 @@ void    vd_g_Pict_Ml86294_Init(void)
 
     /* DPCDリード設定 レジスタ設定 書込み用テーブル(Data可変)初期化 */
     u1_sp_MLIRQHPD_DPCD_READSET_SET_PDU[0] = (U1)ML86294_I2C_SLAVEADR_WR;    /* Slave Address */
-    u1_sp_MLIRQHPD_DPCD_READSET_SET_PDU[1] = (U1)0x27U;    /* Write Address */
+    u1_sp_MLIRQHPD_DPCD_READSET_SET_PDU[1] = (U1)0x26U;    /* Write Address */
     u1_sp_MLIRQHPD_DPCD_READSET_SET_PDU[2] = (U1)0U;    /* Write Data初期値(定期処理内で更新) */
 
     /*  データリード用テーブル初期化 */
@@ -68374,6 +68481,24 @@ void    vd_g_Pict_Ml86294_Init(void)
     /*  データリード用テーブル初期化 */
     u1_sp_ML86294_MLMIPIRCVCYCCHK_RD_PDU2[0] = (U1)ML86294_I2C_SLAVEADR_RD;    /* Slave Address */
     u1_sp_ML86294_MLMIPIRCVCYCCHK_RD_PDU2[1] = (U1)0U;    /* 読出しデータ初期値 */
+
+    /*  データリード用テーブル初期化 */
+    u1_sp_ML86294_MLHPDPLUG_STS_RD_PDU2[0] = (U1)ML86294_I2C_SLAVEADR_RD;    /* Slave Address */
+    u1_sp_ML86294_MLHPDPLUG_STS_RD_PDU2[1] = (U1)0U;    /* 読出しデータ初期値 */
+
+    /*  データリード用テーブル初期化 */
+    u1_sp_ML86294_MLIRQHPDAUX_NOTIF_SET_PDU[0] = (U1)ML86294_I2C_SLAVEADR_WR;    /* Slave Address */
+    u1_sp_ML86294_MLIRQHPDAUX_NOTIF_SET_PDU[1] = (U1)0x04U;    /* Write Address */
+    u1_sp_ML86294_MLIRQHPDAUX_NOTIF_SET_PDU[2] = (U1)0U;    /* Write Data初期値(定期処理内で更新) */
+
+    /*  データリード用テーブル初期化 */
+    u1_sp_ML86294_MLFRZEVCYCCHK_RD_PDU2[0] = (U1)ML86294_I2C_SLAVEADR_RD;    /* Slave Address */
+    u1_sp_ML86294_MLFRZEVCYCCHK_RD_PDU2[1] = (U1)0U;    /* 読出しデータ初期値 */
+
+    /*  データリード用テーブル初期化 */
+    u1_sp_ML86294_MLFRZMEMCYCCHK_RD_PDU2[0] = (U1)ML86294_I2C_SLAVEADR_RD;    /* Slave Address */
+    u1_sp_ML86294_MLFRZMEMCYCCHK_RD_PDU2[1] = (U1)0U;    /* 読出しデータ初期値 */
+
 }
 
 /*===================================================================================================================================*/
@@ -68402,247 +68527,25 @@ static void vd_s_Pict_ProcessInit(void)
 /*===================================================================================================================================*/
 void    vd_g_Pict_Ml86294_Routine(void)
 {
-    static const U2 ML86294_FRZDEC_INT_WAIT = (U2)(40U / ML86294_TASK_TIME);        /* t5 min:40ms */
-    static const U2 ML86294_CYCCHK_POLING = (U2)(100U / ML86294_TASK_TIME);         /* t20 min:100ms */
-    static const U2 ML86294_FRZDAT_CYCCHK_POLING = (U2)(20U / ML86294_TASK_TIME);   /* t21 min:20ms */
-    static const U2 ML86294_IRQHPC_CYCCHK_POLING = (U2)(20U / ML86294_TASK_TIME);   /* t22 min:20ms */
+    /* Ack Wait Timer Countr Increment */
+    if(u4_s_pict_ml_i2c_ack_wait_time < (U4)U4_MAX){
+        u4_s_pict_ml_i2c_ack_wait_time++;
+    }
 
-    U1      u1_t_func_sts;                                          /* Function Status */
-    U1      u1_t_dio_read_result;                                   /* I/O Port Read Result */
-    U1      u1_t_time_chk_flg;                                      /* Poling Time Check Flag */
-    U4      u4_t_cond_met_flg_tmp;
-    U4      u4_t_proc_que_tmp;
+    /* Initialization for the "Video IC Startup" sheet */
+    /* Polling to monitor the start condition */
+    vd_s_Pict_Polling_VIcRst();
+
+    /* Initial register configuration */
+    vd_s_Pict_RegSetting();
+
 
     switch (u1_s_pict_ml_state){
         case ML86294_SEQ_IDLE:                                             /* IDLE */
-            /* Timer Clear */
-            u2_s_pict_ml_cycchk_timer = (U2)0U;
-            u2_s_pict_ml_frzdat_cycchk_timer = (U2)0U;
-            u2_s_pict_ml_irqhpd_cycchk_timer = (U2)0U;
-
-            /* Power ON Check */
-            if(Mcu_OnStep_EIZOIC_OVRALL == (U1)PICT_ML_PWRON_COMP){
-                /* State Update */
-                u1_s_pict_ml_state = (U1)ML86294_SEQ_CYC;
-
-                /* Poling Timer Start */
-                u2_s_pict_ml_cycchk_timer++;
-                u2_s_pict_ml_frzdat_cycchk_timer++;
-                u2_s_pict_ml_irqhpd_cycchk_timer++;
-
-                /* Device Reset Counter Clear */
-                u1_s_pict_mlcyc_dev_reset_cnt = (U1)0U;
-
-                /* Freeze Cycle Check Counter Clear */
-                u1_s_pict_mlfrzdatcyc_n1_cnt = (U1)0U;
-                u1_s_pict_mlfrzdatcyc_n2_cnt = (U1)0U;
-            }
+            vd_s_Pict_MLSeqIdle();
             break;
         case ML86294_SEQ_CYC:                                              /* CYCLIC */
-            /* Ack Wait Timer Countr Increment */
-            if(u4_s_pict_ml_i2c_ack_wait_time < (U4)U4_MAX){        /* 暫定 I2Cアクセス時にカウンタクリアされるため定期では常にカウントアップする */
-                u4_s_pict_ml_i2c_ack_wait_time++;
-            }
-
-            /* Function incomplete */
-            u1_t_func_sts = (U1)FALSE;
-
-            /* Freeze Detection Intruput Check */
-            if(u1_s_pict_ml_frzint_chk_flg == (U1)TRUE){
-                u1_t_dio_read_result = (U1)u1_PICT_ML_GET_V_IC_STATUS1();
-                if((u1_t_dio_read_result == (U1)PICT_ML_IO_STS_HIGH)
-                && (u1_s_pict_ml_pre_v_ic_sts1_sts == (U1)PICT_ML_IO_STS_LOW)){     /* V-IC-STATUS1 = L -> H */
-                    u1_s_pict_mlrcvvicstatus_flg = (U1)TRUE;
-                }
-                /* Previous State Update */
-                u1_s_pict_ml_pre_v_ic_sts1_sts = u1_t_dio_read_result;
-            }
-
-            /* Freeze Detection Intruput Wait Time Check */
-            if(u1_s_pict_mlrcvvicstatus_flg == (U1)TRUE){
-                u1_t_time_chk_flg = u1_s_Pict_Ml86294_TimChk((U2)u2_s_pict_mlrcvvicstatus_timer, ML86294_FRZDEC_INT_WAIT);
-                if(u1_t_time_chk_flg == (U1)TRUE){
-                    vd_s_Pict_ProcessMng((U4)ML86294_PROC_FRZINT);
-                }
-                else{
-                    u2_s_pict_mlrcvvicstatus_timer++;
-                }
-            }
-            else{
-                u2_s_pict_mlrcvvicstatus_timer = (U1)0;
-            }
-
-            /* ML86294 Cycle Check Poling Check */
-            u1_t_time_chk_flg = u1_s_Pict_Ml86294_TimChk((U2)u2_s_pict_ml_cycchk_timer, ML86294_CYCCHK_POLING);
-            if(u1_t_time_chk_flg == (U1)TRUE){
-                vd_s_Pict_ProcessMng((U4)ML86294_PROC_CYCCHK);
-            }
-            else{
-                u2_s_pict_ml_cycchk_timer++;
-            }
-
-            /* Freeze Cycle Check Poling Check */
-            u1_t_time_chk_flg = u1_s_Pict_Ml86294_TimChk((U2)u2_s_pict_ml_frzdat_cycchk_timer, ML86294_FRZDAT_CYCCHK_POLING);
-            if(u1_t_time_chk_flg == (U1)TRUE){
-                vd_s_Pict_ProcessMng((U4)ML86294_PROC_FRYZDAT_CYCCHK);
-            }
-            else{
-                u2_s_pict_ml_frzdat_cycchk_timer++;
-            }
-
-            /* IRQ_HPD Cycle Check Poling Check */
-            u1_t_time_chk_flg = u1_s_Pict_Ml86294_TimChk((U2)u2_s_pict_ml_irqhpd_cycchk_timer, ML86294_IRQHPC_CYCCHK_POLING);
-            if(u1_t_time_chk_flg == (U1)TRUE){
-                vd_s_Pict_ProcessMng((U4)ML86294_PROC_IRQHPD_CYCCHK);
-            }
-            else{
-                u2_s_pict_ml_irqhpd_cycchk_timer++;
-            }
-
-            /* Process Condition Met Flag Fail Check */
-            u4_t_cond_met_flg_tmp = u4_s_pict_ml_proc_cond_met_flg & (U4)ML86294_PROC_RESERVE;
-
-            if((u1_s_pict_ml_proc_exe_cnt < (U1)ML86294_PROC_NUM)
-            && (u4_s_pict_ml_proc_cond_met_flg != (U4)ML86294_PROC_NON)
-            && (u4_t_cond_met_flg_tmp == (U4)0)){
-                switch (u4_sp_pict_ml_proc_que[u1_s_pict_ml_proc_exe_cnt]){
-                    case ML86294_PROC_CYCCHK:                                   /* ML86294 Cycle Check */
-                        u1_t_func_sts = (U1)u1_s_Pict_MLCycChk();
-                        if(u1_t_func_sts == (U1)TRUE){
-                            /* Poling Timer Clear */
-                            u2_s_pict_ml_cycchk_timer = (U1)0U;
-                        }
-                        break;
-                    case ML86294_PROC_FRYZDAT_CYCCHK:                           /* Freeze Cycle Check */
-                        u1_t_func_sts = (U1)u1_s_Pict_MLFrzDatCycChk();
-                        if(u1_t_func_sts == (U1)TRUE){
-                            /* Poling Timer Clear */
-                            u2_s_pict_ml_frzdat_cycchk_timer = (U1)0U;
-                        }
-                        break;
-                    case ML86294_PROC_IRQHPD_CYCCHK:                            /* IRQ_HPD Cycle Check */
-                        u1_t_func_sts = (U1)u1_s_Pict_MLIrqHpdCycChk();
-                        if(u1_t_func_sts == (U1)TRUE){
-                            /* Poling Timer Clear */
-                            u2_s_pict_ml_irqhpd_cycchk_timer = (U1)0U;
-                        }
-                        break;
-                    case ML86294_PROC_CAMAREA_SET:
-                        u1_t_func_sts = (U1)u1_s_Pict_MlCamAreaRegSet();
-                        if(u1_t_func_sts == (U1)TRUE){
-                            /* Excuted Flag ON */
-                            u1_s_pict_mlcamarearegset_flg = (U1)TRUE;
-                        }
-                        break;
-                    case ML86294_PROC_MIPI_ON:
-                        u1_t_func_sts = (U1)u1_s_Pict_MlMipiRegSetOn();
-                        if(u1_t_func_sts == (U1)TRUE){
-                            /* Excuted Flag ON */
-                            u1_s_pict_mlmipiregset_on_flg = (U1)TRUE;
-                        }
-                        break;
-                    case ML86294_PROC_MIPI_OFF:
-                        u1_t_func_sts = (U1)u1_s_Pict_MlMipiRegSetOff();
-                        if(u1_t_func_sts == (U1)TRUE){
-                            /* Excuted Flag ON */
-                            u1_s_pict_mlmipiregset_off_flg = (U1)TRUE;
-                        }
-                        break;
-                    case ML86294_PROC_FRZCHG_ON:
-                        u1_t_func_sts = (U1)u1_s_Pict_MlFrzChgRegSetOn();
-                        if(u1_t_func_sts == (U1)TRUE){
-                            /* Excuted Flag ON */
-                            u1_s_pict_mlfrzchgregset_on_flg = (U1)TRUE;
-                        }
-                        break;
-                    case ML86294_PROC_FRZCHG_OFF:
-                        u1_t_func_sts = (U1)u1_s_Pict_MlFrzChgRegSetOff();
-                        if(u1_t_func_sts == (U1)TRUE){
-                            /* Excuted Flag ON */
-                            u1_s_pict_mlfrzchgregset_off_flg = (U1)TRUE;
-                        }
-                        break;
-                    case ML86294_PROC_CAMPATH_NORMAL:
-                        u1_t_func_sts = (U1)u1_s_Pict_MlCamPathRegSetNml();
-                        if(u1_t_func_sts == (U1)TRUE){
-                            /* Excuted Flag ON */
-                            u1_s_pict_mlfrzcampathregset_nml_flg = (U1)TRUE;
-                        }
-                        break;
-                    case ML86294_PROC_CAMPATH_BYPASS:
-                        u1_t_func_sts = (U1)u1_s_Pict_MlCamPathRegSetByp();
-                        if(u1_t_func_sts == (U1)TRUE){
-                            /* Excuted Flag ON */
-                            u1_s_pict_mlfrzcampathregset_byp_flg = (U1)TRUE;
-                        }
-                        break;
-                    case ML86294_PROC_MIPISYNCCHK:
-                        u1_t_func_sts = (U1)u1_s_Pict_MLMIPISyncCheck();
-                        if(u1_t_func_sts == (U1)TRUE){
-                            /* Excuted Flag ON */
-                            u1_s_pict_mlmipisynccheck_flg = (U1)TRUE;
-                        }
-                        break;
-                    case ML86294_PROC_FRZINT:
-                        u1_t_func_sts = (U1)u1_s_Pict_MlRcvVIcStatusNty();
-                        if(u1_t_func_sts == (U1)TRUE){
-                            /* V-IC-STATUS1 Interrupt Flag Clear */
-                            u1_s_pict_mlrcvvicstatus_flg = (U1)FALSE;
-                            /* V-IC-STATUS1 Interrupt Wait Timer Clear */
-                            u2_s_pict_mlrcvvicstatus_timer = (U2)0U;
-                        }
-                        break;
-                    case ML86294_PROC_I2C_MUTE_ON:
-                        u1_t_func_sts = (U1)u1_s_Pict_MlI2cMuteRegSetOn();
-                        if(u1_t_func_sts == (U1)TRUE){
-                            /* Excuted Flag ON */
-                            u1_s_pict_mli2cmuteregset_on_flg = (U1)TRUE;
-                        }
-                        break;
-                    case ML86294_PROC_I2C_MUTE_OFF:
-                        u1_t_func_sts = (U1)u1_s_Pict_MlI2cMuteRegSetOff();
-                        if(u1_t_func_sts == (U1)TRUE){
-                            /* Excuted Flag ON */
-                            u1_s_pict_mli2cmuteregset_off_flg = (U1)TRUE;
-                        }
-                        break;
-                    case ML86294_PROC_NOAIS_MUTE_ON:
-                        u1_t_func_sts = (U1)u1_s_Pict_MlNoAisMuteRegSetOn();
-                        if(u1_t_func_sts == (U1)TRUE){
-                            /* Excuted Flag ON */
-                            u1_s_pict_mlnoaismuteregset_on_flg = (U1)TRUE;
-                        }
-                        break;
-                    case ML86294_PROC_NOAIS_MUTE_OFF:
-                        u1_t_func_sts = (U1)u1_s_Pict_MlNoAisMuteRegSetOff();
-                        if(u1_t_func_sts == (U1)TRUE){
-                            /* Excuted Flag ON */
-                            u1_s_pict_mlnoaismuteregset_off_flg = (U1)TRUE;
-                        }
-                        break;
-                    default:
-                        vd_s_Pict_ProcessInit();
-                        break;
-                }
-
-                if(u1_t_func_sts == (U1)TRUE){
-                    /* Process Condition Met Flag Clear */
-                    u4_t_proc_que_tmp = u4_sp_pict_ml_proc_que[u1_s_pict_ml_proc_exe_cnt];
-                    u4_s_pict_ml_proc_cond_met_flg &= ~u4_t_proc_que_tmp;
-                    /* Process Queue Clear */
-                    u4_sp_pict_ml_proc_que[u1_s_pict_ml_proc_exe_cnt] = (U4)0U;
-                    /* Counter Update */
-                    if(u1_s_pict_ml_proc_exe_cnt == (U1)((U1)ML86294_PROC_NUM - (U1)1U)){
-                        u1_s_pict_ml_proc_exe_cnt = (U1)0;
-                    }
-                    else{
-                        u1_s_pict_ml_proc_exe_cnt++;
-                    }
-                }
-            }
-            else{
-                vd_s_Pict_ProcessInit();
-            }
+            vd_s_Pict_MLSeqCyc();
             break;
         case ML86294_SEQ_DEV_RST:                                       /* DEV_RST */
             vd_s_Pict_MLDevRst();
@@ -68715,13 +68618,15 @@ static U1    u1_s_Pict_MLCycChk(void)
     U1      u1_t_sip_sync_err;                                      /* Sip Error Result */
     U1      u1_t_cam_sync_err;                                      /* Camera Error Result */
     U1      u1_t_rcv_err;                                           /* Receiver Error Result */
+    U1      u1_t_cam_ev_err;                                        /* Camera EV Error Result */
+    U1      u1_t_cam_mem_err;                                       /* Camera Memory Error Result */
 
     u1_t_ret = (U1)FALSE;
 
     switch (u1_s_pict_mlcycchk_sts){
         case ML86294_CYCCHK_STEP0:                                       /* STEP0 */
         case ML86294_CYCCHK_STEP1:                                       /* STEP1 */
-        /* ----------6.10.1 定期処理 デバイス異常検知開始---------- */
+        /* ---------- 6.10.1 Periodic Processing: Start Device Fault Detection ---------- */
             /* Set Register */
             u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_BANKSET_WRINUM,
                                                           ML86294_BANKSET, &u4_s_pict_ml_i2c_ack_wait_time,
@@ -68733,7 +68638,8 @@ static U1    u1_s_Pict_MLCycChk(void)
             break;
         case ML86294_CYCCHK_STEP2:                                       /* STEP2 */
             /* Read Register */
-            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGREAD(&u2_s_pict_ml_regstep, &u4_s_pict_ml_i2c_ack_wait_time,
+            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGREAD(&u2_s_pict_ml_regstep, (U2)ML86294_WRINUM_I2C_READ,
+                                                           ML86294_I2C_READ, &u4_s_pict_ml_i2c_ack_wait_time,
                                                            st_sp_ML86294_MLFAILCYCCHK_RD_TBL, &u2_s_pict_ml_reg_btwn_time);
             if(u1_t_reg_req_sts == (U1)TRUE){
                 /* Next Process */
@@ -68759,19 +68665,20 @@ static U1    u1_s_Pict_MLCycChk(void)
                     vd_s_Pict_MLDevRst();                                               /* Device Reset Request */
 
                     /* Next Process */
-                    u1_s_pict_mlcycchk_sts = (U1)ML86294_CYCCHK_STEP10;
+                    u1_s_pict_mlcycchk_sts = (U1)ML86294_CYCCHK_STEP15;
 #if 0           /* 暫定 符号なし変数と0を比較する処理となり、ビルドエラーとなるためコメントアウト */
                 }
 #endif
             }
-        /* ----------6.10.1 定期処理 デバイス異常検知終了---------- */
+        /* ---------- 6.10.1 Periodic Processing: End Device Fault Detection ---------- */
             /* Next Process */
             u1_s_pict_mlcycchk_sts = (U1)ML86294_CYCCHK_STEP4;
             break;
         case ML86294_CYCCHK_STEP4:                                       /* STEP4 */
-        /* ----------6.10.1 定期処理 SiP映像入力の同期監視/カメラ映像入力の同期監視開始---------- */
+        /* ---------- 6.10.1 Periodic Processing: Start Sync Monitoring for SiP Video Input / Camera Video Input ---------- */
             /* Read Register */
-            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGREAD(&u2_s_pict_ml_regstep, &u4_s_pict_ml_i2c_ack_wait_time,
+            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGREAD(&u2_s_pict_ml_regstep, (U2)ML86294_WRINUM_I2C_READ,
+                                                           ML86294_I2C_READ, &u4_s_pict_ml_i2c_ack_wait_time,
                                                            st_sp_ML86294_MLSYNCCYCCHK_RD_TBL, &u2_s_pict_ml_reg_btwn_time);
             if(u1_t_reg_req_sts == (U1)TRUE){
                 /* Next Process */
@@ -68800,12 +68707,12 @@ static U1    u1_s_Pict_MLCycChk(void)
             /* Previous State Update */
             u1_s_pict_mlsync_pre_sip_sync_err = u1_t_sip_sync_err;
             u1_s_pict_mlsync_pre_cam_sync_err = u1_t_cam_sync_err;
-        /* ----------6.10.1 定期処理 SiP映像入力の同期監視/カメラ映像入力の同期監視終了---------- */
+        /* ---------- 6.10.1 Periodic Processing: End Sync Monitoring for SiP Video Input / Camera Video Input ---------- */
             /* Next Process */
             u1_s_pict_mlcycchk_sts = (U1)ML86294_CYCCHK_STEP6;
             break;
         case ML86294_CYCCHK_STEP6:                                       /* STEP6 */
-        /* ----------6.10.1 定期処理 映像ICの内部経路監視開始---------- */
+        /* ---------- 6.10.1 Periodic Processing: Start Monitoring Internal Paths of the Video IC ---------- */
             /* Read I/O */
             u1_t_dio_read_result = u1_PICT_MLROUTECYCCHK_GET_V_IC_STATUS2();        /* Get V-IC-STATUS2 Status */
 
@@ -68819,31 +68726,106 @@ static U1    u1_s_Pict_MLCycChk(void)
 
             /* Previous State Update */
             u1_s_pict_mlroute_pre_v_ic_sts2_sts = u1_t_dio_read_result;
-        /* ----------6.10.1 定期処理 映像ICの内部経路監視終了---------- */
-            /* Next Process */
-            u1_s_pict_mlcycchk_sts = (U1)ML86294_CYCCHK_STEP7;
+        /* ---------- 6.10.1 Periodic Processing: End Monitoring Internal Paths of the Video IC ---------- */
+        /* ---------- 6.10.1 Periodic Processing: Start Stuck Detection for the Internal Frame Memory Caused by the Video IC ---------- */
+            if(u1_t_dio_read_result == (U1)PICT_ML_IO_STS_HIGH){                    /* V-IC-STATUS2 = H */
+                /* Next Process */
+                u1_s_pict_mlcycchk_sts = (U1)ML86294_CYCCHK_STEP7;
+            }
+            else{
+                /* Next Process */
+                u1_s_pict_mlcycchk_sts = (U1)ML86294_CYCCHK_STEP12;
+            }
             break;
         case ML86294_CYCCHK_STEP7:                                       /* STEP7 */
-        /* ----------6.10.1 定期処理 MIPI映像受信部のエラー検知開始---------- */
-            /* Set Register */
             u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_BANKSET_WRINUM,
                                                           ML86294_BANKSET, &u4_s_pict_ml_i2c_ack_wait_time,
-                                                          st_sp_ML86294_SET_BANK15_TBL, &u2_s_pict_ml_reg_btwn_time);
+                                                          st_sp_ML86294_SET_BANK12_TBL, &u2_s_pict_ml_reg_btwn_time);
             if(u1_t_reg_req_sts == (U1)TRUE){
                 /* Next Process */
                 u1_s_pict_mlcycchk_sts = (U1)ML86294_CYCCHK_STEP8;
             }
             break;
         case ML86294_CYCCHK_STEP8:                                       /* STEP8 */
-            /* Read Register */
-            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGREAD(&u2_s_pict_ml_regstep, &u4_s_pict_ml_i2c_ack_wait_time,
-                                                           st_sp_ML86294_MLMIPIRCVCYCCHK_RD_TBL, &u2_s_pict_ml_reg_btwn_time);
+            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGREAD(&u2_s_pict_ml_regstep, (U2)ML86294_WRINUM_I2C_READ,
+                                                           ML86294_I2C_READ, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                           st_sp_ML86294_MLFRZEVCYCCHK_RD_TBL, &u2_s_pict_ml_reg_btwn_time);
             if(u1_t_reg_req_sts == (U1)TRUE){
                 /* Next Process */
                 u1_s_pict_mlcycchk_sts = (U1)ML86294_CYCCHK_STEP9;
             }
             break;
         case ML86294_CYCCHK_STEP9:                                       /* STEP9 */
+            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_BANKSET_WRINUM,
+                                                          ML86294_BANKSET, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                          st_sp_ML86294_SET_BANK25_TBL, &u2_s_pict_ml_reg_btwn_time);
+            if(u1_t_reg_req_sts == (U1)TRUE){
+                /* Next Process */
+                u1_s_pict_mlcycchk_sts = (U1)ML86294_CYCCHK_STEP10;
+            }
+            break;
+        case ML86294_CYCCHK_STEP10:                                       /* STEP10 */
+            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGREAD(&u2_s_pict_ml_regstep, (U2)ML86294_WRINUM_I2C_READ,
+                                                           ML86294_I2C_READ, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                           st_sp_ML86294_MLFRZMEMCYCCHK_RD_TBL, &u2_s_pict_ml_reg_btwn_time);
+            if(u1_t_reg_req_sts == (U1)TRUE){
+                /* Next Process */
+                u1_s_pict_mlcycchk_sts = (U1)ML86294_CYCCHK_STEP11;
+            }
+            break;
+        case ML86294_CYCCHK_STEP11:                                       /* STEP11 */
+            u1_t_reg_read_result = st_sp_ML86294_MLSYNCCYCCHK_RD_TBL[1].u1p_pdu[1];
+            u1_t_cam_sync_err = u1_t_reg_read_result & (U1)PICT_REG_MASK_BIT_3;     /* Get Camera Error Result */
+            u1_t_reg_read_result = st_sp_ML86294_MLFRZEVCYCCHK_RD_TBL[1].u1p_pdu[1];
+            u1_t_cam_ev_err = u1_t_reg_read_result & (U1)PICT_REG_MASK_BIT_0;     /* Get Camera EV Error Result */
+            u1_t_reg_read_result = st_sp_ML86294_MLFRZMEMCYCCHK_RD_TBL[1].u1p_pdu[1];
+            u1_t_cam_mem_err = u1_t_reg_read_result & (U1)PICT_REG_MASK_BIT_0;     /* Get Camera Memory Error Result */
+            if((u1_t_cam_sync_err == (U1)PICT_REG_MASK_BIT_3 )                  /* EIZO_IC Stuck Detected */
+            && (u1_t_cam_ev_err != (U1)PICT_REG_MASK_BIT_0)
+            && (u1_t_cam_mem_err == (U1)PICT_REG_MASK_BIT_0)){
+                u1_s_pict_mlvicfrz_cause_cnt++;
+                if(u1_s_pict_mlvicfrz_cause_cnt > (U1)PICT_ML_MLVICFRZ_CAUSE_CNT_MAX){ /* Drec Counter > 10 */
+                    vd_PICT_ML_DREC_REQ((U1)SYSECDRC_DREC_ID_11, (U1)0x00U, (U1)0x00U); /* Only once */
+                    /* Function Completion */
+                    u1_t_ret = (U1)TRUE;
+                    /* Process Reset */
+                    u1_s_pict_mlcycchk_sts = (U1)ML86294_CYCCHK_STEP0;
+                    vd_s_Pict_MLDevRst();                                               /* Device Reset Request */
+                }
+                else{
+                    /* Next Process */
+                    u1_s_pict_mlcycchk_sts = (U1)ML86294_CYCCHK_STEP12;
+                }
+            }
+            else{
+                u1_s_pict_mlvicfrz_cause_cnt = (U1)0;
+                /* Next Process */
+                u1_s_pict_mlcycchk_sts = (U1)ML86294_CYCCHK_STEP12;
+            }
+        /* ---------- 6.10.1 Periodic Processing: End Stuck Detection for the Internal Frame Memory Caused by the Video IC ---------- */
+            break;
+        case ML86294_CYCCHK_STEP12:                                       /* STEP12 */
+        /* ---------- 6.10.1 Periodic Processing: Start Error Detection for the MIPI Video Receiver ---------- */
+            /* Set Register */
+            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_BANKSET_WRINUM,
+                                                          ML86294_BANKSET, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                          st_sp_ML86294_SET_BANK15_TBL, &u2_s_pict_ml_reg_btwn_time);
+            if(u1_t_reg_req_sts == (U1)TRUE){
+                /* Next Process */
+                u1_s_pict_mlcycchk_sts = (U1)ML86294_CYCCHK_STEP13;
+            }
+            break;
+        case ML86294_CYCCHK_STEP13:                                       /* STEP13 */
+            /* Read Register */
+            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGREAD(&u2_s_pict_ml_regstep, (U2)ML86294_WRINUM_I2C_READ,
+                                                           ML86294_I2C_READ, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                           st_sp_ML86294_MLMIPIRCVCYCCHK_RD_TBL, &u2_s_pict_ml_reg_btwn_time);
+            if(u1_t_reg_req_sts == (U1)TRUE){
+                /* Next Process */
+                u1_s_pict_mlcycchk_sts = (U1)ML86294_CYCCHK_STEP14;
+            }
+            break;
+        case ML86294_CYCCHK_STEP14:                                       /* STEP14 */
             u1_t_reg_read_result = st_sp_ML86294_MLMIPIRCVCYCCHK_RD_TBL[1].u1p_pdu[1];
             u1_t_rcv_err = u1_t_reg_read_result & (U1)PICT_ML_MIPIRCVCYCCHK_RCV_DAT_MASK;   /* Get Receiver Error Result */
             if(u1_t_rcv_err != (U1)PICT_ML_MIPIRCVCYCCHK_RCV_OK ){                  /* Receiver Error */
@@ -68852,13 +68834,13 @@ static U1    u1_s_Pict_MLCycChk(void)
                     vd_PICT_ML_DREC_REQ((U1)SYSECDRC_DREC_ID_6, u1_s_pict_mlmipircv_drec_cnt, (U1)0x00U);
                 }
             }
-        /* ----------6.10.1 定期処理 MIPI映像受信部のエラー検知終了---------- */
+        /* ---------- 6.10.1 Periodic Processing: End Error Detection for the MIPI Video Receiver ---------- */
             /* Function Completion */
             u1_t_ret = (U1)TRUE;
             /* Process Reset */
             u1_s_pict_mlcycchk_sts = (U1)ML86294_CYCCHK_STEP0;
             break;
-        case ML86294_CYCCHK_STEP10:                                     /* STEP10 */
+        case ML86294_CYCCHK_STEP15:                                     /* STEP15 */
         /* Device Restart or Reset */
             /* Process Reset */
             u1_s_pict_mlcycchk_sts = (U1)ML86294_CYCCHK_STEP0;
@@ -68921,7 +68903,7 @@ static U1    u1_s_Pict_MLFrzDatCycChk(void)
             }
             break;
         case ML86294_FRZDAT_CYCCHK_STEP2:                                       /* STEP2 */
-        /* ----------6.10.2 固着検知ビット監視 カメラモード開始---------- */
+        /* ---------- 6.10.2 Stuck-Detection Bit Monitoring: Start Camera Mode ---------- */
             /* N1++ */
             if(u1_s_pict_mlfrzdatcyc_n1_cnt < (U1)U1_MAX){
                 u1_s_pict_mlfrzdatcyc_n1_cnt++;
@@ -68950,7 +68932,8 @@ static U1    u1_s_Pict_MLFrzDatCycChk(void)
             break;
         case ML86294_FRZDAT_CYCCHK_STEP4:                                       /* STEP4 */
             /* Read Register */
-            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGREAD(&u2_s_pict_ml_regstep, &u4_s_pict_ml_i2c_ack_wait_time,
+            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGREAD(&u2_s_pict_ml_regstep, (U2)ML86294_WRINUM_I2C_READ,
+                                                           ML86294_I2C_READ, &u4_s_pict_ml_i2c_ack_wait_time,
                                                            st_sp_ML86294_MLFRZDATCYCFRZBIT_RD_TBL, &u2_s_pict_ml_reg_btwn_time);
             if(u1_t_reg_req_sts == (U1)TRUE){
                 /* Next Process */
@@ -68984,7 +68967,7 @@ static U1    u1_s_Pict_MLFrzDatCycChk(void)
         case ML86294_FRZDAT_CYCCHK_STEP7:                                       /* STEP7 */
             /* N1=0 */
             u1_s_pict_mlfrzdatcyc_n1_cnt = (U1)0U;
-        /* ----------6.10.2 固着検知ビット監視 カメラモード終了---------- */
+        /* ---------- 6.10.2 Stuck-Detection Bit Monitoring: End Camera Mode ---------- */
 
             /* Function Completion */
             u1_t_ret = (U1)TRUE;
@@ -68992,7 +68975,7 @@ static U1    u1_s_Pict_MLFrzDatCycChk(void)
             u1_s_pict_mlfrzdatcycchk_sts = (U1)ML86294_FRZDAT_CYCCHK_STEP0;
             break;
         case ML86294_FRZDAT_CYCCHK_STEP8:                                       /* STEP8 */
-        /* ----------6.10.2 固着検知ビット監視 カメラモード以外開始---------- */
+        /* ---------- 6.10.2 Stuck-Detection Bit Monitoring: Start Non-Camera Mode ---------- */
             /* N2++ */
             if(u1_s_pict_mlfrzdatcyc_n2_cnt < (U1)U1_MAX){
                 u1_s_pict_mlfrzdatcyc_n2_cnt++;
@@ -69031,7 +69014,8 @@ static U1    u1_s_Pict_MLFrzDatCycChk(void)
             break;
         case ML86294_FRZDAT_CYCCHK_STEP10:                                      /* STEP10 */
             /* Read Register */
-            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGREAD(&u2_s_pict_ml_regstep, &u4_s_pict_ml_i2c_ack_wait_time,
+            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGREAD(&u2_s_pict_ml_regstep, (U2)ML86294_WRINUM_I2C_READ,
+                                                           ML86294_I2C_READ, &u4_s_pict_ml_i2c_ack_wait_time,
                                                            st_sp_ML86294_MLFRZDATCYCFRZBIT_RD_TBL, &u2_s_pict_ml_reg_btwn_time);
             if(u1_t_reg_req_sts == (U1)TRUE){
                 /* Next Process */
@@ -69084,7 +69068,8 @@ static U1    u1_s_Pict_MLFrzDatCycChk(void)
             break;
         case ML86294_FRZDAT_CYCCHK_STEP15:                                      /* STEP15 */
             /* Read Register */
-            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGREAD(&u2_s_pict_ml_regstep, &u4_s_pict_ml_i2c_ack_wait_time,
+            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGREAD(&u2_s_pict_ml_regstep, (U2)ML86294_WRINUM_I2C_READ,
+                                                           ML86294_I2C_READ, &u4_s_pict_ml_i2c_ack_wait_time,
                                                            st_sp_ML86294_MLFRZDATCYCROUTEBIT_RD_TBL, &u2_s_pict_ml_reg_btwn_time);
             if(u1_t_reg_req_sts == (U1)TRUE){
                 /* Next Process */
@@ -69117,7 +69102,7 @@ static U1    u1_s_Pict_MLFrzDatCycChk(void)
         case ML86294_FRZDAT_CYCCHK_STEP18:                                      /* STEP18 */
             /* N2=0 */
             u1_s_pict_mlfrzdatcyc_n2_cnt = (U1)0U;
-        /* ----------6.10.2 固着検知ビット監視 カメラモード以外終了---------- */
+        /* ---------- 6.10.2 Stuck-Detection Bit Monitoring: End Non-Camera Mode ---------- */
 
             /* Function Completion */
             u1_t_ret = (U1)TRUE;
@@ -69140,63 +69125,77 @@ static U1    u1_s_Pict_MLFrzDatCycChk(void)
 /*  Return:         TRUE (Function Completion) / FALSE (Function Incompletion)                                                       */
 /*===================================================================================================================================*/
 static U1    u1_s_Pict_MLIrqHpdCycChk(void)
-{   /* 暫定　I/Fメモ 6.10.3 IRQ_HPDの監視 */
+{   /* 6.10.3 Monitoring of IRQ_HPD */
     static const ST_REG_WRI_REQ ML86294_IRQHPD_DPCD_SET1[ML86294_IRQHPD_DPCD_SET1_WRINUM] = {
-        /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
+        /*  Start address,   number of writes,   wait time between register accesses */
         {        0,         3,         0}
     };
 
     static const ST_REG_WRI_REQ ML86294_IRQHPD_DPCD_READSET_SET[ML86294_IRQHPD_DPCD_READSET_SET_WRINUM] = {
-        /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
+        /*  Start address,   number of writes,   wait time between register accesses */
         {        0,         1,         0}
     };
 
     static const ST_REG_WRI_REQ ML86294_IRQHPD_DPCD_REGNUM_SET[ML86294_IRQHPD_DPCD_REGNUM_SET_WRINUM] = {
-        /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
+        /*  Start address,   number of writes,   wait time between register accesses */
         {        0,         1,         0}
     };
 
     static const ST_REG_WRI_REQ ML86294_IRQHPD_DPCD_AUXSND_READSET_SET[ML86294_IRQHPD_DPCD_AUXSND_READSET_SET_WRINUM] = {
-        /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
+        /*  Start address,   number of writes,   wait time between register accesses */
         {        0,         1,         0}
     };
 
-    static const ST_REG_WRI_REQ ML86294_IRQHPD_DPCD_SET2[ML86294_IRQHPD_DPCD_SET2_WRINUM] = {
-        /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
-        {        0,         3,         0}
+    static const ST_REG_WRI_REQ ML86294_IRQHPD_DPCD_EDPTX_AUTO_LT_OFF_SET[ML86294_IRQHPD_DPCD_EDPTX_AUTO_LT_OFF_SET_WRINUM] = {
+        /*  Start address,   number of writes,   wait time between register accesses */
+        {        0,         1,         0},  /* Bank9 */
+        {        1,         1,         0}
     };
 
-    static const ST_REG_WRI_REQ ML86294_IRQHPD_DPCD_SET3[ML86294_IRQHPD_DPCD_SET3_WRINUM] = {
-        /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
+    static const ST_REG_WRI_REQ ML86294_IRQHPD_DPCD_EDPTX_CONFIG_SET[ML86294_IRQHPD_DPCD_EDPTX_CONFIG_SET_WRINUM] = {
+        /*  Start address,   number of writes,   wait time between register accesses */
+        {        0,         1,         0},  /* Bank8 */
+        {        1,         4,         0},
+        {        5,         1,         0},  /* Bank9 */
+        {        6,         4,         0},
+        {       10,         1,         0},
+        {       11,         1,         0},  /* Bank10 */
+        {       15,         4,         0},
+        {       19,         4,         0},
+        {       23,         4,         0},
+        {       27,         4,         0},
+        {       31,         4,         0}
+    };
+
+    static const ST_REG_WRI_REQ ML86294_IRQHPDAUX_NOTIF_SET[ML86294_IRQHPDAUX_NOTIF_SET_WRINUM] = {
+        /*  Start address,   number of writes,   wait time between register accesses */
+        {        1,         1,         0}
+    };
+
+    static const ST_REG_WRI_REQ ML86294_IRQHPD_DPCD_EDPTX_AUTO_LT_ON_SET[ML86294_IRQHPD_DPCD_EDPTX_AUTO_LT_ON_SET_WRINUM] = {
+        /*  Start address,   number of writes,   wait time between register accesses */
         {        0,         1,         0},  /* Bank9 */
-        {        1,         1,         0},
-        {        2,         1,         0},  /* Bank8 */
-        {        3,         4,         0},
-        {        7,         1,         0},  /* Bank9 */
-        {        8,         4,         0},
-        {       12,         1,         0},
-        {       13,         1,         0},  /* Bank10 */
-        {       14,         4,         0},
-        {       18,         4,         0},
-        {       22,         4,         0},
-        {       26,         4,         0},
-        {       30,         4,         0},
-        {       34,         1,         0},  /* Bank8 */
-        {       35,         3,         0},
-        {       38,         1,         0},  /* Bank9 */
-        {       39,         1,         0},
-        {       40,         1,         0},  /* Bank8 */
-        {       41,         1,         0}
+        {        1,         1,         0}
+    };
+
+    static const ST_REG_WRI_REQ ML86294_IRQHPD_DPCD_VIDEO_TX_START_SET[ML86294_IRQHPD_DPCD_VIDEO_TX_START_SET_WRINUM] = {
+        /*  Start address,   number of writes,   wait time between register accesses */
+        {        0,         1,         0},  /* Bank8 */
+        {        1,         1,         0}
     };
 
     U1      u1_t_ret;                                               /* Function Completion Status  */
     U1      u1_t_reg_req_sts;
     U1      u1_t_reg_read_result;                                   /* Register Read Result */
-    U1      u1_t_irqhpd_assert;                                     /* IRQ_HPD Assert */
     U1      u1_t_irqhpd_dpcd_read_set;                              /* DPCD Register Read Set Data  */
     U1      u1_t_irqhpd_dpcd_auxsnd_set;                            /* DPCD Register AUX Send Byte Data */
     U1      u1_t_irqhpd_auxcom_read_sts1;                           /* Register Read Status1 */
     U1      u1_t_irqhpd_auxcom_read_sts2;                           /* Register Read Status2 */
+
+    U1      u1_t_auxtimeout_notif;                                  /* AUX_TIMEOUT Notif */
+    U1      u1_t_hpdplug_notif;                                     /* HPD_PLUG Notif */
+    U1      u1_t_irqhpd_notif;                                      /* IRQ_HPD Notif */
+    U1      u1_t_hpdplug_sts;                                       /* HPD_PLUG Status */
 
     u1_t_ret = (U1)FALSE;
 
@@ -69214,7 +69213,8 @@ static U1    u1_s_Pict_MLIrqHpdCycChk(void)
             break;
         case ML86294_IRQHPD_CYCCHK_STEP2:                                       /* STEP2 */
             /* Read Register */
-            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGREAD(&u2_s_pict_ml_regstep, &u4_s_pict_ml_i2c_ack_wait_time,
+            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGREAD(&u2_s_pict_ml_regstep, (U2)ML86294_WRINUM_I2C_READ,
+                                                           ML86294_I2C_READ, &u4_s_pict_ml_i2c_ack_wait_time,
                                                            st_sp_ML86294_MLIRQHPD_ASSERT_RD_TBL, &u2_s_pict_ml_reg_btwn_time);
             if(u1_t_reg_req_sts == (U1)TRUE){
                 /* Next Process */
@@ -69223,14 +69223,35 @@ static U1    u1_s_Pict_MLIrqHpdCycChk(void)
             break;
         case ML86294_IRQHPD_CYCCHK_STEP3:                                       /* STEP3 */
             u1_t_reg_read_result = st_sp_ML86294_MLIRQHPD_ASSERT_RD_TBL[1].u1p_pdu[1];
-            u1_t_irqhpd_assert = u1_t_reg_read_result & (U1)PICT_REG_MASK_BIT_1;      /* Get IRQ_HPD Assert */
-            if(u1_t_irqhpd_assert == (U1)PICT_REG_MASK_BIT_1){
+            u1_t_auxtimeout_notif = u1_t_reg_read_result & (U1)PICT_REG_MASK_BIT_6;      /* Get AUX Timeout */
+            u1_t_hpdplug_notif = u1_t_reg_read_result & (U1)PICT_REG_MASK_BIT_0;      /* Get HPD_PLUG */
+            u1_t_irqhpd_notif = u1_t_reg_read_result & (U1)PICT_REG_MASK_BIT_1;      /* Get IRQ_HPD */
+
+            if(u1_t_auxtimeout_notif == (U1)PICT_REG_MASK_BIT_6){
+                if(u1_s_pict_mlauxtimeoutcyc_notif_drec_cnt < (U1)PICT_ML_MLAUXTIMEOUT_NOTIF_DREC_CNT_MAX){ /* Drec Counter < 3 */
+                    u1_s_pict_mlauxtimeoutcyc_notif_drec_cnt++;
+                    vd_PICT_ML_DREC_REQ((U1)SYSECDRC_DREC_ID_12, u1_s_pict_mlauxtimeoutcyc_notif_drec_cnt, (U1)0x00U);
+                }
+                /* Next Process */
+                u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP4;
+            }
+            else if(u1_t_hpdplug_notif == (U1)PICT_REG_MASK_BIT_0){
+                if(u1_s_pict_mlhpdplugcyc_notif_drec_cnt < (U1)PICT_ML_MLHPDPLUG_NOTIF_DREC_CNT_MAX){ /* Drec Counter < 3 */
+                    u1_s_pict_mlhpdplugcyc_notif_drec_cnt++;
+                    vd_PICT_ML_DREC_REQ((U1)SYSECDRC_DREC_ID_13, u1_s_pict_mlhpdplugcyc_notif_drec_cnt, (U1)0x00U);
+                }
+                /* Next Process */
+                u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP10;
+                u1_s_pict_irqhpd_notif_step = (U1)ML86294_IRQHPD_CYCCHK_STEP23;
+            }
+            else if(u1_t_irqhpd_notif == (U1)PICT_REG_MASK_BIT_1){
                 if(u1_s_pict_mlirqhpdcyc_assert_drec_cnt < (U1)PICT_ML_MLIRQHPD_ASSERT_DREC_CNT_MAX){ /* Drec Counter < 3 */
                     u1_s_pict_mlirqhpdcyc_assert_drec_cnt++;
                     vd_PICT_ML_DREC_REQ((U1)SYSECDRC_DREC_ID_10, u1_s_pict_mlirqhpdcyc_assert_drec_cnt, (U1)0x00U);
                 }
                 /* Next Process */
-                u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP4;
+                u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP12;
+                u1_s_pict_irqhpd_notif_step = (U1)ML86294_IRQHPD_CYCCHK_STEP25;
             }
             else{
                 /* Function Completion */
@@ -69240,33 +69261,42 @@ static U1    u1_s_Pict_MLIrqHpdCycChk(void)
             }
             break;
         case ML86294_IRQHPD_CYCCHK_STEP4:                                       /* STEP4 */
-            /* Set Register */
-            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_IRQHPD_DPCD_SET1_WRINUM,
-                                                          ML86294_IRQHPD_DPCD_SET1, &u4_s_pict_ml_i2c_ack_wait_time,
-                                                          st_sp_MLIRQHPD_DPCD_SET1_TBL, &u2_s_pict_ml_reg_btwn_time);
+            /* Read Register */
+            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGREAD(&u2_s_pict_ml_regstep, (U2)ML86294_WRINUM_I2C_READ,
+                                                           ML86294_I2C_READ, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                           st_sp_ML86294_MLHPDPLUG_STS_RD_TBL, &u2_s_pict_ml_reg_btwn_time);
             if(u1_t_reg_req_sts == (U1)TRUE){
                 /* Next Process */
                 u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP5;
             }
             break;
         case ML86294_IRQHPD_CYCCHK_STEP5:                                       /* STEP5 */
-            /* Read Register */
-            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGREAD(&u2_s_pict_ml_regstep, &u4_s_pict_ml_i2c_ack_wait_time,
-                                                           st_sp_MLIRQHPD_DPCD_READSET_RD_TBL, &u2_s_pict_ml_reg_btwn_time);
-            if(u1_t_reg_req_sts == (U1)TRUE){
-                u1_t_reg_read_result = st_sp_MLIRQHPD_DPCD_READSET_RD_TBL[1].u1p_pdu[1];
-                u1_t_irqhpd_dpcd_read_set = u1_t_reg_read_result & (U1)PICT_ML_MLIRQHPD_DPCD_READ_REGDATA1; /* bit[7:4] = 0x0 */
-                u1_t_irqhpd_dpcd_read_set = u1_t_reg_read_result | (U1)PICT_ML_MLIRQHPD_DPCD_READ_REGDATA2; /* bit[7] = 1, bit[4] = 1 */
-                st_sp_MLIRQHPD_DPCD_READSET_SET_TBL[0].u1p_pdu[2] = u1_t_irqhpd_dpcd_read_set;              /* Register Write Data Set */
+            u1_t_reg_read_result = st_sp_ML86294_MLHPDPLUG_STS_RD_TBL[1].u1p_pdu[1];
+            u1_t_hpdplug_sts = u1_t_reg_read_result & (U1)PICT_REG_MASK_BIT_6;      /* Get HPD Sts */
+            if(u1_t_hpdplug_sts == (U1)PICT_REG_MASK_BIT_6){
+                u1_s_pict_mldevreset_chk_cnt++;
+                if(u1_s_pict_mldevreset_chk_cnt > (U1)PICT_ML_MLDEVRESET_CHK_CNT_MAX){ /* restart Counter > 3 */
+                    /* Function Completion */
+                    u1_t_ret = (U1)TRUE;
+                    /* Process Reset */
+                    u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP0;
+                    vd_s_Pict_MLDevRst();                                               /* Device Reset Request */
+                }
+                else{
+                    /* Next Process */
+                    u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP6;
+                }
+            }
+            else{
                 /* Next Process */
-                u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP6;
+                u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP8;
             }
             break;
         case ML86294_IRQHPD_CYCCHK_STEP6:                                       /* STEP6 */
             /* Set Register */
-            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_IRQHPD_DPCD_READSET_SET_WRINUM,
-                                                          ML86294_IRQHPD_DPCD_READSET_SET, &u4_s_pict_ml_i2c_ack_wait_time,
-                                                          st_sp_MLIRQHPD_DPCD_READSET_SET_TBL, &u2_s_pict_ml_reg_btwn_time);
+            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_IRQHPD_DPCD_EDPTX_AUTO_LT_OFF_SET_WRINUM,
+                                                          ML86294_IRQHPD_DPCD_EDPTX_AUTO_LT_OFF_SET, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                          st_sp_MLIRQHPD_DPCD_EDPTX_AUTO_LT_OFF_SET_TBL, &u2_s_pict_ml_reg_btwn_time);
             if(u1_t_reg_req_sts == (U1)TRUE){
                 /* Next Process */
                 u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP7;
@@ -69274,17 +69304,103 @@ static U1    u1_s_Pict_MLIrqHpdCycChk(void)
             break;
         case ML86294_IRQHPD_CYCCHK_STEP7:                                       /* STEP7 */
             /* Set Register */
-            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_IRQHPD_DPCD_REGNUM_SET_WRINUM,
-                                                          ML86294_IRQHPD_DPCD_REGNUM_SET, &u4_s_pict_ml_i2c_ack_wait_time,
-                                                          st_sp_MLIRQHPD_DPCD_REGNUM_SET_TBL, &u2_s_pict_ml_reg_btwn_time);
+            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_IRQHPD_DPCD_EDPTX_CONFIG_SET_WRINUM,
+                                                          ML86294_IRQHPD_DPCD_EDPTX_CONFIG_SET, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                          st_sp_MLIRQHPD_DPCD_EDPTX_CONFIG_SET_TBL, &u2_s_pict_ml_reg_btwn_time);
             if(u1_t_reg_req_sts == (U1)TRUE){
+                u1_s_pict_mlrelinktrn_exec_flg = (U1)TRUE;
                 /* Next Process */
                 u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP8;
             }
             break;
         case ML86294_IRQHPD_CYCCHK_STEP8:                                       /* STEP8 */
+            u1_t_reg_read_result = st_sp_ML86294_MLIRQHPD_ASSERT_RD_TBL[1].u1p_pdu[1];
+            u1_t_irqhpd_dpcd_read_set = u1_t_reg_read_result | (U1)PICT_REG_MASK_BIT_6; /* bit[6] = 1 */
+            st_sp_ML86294_MLIRQHPDAUX_NOTIF_SET_TBL[0].u1p_pdu[2] = u1_t_irqhpd_dpcd_read_set;              /* Register Write Data Set */
+            /* Next Process */
+            u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP9;
+            break;
+        case ML86294_IRQHPD_CYCCHK_STEP9:                                       /* STEP9 */
+            /* Set Register */
+            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_IRQHPDAUX_NOTIF_SET_WRINUM,
+                                                          ML86294_IRQHPDAUX_NOTIF_SET, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                          st_sp_ML86294_MLIRQHPDAUX_NOTIF_SET_TBL, &u2_s_pict_ml_reg_btwn_time);
+            if(u1_t_reg_req_sts == (U1)TRUE){
+                /* Next Process */
+                u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP27;
+            }
+            break;
+        case ML86294_IRQHPD_CYCCHK_STEP10:                                       /* STEP10 */
             /* Read Register */
-            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGREAD(&u2_s_pict_ml_regstep, &u4_s_pict_ml_i2c_ack_wait_time,
+            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGREAD(&u2_s_pict_ml_regstep, (U2)ML86294_WRINUM_I2C_READ,
+                                                           ML86294_I2C_READ, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                           st_sp_ML86294_MLHPDPLUG_STS_RD_TBL, &u2_s_pict_ml_reg_btwn_time);
+            if(u1_t_reg_req_sts == (U1)TRUE){
+                /* Next Process */
+                u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP11;
+            }
+            break;
+        case ML86294_IRQHPD_CYCCHK_STEP11:                                       /* STEP11 */
+            u1_t_reg_read_result = st_sp_ML86294_MLHPDPLUG_STS_RD_TBL[1].u1p_pdu[1];
+            u1_t_hpdplug_sts = u1_t_reg_read_result & (U1)PICT_REG_MASK_BIT_6;      /* Get HPD Sts */
+            if(u1_t_hpdplug_sts == (U1)PICT_REG_MASK_BIT_6){
+                /* Next Process */
+                u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP12;
+                u1_s_pict_irqhpd_notif_step = (U1)ML86294_IRQHPD_CYCCHK_STEP23;
+            }
+            else{
+                /* Next Process */
+                u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP23;
+            }
+            break;
+
+        case ML86294_IRQHPD_CYCCHK_STEP12:                                       /* STEP12 */
+            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_IRQHPD_DPCD_SET1_WRINUM,
+                                                          ML86294_IRQHPD_DPCD_SET1, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                          st_sp_MLIRQHPD_DPCD_SET1_TBL, &u2_s_pict_ml_reg_btwn_time);
+            if(u1_t_reg_req_sts == (U1)TRUE){
+                /* Next Process */
+                u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP13;
+            }
+            break;
+        case ML86294_IRQHPD_CYCCHK_STEP13:                                       /* STEP13 */
+            /* Read Register */
+            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGREAD(&u2_s_pict_ml_regstep, (U2)ML86294_WRINUM_I2C_READ,
+                                                           ML86294_I2C_READ, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                           st_sp_MLIRQHPD_DPCD_READSET_RD_TBL, &u2_s_pict_ml_reg_btwn_time);
+            if(u1_t_reg_req_sts == (U1)TRUE){
+                u1_t_reg_read_result = st_sp_MLIRQHPD_DPCD_READSET_RD_TBL[1].u1p_pdu[1];
+                u1_t_irqhpd_dpcd_read_set = u1_t_reg_read_result & (U1)PICT_ML_MLIRQHPD_DPCD_READ_REGDATA1; /* bit[7:4] = 0x0 */
+                u1_t_irqhpd_dpcd_read_set = u1_t_reg_read_result | (U1)PICT_ML_MLIRQHPD_DPCD_READ_REGDATA2; /* bit[7] = 1, bit[4] = 1 */
+                st_sp_MLIRQHPD_DPCD_READSET_SET_TBL[0].u1p_pdu[2] = u1_t_irqhpd_dpcd_read_set;              /* Register Write Data Set */
+                /* Next Process */
+                u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP14;
+            }
+            break;
+        case ML86294_IRQHPD_CYCCHK_STEP14:                                       /* STEP14 */
+            /* Set Register */
+            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_IRQHPD_DPCD_READSET_SET_WRINUM,
+                                                          ML86294_IRQHPD_DPCD_READSET_SET, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                          st_sp_MLIRQHPD_DPCD_READSET_SET_TBL, &u2_s_pict_ml_reg_btwn_time);
+            if(u1_t_reg_req_sts == (U1)TRUE){
+                /* Next Process */
+                u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP15;
+            }
+            break;
+        case ML86294_IRQHPD_CYCCHK_STEP15:                                       /* STEP15 */
+            /* Set Register */
+            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_IRQHPD_DPCD_REGNUM_SET_WRINUM,
+                                                          ML86294_IRQHPD_DPCD_REGNUM_SET, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                          st_sp_MLIRQHPD_DPCD_REGNUM_SET_TBL, &u2_s_pict_ml_reg_btwn_time);
+            if(u1_t_reg_req_sts == (U1)TRUE){
+                /* Next Process */
+                u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP16;
+            }
+            break;
+        case ML86294_IRQHPD_CYCCHK_STEP16:                                       /* STEP16 */
+            /* Read Register */
+            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGREAD(&u2_s_pict_ml_regstep, (U2)ML86294_WRINUM_I2C_READ,
+                                                           ML86294_I2C_READ, &u4_s_pict_ml_i2c_ack_wait_time,
                                                            st_sp_MLIRQHPD_DPCD_AUXSND_READSET_RD_TBL, &u2_s_pict_ml_reg_btwn_time);
             if(u1_t_reg_req_sts == (U1)TRUE){
                 u1_t_reg_read_result = st_sp_MLIRQHPD_DPCD_AUXSND_READSET_RD_TBL[1].u1p_pdu[1];
@@ -69292,68 +69408,147 @@ static U1    u1_s_Pict_MLIrqHpdCycChk(void)
                 u1_t_irqhpd_dpcd_auxsnd_set = u1_t_reg_read_result | (U1)PICT_ML_MLIRQHPD_DPCD_AUXSND_REGDATA2; /* bit[4:0] = 0x03 */
                 st_sp_MLIRQHPD_DPCD_AUXSND_READSET_SET_TBL[0].u1p_pdu[2] = u1_t_irqhpd_dpcd_auxsnd_set;         /* Register Write Data Set */
                 /* Next Process */
-                u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP9;
+                u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP17;
             }
             break;
-        case ML86294_IRQHPD_CYCCHK_STEP9:                                       /* STEP9 */
+        case ML86294_IRQHPD_CYCCHK_STEP17:                                       /* STEP17 */
             /* Set Register */
             u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_IRQHPD_DPCD_AUXSND_READSET_SET_WRINUM,
                                                           ML86294_IRQHPD_DPCD_AUXSND_READSET_SET, &u4_s_pict_ml_i2c_ack_wait_time,
                                                           st_sp_MLIRQHPD_DPCD_AUXSND_READSET_SET_TBL, &u2_s_pict_ml_reg_btwn_time);
             if(u1_t_reg_req_sts == (U1)TRUE){
                 /* Next Process */
-                u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP10;
+                u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP18;
             }
             break;
-        case ML86294_IRQHPD_CYCCHK_STEP10:                                      /* STEP10 */
+        case ML86294_IRQHPD_CYCCHK_STEP18:                                      /* STEP18 */
             /* Read Register */
-            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGREAD(&u2_s_pict_ml_regstep, &u4_s_pict_ml_i2c_ack_wait_time,
+            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGREAD(&u2_s_pict_ml_regstep, (U2)ML86294_WRINUM_I2C_READ,
+                                                           ML86294_I2C_READ, &u4_s_pict_ml_i2c_ack_wait_time,
                                                            st_sp_MLIRQHPD_DPCD_AUXCOM_RD1_TBL, &u2_s_pict_ml_reg_btwn_time);
             if(u1_t_reg_req_sts == (U1)TRUE){
                 /* Next Process */
-                u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP11;
+                u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP19;
             }
             break;
-        case ML86294_IRQHPD_CYCCHK_STEP11:                                      /* STEP11 */
+        case ML86294_IRQHPD_CYCCHK_STEP19:                                      /* STEP19 */
             /* Read Register */
-            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGREAD(&u2_s_pict_ml_regstep, &u4_s_pict_ml_i2c_ack_wait_time,
+            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGREAD(&u2_s_pict_ml_regstep, (U2)ML86294_WRINUM_I2C_READ,
+                                                           ML86294_I2C_READ, &u4_s_pict_ml_i2c_ack_wait_time,
                                                            st_sp_MLIRQHPD_DPCD_AUXCOM_RD2_TBL, &u2_s_pict_ml_reg_btwn_time);
             if(u1_t_reg_req_sts == (U1)TRUE){
                 /* Next Process */
-                u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP12;
+                u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP20;
             }
             break;
-        case ML86294_IRQHPD_CYCCHK_STEP12:                                      /* STEP12 */
+        case ML86294_IRQHPD_CYCCHK_STEP20:                                      /* STEP20 */
             u1_t_irqhpd_auxcom_read_sts1 = st_sp_MLIRQHPD_DPCD_AUXCOM_RD1_TBL[1].u1p_pdu[1];
             u1_t_irqhpd_auxcom_read_sts2 = st_sp_MLIRQHPD_DPCD_AUXCOM_RD2_TBL[1].u1p_pdu[1];
             if((u1_t_irqhpd_auxcom_read_sts1 == (U1)PICT_ML_MLIRQHPD_DPCD_AUXCOM_OK)
             && (u1_t_irqhpd_auxcom_read_sts2 == (U1)PICT_ML_MLIRQHPD_DPCD_AUXCOM_OK)){
-                /* Next Process */
-                u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP13;
+                if((u1_s_pict_irqhpd_notif_step == (U1)ML86294_IRQHPD_CYCCHK_STEP23)
+                || (u1_s_pict_irqhpd_notif_step == (U1)ML86294_IRQHPD_CYCCHK_STEP25)){
+                    /* Next Process */
+                    u1_s_pict_mlirqhpdcycchk_sts = u1_s_pict_irqhpd_notif_step;
+                }
+                else{
+                    /* failsafe */
+                    u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP0;
+                }
             }
             else{
                 /* Process Reset */
-                u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP14;
+                u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP21;
             }
             break;
-        case ML86294_IRQHPD_CYCCHK_STEP13:                                      /* STEP13 */
+        case ML86294_IRQHPD_CYCCHK_STEP21:                                       /* STEP21 */
             /* Set Register */
-            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_IRQHPD_DPCD_SET2_WRINUM,
-                                                          ML86294_IRQHPD_DPCD_SET2, &u4_s_pict_ml_i2c_ack_wait_time,
-                                                          st_sp_MLIRQHPD_DPCD_SET2_TBL, &u2_s_pict_ml_reg_btwn_time);
+            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_IRQHPD_DPCD_EDPTX_AUTO_LT_OFF_SET_WRINUM,
+                                                          ML86294_IRQHPD_DPCD_EDPTX_AUTO_LT_OFF_SET, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                          st_sp_MLIRQHPD_DPCD_EDPTX_AUTO_LT_OFF_SET_TBL, &u2_s_pict_ml_reg_btwn_time);
             if(u1_t_reg_req_sts == (U1)TRUE){
+                /* Next Process */
+                u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP22;
+            }
+            break;
+        case ML86294_IRQHPD_CYCCHK_STEP22:                                       /* STEP22 */
+            /* Set Register */
+            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_IRQHPD_DPCD_EDPTX_CONFIG_SET_WRINUM,
+                                                          ML86294_IRQHPD_DPCD_EDPTX_CONFIG_SET, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                          st_sp_MLIRQHPD_DPCD_EDPTX_CONFIG_SET_TBL, &u2_s_pict_ml_reg_btwn_time);
+            if(u1_t_reg_req_sts == (U1)TRUE){
+                u1_s_pict_mlrelinktrn_exec_flg = (U1)TRUE;
+                if((u1_s_pict_irqhpd_notif_step == (U1)ML86294_IRQHPD_CYCCHK_STEP23)
+                || (u1_s_pict_irqhpd_notif_step == (U1)ML86294_IRQHPD_CYCCHK_STEP25)){
+                    /* Next Process */
+                    u1_s_pict_mlirqhpdcycchk_sts = u1_s_pict_irqhpd_notif_step;
+                }
+                else{
+                    /* failsafe */
+                    u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP0;
+                }
+            }
+            break;
+        case ML86294_IRQHPD_CYCCHK_STEP23:                                       /* STEP23 */
+            u1_t_reg_read_result = st_sp_ML86294_MLIRQHPD_ASSERT_RD_TBL[1].u1p_pdu[1];
+            u1_t_irqhpd_dpcd_read_set = u1_t_reg_read_result | (U1)PICT_REG_MASK_BIT_0; /* bit[0] = 1 */
+            st_sp_ML86294_MLIRQHPDAUX_NOTIF_SET_TBL[0].u1p_pdu[2] = u1_t_irqhpd_dpcd_read_set;              /* Register Write Data Set */
+            /* Next Process */
+            u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP24;
+            break;
+        case ML86294_IRQHPD_CYCCHK_STEP24:                                       /* STEP24 */
+            /* Set Register */
+            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_IRQHPDAUX_NOTIF_SET_WRINUM,
+                                                          ML86294_IRQHPDAUX_NOTIF_SET, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                          st_sp_ML86294_MLIRQHPDAUX_NOTIF_SET_TBL, &u2_s_pict_ml_reg_btwn_time);
+            if(u1_t_reg_req_sts == (U1)TRUE){
+                /* Next Process */
+                u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP27;
+            }
+            break;
+        case ML86294_IRQHPD_CYCCHK_STEP25:                                       /* STEP25 */
+            u1_t_reg_read_result = st_sp_ML86294_MLIRQHPD_ASSERT_RD_TBL[1].u1p_pdu[1];
+            u1_t_irqhpd_dpcd_read_set = u1_t_reg_read_result | (U1)PICT_REG_MASK_BIT_1; /* bit[1] = 1 */
+            st_sp_ML86294_MLIRQHPDAUX_NOTIF_SET_TBL[0].u1p_pdu[2] = u1_t_irqhpd_dpcd_read_set;              /* Register Write Data Set */
+            /* Next Process */
+            u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP26;
+            break;
+        case ML86294_IRQHPD_CYCCHK_STEP26:                                       /* STEP26 */
+            /* Set Register */
+            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_IRQHPDAUX_NOTIF_SET_WRINUM,
+                                                          ML86294_IRQHPDAUX_NOTIF_SET, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                          st_sp_ML86294_MLIRQHPDAUX_NOTIF_SET_TBL, &u2_s_pict_ml_reg_btwn_time);
+            if(u1_t_reg_req_sts == (U1)TRUE){
+                /* Next Process */
+                u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP27;
+            }
+            break;
+
+        case ML86294_IRQHPD_CYCCHK_STEP27:                                       /* STEP27 */
+            if(u1_s_pict_mlrelinktrn_exec_flg == (U1)TRUE){
+                /* Set Register */
+                u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_IRQHPD_DPCD_EDPTX_AUTO_LT_ON_SET_WRINUM,
+                                                              ML86294_IRQHPD_DPCD_EDPTX_AUTO_LT_ON_SET, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                              st_sp_MLIRQHPD_DPCD_EDPTX_AUTO_LT_ON_SET_TBL, &u2_s_pict_ml_reg_btwn_time);
+                if(u1_t_reg_req_sts == (U1)TRUE){
+                    /* Next Process */
+                    u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP28;
+                }
+            }
+            else{
                 /* Function Completion */
                 u1_t_ret = (U1)TRUE;
                 /* Process Reset */
                 u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP0;
             }
             break;
-        case ML86294_IRQHPD_CYCCHK_STEP14:                                      /* STEP14 */
+        case ML86294_IRQHPD_CYCCHK_STEP28:                                       /* STEP28 */
             /* Set Register */
-            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_IRQHPD_DPCD_SET3_WRINUM,
-                                                          ML86294_IRQHPD_DPCD_SET3, &u4_s_pict_ml_i2c_ack_wait_time,
-                                                          st_sp_MLIRQHPD_DPCD_SET3_TBL, &u2_s_pict_ml_reg_btwn_time);
+            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_IRQHPD_DPCD_VIDEO_TX_START_SET_WRINUM,
+                                                          ML86294_IRQHPD_DPCD_VIDEO_TX_START_SET, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                          st_sp_MLIRQHPD_DPCD_VIDEO_TX_START_SET_TBL, &u2_s_pict_ml_reg_btwn_time);
             if(u1_t_reg_req_sts == (U1)TRUE){
+                u1_s_pict_mlrelinktrn_exec_flg = (U1)FALSE;
                 /* Function Completion */
                 u1_t_ret = (U1)TRUE;
                 /* Process Reset */
@@ -69362,7 +69557,7 @@ static U1    u1_s_Pict_MLIrqHpdCycChk(void)
             break;
         default:                                                                /* FAIL */
             /* Process Reset */
-            u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_FRZDAT_CYCCHK_STEP0;
+            u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP0;
             break;
     }
 
@@ -69376,9 +69571,9 @@ static U1    u1_s_Pict_MLIrqHpdCycChk(void)
 /*  Return:         TRUE (Function Completion) / FALSE (Function Incompletion)                                                       */
 /*===================================================================================================================================*/
 static U1   u1_s_Pict_MlCamAreaRegSet(void)
-{   /* 暫定　I/Fメモ 6.5.1.2 起動後のカメラ映像表示に関する設定フロー */
+{   /* 6.5.1.2 Configuration Flow for Displaying the Camera Video After Startup */
     static const ST_REG_WRI_REQ ML86294_CAMAREA_SET[ML86294_CAMAREA_SET_WRINUM] = {
-        /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
+        /*  Start address,   number of writes,   wait time between register accesses */
         {        0,         1,         0},  /* Bank0 */
         {        1,         4,         0},
         {        5,         4,         0},
@@ -69426,7 +69621,7 @@ static U1   u1_s_Pict_MlCamAreaRegSet(void)
         {      149,         2,         0}
     };
 
-    /* 可動（非格納） : Center Display [14inch.可動(非格納) 2560x1440 ヒーコン統合モデル] */
+    /* Movable (not stowed)  : Center Display [14-inch, movable (not stowed),  2560x1440, HEACON integrated model] */
     static const U1 u1_sp_ML86294_CAMAREA_SIZE_FUNC_STEP_MOV_UNSTOW[PICT_ML_CAN_CAM_SIZE_MAX] =
     {
         0xFFU,                                /* NONE *//* Not Use */
@@ -69440,14 +69635,14 @@ static U1   u1_s_Pict_MlCamAreaRegSet(void)
         ML86294_CAMAREA_SET_STEP8,            /* 1696x954  */
         ML86294_CAMAREA_SET_STEP9,            /* 1104x621  */
         ML86294_CAMAREA_SET_STEP10,           /* 16720x720 */
-        ML86294_CAMAREA_SET_STEP_MOV_RSV,     /* 予備(11) */
-        ML86294_CAMAREA_SET_STEP_MOV_RSV,     /* 予備(12) */
-        ML86294_CAMAREA_SET_STEP_MOV_RSV,     /* 予備(13) */
-        ML86294_CAMAREA_SET_STEP_MOV_RSV,     /* 予備(14) */
-        ML86294_CAMAREA_SET_STEP_MOV_RSV      /* 予備(15) */
+        ML86294_CAMAREA_SET_STEP_MOV_RSV,     /* Reserved(11) */
+        ML86294_CAMAREA_SET_STEP_MOV_RSV,     /* Reserved(12) */
+        ML86294_CAMAREA_SET_STEP_MOV_RSV,     /* Reserved(13) */
+        ML86294_CAMAREA_SET_STEP_MOV_RSV,     /* Reserved(14) */
+        ML86294_CAMAREA_SET_STEP_MOV_RSV      /* Reserved(15) */
     };
 
-    /* 可動（格納RHD） : Center Display [14inch.可動(格納RHD) 2560x1440 ヒーコン統合モデル] */
+    /* Movable (stowed RHD)  : Center Display [14-inch, movable (stowed RHD),  2560x1440, HEACON integrated model] */
     static const U1 u1_sp_ML86294_CAMAREA_SIZE_FUNC_STEP_MOV_STOW_RHD[PICT_ML_CAN_CAM_SIZE_MAX] =
     {
         0xFFU,                                /* NONE *//* Not Use */
@@ -69461,14 +69656,14 @@ static U1   u1_s_Pict_MlCamAreaRegSet(void)
         ML86294_CAMAREA_SET_STEP18,           /* 1696x954  */
         ML86294_CAMAREA_SET_STEP19,           /* 1104x621  */
         ML86294_CAMAREA_SET_STEP20,           /* 16720x720 */
-        ML86294_CAMAREA_SET_STEP_MOV_RSV,     /* 予備(11) */
-        ML86294_CAMAREA_SET_STEP_MOV_RSV,     /* 予備(12) */
-        ML86294_CAMAREA_SET_STEP_MOV_RSV,     /* 予備(13) */
-        ML86294_CAMAREA_SET_STEP_MOV_RSV,     /* 予備(14) */
-        ML86294_CAMAREA_SET_STEP_MOV_RSV      /* 予備(15) */
+        ML86294_CAMAREA_SET_STEP_MOV_RSV,     /* Reserved(11) */
+        ML86294_CAMAREA_SET_STEP_MOV_RSV,     /* Reserved(12) */
+        ML86294_CAMAREA_SET_STEP_MOV_RSV,     /* Reserved(13) */
+        ML86294_CAMAREA_SET_STEP_MOV_RSV,     /* Reserved(14) */
+        ML86294_CAMAREA_SET_STEP_MOV_RSV      /* Reserved(15) */
     };
 
-    /* 可動（格納LHD） : Center Display [14inch.可動(格納LHD) 2560x1440 ヒーコン統合モデル] */
+    /* Movable (stowed LHD)  : Center Display [14-inch, movable (stowed LHD),  2560x1440, HEACON integrated model] */
     static const U1 u1_sp_ML86294_CAMAREA_SIZE_FUNC_STEP_MOV_STOW_LHD[PICT_ML_CAN_CAM_SIZE_MAX] =
     {
         0xFFU,                                /* NONE *//* Not Use */
@@ -69482,14 +69677,14 @@ static U1   u1_s_Pict_MlCamAreaRegSet(void)
         ML86294_CAMAREA_SET_STEP28,           /* 1696x954  */
         ML86294_CAMAREA_SET_STEP29,           /* 1104x621  */
         ML86294_CAMAREA_SET_STEP30,           /* 16720x720 */
-        ML86294_CAMAREA_SET_STEP_MOV_RSV,     /* 予備(11) */
-        ML86294_CAMAREA_SET_STEP_MOV_RSV,     /* 予備(12) */
-        ML86294_CAMAREA_SET_STEP_MOV_RSV,     /* 予備(13) */
-        ML86294_CAMAREA_SET_STEP_MOV_RSV,     /* 予備(14) */
-        ML86294_CAMAREA_SET_STEP_MOV_RSV      /* 予備(15) */
+        ML86294_CAMAREA_SET_STEP_MOV_RSV,     /* Reserved(11) */
+        ML86294_CAMAREA_SET_STEP_MOV_RSV,     /* Reserved(12) */
+        ML86294_CAMAREA_SET_STEP_MOV_RSV,     /* Reserved(13) */
+        ML86294_CAMAREA_SET_STEP_MOV_RSV,     /* Reserved(14) */
+        ML86294_CAMAREA_SET_STEP_MOV_RSV      /* Reserved(15) */
     };
 
-    /* 固定           : Center Display [14inch.固定 2560x1440 ヒーコン統合モデル] */
+    /* Fixed                 : Center Display [14-inch, fixed,                2560x1440, HEACON integrated model] */
     static const U1 u1_sp_ML86294_CAMAREA_SIZE_FUNC_STEP_FIXED[PICT_ML_CAN_CAM_SIZE_MAX] =
     {
         0xFFU,                                /* NONE *//* Not Use */
@@ -69503,11 +69698,11 @@ static U1   u1_s_Pict_MlCamAreaRegSet(void)
         ML86294_CAMAREA_SET_STEP38,           /* 1696x954  */
         ML86294_CAMAREA_SET_STEP39,           /* 1104x621  */
         ML86294_CAMAREA_SET_STEP40,           /* 16720x720 */
-        ML86294_CAMAREA_SET_STEP_FIXED_RSV,   /* 予備(11) */
-        ML86294_CAMAREA_SET_STEP_FIXED_RSV,   /* 予備(12) */
-        ML86294_CAMAREA_SET_STEP_FIXED_RSV,   /* 予備(13) */
-        ML86294_CAMAREA_SET_STEP_FIXED_RSV,   /* 予備(14) */
-        ML86294_CAMAREA_SET_STEP_FIXED_RSV    /* 予備(15) */
+        ML86294_CAMAREA_SET_STEP_FIXED_RSV,   /* Reserved(11) */
+        ML86294_CAMAREA_SET_STEP_FIXED_RSV,   /* Reserved(12) */
+        ML86294_CAMAREA_SET_STEP_FIXED_RSV,   /* Reserved(13) */
+        ML86294_CAMAREA_SET_STEP_FIXED_RSV,   /* Reserved(14) */
+        ML86294_CAMAREA_SET_STEP_FIXED_RSV    /* Reserved(15) */
     };
 
     U1      u1_t_ret;                                               /* Function Completion Status  */
@@ -69529,11 +69724,11 @@ static U1   u1_s_Pict_MlCamAreaRegSet(void)
                 if((u1_t_camarea_camsize <  (U1)PICT_ML_CAN_CAM_SIZE_MAX)
                 && (u1_t_camarea_camsize != (U1)PICT_ML_CAN_CAM_SIZE_NONE)){
                     if (u1_t_cid_type == (U1)PICT_ML_CID_TYPE_MOV){
-                        /* u1_g_DISP 格納・非格納状態を取得する */
-                        /* 暫定 カメラのIF接続 非格納固定 */
-                        u1_t_disp_state = (U1)PICT_ML_CAN_MOV_UNSTOW;
+                        /* Get the stowed/unstowed state */
+                        /* 暫定 カメラのIF接続 格納固定 */
+                        u1_t_disp_state = (U1)PICT_ML_CAN_MOV_STOW;
                         if(u1_t_disp_state == (U1)PICT_ML_CAN_MOV_STOW){
-                            /* u1_g_DISP 格納・非格納状態を取得する */
+                            /* Get the handle state */
                             /* 暫定 カメラのIF接続 左ハンドル固定 */
                             u1_t_handle = (U1)PICT_ML_CAN_HD_LHD;
                             if(u1_t_handle ==  (U1)PICT_ML_CAN_HD_LHD){
@@ -70089,7 +70284,7 @@ static U1   u1_s_Pict_MlCamAreaRegSet(void)
                 u1_s_pict_mlcamarea_set_sts = (U1)ML86294_CAMAREA_SET_STEP0;
             }
             break;
-        case ML86294_CAMAREA_SET_STEP_MOV_RSV:                                /* 予備 */
+        case ML86294_CAMAREA_SET_STEP_MOV_RSV:                                /* Reserved */
             /* Set Register */
             u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_CAMAREA_SET_WRINUM,
                                                           ML86294_CAMAREA_SET, &u4_s_pict_ml_i2c_ack_wait_time,
@@ -70105,7 +70300,7 @@ static U1   u1_s_Pict_MlCamAreaRegSet(void)
                 u1_s_pict_mlcamarea_set_sts = (U1)ML86294_CAMAREA_SET_STEP0;
             }
             break;
-        case ML86294_CAMAREA_SET_STEP_FIXED_RSV:                               /* 予備 */
+        case ML86294_CAMAREA_SET_STEP_FIXED_RSV:                               /* Reserved */
             /* Set Register */
             u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_CAMAREA_SET_WRINUM,
                                                           ML86294_CAMAREA_SET, &u4_s_pict_ml_i2c_ack_wait_time,
@@ -70515,7 +70710,7 @@ U1    u1_g_Pict_MlCamPathSetByp(void)
 /*  Arguments:      -                                                                                                                */
 /*  Return:         TRUE (Function Completion) / FALSE (Function Incompletion)                                                       */
 /*===================================================================================================================================*/
-U1    u1_s_Pict_MLMIPISyncCheck(void)
+static U1    u1_s_Pict_MLMIPISyncCheck(void)
 {   /* 暫定　I/Fメモ 6.7.3 カメラ映像入力の同期検出 */
     U1      u1_t_ret;                                               /* Function Completion Status  */
     U1      u1_t_reg_req_sts;
@@ -70538,7 +70733,8 @@ U1    u1_s_Pict_MLMIPISyncCheck(void)
             break;
         case ML86294_REGGET_STEP2:                          /* STEP2 */
             /* Read Register */
-            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGREAD(&u2_s_pict_ml_regstep, &u4_s_pict_ml_i2c_ack_wait_time,
+            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGREAD(&u2_s_pict_ml_regstep, (U2)ML86294_WRINUM_I2C_READ,
+                                                           ML86294_I2C_READ, &u4_s_pict_ml_i2c_ack_wait_time,
                                                             st_sp_ML86294_MIPISYNCSTATUS_RD_TBL, &u2_s_pict_ml_reg_btwn_time);
             if(u1_t_reg_req_sts == (U1)TRUE){
                 u1_t_reg_read_result = st_sp_ML86294_MIPISYNCSTATUS_RD_TBL[1].u1p_pdu[1];
@@ -70619,7 +70815,8 @@ static U1    u1_s_Pict_MlRcvVIcStatusNty(void)
             break;
         case ML86294_RCVVICSTATUS_STEP1:                          /* STEP1 */
             /* Read Register */
-            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGREAD(&u2_s_pict_ml_regstep, &u4_s_pict_ml_i2c_ack_wait_time,
+            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGREAD(&u2_s_pict_ml_regstep, (U2)ML86294_WRINUM_I2C_READ,
+                                                           ML86294_I2C_READ, &u4_s_pict_ml_i2c_ack_wait_time,
                                                            st_sp_ML86294_MlRCVVICSTATUS_RD_TBL, &u2_s_pict_ml_reg_btwn_time);
             if(u1_t_reg_req_sts == (U1)TRUE){
                 u1_t_reg_read_result = st_sp_ML86294_MlRCVVICSTATUS_RD_TBL[1].u1p_pdu[1];
@@ -70881,7 +71078,7 @@ static void    vd_s_Pict_MLDevRst(void)
         case ML86294_DEV_RST_STEP0:                                        /* STEP0 */
             /* DEV_RST State */
             u1_s_pict_ml_state = (U1)ML86294_SEQ_DEV_RST;
-        
+
             /* Notification the SiP side of the video IC malfunction */
             u1_s_pict_mldevrst_notif = (U1)PICT_ML_DEVRST_ACT;
 
@@ -70921,6 +71118,261 @@ static void    vd_s_Pict_MLDevRst(void)
 }
 
 /*===================================================================================================================================*/
+/*  void    vd_s_Pict_MLSeqIdle(void)                                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_Pict_MLSeqIdle(void)
+{
+    /* Timer Clear */
+    u2_s_pict_ml_cycchk_timer = (U2)0U;
+    u2_s_pict_ml_frzdat_cycchk_timer = (U2)0U;
+    u2_s_pict_ml_irqhpd_cycchk_timer = (U2)0U;
+
+    /* Power ON Check */
+    if(Mcu_OnStep_EIZOIC_OVRALL == (U1)PICT_ML_PWRON_COMP){
+        /* State Update */
+        u1_s_pict_ml_state = (U1)ML86294_SEQ_CYC;
+
+        /* Poling Timer Start */
+        u2_s_pict_ml_cycchk_timer++;
+        u2_s_pict_ml_frzdat_cycchk_timer++;
+        u2_s_pict_ml_irqhpd_cycchk_timer++;
+
+        /* Device Reset Counter Clear */
+        u1_s_pict_mlcyc_dev_reset_cnt = (U1)0U;
+
+        /* Video IC Freeze Counter Clear */
+        u1_s_pict_mlvicfrz_cause_cnt = (U1)0U;
+
+        /* Freeze Cycle Check Counter Clear */
+        u1_s_pict_mlfrzdatcyc_n1_cnt = (U1)0U;
+        u1_s_pict_mlfrzdatcyc_n2_cnt = (U1)0U;
+    }
+}
+
+/*===================================================================================================================================*/
+/*  void    vd_s_Pict_MLSeqCyc(void)                                                                                                 */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_Pict_MLSeqCyc(void)
+{
+    static const U2 ML86294_FRZDEC_INT_WAIT = (U2)(40U / ML86294_TASK_TIME);        /* t5 min:40ms */
+    static const U2 ML86294_CYCCHK_POLING = (U2)(100U / ML86294_TASK_TIME);         /* t20 min:100ms */
+    static const U2 ML86294_FRZDAT_CYCCHK_POLING = (U2)(20U / ML86294_TASK_TIME);   /* t21 min:20ms */
+    static const U2 ML86294_IRQHPC_CYCCHK_POLING = (U2)(20U / ML86294_TASK_TIME);   /* t22 min:20ms */
+
+    U1      u1_t_func_sts;                                          /* Function Status */
+    U1      u1_t_dio_read_result;                                   /* I/O Port Read Result */
+    U1      u1_t_time_chk_flg;                                      /* Poling Time Check Flag */
+    U4      u4_t_cond_met_flg_tmp;
+    U4      u4_t_proc_que_tmp;
+
+    /* Function incomplete */
+    u1_t_func_sts = (U1)FALSE;
+
+    /* Freeze Detection Intruput Check */
+    if(u1_s_pict_ml_frzint_chk_flg == (U1)TRUE){
+        u1_t_dio_read_result = (U1)u1_PICT_ML_GET_V_IC_STATUS1();
+        if((u1_t_dio_read_result == (U1)PICT_ML_IO_STS_HIGH)
+        && (u1_s_pict_ml_pre_v_ic_sts1_sts == (U1)PICT_ML_IO_STS_LOW)){     /* V-IC-STATUS1 = L -> H */
+            u1_s_pict_mlrcvvicstatus_flg = (U1)TRUE;
+        }
+        /* Previous State Update */
+        u1_s_pict_ml_pre_v_ic_sts1_sts = u1_t_dio_read_result;
+    }
+
+    /* Freeze Detection Intruput Wait Time Check */
+    if(u1_s_pict_mlrcvvicstatus_flg == (U1)TRUE){
+        u1_t_time_chk_flg = u1_s_Pict_Ml86294_TimChk((U2)u2_s_pict_mlrcvvicstatus_timer, ML86294_FRZDEC_INT_WAIT);
+        if(u1_t_time_chk_flg == (U1)TRUE){
+            vd_s_Pict_ProcessMng((U4)ML86294_PROC_FRZINT);
+        }
+        else{
+            u2_s_pict_mlrcvvicstatus_timer++;
+        }
+    }
+    else{
+        u2_s_pict_mlrcvvicstatus_timer = (U1)0;
+    }
+
+    /* ML86294 Cycle Check Poling Check */
+    u1_t_time_chk_flg = u1_s_Pict_Ml86294_TimChk((U2)u2_s_pict_ml_cycchk_timer, ML86294_CYCCHK_POLING);
+    if(u1_t_time_chk_flg == (U1)TRUE){
+        vd_s_Pict_ProcessMng((U4)ML86294_PROC_CYCCHK);
+    }
+    else{
+        u2_s_pict_ml_cycchk_timer++;
+    }
+
+    /* Freeze Cycle Check Poling Check */
+    u1_t_time_chk_flg = u1_s_Pict_Ml86294_TimChk((U2)u2_s_pict_ml_frzdat_cycchk_timer, ML86294_FRZDAT_CYCCHK_POLING);
+    if(u1_t_time_chk_flg == (U1)TRUE){
+        vd_s_Pict_ProcessMng((U4)ML86294_PROC_FRYZDAT_CYCCHK);
+    }
+    else{
+        u2_s_pict_ml_frzdat_cycchk_timer++;
+    }
+
+    /* IRQ_HPD Cycle Check Poling Check */
+    u1_t_time_chk_flg = u1_s_Pict_Ml86294_TimChk((U2)u2_s_pict_ml_irqhpd_cycchk_timer, ML86294_IRQHPC_CYCCHK_POLING);
+    if(u1_t_time_chk_flg == (U1)TRUE){
+        vd_s_Pict_ProcessMng((U4)ML86294_PROC_IRQHPD_CYCCHK);
+    }
+    else{
+        u2_s_pict_ml_irqhpd_cycchk_timer++;
+    }
+
+    /* Process Condition Met Flag Fail Check */
+    u4_t_cond_met_flg_tmp = u4_s_pict_ml_proc_cond_met_flg & (U4)ML86294_PROC_RESERVE;
+
+    if((u1_s_pict_ml_proc_exe_cnt < (U1)ML86294_PROC_NUM)
+    && (u4_s_pict_ml_proc_cond_met_flg != (U4)ML86294_PROC_NON)
+    && (u4_t_cond_met_flg_tmp == (U4)0)){
+        switch (u4_sp_pict_ml_proc_que[u1_s_pict_ml_proc_exe_cnt]){
+            case ML86294_PROC_CYCCHK:                                   /* ML86294 Cycle Check */
+                u1_t_func_sts = (U1)u1_s_Pict_MLCycChk();
+                if(u1_t_func_sts == (U1)TRUE){
+                    /* Poling Timer Clear */
+                    u2_s_pict_ml_cycchk_timer = (U1)0U;
+                }
+                break;
+            case ML86294_PROC_FRYZDAT_CYCCHK:                           /* Freeze Cycle Check */
+                u1_t_func_sts = (U1)u1_s_Pict_MLFrzDatCycChk();
+                if(u1_t_func_sts == (U1)TRUE){
+                    /* Poling Timer Clear */
+                    u2_s_pict_ml_frzdat_cycchk_timer = (U1)0U;
+                }
+                break;
+            case ML86294_PROC_IRQHPD_CYCCHK:                            /* IRQ_HPD Cycle Check */
+                u1_t_func_sts = (U1)u1_s_Pict_MLIrqHpdCycChk();
+                if(u1_t_func_sts == (U1)TRUE){
+                    /* Poling Timer Clear */
+                    u2_s_pict_ml_irqhpd_cycchk_timer = (U1)0U;
+                }
+                break;
+            case ML86294_PROC_CAMAREA_SET:
+                u1_t_func_sts = (U1)u1_s_Pict_MlCamAreaRegSet();
+                if(u1_t_func_sts == (U1)TRUE){
+                    /* Excuted Flag ON */
+                    u1_s_pict_mlcamarearegset_flg = (U1)TRUE;
+                }
+                break;
+            case ML86294_PROC_MIPI_ON:
+                u1_t_func_sts = (U1)u1_s_Pict_MlMipiRegSetOn();
+                if(u1_t_func_sts == (U1)TRUE){
+                    /* Excuted Flag ON */
+                    u1_s_pict_mlmipiregset_on_flg = (U1)TRUE;
+                }
+                break;
+            case ML86294_PROC_MIPI_OFF:
+                u1_t_func_sts = (U1)u1_s_Pict_MlMipiRegSetOff();
+                if(u1_t_func_sts == (U1)TRUE){
+                    /* Excuted Flag ON */
+                    u1_s_pict_mlmipiregset_off_flg = (U1)TRUE;
+                }
+                break;
+            case ML86294_PROC_FRZCHG_ON:
+                u1_t_func_sts = (U1)u1_s_Pict_MlFrzChgRegSetOn();
+                if(u1_t_func_sts == (U1)TRUE){
+                    /* Excuted Flag ON */
+                    u1_s_pict_mlfrzchgregset_on_flg = (U1)TRUE;
+                }
+                break;
+            case ML86294_PROC_FRZCHG_OFF:
+                u1_t_func_sts = (U1)u1_s_Pict_MlFrzChgRegSetOff();
+                if(u1_t_func_sts == (U1)TRUE){
+                    /* Excuted Flag ON */
+                    u1_s_pict_mlfrzchgregset_off_flg = (U1)TRUE;
+                }
+                break;
+            case ML86294_PROC_CAMPATH_NORMAL:
+                u1_t_func_sts = (U1)u1_s_Pict_MlCamPathRegSetNml();
+                if(u1_t_func_sts == (U1)TRUE){
+                    /* Excuted Flag ON */
+                    u1_s_pict_mlfrzcampathregset_nml_flg = (U1)TRUE;
+                }
+                break;
+            case ML86294_PROC_CAMPATH_BYPASS:
+                u1_t_func_sts = (U1)u1_s_Pict_MlCamPathRegSetByp();
+                if(u1_t_func_sts == (U1)TRUE){
+                    /* Excuted Flag ON */
+                    u1_s_pict_mlfrzcampathregset_byp_flg = (U1)TRUE;
+                }
+                break;
+            case ML86294_PROC_MIPISYNCCHK:
+                u1_t_func_sts = (U1)u1_s_Pict_MLMIPISyncCheck();
+                if(u1_t_func_sts == (U1)TRUE){
+                    /* Excuted Flag ON */
+                    u1_s_pict_mlmipisynccheck_flg = (U1)TRUE;
+                }
+                break;
+            case ML86294_PROC_FRZINT:
+                u1_t_func_sts = (U1)u1_s_Pict_MlRcvVIcStatusNty();
+                if(u1_t_func_sts == (U1)TRUE){
+                    /* V-IC-STATUS1 Interrupt Flag Clear */
+                    u1_s_pict_mlrcvvicstatus_flg = (U1)FALSE;
+                    /* V-IC-STATUS1 Interrupt Wait Timer Clear */
+                    u2_s_pict_mlrcvvicstatus_timer = (U2)0U;
+                }
+                break;
+            case ML86294_PROC_I2C_MUTE_ON:
+                u1_t_func_sts = (U1)u1_s_Pict_MlI2cMuteRegSetOn();
+                if(u1_t_func_sts == (U1)TRUE){
+                    /* Excuted Flag ON */
+                    u1_s_pict_mli2cmuteregset_on_flg = (U1)TRUE;
+                }
+                break;
+            case ML86294_PROC_I2C_MUTE_OFF:
+                u1_t_func_sts = (U1)u1_s_Pict_MlI2cMuteRegSetOff();
+                if(u1_t_func_sts == (U1)TRUE){
+                    /* Excuted Flag ON */
+                    u1_s_pict_mli2cmuteregset_off_flg = (U1)TRUE;
+                }
+                break;
+            case ML86294_PROC_NOAIS_MUTE_ON:
+                u1_t_func_sts = (U1)u1_s_Pict_MlNoAisMuteRegSetOn();
+                if(u1_t_func_sts == (U1)TRUE){
+                    /* Excuted Flag ON */
+                    u1_s_pict_mlnoaismuteregset_on_flg = (U1)TRUE;
+                }
+                break;
+            case ML86294_PROC_NOAIS_MUTE_OFF:
+                u1_t_func_sts = (U1)u1_s_Pict_MlNoAisMuteRegSetOff();
+                if(u1_t_func_sts == (U1)TRUE){
+                    /* Excuted Flag ON */
+                    u1_s_pict_mlnoaismuteregset_off_flg = (U1)TRUE;
+                }
+                break;
+            default:
+                vd_s_Pict_ProcessInit();
+                break;
+        }
+
+        if(u1_t_func_sts == (U1)TRUE){
+            /* Process Condition Met Flag Clear */
+            u4_t_proc_que_tmp = u4_sp_pict_ml_proc_que[u1_s_pict_ml_proc_exe_cnt];
+            u4_s_pict_ml_proc_cond_met_flg &= ~u4_t_proc_que_tmp;
+            /* Process Queue Clear */
+            u4_sp_pict_ml_proc_que[u1_s_pict_ml_proc_exe_cnt] = (U4)0U;
+            /* Counter Update */
+            if(u1_s_pict_ml_proc_exe_cnt == (U1)((U1)ML86294_PROC_NUM - (U1)1U)){
+                u1_s_pict_ml_proc_exe_cnt = (U1)0;
+            }
+            else{
+                u1_s_pict_ml_proc_exe_cnt++;
+            }
+        }
+    }
+    else{
+        vd_s_Pict_ProcessInit();
+    }
+}
+
+/*===================================================================================================================================*/
 /*  U1    u1_g_Pict_MlDevRstGet(void)                                                                                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      u1_a_reg_read_result  :  Register Read Result                                                                    */
@@ -70930,3 +71382,424 @@ U1    u1_g_Pict_MlDevRstGet(void)
 {
     return(u1_s_pict_mldevrst_notif);
 }
+
+/*===================================================================================================================================*/
+/*  void    vd_s_Pict_Polling_VIcRst(void)                                                                                           */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*  Note:           /V-IC-RST=Hi 監視                                                                                                */
+/*===================================================================================================================================*/
+static void     vd_s_Pict_Polling_VIcRst( void )
+{
+    U1   u1_t_dio_ret;
+
+    u1_t_dio_ret =   Dio_ReadChannel(MCU_PORT_V_IC_RST);
+
+    if(u1_t_dio_ret  ==  (U1)STD_LOW){
+        vd_g_Pict_Ml86294_Init();
+    }
+    else if((u1_t_dio_ret  ==  (U1)STD_HIGH) &&
+        (u2_s_pict_polling_vicrst < (U2)MCU_SYS_COUNTTIME_FIN)){
+        u2_s_pict_polling_vicrst++;
+    }
+    else{
+        /* do nothing */
+    }
+}
+
+/*===================================================================================================================================*/
+/*  void    vd_s_Pict_RegSetting(void)                                                                                               */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*  Note:           7.レジスタ設定                                                                                                    */
+/*===================================================================================================================================*/
+static void     vd_s_Pict_RegSetting( void )
+{
+    static const U2 MCU_PWRON_TIME_EIZOIC  =   (ML86294_TASK_TIME / ML86294_TASK_TIME);    /* min:1ms */
+
+    U1   u1_t_time_chk;
+
+    u1_t_time_chk    =   u1_s_Pict_Ml86294_TimChk(u2_s_pict_polling_vicrst, MCU_PWRON_TIME_EIZOIC);
+
+    if(u1_t_time_chk ==  (U1)TRUE){
+        vd_s_Pict_SetReg();
+    }
+}
+
+/*===================================================================================================================================*/
+/*  void    vd_s_Pict_SetReg(void)                                                                                                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*  Note:           映像IC初期化処理 レジスタ設定                                                                                      */
+/*===================================================================================================================================*/
+static void     vd_s_Pict_SetReg( void )
+{
+    /* 6.2 初期化処理 */
+    static const ST_REG_WRI_REQ EIZOIC_INISET[MCU_WRINUM_EIZOIC_INISET] = {
+        /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
+        {        0,         1,         0},
+        {        1,         1,         0},
+        {        2,         1,         0},
+        {        3,         4,         0},
+        {        7,         2,         0},
+        {        9,         1,         0},
+        {       10,         1,         0},
+        {       11,         1,         0},
+        {       12,         4,         0},
+        {       16,         4,         0},
+        {       20,         4,         0},
+        {       24,         4,         0},
+        {       28,         2,         0},
+        {       30,         1,         0},
+        {       31,         1,         0},
+        {       32,         1,         0},
+        {       33,         2,         0},
+        {       35,         1,         0},
+        {       36,         4,         0},
+        {       40,         4,         0},
+        {       44,         4,         0},
+        {       48,         4,         0},
+        {       52,         1,         0},
+        {       53,         1,         0},
+        {       54,         4,         0},
+        {       58,         4,         0},
+        {       62,         4,         0},
+        {       66,         4,         0},
+        {       70,         4,         0},
+        {       74,         4,         0},
+        {       78,         4,         0},
+        {       82,         4,         0},
+        {       86,         4,         0},
+        {       90,         4,         0},
+        {       94,         4,         0},
+        {       98,         3,         0},
+        {      101,         1,         0},
+        {      102,         4,         0},
+        {      106,         4,         0},
+        {      110,         4,         0},
+        {      114,         4,         0},
+        {      118,         4,         0},
+        {      122,         4,         0},
+        {      126,         4,         0},
+        {      130,         4,         0},
+        {      134,         4,         0},
+        {      138,         4,         0},
+        {      142,         4,         0},
+        {      146,         4,         0},
+        {      150,         4,         0},
+        {      154,         4,         0},
+        {      158,         4,         0},
+        {      162,         1,         0},
+        {      163,         2,         0},
+        {      165,         1,         0},
+        {      166,         3,         0},
+        {      169,         1,         0},
+        {      170,         4,         0},
+        {      174,         3,         0},
+        {      177,         1,         0},
+        {      178,         2,         0},
+        {      180,         1,         0},
+        {      181,         1,         0},
+        {      182,         1,         0},
+        {      183,         4,         0},
+        {      187,         2,         0},
+        {      189,         1,         0},
+        {      190,         3,         0},
+        {      193,         1,         0},
+        {      194,         1,         0},
+        {      195,         1,         0},
+        {      196,         3,         0},
+        {      199,         1,         0},
+        {      200,         1,         0},
+        {      201,         1,         0},
+        {      202,         4,         0},
+        {      206,         4,         0},
+        {      210,         4,         0},
+        {      214,         4,         0},
+        {      218,         4,         0},
+        {      222,         4,         0},
+        {      226,         4,         0},
+        {      230,         4,         0},
+        {      234,         4,         0},
+        {      238,         4,         0},
+        {      242,         4,         0},
+        {      246,         4,         0},
+        {      250,         4,         0},
+        {      254,         4,         0},
+        {      258,         4,         0},
+        {      262,         4,         0},
+        {      266,         4,         0},
+        {      270,         4,         0},
+        {      274,         4,         0},
+        {      278,         4,         0},
+        {      282,         4,         0},
+        {      286,         4,         0},
+        {      290,         4,         0},
+        {      294,         4,         0},
+        {      298,         4,         0},
+        {      302,         4,         0},
+        {      306,         4,         0},
+        {      310,         4,         0},
+        {      314,         4,         0},
+        {      318,         4,         0},
+        {      322,         4,         0},
+        {      326,         4,         0},
+        {      330,         1,         0},
+        {      331,         4,         0},
+        {      335,         4,         0},
+        {      339,         4,         0},
+        {      343,         4,         0},
+        {      347,         4,         0},
+        {      351,         4,         0},
+        {      355,         4,         0},
+        {      359,         4,         0},
+        {      363,         4,         0},
+        {      367,         4,         0},
+        {      371,         4,         0},
+        {      375,         4,         0},
+        {      379,         4,         0},
+        {      383,         4,         0},
+        {      387,         4,         0},
+        {      391,         4,         0},
+        {      395,         4,         0},
+        {      399,         4,         0},
+        {      403,         4,         0},
+        {      407,         4,         0},
+        {      411,         4,         0},
+        {      415,         4,         0},
+        {      419,         4,         0},
+        {      423,         4,         0},
+        {      427,         4,         0},
+        {      431,         4,         0},
+        {      435,         4,         0},
+        {      439,         4,         0},
+        {      443,         4,         0},
+        {      447,         4,         0},
+        {      451,         4,         0},
+        {      455,         4,         0},
+        {      459,         1,         0},
+        {      460,         4,         0},
+        {      464,         4,         0},
+        {      468,         4,         0},
+        {      472,         4,         0},
+        {      476,         4,         0},
+        {      480,         4,         0}
+    };
+    /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
+    static const ST_REG_WRI_REQ EIZOIC_SIPSET[MCU_WRINUM_EIZOIC_SIPSET] = {
+        /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
+        {        0,         1,         0},
+        {        1,         1,         0},
+        {        2,         1,         0},
+        {        3,         1,         0}
+    };
+    /* 6.5.1.1 起動時のカメラ映像表示に関する設定 */
+    /* どのカメラサイズでも書込み位置と個数は共通 */
+    static const ST_REG_WRI_REQ EIZOIC_CAMSET[MCU_WRINUM_EIZOIC_CAMSET] = {
+        /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
+        {        0,         1,         0},
+        {        1,         4,         0},
+        {        5,         4,         0},
+        {        9,         4,         0},
+        {       13,         4,         0},
+        {       17,         4,         0},
+        {       21,         2,         0},
+        {       23,         1,         0},
+        {       24,         4,         0},
+        {       28,         4,         0},
+        {       32,         4,         0},
+        {       36,         4,         0},
+        {       40,         1,         0},
+        {       41,         4,         0},
+        {       45,         4,         0},
+        {       49,         1,         0},
+        {       50,         4,         0},
+        {       54,         4,         0},
+        {       58,         4,         0},
+        {       62,         4,         0},
+        {       66,         4,         0},
+        {       70,         4,         0},
+        {       74,         4,         0},
+        {       78,         4,         0},
+        {       82,         4,         0},
+        {       86,         4,         0},
+        {       90,         4,         0},
+        {       94,         4,         0},
+        {       98,         4,         0},
+        {      102,         4,         0},
+        {      106,         4,         0},
+        {      110,         4,         0},
+        {      114,         4,         0},
+        {      118,         2,         0},
+        {      120,         1,         0},
+        {      121,         2,         0},
+        {      123,         1,         0},
+        {      124,         4,         0},
+        {      128,         1,         0},
+        {      129,         4,         0},
+        {      133,         4,         0},
+        {      137,         4,         0},
+        {      141,         4,         0},
+        {      145,         4,         0},
+        {      149,         2,         0}
+    };
+    /* 6.4.1 別体センターディスプレイへの映像出力ON ( eDP出力ON ) */
+    static const ST_REG_WRI_REQ EIZOIC_CNTDSPSET[MCU_WRINUM_EIZOIC_CNTDSPSET] = {
+        /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
+        {        0,         1,         0},
+        {        1,         1,         0},
+        {        2,         1,         0},
+        {        3,         4,         0},
+        {        7,         1,         0},
+        {        8,         4,         0},
+        {       12,         1,         0},
+        {       13,         1,         0},
+        {       14,         4,         0},
+        {       18,         4,         0},
+        {       22,         4,         0},
+        {       26,         4,         0},
+        {       30,         4,         0},
+        {       34,         1,         0},
+        {       35,         1,         0},
+        {       36,         1,         0},
+        {       37,         1,         0}
+    };
+    /* 6.4.1 別体センターディスプレイへの映像出力ON ( eDP出力ON ) */
+    static const ST_REG_WRI_REQ EIZOIC_HPDPLUGSET[MCU_WRINUM_EIZOIC_HPDPLUGSET] = {
+        /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
+        {        0,         1,         0},
+    };
+
+    U1   u1_t_sts;        /* 書込み状況 */
+    U1   u1_t_rg_read;
+    U1   u1_t_rg_set;
+    U1   u1_t_time_chk;
+    U1   u1_t_hpd_chk;
+
+    u1_t_sts         = (U1)FALSE;
+
+    if(u2_s_pict_polling_wait < (U2)U2_MAX){
+        u2_s_pict_polling_wait++;
+    }
+
+    switch (Mcu_OnStep_EIZOIC_OVRALL)
+    {
+    case MCU_STEP_EIZOIC_OVERALL_0:
+        /* GVIF3送信仕様の"eDP設定"完了まで待機 */
+        if(u1_g_gvifsnd_gvif3tx_overall_step == MCU_STEP_GVIF3TX_OVERALL_3){
+            Mcu_OnStep_EIZOIC_OVRALL = (U1)MCU_STEP_EIZOIC_OVERALL_1;
+        }
+        break;
+
+    case MCU_STEP_EIZOIC_OVERALL_1:
+        /* レジスタ書込み処理 */
+        u1_t_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)MCU_WRINUM_EIZOIC_INISET,
+                                                EIZOIC_INISET, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                st_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT, &u2_s_pict_ml_reg_btwn_time);
+
+        if(u1_t_sts == (U1)TRUE){
+            /* 全書込み完了 次状態に遷移 */
+            Mcu_OnStep_EIZOIC_OVRALL = (U1)MCU_STEP_EIZOIC_OVERALL_2;
+        }
+        break;
+
+    case MCU_STEP_EIZOIC_OVERALL_2:
+        /* レジスタ書込み処理 */
+        u1_t_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)MCU_WRINUM_EIZOIC_SIPSET,
+                                                EIZOIC_SIPSET, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                st_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_SIP, &u2_s_pict_ml_reg_btwn_time);
+
+        if(u1_t_sts == (U1)TRUE){
+            /* 全書込み完了 次状態に遷移 */
+            Mcu_OnStep_EIZOIC_OVRALL = (U1)MCU_STEP_EIZOIC_OVERALL_3;
+        }
+        break;
+
+    case MCU_STEP_EIZOIC_OVERALL_3:
+        /* レジスタ書込み処理 */
+        /* ToDo：MCUにバックアップしている「カメラシステム種別」と「カメラ映像の切り出しサイズ 」に基づき設定値を切り替えする。現時点ではカメラなし決め打ち */
+        u1_t_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)MCU_WRINUM_EIZOIC_CAMSET,
+                                                EIZOIC_CAMSET, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                st_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON, &u2_s_pict_ml_reg_btwn_time);
+
+        if(u1_t_sts == (U1)TRUE){
+            /* 全書込み完了 次状態に遷移 */
+            Mcu_OnStep_EIZOIC_OVRALL = (U1)MCU_STEP_EIZOIC_OVERALL_4;
+            u2_s_pict_polling_wait = (U2)0U;
+        }
+        break;
+    case MCU_STEP_EIZOIC_OVERALL_4:
+
+        u1_t_time_chk    =   u1_s_Pict_Ml86294_TimChk(u2_s_pict_polling_wait, WAITTIME_T4);
+
+        if(u1_t_time_chk ==  (U1)TRUE){
+            u1_t_hpd_chk = u1_g_Pict_GvifSndrHdpSet();
+            if(u1_t_hpd_chk == (U1)TRUE){
+                Mcu_OnStep_EIZOIC_OVRALL = (U1)MCU_STEP_EIZOIC_OVERALL_5;
+            }
+            u2_s_pict_polling_wait = (U2)0U;
+        }
+        break;
+    case MCU_STEP_EIZOIC_OVERALL_5:
+
+        u1_t_time_chk    =   u1_s_Pict_Ml86294_TimChk(u2_s_pict_polling_wait, WAITTIME_T10);
+
+        if(u1_t_time_chk ==  (U1)TRUE){
+            Mcu_OnStep_EIZOIC_OVRALL = (U1)MCU_STEP_EIZOIC_OVERALL_6;
+            u2_s_pict_polling_wait = (U2)0U;
+        }
+        break;
+    case MCU_STEP_EIZOIC_OVERALL_6:
+        /* レジスタ書込み処理 */
+        u1_t_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)MCU_WRINUM_EIZOIC_CNTDSPSET,
+                                                EIZOIC_CNTDSPSET, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                st_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CENTERDISP_ON, &u2_s_pict_ml_reg_btwn_time);
+
+        if(u1_t_sts == (U1)TRUE){
+            /* 全書込み完了 次状態に遷移 */
+            Mcu_OnStep_EIZOIC_OVRALL = (U1)MCU_STEP_EIZOIC_OVERALL_7;
+        }
+        break;
+    case MCU_STEP_EIZOIC_OVERALL_7:
+        /* レジスタ書込み処理 */
+        u1_t_sts = u1_PICT_ML_I2C_CTRL_REGREAD(&u2_s_pict_ml_regstep, (U2)ML86294_WRINUM_I2C_READ,
+                                                    ML86294_I2C_READ, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                    st_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_HPD_PLUG_CLR_RD_TBL, &u2_s_pict_ml_reg_btwn_time);
+
+        if(u1_t_sts == (U1)TRUE){
+            u1_t_rg_read = st_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_HPD_PLUG_CLR_RD_TBL[1].u1p_pdu[1];
+            /* bit[0] (0x01) をクリア */
+            u1_t_rg_set = (U1)(u1_t_rg_read | MCU_BIT0_MASK);
+
+            st_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_HPD_PLUG_CLR_SET_TBL[0].u1p_pdu[2] = u1_t_rg_set;
+            /* 全書込み完了 次状態に遷移 */
+            Mcu_OnStep_EIZOIC_OVRALL = (U1)MCU_STEP_EIZOIC_OVERALL_8;
+        }
+        break;
+    case MCU_STEP_EIZOIC_OVERALL_8:
+        /* レジスタ書込み処理 */
+        u1_t_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)MCU_WRINUM_EIZOIC_HPDPLUGSET,
+                                                EIZOIC_HPDPLUGSET, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                st_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_HPD_PLUG_CLR_SET_TBL, &u2_s_pict_ml_reg_btwn_time);
+
+        if(u1_t_sts == (U1)TRUE){
+            /* 全書込み完了 次状態に遷移 */
+            Mcu_OnStep_EIZOIC_OVRALL = (U1)MCU_STEP_EIZOIC_OVERALL_FIN;
+            /* 初期化完了通知 */
+            vd_g_XspiIviSub1PowerDevInitCmpApp((U1)XSPI_IVI_POWER_EIZO_INI);
+        }
+        break;
+
+    case MCU_STEP_EIZOIC_OVERALL_FIN:
+        break;
+
+    default:
+        /* 異常時はフローをはじめからやり直す */
+        Mcu_OnStep_EIZOIC_OVRALL = (U1)MCU_STEP_EIZOIC_OVERALL_0;
+        break;
+    }
+}
+

@@ -72,7 +72,6 @@
 ../../src/PE2VM2/App/IVI/PictCtrl/IVI_PictCtrl_Main.c
 ../../src/PE2VM2/App/IVI/PictCtrl/ML86294Ctl.c
 ../../src/PE2VM2/App/IVI/PictCtrl/PictCtl.c
-../../src/PE2VM2/App/IVI/PictCtrl/pictic.c
 ../../src/PE2VM2/App/IVI/PictCtrl/PictLogCtl.c
 ../../src/PE2VM2/App/IVI/PictCtrl/PictMuteCtl.c
 ../../src/PE2VM2/App/IVI/PwrCtrl/DDFreq/IVI_PwrCtrl_DDFreq.c
