@@ -757,8 +757,8 @@ static inline void    vd_s_XSpiCfgTxMulmed(        U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxMetcstmMcst(    U4 * u4_ap_pdu_tx) {
-    u4_ap_pdu_tx[0] = (((U4)u1_g_McstReset((U1)FALSE) & (U4)XSPI_MSK_02BIT) << 22);           /* Customize Reset                */
-    u4_ap_pdu_tx[0] = ((u4_g_McstBf((U1)MCST_BFI_METWRNCSTM) & (U4)0x00000007U) << (U1)28);
+    u4_ap_pdu_tx[0]  = (((U4)u1_g_McstReset((U1)FALSE) & (U4)XSPI_MSK_02BIT) << 22);           /* Customize Reset                */
+    u4_ap_pdu_tx[0] |= ((u4_g_McstBf((U1)MCST_BFI_METWRNCSTM) & (U4)0x00000007U) << (U1)28);
 }
 
 /*===================================================================================================================================*/
@@ -1244,6 +1244,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-44    04/08/2026 KO       Change for BEV Electronic CV. (Add TT abnormality monitoring)                                      */
 /*  BEV-45    04/16/2026 KH       Change for BEV Electronic_CV. (Add SYS_DM**)                                                       */
 /*  BEV-46    04/16/2026 SH       Change for BEV E-CV. (Add TRIPA_STS_RSLT and TRIPB_STS_RSLT)                                       */
+/*  BEV-47    04/22/2026 SN       Change vd_s_XSpiCfgTxMetcstmMcst                                                                   */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
