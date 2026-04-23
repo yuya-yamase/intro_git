@@ -57,8 +57,6 @@
 ../../src/PE2VM2/App/IVI/ExtSigCtrl/USBCtl.c
 ../../src/PE2VM2/App/IVI/FwuPx/fwupx.c
 ../../src/PE2VM2/App/IVI/GyrCtrl/CarSpdPls.c
-../../src/PE2VM2/App/IVI/GyrCtrl/config/Mcu_Sys_Pwr_Gyr.c
-../../src/PE2VM2/App/IVI/GyrCtrl/gyro.c
 ../../src/PE2VM2/App/IVI/GyrCtrl/GyroDevCtl.c
 ../../src/PE2VM2/App/IVI/GyrCtrl/IVI_GyrCtrl_Main.c
 ../../src/PE2VM2/App/IVI/I2cCtrl/Mcu_I2c_Ctrl.c
