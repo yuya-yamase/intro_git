@@ -134,6 +134,11 @@
 #define PWRCTRL_SIP_PMAPSFS_WAIT_SAIL_RESOUT_N     ( 100U / PWRCTRL_CFG_TASK_TIME)   /* SAIL_RESOUT_N   =Loチェック待機時間:100ms                    */
 #define PWRCTRL_SIP_PMAPSFS_WAIT_POFF_COMP         ( 100U / PWRCTRL_CFG_TASK_TIME)   /* POFF_COMPLETE_N =Loチェック待機時間:100ms                    */
 
+/* SPI通信途絶監視 */
+#define PWRCTRL_SIP_SPIFS_CHK_T   (1U)                          /* SPI通信途絶監視開始条件の時間計測実行 */
+#define PWRCTRL_SIP_SPIFS_CHK_F   (0U)                          /* SPI通信途絶監視開始条件の時間計測未実行 */
+#define PWRCTRL_SIP_ON_T_SPIFS    (15U / PWRCTRL_CFG_TASK_TIME) /* +B起動シーケンスにおける端子操作後の待ち時間 PM_PWR_EN_N=Loから15ms */
+
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
 /*--------------------------------------------------------------------------*/
@@ -281,6 +286,10 @@ static U4 u4_s_PwrCtrl_Sip_PmaPsFs_SAIL_RESOUT_N_Chk_Tim;
 static U4 u4_s_PwrCtrl_Sip_PmaPsFs_SAIL_RESOUT_N_Wait_Tim;
 static U4 u4_s_PwrCtrl_Sip_PmaPsFs_POFF_COMPLETE_N_Chk_Tim;
 static U4 u4_s_PwrCtrl_Sip_PmaPsFs_POFF_COMPLETE_N_Wait_Tim;
+
+/* SPI通信途絶監視 */
+static U1 u1_s_PwrCtrl_sip_on_SpiFsOn_Chk;
+static U4 u4_s_PwrCtrl_Sip_on_SpiFsOn_Tim;
 
 #if (PWRCTRL_CFG_PRIVATE_ERR_CHK == PWRCTRL_CFG_PRIVATE_ERR_CHK_ENABLE)
 /* 異常系チェック用STB定義 */
@@ -631,6 +640,9 @@ void vd_g_PwrCtrlSipBonInit( void )
     u4_s_PwrCtrl_Sip_PmaPsFs_POFF_COMPLETE_N_Chk_Tim    = (U4)PWRCTRL_SIP_TIME_INIT;
     u4_s_PwrCtrl_Sip_PmaPsFs_POFF_COMPLETE_N_Wait_Tim   = (U4)PWRCTRL_SIP_TIME_INIT;
 
+    /* SPI通信途絶監視開始条件の初期化 */
+    vd_g_PwrCtrlSpiFsOnInit();
+
     return;
 }
 
@@ -891,6 +903,9 @@ void vd_g_PwrCtrlSipOnReq( void )
     /* 計測点⑮⑬Ethリンクアップ状態に未検知を設定 */
     vd_g_PwrCtrlComEthLinkup((U1)PWRCTRL_COM_ETH_LINKUP_NODETECT);
 
+    /* SPI通信途絶監視開始条件の初期化 */
+    vd_g_PwrCtrlSpiFsOnInit();
+
     return;
 }
 
@@ -954,6 +969,9 @@ void vd_g_PwrCtrlSipOnPwrOnReq( void )
     vd_g_PwrCtrlComTxClrBootLog((U1)PWRCTRL_COM_BOOTLOG_BONREQ);
     /* 計測点⑮⑬Ethリンクアップ状態に未検知を設定 */
     vd_g_PwrCtrlComEthLinkup((U1)PWRCTRL_COM_ETH_LINKUP_NODETECT);
+
+    /* SPI通信途絶監視開始条件の初期化 */
+    vd_g_PwrCtrlSpiFsOnInit();
 
     return;
 }
@@ -1302,6 +1320,21 @@ void vd_g_PwrCtrlSipSoCOnComp(void)
 }
 
 /*****************************************************************************
+  Function      : vd_g_PwrCtrlSipSetWakeupStat1
+  Description   : SIP共通 WAKEUP-STAT1(RAM/RIM)設定関数
+  param[in/out] : [in] u1_a_data: WAKEUP-STAT1設定値
+  return        : -
+  Note          : none
+*****************************************************************************/
+void vd_g_PwrCtrlSipSetWakeupStat1( const U1 u1_a_data)
+{
+    u1_s_PwrCtrl_Sip_WAKEUP_STAT1 = u1_a_data;
+    vd_g_Rim_WriteU1((U2)RIMID_U1_PWCTR_SOC_WU_STAT1, u1_s_PwrCtrl_Sip_WAKEUP_STAT1);
+
+    return;
+}
+
+/*****************************************************************************
   Function      : vd_g_PwrCtrlSipSoCOnError
   Description   : SIP共通 SoC異常検知時の状態設定関数
   param[in/out] : -
@@ -1316,6 +1349,41 @@ void vd_g_PwrCtrlSipSoCOnError(void)
 
     /* SAILへの起動要因に強制リセット起動を設定 */
     u1_s_PwrCtrl_Sip_Soc_Rst = PWRCTRL_SIP_SOCRST_ABNORMAL;
+    return;
+}
+
+/*****************************************************************************/
+/*  Function      : vd_g_PwrCtrlSipFullInitStart                             */
+/*  Description   : SIP共通 完全初期化開始時のWAKEUP-STAT1,2,3設定関数       */
+/*  param[in/out] : -                                                        */
+/*  return        : -                                                        */
+/*  Note          : none                                                     */
+/*****************************************************************************/
+void vd_g_PwrCtrlSipFullInitStart(void)
+{
+    /* 完全初期化(WAKEUP-STAT1,2,3=High)を端子設定 */
+    (void)Dio_WriteChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_WAKEUP_STAT1], (U1)MCU_DIO_HIGH);
+    (void)Dio_WriteChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_WAKEUP_STAT2], (U1)MCU_DIO_HIGH);
+    (void)Dio_WriteChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_WAKEUP_STAT3], (U1)MCU_DIO_HIGH);
+
+    return;
+}
+
+/*****************************************************************************/
+/*  Function      : vd_g_PwrCtrlSipFullInitEnd                               */
+/*  Description   : SIP共通 完全初期化終了時のWAKEUP-STAT1,2,3設定関数       */
+/*  param[in/out] : -                                                        */
+/*  return        : -                                                        */
+/*  Note          : none                                                     */
+/*****************************************************************************/
+void vd_g_PwrCtrlSipFullInitEnd(void)
+{
+    /* MCUホットスタート(WALEUP-STAT1=High)/SoC異常起動以外を設定 */
+    u1_s_PwrCtrl_Sip_WAKEUP_STAT1 = (U1)MCU_DIO_HIGH;
+    u1_s_PwrCtrl_Sip_WAKEUP_STAT2 = (U1)MCU_DIO_LOW;
+    u1_s_PwrCtrl_Sip_WAKEUP_STAT3 = (U1)MCU_DIO_LOW;
+    vd_g_Rim_WriteU1((U2)RIMID_U1_PWCTR_SOC_WU_STAT1, u1_s_PwrCtrl_Sip_WAKEUP_STAT1);
+
     return;
 }
 
@@ -1387,6 +1455,21 @@ void vd_g_PwrCtrlSipClrSoCWkupCond( void )
     /* SoC起動条件通知に未設定を設定 */
     u1_s_PwrCtrl_Sip_SoCWkupCond = (U1)PWRCTRL_COM_SOCWKUP_NON;
     vd_g_Rim_WriteU1((U2)RIMID_U1_PWCTR_SOC_WKUPCOND, u1_s_PwrCtrl_Sip_SoCWkupCond);
+
+    return;
+}
+
+/*****************************************************************************
+  Function      : vd_g_PwrCtrlSpiFsOnInit
+  Description   : SPI通信途絶監視開始条件の初期化処理
+  param[in/out] : -
+  return        : -
+  Note          : none
+*****************************************************************************/
+void vd_g_PwrCtrlSpiFsOnInit( void )
+{
+    u1_s_PwrCtrl_sip_on_SpiFsOn_Chk = (U1)PWRCTRL_SIP_SPIFS_CHK_F;
+    u4_s_PwrCtrl_Sip_on_SpiFsOn_Tim = (U4)PWRCTRL_SIP_TIME_INIT;
 
     return;
 }
@@ -1699,12 +1782,24 @@ static void vd_s_PwrCtrlSipOnStep3( void )
 
         /* STEP3-1が完了していれば次のSTEPに進める */
         if(u4_s_PwrCtrl_Sip_On_PM_PWR_EN_N_Step3_Tim == (U4)PWRCTRL_SIP_TIME_INVALID){
+            /* SPI通信途絶監視 開始条件の時間計測開始 */
+            u1_s_PwrCtrl_sip_on_SpiFsOn_Chk = (U1)PWRCTRL_SIP_SPIFS_CHK_T;
             u1_s_PwrCtrl_Sip_On_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP4;
             /* SoC起動通知(PM_PWR_EN_N = Lo) */
             vd_g_PwrCtrlComTxSetSoCOnStart();
         }
     }
-        
+    /* 条件成立時にSPI通信途絶監視の監視開始を通知する */
+    if(u1_s_PwrCtrl_sip_on_SpiFsOn_Chk == (U1)PWRCTRL_SIP_SPIFS_CHK_T){
+        if(u4_s_PwrCtrl_Sip_on_SpiFsOn_Tim >= (U4)PWRCTRL_SIP_ON_T_SPIFS){
+            vd_g_PwrCtrlObserveSpiFailReq((U1)PWRCTRL_OBSERVE_ON);                /* SPI通信途絶監視開始 */
+            vd_g_PwrCtrlSpiFsOnInit();
+        }
+        else{
+            u4_s_PwrCtrl_Sip_on_SpiFsOn_Tim++;
+        }
+    }
+    
     if(u1_s_PwrCtrl_Sip_On_Step >= (U1)PWRCTRL_COMMON_PROCESS_STEP3){
         /* STEP3以降のSTEP時に並行して処理を行い、シーケンスの完了判定前(STEP9)に完了しているか確認する */
         /* AOSS_SLEEP_NETRY_EXIT,POFF_COMPLETE_N初期値チェックからtPMIC_FAST_POFF_EN_N_HI経過後にPMIC_FAST_POFF_EN_N = Hi */
@@ -2056,6 +2151,8 @@ static void vd_s_PwrCtrlSipRsmMainFunc( void )
         /* STEP3-1とSTEP3-2が完了していれば次のSTEPに進める */
         if((u4_s_PwrCtrl_Sip_Rsm_MM_SUSPEND_REQ_N_Tim == (U4)PWRCTRL_SIP_TIME_INVALID)&&
            (u4_s_PwrCtrl_Sip_Rsm_STR_WAKE_Tim == (U4)PWRCTRL_SIP_TIME_INVALID)){
+            /* SPI通信途絶監視 開始 */
+            vd_g_PwrCtrlObserveSpiFailReq((U1)PWRCTRL_OBSERVE_ON);
             u1_s_PwrCtrl_Sip_Rsm_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
             u1_s_PwrCtrl_Sip_Pwr_Sts  = (U1)PWRCTRL_SIP_STS_NON;
             /* SoC起動通知(STR_WAKE = Hi) */
@@ -2646,6 +2743,8 @@ static void vd_s_PwrCtrlSipForcedOffMainFunc( void )
 *****************************************************************************/
 static void vd_s_PwrCtrlSipForcedOffStep1( void )
 {
+    U1 u1_t_otareq;  /* OTAアクティベート要求有無 */
+
     if(u1_s_PwrCtrl_Sip_ForcedOff_Step == (U1)PWRCTRL_COMMON_PROCESS_STEP1){
         /* STEP1-1 */
         vd_s_PwrCtrl_Sip_DioWriteCheck(&u4_s_PwrCtrl_Sip_ForcedOff_PMICFASTPOFF_Tim,
@@ -2663,8 +2762,19 @@ static void vd_s_PwrCtrlSipForcedOffStep1( void )
         /* STEP1-1とSTEP1-2が完了していればSTEPを完了して起動要因判定に進める */
         if((u4_s_PwrCtrl_Sip_ForcedOff_PMICFASTPOFF_Tim == (U4)PWRCTRL_SIP_TIME_INVALID) &&
            (u4_s_PwrCtrl_Sip_ForcedOff_POFF_COMPLETE_N_Chk_Tim == (U4)PWRCTRL_SIP_TIME_INVALID)){
-            u1_s_PwrCtrl_Sip_ForcedOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
-            u1_s_PwrCtrl_Sip_Pwr_Sts        = (U1)PWRCTRL_SIP_STS_NON;
+
+            u1_t_otareq = u1_g_PwrCtrlOta_GetReqSts();     /* OTAアクティベート要求取得 */
+            /* OTAアクティベート要求無し */
+            if(u1_t_otareq == (U1)PWRCTRL_OTA_OTAREQ_OFF)
+            {
+                u1_s_PwrCtrl_Sip_ForcedOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+                u1_s_PwrCtrl_Sip_Pwr_Sts        = (U1)PWRCTRL_SIP_STS_NON;
+            }
+            /* OTAアクティベート要求有り */
+            else
+            {
+                u1_s_PwrCtrl_Sip_ForcedOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP4;
+            }
         }
 
         else{

@@ -50,6 +50,7 @@ static U2 u2_s_PwrCtrlObservePgdVsysSeq( void );
 /* リセット要求検知 */
 static U2 u2_s_PwrCtrlObserveSoCResetReqSeq( void );
 static U2 u2_s_PwrCtrlObserveNMDiagResetSeq( void );
+static U2 u2_s_PwrCtrlObserveVMResetSeq( void );
 
 /*--------------------------------------------------------------------------*/
 /* Data                                                                     */
@@ -61,6 +62,7 @@ static U4 u4_s_PwrCtrl_Observe_SleepTime;     /* スリープ条件継続時間 */
 /* 異常監視 */
 static U1 u1_s_PwrCtrl_Observe_Psail_Sts;           /* PM_PSAIL_ERR_N監視状態 */
 static U1 u1_s_PwrCtrl_Observe_PsHold_Sts;          /* PMA_PS_HOLD監視状態 */
+static U1 u1_s_PwrCtrl_Observe_Spifail_Sts;         /* SPI通信途絶監視状態 */
 static U1 u1_s_PwrCtrl_Observe_PgdAsilVbLowPwr_Sts; /* PGOOD_ASIL_VB監視(LOW-POWER-ON)状態 */
 static U1 u1_s_PwrCtrl_Observe_PgdAsilVbSysPwr_Sts; /* PGOOD_ASIL_VB監視(SYS電源制御)状態 */
 static U1 u1_s_PwrCtrl_Observe_PgdAsilVsys_Sts;     /* PGOOD_ASIL_VSYS監視状態 */
@@ -74,6 +76,7 @@ static U2 u2_s_PwrCtrl_Observe_Err_Sts;             /* 監視異常発生内容 */
 static U1 u1_s_PwrCtrl_Observe_SoCResetErr_Sts;     /* SoCリセット要求(異常)監視状態 */
 static U1 u1_s_PwrCtrl_Observe_PreSoCResetReq;      /* SoCリセット要求前回値 */
 static U1 u1_s_PwrCtrl_Observe_PreNMDiagReset;      /* NMダイアグリセット前回値 */
+static U1 u1_s_PwrCtrl_Observe_PreVMResetReq;       /* VMリセット準備要求前回値 */
 static U2 u2_s_PwrCtrl_Observe_Reset_Sts;           /* リセット要求内容 */
 
 #if (PWRCTRL_CFG_PRIVATE_ERR_CHK == PWRCTRL_CFG_PRIVATE_ERR_CHK_ENABLE)
@@ -108,6 +111,7 @@ void vd_g_PwrCtrlObserveInit( void )
     u2_s_PwrCtrl_Observe_Err_Sts = (U2)PWRCTRL_OBSERVE_ERR_NON;
     u1_s_PwrCtrl_Observe_Psail_Sts = (U1)PWRCTRL_OBSERVE_OFF;
     u1_s_PwrCtrl_Observe_PsHold_Sts = (U1)PWRCTRL_OBSERVE_OFF;
+    u1_s_PwrCtrl_Observe_Spifail_Sts = (U1)PWRCTRL_OBSERVE_OFF;
     u1_s_PwrCtrl_Observe_PgdAsilVbLowPwr_Sts = (U1)PWRCTRL_OBSERVE_OFF;
     u1_s_PwrCtrl_Observe_PgdAsilVbSysPwr_Sts = (U1)PWRCTRL_OBSERVE_OFF;
     u1_s_PwrCtrl_Observe_PgdAsilVsys_Sts = (U1)PWRCTRL_OBSERVE_OFF;
@@ -124,6 +128,8 @@ void vd_g_PwrCtrlObserveInit( void )
     u1_s_PwrCtrl_Observe_SoCResetErr_Sts = (U1)PWRCTRL_OBSERVE_OFF;
     u1_s_PwrCtrl_Observe_PreSoCResetReq = (U1)PWRCTRL_COM_SOCRESET_NON;
     u1_s_PwrCtrl_Observe_PreNMDiagReset = (U1)PWRCTRL_COM_NMDIAGRESET_NON;
+    u1_s_PwrCtrl_Observe_PreVMResetReq = (U1)PWRCTRL_COM_VMRESETREQ_NON;
+
     return;
 }
 
@@ -171,6 +177,7 @@ void vd_g_PwrCtrlObserveMainFunc( void )
     /* リセット要求検知 */
     u2_t_resetreq |= u2_s_PwrCtrlObserveSoCResetReqSeq();   /* SoCリセット要求監視 */
     u2_t_resetreq |= u2_s_PwrCtrlObserveNMDiagResetSeq();   /* NMダイアグリセット監視 */
+    u2_t_resetreq |= u2_s_PwrCtrlObserveVMResetSeq();       /* VMリセット準備要求監視 */
 
     u2_s_PwrCtrl_Observe_Err_Sts = u2_t_obserr;             /* 監視異常発生内容を更新 */
 #if (PWRCTRL_CFG_PRIVATE_ERR_CHK == PWRCTRL_CFG_PRIVATE_ERR_CHK_ENABLE)
@@ -297,6 +304,24 @@ void vd_g_PwrCtrlObservePsHoldReq(const U1 u1_a_req )
     return;
 }
 
+/*****************************************************************************
+  Function      : vd_g_PwrCtrlObserveSpiFailReq
+  Description   : SPI通信途絶監視開始/終了要求通知処理
+  param[in/out] :[ in ] u1_a_req:開始/終了要求
+  return        : none
+  Note          : none
+*****************************************************************************/
+void vd_g_PwrCtrlObserveSpiFailReq(const U1 u1_a_req )
+{
+    u1_s_PwrCtrl_Observe_Spifail_Sts = u1_a_req;
+    vd_g_PwrCtrlComTxSetSoCPower(u1_a_req);        /* VM間通信送信設定 */
+    
+    if(u1_a_req == (U1)PWRCTRL_OBSERVE_OFF){
+        vd_g_PwrCtrlSpiFsOnInit();
+    }
+
+    return;
+}
 /*****************************************************************************
   Function      : vd_g_PwrCtrlObservePgdAsilVbSysPwrReq
   Description   : PGOOD_ASIL_VB監視開始/終了要求(SYS電源制御状態)通知処理
@@ -434,6 +459,18 @@ U2 u2_g_PwrCtrlObserveGetResetSts(void)
 }
 
 /*****************************************************************************
+  Function      : u1_g_PwrCtrlObserveGetSoCPower
+  Description   : SoC起動状態取得処理
+  param[in/out] : none
+  return        : SoC起動状態
+  Note          : none
+*****************************************************************************/
+U1 u1_g_PwrCtrlObserveGetSoCPower(void)
+{
+    return(u1_s_PwrCtrl_Observe_SocPower_Sts);
+}
+
+/*****************************************************************************
   Function      : vd_g_PwrCtrlObserveSetSocPower
   Description   : SoC起動状態設定処理
   param[in/out] :[ in ] u1_a_sts:SoC起動状態
@@ -443,7 +480,6 @@ U2 u2_g_PwrCtrlObserveGetResetSts(void)
 void vd_g_PwrCtrlObserveSetSocPower(const U1 u1_a_sts )
 {
     u1_s_PwrCtrl_Observe_SocPower_Sts = u1_a_sts;  /* 監視制御用に設定内容保存 */
-    vd_g_PwrCtrlComTxSetSoCPower(u1_a_sts);        /* VM間通信送信設定 */
     
     return;
 }
@@ -601,8 +637,8 @@ static U2 u2_g_PwrCtrlObserveSpiFailSeq( void )
 
     u2_t_ret = (U2)PWRCTRL_OBSERVE_ERR_NON;
 
-    /* SoC起動状態の場合 */
-    if(u1_s_PwrCtrl_Observe_SocPower_Sts == (U1)PWRCTRL_OBSERVE_SOCPOWER_ON)
+    /* SPI通信途絶監視実行状態の場合 */
+    if(u1_s_PwrCtrl_Observe_Spifail_Sts == (U1)PWRCTRL_OBSERVE_ON)
     {
         /* SPI通信途絶結果を取得 */
         u1_t_spifail = u1_g_PwrCtrlComGetSpiFail();
@@ -838,9 +874,19 @@ static U2 u2_s_PwrCtrlObserveSoCResetReqSeq( void )
     {
         /* SoCリセット要求(異常)検知実行状態 かつ 前回値がSoCリセット要求(異常)以外の場合 */
         if((u1_s_PwrCtrl_Observe_SoCResetErr_Sts == (U1)PWRCTRL_OBSERVE_ON)
-        && (u1_s_PwrCtrl_Observe_PreSoCResetReq != (U1)PWRCTRL_OBSERVE_RESET_SOCERR))
+        && (u1_s_PwrCtrl_Observe_PreSoCResetReq != (U1)PWRCTRL_COM_SOCRESET_SOCERR))
         {
             u2_t_ret = (U2)PWRCTRL_OBSERVE_RESET_SOCERR;
+        }
+    }
+
+    /* 取得内容がCDCリセット要求の場合 */
+    if(u1_t_read_req == (U1)PWRCTRL_COM_SOCRESET_CDC)
+    {
+        /* SoC起動状態以外の場合 */
+        if(u1_s_PwrCtrl_Observe_SocPower_Sts == (U1)PWRCTRL_OBSERVE_SOCPOWER_ON)
+        {
+            u2_t_ret = (U2)PWRCTRL_OBSERVE_RESET_CDC;
         }
     }
 
@@ -880,6 +926,60 @@ static U2 u2_s_PwrCtrlObserveNMDiagResetSeq( void )
 
     /* NMダイアグリセットの前回値を更新 */
     u1_s_PwrCtrl_Observe_PreNMDiagReset = u1_t_read_req;
+
+    return(u2_t_ret);
+}
+
+/*****************************************************************************
+  Function      : u2_s_PwrCtrlObserveVMResetSeq
+  Description   : VMリセット準備要求検知処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static U2 u2_s_PwrCtrlObserveVMResetSeq( void )
+{
+    U2 u2_t_ret;
+    U1 u1_t_read_req;
+    U1 u1_t_fullinit_sts;
+
+    u2_t_ret = (U2)PWRCTRL_OBSERVE_ERR_NON;
+
+    /* VMリセット準備要求を取得 */
+    u1_t_read_req = u1_g_PwrCtrlComGetVMResetReq();
+    /* 完全初期化要求受付状態を取得 */
+    u1_t_fullinit_sts = u1_g_PwrCtrlComGetFullInitSts();
+    
+    /* 取得内容がVMリセット準備要求の場合 */
+    if(u1_t_read_req == (U1)PWRCTRL_COM_VMRESETREQ_ON)
+    {
+        /* SoC起動状態 かつ 前回値がVMリセット準備要求以外の場合 */
+        if((u1_s_PwrCtrl_Observe_SocPower_Sts == (U1)PWRCTRL_OBSERVE_SOCPOWER_ON)
+        && (u1_s_PwrCtrl_Observe_PreVMResetReq != (U1)PWRCTRL_COM_VMRESETREQ_ON))
+        {
+            /* 完全初期化要求ありの場合 */
+            if(u1_t_fullinit_sts == (U1)PWRCTRL_COM_FULLINITSTS_ON)
+            {
+                u2_t_ret = (U2)PWRCTRL_OBSERVE_RESET_VMRESET;
+                vd_g_PwrCtrlComTxSetVMResetRes((U1)PWRCTRL_COM_VMRESETRES_FULLINIT);
+            }
+            else
+            {
+                vd_g_PwrCtrlComTxSetVMResetRes((U1)PWRCTRL_COM_VMRESETRES_FULLINITNON);
+            }
+        }
+    }
+    else if(u1_t_read_req == (U1)PWRCTRL_COM_VMRESETREQ_NON)
+    {
+        vd_g_PwrCtrlComTxSetVMResetRes((U1)PWRCTRL_COM_VMRESETRES_NON);
+    }
+    else
+    {
+        /* 処理なし */
+    }
+
+    /* VMリセット準備要求の前回値を更新 */
+    u1_s_PwrCtrl_Observe_PreVMResetReq = u1_t_read_req;
 
     return(u2_t_ret);
 }

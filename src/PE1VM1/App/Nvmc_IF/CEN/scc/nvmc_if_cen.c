@@ -29,6 +29,21 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+/* 不揮発値定義(VM間通信送信値定義) */
+#define PWRCTRL_OTA_NOREQ              (0x00000000)
+#define PWRCTRL_OTA_REQ                (0x00000001)
+#define PWRCTRL_OTA_INIT               (0xFFFFFFFF)
+
+/* VM間通信用定義 */
+#define PWRCTRL_VM_RCVBUF_CLR          (0U)
+#define PWRCTRL_VM_LEN_1WORD           (1U)           /* VM間通信データ長：1WORD */
+#define PWRCTRL_VM_1BYTEMASK           (0x000000FF)   /* 1Byte目マスク */
+
+/* VM間通信受信値定義 */
+#define PWRCTRL_OTA_WRITE_NOOTA        (0x00)
+#define PWRCTRL_OTA_WRITE_OTA          (0x01)
+#define PWRCTRL_OTA_WRITE_NOWRITEREQ   (0x02)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -38,6 +53,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static  U4    u4_s_PwrCtrl_OtaReq;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -55,7 +71,9 @@
 /*===================================================================================================================================*/
 void    vd_g_NvmcIfCENBonInit(void)
 {
-	/* Add skeleton code for CEN module (logic TBD) */
+    u4_s_PwrCtrl_OtaReq = (U4)PWRCTRL_OTA_INIT;
+
+    return;
 }
 
 /*===================================================================================================================================*/
@@ -66,7 +84,9 @@ void    vd_g_NvmcIfCENBonInit(void)
 /*===================================================================================================================================*/
 void    vd_g_NvmcIfCENRstInit(void)
 {
-	/* Add skeleton code for CEN module (logic TBD) */
+    u4_s_PwrCtrl_OtaReq = (U4)PWRCTRL_OTA_NOREQ;
+
+    return;
 }
 
 /*===================================================================================================================================*/
@@ -77,7 +97,9 @@ void    vd_g_NvmcIfCENRstInit(void)
 /*===================================================================================================================================*/
 void    vd_g_NvmcIfCENWkupInit(void)
 {
-	/* Add skeleton code for CEN module (logic TBD) */
+    u4_s_PwrCtrl_OtaReq = (U4)PWRCTRL_OTA_NOREQ;
+
+    return;
 }
 
 /*===================================================================================================================================*/
@@ -88,7 +110,77 @@ void    vd_g_NvmcIfCENWkupInit(void)
 /*===================================================================================================================================*/
 void    vd_g_NvmcIfCENMainTask(void)
 {
-   	/* Add skeleton code for CEN module (logic TBD) */
+    U4 u4_t_readdata;
+    U4 u4_t_buf;
+    U1 u1_t_nvm_sts;
+    U1 u1_t_vm_ret;
+    U1 u1_t_vm_data;
+
+    /* +B起動の定期タスクの初回のみ不揮発読み出し */
+    if(u4_s_PwrCtrl_OtaReq == (U4)PWRCTRL_OTA_INIT)
+    {
+        u1_t_nvm_sts = u1_g_Nvmc_ReadStrValU4withSts((U2)NVMCID_U4_PWCTRL_OTAACT_REQ, &u4_t_readdata);    /* 不揮発読み出し */
+        /* 読み出し結果正常 */
+        if(u1_t_nvm_sts == (U1)NVMC_STATUS_COMP)
+        {
+            /* "OTAアクティベート要求有り" */
+            if(u4_t_readdata == (U4)PWRCTRL_OTA_REQ)
+            {
+                u4_s_PwrCtrl_OtaReq = (U4)PWRCTRL_OTA_REQ;
+            }
+            /* "OTAアクティベート要求無し" */
+            else
+            {
+                u4_s_PwrCtrl_OtaReq = (U4)PWRCTRL_OTA_NOREQ;
+            }
+        }
+        /* 読み出し結果異常 */
+        else
+        {
+            u4_s_PwrCtrl_OtaReq = (U4)PWRCTRL_OTA_NOREQ;
+        }
+    }
+
+    /* VM間通信受信 */
+    u4_t_buf = (U4)PWRCTRL_VM_RCVBUF_CLR;
+    u1_t_vm_ret = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM3TO1_OTAACT_REQ, &u4_t_buf, (U2)PWRCTRL_VM_LEN_1WORD);
+
+    /* VM間通信受信OK */
+    if(u1_t_vm_ret != (U1)IVDSH_NO_REA)
+    {
+        u1_t_vm_data = (U1)(u4_t_buf & (U4)PWRCTRL_VM_1BYTEMASK);
+
+        /* "OTAアクティベート要求無し"書き込み要求 */
+        if(u1_t_vm_data == (U1)PWRCTRL_OTA_WRITE_NOOTA)
+        {
+            /* 現在の送信値(不揮発値)と書き込み要求が異なる場合 */
+            if(u4_s_PwrCtrl_OtaReq != (U4)PWRCTRL_OTA_NOREQ)
+            {
+                u4_s_PwrCtrl_OtaReq = (U4)PWRCTRL_OTA_NOREQ;                                 /* VM間通信の送信値を更新 */
+                vd_g_Nvmc_WriteU4((U2)NVMCID_U4_PWCTRL_OTAACT_REQ, u4_s_PwrCtrl_OtaReq);     /* 不揮発更新 */
+            }
+        }
+        /* "OTAアクティベート要求有り"書き込み要求 */
+        else if(u1_t_vm_data == (U1)PWRCTRL_OTA_WRITE_OTA)
+        {
+            /* 現在の送信値(不揮発値)と書き込み要求が異なる場合 */
+            if(u4_s_PwrCtrl_OtaReq != (U4)PWRCTRL_OTA_REQ)
+            {
+                u4_s_PwrCtrl_OtaReq = (U4)PWRCTRL_OTA_REQ;                                   /* VM間通信の送信値を更新 */
+                vd_g_Nvmc_WriteU4((U2)NVMCID_U4_PWCTRL_OTAACT_REQ, u4_s_PwrCtrl_OtaReq);     /* 不揮発更新 */
+            }
+        }
+        /* 書き込み要求無し、または範囲外 */
+        else
+        {
+            /* 何もしない */
+        }
+    }
+
+    /* VM間通信送信 */
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM1TO3_OTAACT_INF, &u4_s_PwrCtrl_OtaReq, (U2)PWRCTRL_VM_LEN_1WORD);
+
+    return;
 }
 
 /*===================================================================================================================================*/
