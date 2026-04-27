@@ -117,6 +117,7 @@ static U1  u1_s_PwrCtrl_Main_SipPwrSts;                   /* SIP電源状態    */
 static U1  u1_s_PwrCtrl_Main_ShtdwnOkFlag;
 static U1  u1_s_PwrCtrl_Main_StbyJdgFlag;
 static U1  u1_s_PwrCtrl_Main_SysPwrInfo;
+static U1  u1_s_PwrCtrl_Main_SipOnInhFlag;
 
 static U4  u4_s_PwrCtrl_Main_MmStby;
 static U4  u4_s_PwrCtrl_Main_Aoss;
@@ -170,6 +171,17 @@ U1 u1_g_PwrCtrlMainSysPwrInfo( void )
     return( u1_s_PwrCtrl_Main_SysPwrInfo );
 }
 /*****************************************************************************
+  Function      : u1_g_PwrCtrlMainSipOnInhFlag
+  Description   : SIP起動抑制フラグ通知処理
+  param[in/out] : none
+  return        : SIP起動抑制フラグ
+  Note          : none
+*****************************************************************************/
+U1 u1_g_PwrCtrlMainSipOnInhFlag( void )
+{
+    return( u1_s_PwrCtrl_Main_SipOnInhFlag );
+}
+/*****************************************************************************
   Function      : vd_g_PwrCtrlMainProhibitSleep
   Description   : VM3スリープ禁止許可設定用処理
   param[in/out] : [in] u1_a_ProhibitSleep スリープ禁止/許可
@@ -212,6 +224,7 @@ void vd_g_PwrCtrlMainBonReq( void )
     u1_s_PwrCtrl_Main_ShtdwnOkFlag = (U1)PWRCTRL_COMMON_SYS_PWR_OFF;
     u1_s_PwrCtrl_Main_StbyJdgFlag  = (U1)PWRCTRL_MAIN_STBYJDG_NG;    /* スタンバイ判定不可 */
     u1_s_PwrCtrl_Main_SysPwrInfo   = (U1)FALSE;
+    u1_s_PwrCtrl_Main_SipOnInhFlag = (U1)PWRCTRL_MAIN_ONINHIBIT_OFF;
 
     vd_g_PwrCtrlSipBonInit();                                        /* SIP電源状態+B初期化要求 */
     vd_g_PwrCtrlSysPwrOnStart();
@@ -251,18 +264,27 @@ void vd_g_PwrCtrlMainBonReq( void )
 *****************************************************************************/
 static void vd_s_PwrCtrlMainBonDDconvOnReq( void )
 {
-    vd_g_PwrCtrlSipOnReq();                                       /* SIP電源状態+B初期化要求 */
+    /* SIP起動抑制フラグがOFFの場合 */
+    if(u1_s_PwrCtrl_Main_SipOnInhFlag == (U1)PWRCTRL_MAIN_ONINHIBIT_OFF)
+    {
+        vd_g_PwrCtrlSipOnReq();                                       /* SIP電源状態+B初期化要求 */
 
-    /* +B-ONシーケンス実施要求 */
-    u1_s_PwrCtrl_Main_Sts       = (U1)PWRCTRL_MAIN_BON_REQ;
-    u1_s_PwrCtrl_Main_SysPwrSts = (U1)PWRCTRL_MAIN_SYS_STS_COMP;  /* SYS電源状態：実行中→完了 */
-    u1_s_PwrCtrl_Main_SipPwrSts = (U1)PWRCTRL_MAIN_SIP_STS_INPRC; /* SIP電源状態：初期状態→実行中 */
-    u4_s_PwrCtrl_Main_MmStby    = (U4)PWRCTRL_MAIN_TIME_INIT;
+        /* +B-ONシーケンス実施要求 */
+        u1_s_PwrCtrl_Main_Sts       = (U1)PWRCTRL_MAIN_BON_REQ;
+        u1_s_PwrCtrl_Main_SysPwrSts = (U1)PWRCTRL_MAIN_SYS_STS_COMP;  /* SYS電源状態：実行中→完了 */
+        u1_s_PwrCtrl_Main_SipPwrSts = (U1)PWRCTRL_MAIN_SIP_STS_INPRC; /* SIP電源状態：初期状態→実行中 */
+        u4_s_PwrCtrl_Main_MmStby    = (U4)PWRCTRL_MAIN_TIME_INIT;
 
-    vd_g_PwrCtrlObserveSoCResetErrReq((U1)PWRCTRL_OBSERVE_OFF);        /* SoCリセット要求(異常)検知 終了 */
-    vd_g_PwrCtrlObserveSpiFailReq((U1)PWRCTRL_OBSERVE_OFF);            /* SPI通信途絶監視 停止 */
-    vd_g_PwrCtrlObserveSetSocPower((U1)PWRCTRL_OBSERVE_SOCPOWER_OFF);  /* SoC起動状態：SoC停止設定 */
-    vd_s_PwrCtrlMainFullInitExeChk();                                  /* 完全初期化実施判定処理 */
+        vd_g_PwrCtrlObserveSoCResetErrReq((U1)PWRCTRL_OBSERVE_OFF);        /* SoCリセット要求(異常)検知 終了 */
+        vd_g_PwrCtrlObserveSpiFailReq((U1)PWRCTRL_OBSERVE_OFF);            /* SPI通信途絶監視 停止 */
+        vd_g_PwrCtrlObserveSetSocPower((U1)PWRCTRL_OBSERVE_SOCPOWER_OFF);  /* SoC起動状態：SoC停止設定 */
+        vd_s_PwrCtrlMainFullInitExeChk();                                  /* 完全初期化実施判定処理 */
+    }
+    else
+    {
+        u1_s_PwrCtrl_Main_Sts          = (U1)PWRCTRL_MAIN_NO_REQ;          /* 処理完了 */
+        u1_s_PwrCtrl_Main_StbyJdgFlag  = (U1)PWRCTRL_MAIN_STBYJDG_OK;      /* スタンバイ判定可 */
+    }
 
     return;
 }
@@ -337,6 +359,7 @@ void vd_g_PwrCtrlMainWakeupReq( void )
     u1_s_PwrCtrl_Main_ShtdwnOkFlag = (U1)PWRCTRL_COMMON_SYS_PWR_OFF;
     u1_s_PwrCtrl_Main_StbyJdgFlag  = (U1)PWRCTRL_MAIN_STBYJDG_NG;    /* スタンバイ判定不可 */
     u1_s_PwrCtrl_Main_SysPwrInfo   = (U1)FALSE;
+    u1_s_PwrCtrl_Main_SipOnInhFlag = (U1)PWRCTRL_MAIN_ONINHIBIT_OFF;
 
     vd_g_PwrCtrlSipWkupInit();                                       /* SIP電源状態Wakeup初期化要求 */
     vd_g_PwrCtrlSysPwrOnStart();
@@ -658,10 +681,6 @@ static void vd_s_PwrCtrlMainFullInitExeChk( void )
         vd_g_PwrCtrlComTxSetInitStart((U1)PWRCTRL_COM_FULLINITSTART_ON);             /* VM2初期化開始通知 */
         vd_g_PwrCtrlFullInitStartReq();                                              /* 完全初期化シーケンス実行要求 */
     }
-    else
-    {
-        /* 【todo】SAIL完全初期化要求通知：要求無し */
-    }
 
     return;
 }
@@ -771,6 +790,7 @@ static void vd_s_PwrCtrlMainObserveFsJudge( void )
 {
     U2 u2_t_observe_sts;
     U2 u2_t_resetreq_sts;
+    U1 u1_t_power;
 
     /* 監視制御の異常検知情報を取得 */
     u2_t_observe_sts = u2_g_PwrCtrlObserveGetErrSts();
@@ -778,7 +798,6 @@ static void vd_s_PwrCtrlMainObserveFsJudge( void )
     u2_t_resetreq_sts = u2_g_PwrCtrlObserveGetResetSts();
 
     /* 監視制御の優先度順に異常検知有無を判定 */
-    /* 【todo】5-12-1. PGOOD_ASIL_VB監視 異常検知  */
     /* PM_PSAIL_ERR_N監視 異常検知の場合 */
     if( (u2_t_observe_sts & (U2)PWRCTRL_OBSERVE_ERR_PMPSAIL) == (U2)PWRCTRL_OBSERVE_ERR_PMPSAIL)
     {
@@ -916,9 +935,39 @@ static void vd_s_PwrCtrlMainObserveFsJudge( void )
     {
         /* 何もしない */
     }
+
+    /* PGOOD_DIODE監視 異常検知  */
+    if((u2_t_observe_sts & (U2)PWRCTRL_OBSERVE_ERR_PGD_DIODE) == (U2)PWRCTRL_OBSERVE_ERR_PGD_DIODE)
+    {
+        /* SIP監視制御を停止 */
+        vd_g_PwrCtrl_ObserveSAIL_ObserveReq((U1)PWRCTRL_OBSERVESAIL_REQ_OFF_ALL); /* UART監視/SAIL-ERR監視 停止要求 */
+        vd_g_PwrCtrlObservePsailReq((U1)PWRCTRL_OBSERVE_OFF);                     /* PM_PSAIL_ERR_N監視 終了 */
+        vd_g_PwrCtrlObservePsHoldReq((U1)PWRCTRL_OBSERVE_OFF);                    /* PMA_PS_HOLD監視 終了 */
+        vd_g_PwrCtrlObserveSoCResetErrReq((U1)PWRCTRL_OBSERVE_OFF);               /* SoCリセット要求(異常)検知 終了 */
+        vd_g_PwrCtrlSipSoCOnError();                                              /* SoC異常検知の設定 */
+        /* 【ToDo】SoC異常起動(DDコン異常)の設定 */
+        vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_SOCERR);            /* SoC異常起動(SoC異常)の設定 */
+        u1_s_PwrCtrl_Main_SipOnInhFlag = (U1)PWRCTRL_MAIN_ONINHIBIT_ON;           /* SIP起動抑制フラグ：抑制 */
+        vd_g_PwrCtrlObservePgdDiodeReq((U1)PWRCTRL_OBSERVE_OFF);                  /* PGOOD_DIODE監視 終了 */
+    }
+    
+    /* SIP起動抑制状態の場合 */
+    if(u1_s_PwrCtrl_Main_SipOnInhFlag == (U1)PWRCTRL_MAIN_ONINHIBIT_ON)
+    {
+        /* SoC起動状態の取得 */
+        u1_t_power = u1_g_PwrCtrlObserveGetSoCPower();
+        /* 通常動作中かつ、SoC起動状態の場合 */
+        if( (u1_s_PwrCtrl_Main_Sts == (U1)PWRCTRL_MAIN_NO_REQ)
+         && (u1_t_power == (U1)PWRCTRL_OBSERVE_SOCPOWER_ON) )
+        {
+            /* SIP電源強制OFFシーケンス要求(SIP電源強制OFF処理開始 SOC異常系) */
+            vd_s_PwrCtrlMainForcedOffReq((U1)PWRCTRL_MAIN_FORCEDOFF_STS_SOCERR);
+        }
+    }
+
+    /* 【todo】5-12-1. PGOOD_ASIL_VB監視 異常検知  */
     /* 【todo】5-12-2. PGOOD_ASIL_VSYS監視 異常検知  */
     /* 【todo】5-12-3. PGOOD_ASIL_VSYS(V11)監視 異常検知  */
-    /* 【todo】5-12-4. PGOOD_DIODE監視 異常検知  */
     /* 【todo】5-12-5. PGOOD_VB監視 異常検知  */
     /* 【todo】5-12-5. PGOOD_VSYS監視 異常検知  */
 
@@ -946,16 +995,25 @@ static void vd_s_PwrCtrlMainOnOffJudge( void )
             u1_t_req = u1_g_PwrCtrlObserveOnOffTrigger();
             if(u1_t_req == (U1)PWRCTRL_OBSERVE_POWER_OFF)
             {
-                u1_t_str = u1_g_PwrCtrlComGetSTRMode();
-                
-                if(u1_t_str == (U1)PWRCTRL_COM_STR_ON){
-                    /* スタンバイシーケンス要求 */
-                    vd_s_PwrCtrlMainStandbyReq();
+                /* SIP起動抑制フラグがOFFの場合 */
+                if(u1_s_PwrCtrl_Main_SipOnInhFlag == (U1)PWRCTRL_MAIN_ONINHIBIT_OFF)
+                {
+                    u1_t_str = u1_g_PwrCtrlComGetSTRMode();
+                    if(u1_t_str == (U1)PWRCTRL_COM_STR_ON)
+                    {
+                        /* スタンバイシーケンス要求 */
+                        vd_s_PwrCtrlMainStandbyReq();
+                    }
+                    else
+                    {
+                        /* SIP電源OFF&MCUスタンバイシーケンス要求 */
+                        vd_s_PwrCtrlMainSipOffMcuStandbyReq();
+                    }
                 }
-                
-                else{
-                    /* SIP電源OFF&MCUスタンバイシーケンス要求 */
-                    vd_s_PwrCtrlMainSipOffMcuStandbyReq();
+                else
+                {
+                    /* SIP電源OFF&MCUスタンバイシーケンス SYS系電源OFF、MCUスタンバイ処理開始要求 */
+                    vd_s_PwrCtrlMainSipOffMcuStandbySysDevReq();
                 }
             }
         }
@@ -1131,9 +1189,18 @@ static void vd_s_PwrCtrlMainBonSeq( void )
             }
 
             u1_s_PwrCtrl_Main_SysPwrSts = (U1)PWRCTRL_MAIN_SYS_STS_COMP;       /* SYS電源状態：実行中→完了 */
-            u1_s_PwrCtrl_Main_SipPwrSts = (U1)PWRCTRL_MAIN_SIP_STS_INPRC;      /* SIP電源状態：初期状態→実行中 */
-            vd_g_PwrCtrlSipOnReq();                                            /* SIP電源ON要求(+B ON) */
-            vd_s_PwrCtrlMainFullInitExeChk();                                  /* 完全初期化実施判定処理 */
+            /* SIP起動抑制フラグがOFFの場合 */
+            if(u1_s_PwrCtrl_Main_SipOnInhFlag == (U1)PWRCTRL_MAIN_ONINHIBIT_OFF)
+            {
+                u1_s_PwrCtrl_Main_SipPwrSts = (U1)PWRCTRL_MAIN_SIP_STS_INPRC;      /* SIP電源状態：初期状態→実行中 */
+                vd_g_PwrCtrlSipOnReq();                                            /* SIP電源ON要求(+B ON) */
+                vd_s_PwrCtrlMainFullInitExeChk();                                  /* 完全初期化実施判定処理 */
+            }
+            else
+            {
+                u1_s_PwrCtrl_Main_Sts          = (U1)PWRCTRL_MAIN_NO_REQ;          /* 処理完了 */
+                u1_s_PwrCtrl_Main_StbyJdgFlag  = (U1)PWRCTRL_MAIN_STBYJDG_OK;      /* スタンバイ判定可 */
+            }
         }
     }
 
@@ -1564,6 +1631,7 @@ static void vd_s_PwrCtrlMainSipOffMcuStandbySeq( void )
                 if ( ( u1_s_PwrCtrl_Main_NonRednPwrSts == (U1)PWRCTRL_MAIN_SYS_STS_COMP )
                   && ( u1_s_PwrCtrl_Main_SipPwrSts     == (U1)PWRCTRL_MAIN_SIP_STS_COMP ))
                 {
+                    u1_s_PwrCtrl_Main_SipOnInhFlag = (U1)PWRCTRL_MAIN_ONINHIBIT_OFF;     /* SIP起動抑制フラグ：解除 */
                     u1_s_PwrCtrl_Main_Sts          = (U1)PWRCTRL_MAIN_NO_REQ;            /* 処理完了 */
                     /* OTAアクティベート要求無しの場合 */
                     if(u1_t_ota_req == (U1)PWRCTRL_OTA_OTAREQ_OFF)
@@ -1773,6 +1841,7 @@ static void vd_s_PwrCtrlMainStandbySeq( void )
                 if ( ( u1_s_PwrCtrl_Main_NonRednPwrSts == (U1)PWRCTRL_MAIN_NRD_STS_COMP )
                   && ( u1_s_PwrCtrl_Main_SipPwrSts     == (U1)PWRCTRL_MAIN_SIP_STS_COMP ))
                 {
+                    u1_s_PwrCtrl_Main_SipOnInhFlag = (U1)PWRCTRL_MAIN_ONINHIBIT_OFF;     /* SIP起動抑制フラグ：解除 */
                     u1_s_PwrCtrl_Main_Sts          = (U1)PWRCTRL_MAIN_NO_REQ;            /* 処理完了 */
                     u1_s_PwrCtrl_Main_ShtdwnOkFlag = (U1)PWRCTRL_COMMON_SYS_PWR_ON;
 #if (PWRCTRL_CFG_PRIVATE_ERR_CHK == PWRCTRL_CFG_PRIVATE_ERR_CHK_ENABLE)
@@ -2088,22 +2157,31 @@ static void vd_s_PwrCtrlMainSailErrFsSeq( void )
     /* SIP処理終了後の判定 */
     if(u1_s_PwrCtrl_Main_SipPwrSts == (U1)PWRCTRL_MAIN_SIP_STS_COMP)
     {
-        /* 起動要件成立? */
-        u1_t_wake_factor = u1_g_PwrCtrlObserveOnOffTrigger();
-        if(u1_t_wake_factor == (U1)PWRCTRL_OBSERVE_POWER_ON)
+        /* SIP起動抑制フラグがOFFの場合 */
+        if(u1_s_PwrCtrl_Main_SipOnInhFlag == (U1)PWRCTRL_MAIN_ONINHIBIT_OFF)
         {
-            vd_g_PwrCtrlComTxSetPwrOn((U1)PWRCTRL_COM_PWRON_SAILERR_TO_ON);     /* SIP電源再起動通知設定 */
+            /* 起動要件成立? */
+            u1_t_wake_factor = u1_g_PwrCtrlObserveOnOffTrigger();
+            if(u1_t_wake_factor == (U1)PWRCTRL_OBSERVE_POWER_ON)
+            {
+                vd_g_PwrCtrlComTxSetPwrOn((U1)PWRCTRL_COM_PWRON_SAILERR_TO_ON);     /* SIP電源再起動通知設定 */
 
-            u1_s_PwrCtrl_Main_NonRednPwrSts = (U1)PWRCTRL_MAIN_NRD_STS_INIT;    /* 非冗長電源：初期状態 */
-            vd_g_PwrCtrlNoRedunPwrOnStart();                                    /* 非冗長電源制御ON要求 */
+                u1_s_PwrCtrl_Main_NonRednPwrSts = (U1)PWRCTRL_MAIN_NRD_STS_INIT;    /* 非冗長電源：初期状態 */
+                vd_g_PwrCtrlNoRedunPwrOnStart();                                    /* 非冗長電源制御ON要求 */
 
-            u1_s_PwrCtrl_Main_Sts = (U1)PWRCTRL_MAIN_NO_REQ;        /* 処理完了 */
-            vd_s_PwrCtrlMainBonPwrOnReq();                          /* +B起動シーケンス SIP電源のみ起動処理開始要求 */
+                u1_s_PwrCtrl_Main_Sts = (U1)PWRCTRL_MAIN_NO_REQ;        /* 処理完了 */
+                vd_s_PwrCtrlMainBonPwrOnReq();                          /* +B起動シーケンス SIP電源のみ起動処理開始要求 */
+            }
+            else
+            {
+                u1_s_PwrCtrl_Main_Sts = (U1)PWRCTRL_MAIN_NO_REQ;        /* 処理完了 */
+                vd_s_PwrCtrlMainSipOffMcuStandbySysDevReq();            /* SIP電源OFF&MCUスタンバイシーケンス SYS系電源OFF、MCUスタンバイ処理開始要求 */
+            }
         }
         else
         {
-            u1_s_PwrCtrl_Main_Sts = (U1)PWRCTRL_MAIN_NO_REQ;        /* 処理完了 */
-            vd_s_PwrCtrlMainSipOffMcuStandbySysDevReq();            /* SIP電源OFF&MCUスタンバイシーケンス SYS系電源OFF、MCUスタンバイ処理開始要求 */
+            /* SIP電源強制OFFシーケンス要求(SIP電源強制OFF処理開始 PMIC異常系 DDコンOFF処理開始) */
+            vd_s_PwrCtrlMainForcedOffReq((U1)PWRCTRL_MAIN_FORCEDOFF_STS_DDERR);
         }
     }
 
@@ -2172,22 +2250,31 @@ static void vd_s_PwrCtrlMainPmaPsFsSeq( void )
     /* SIP処理終了後の判定 */
     if(u1_s_PwrCtrl_Main_SipPwrSts == (U1)PWRCTRL_MAIN_SIP_STS_COMP)
     {
-        /* 起動要件成立? */
-        u1_t_wake_factor = u1_g_PwrCtrlObserveOnOffTrigger();
-        if(u1_t_wake_factor == (U1)PWRCTRL_OBSERVE_POWER_ON)
+        /* SIP起動抑制フラグがOFFの場合 */
+        if(u1_s_PwrCtrl_Main_SipOnInhFlag == (U1)PWRCTRL_MAIN_ONINHIBIT_OFF)
         {
-            vd_g_PwrCtrlComTxSetPwrOn((U1)PWRCTRL_COM_PWRON_PMAPSHOLD_TO_ON);   /* SIP電源再起動通知設定 */
+            /* 起動要件成立? */
+            u1_t_wake_factor = u1_g_PwrCtrlObserveOnOffTrigger();
+            if(u1_t_wake_factor == (U1)PWRCTRL_OBSERVE_POWER_ON)
+            {
+                vd_g_PwrCtrlComTxSetPwrOn((U1)PWRCTRL_COM_PWRON_PMAPSHOLD_TO_ON);   /* SIP電源再起動通知設定 */
 
-            u1_s_PwrCtrl_Main_NonRednPwrSts = (U1)PWRCTRL_MAIN_NRD_STS_INIT;    /* 非冗長電源：初期状態 */
-            vd_g_PwrCtrlNoRedunPwrOnStart();                                    /* 非冗長電源制御ON要求 */
+                u1_s_PwrCtrl_Main_NonRednPwrSts = (U1)PWRCTRL_MAIN_NRD_STS_INIT;    /* 非冗長電源：初期状態 */
+                vd_g_PwrCtrlNoRedunPwrOnStart();                                    /* 非冗長電源制御ON要求 */
 
-            u1_s_PwrCtrl_Main_Sts = (U1)PWRCTRL_MAIN_NO_REQ;        /* 処理完了 */
-            vd_s_PwrCtrlMainBonPwrOnReq();                          /* +B起動シーケンス SIP電源のみ起動処理開始要求 */
+                u1_s_PwrCtrl_Main_Sts = (U1)PWRCTRL_MAIN_NO_REQ;        /* 処理完了 */
+                vd_s_PwrCtrlMainBonPwrOnReq();                          /* +B起動シーケンス SIP電源のみ起動処理開始要求 */
+            }
+            else
+            {
+                u1_s_PwrCtrl_Main_Sts = (U1)PWRCTRL_MAIN_NO_REQ;        /* 処理完了 */
+                vd_s_PwrCtrlMainSipOffMcuStandbySysDevReq();            /* SIP電源OFF&MCUスタンバイシーケンス SYS系電源OFF、MCUスタンバイ処理開始要求 */
+            }
         }
         else
         {
-            u1_s_PwrCtrl_Main_Sts = (U1)PWRCTRL_MAIN_NO_REQ;        /* 処理完了 */
-            vd_s_PwrCtrlMainSipOffMcuStandbySysDevReq();            /* SIP電源OFF&MCUスタンバイシーケンス SYS系電源OFF、MCUスタンバイ処理開始要求 */
+            /* SIP電源強制OFFシーケンス要求(SIP電源強制OFF処理開始 PMIC異常系 DDコンOFF処理開始) */
+            vd_s_PwrCtrlMainForcedOffReq((U1)PWRCTRL_MAIN_FORCEDOFF_STS_DDERR);
         }
     }
 

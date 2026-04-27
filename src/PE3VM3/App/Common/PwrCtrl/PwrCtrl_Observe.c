@@ -387,7 +387,23 @@ void vd_g_PwrCtrlObservePgdAsilVsysV11Req(const U1 u1_a_req )
 *****************************************************************************/
 void vd_g_PwrCtrlObservePgdDiodeReq(const U1 u1_a_req )
 {
-    u1_s_PwrCtrl_Observe_PgdDiode_Sts = u1_a_req;
+    U1 u1_t_siponinhibit_sts;
+
+    /* 開始要求の場合 */
+    if(u1_a_req == (U1)PWRCTRL_OBSERVE_ON)
+    {
+        /* SIP起動抑制フラグがOFFの場合 */
+        u1_t_siponinhibit_sts = u1_g_PwrCtrlMainSipOnInhFlag();
+        if(u1_t_siponinhibit_sts == (U1)PWRCTRL_MAIN_ONINHIBIT_OFF)
+        {
+            u1_s_PwrCtrl_Observe_PgdDiode_Sts = (U1)PWRCTRL_OBSERVE_ON;
+        }
+    }
+    /* 終了要求の場合 */
+    else
+    {
+        u1_s_PwrCtrl_Observe_PgdDiode_Sts = (U1)PWRCTRL_OBSERVE_OFF;
+    }
 
     return;
 }

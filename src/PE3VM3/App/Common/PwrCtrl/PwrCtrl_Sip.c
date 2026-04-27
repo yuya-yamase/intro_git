@@ -2744,6 +2744,7 @@ static void vd_s_PwrCtrlSipForcedOffMainFunc( void )
 static void vd_s_PwrCtrlSipForcedOffStep1( void )
 {
     U1 u1_t_otareq;  /* OTAアクティベート要求有無 */
+    U1 u1_t_siponinhibit_sts;   /* SIP起動抑制フラグ */
 
     if(u1_s_PwrCtrl_Sip_ForcedOff_Step == (U1)PWRCTRL_COMMON_PROCESS_STEP1){
         /* STEP1-1 */
@@ -2764,13 +2765,15 @@ static void vd_s_PwrCtrlSipForcedOffStep1( void )
            (u4_s_PwrCtrl_Sip_ForcedOff_POFF_COMPLETE_N_Chk_Tim == (U4)PWRCTRL_SIP_TIME_INVALID)){
 
             u1_t_otareq = u1_g_PwrCtrlOta_GetReqSts();     /* OTAアクティベート要求取得 */
-            /* OTAアクティベート要求無し */
-            if(u1_t_otareq == (U1)PWRCTRL_OTA_OTAREQ_OFF)
+            u1_t_siponinhibit_sts = u1_g_PwrCtrlMainSipOnInhFlag(); /* SIP起動抑制フラグ取得 */
+            /* OTAアクティベート要求無しかつ、SIP起動抑制フラグがOFFの場合 */
+            if( (u1_t_otareq == (U1)PWRCTRL_OTA_OTAREQ_OFF)
+             && (u1_t_siponinhibit_sts == (U1)PWRCTRL_MAIN_ONINHIBIT_OFF) )
             {
                 u1_s_PwrCtrl_Sip_ForcedOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
                 u1_s_PwrCtrl_Sip_Pwr_Sts        = (U1)PWRCTRL_SIP_STS_NON;
             }
-            /* OTAアクティベート要求有り */
+            /* OTAアクティベート要求有りまたは、SIP起動抑制フラグがONの場合 */
             else
             {
                 u1_s_PwrCtrl_Sip_ForcedOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP4;
