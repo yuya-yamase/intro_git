@@ -37,6 +37,7 @@
 #define PWRCTRL_MAIN_SIP_STS_CHK_WAKE   (0x04U)  /* 起動要因判定中 */
 #define PWRCTRL_MAIN_SIP_STS_CHK_SAILERR (0x05U) /* SAILERR判定中 */
 #define PWRCTRL_MAIN_SIP_STS_FULLINIT   (0x06U)  /* 完全初期化実行中 */
+#define PWRCTRL_MAIN_SIP_STS_WAIT_VMCOM (0x07U)  /* VM間通信通知待ち */
 #define PWRCTRL_MAIN_SIP_STS_COMP       (0xFFU)  /* 完了 */
 
 /* SIP強制電源OFF状態 */
@@ -62,6 +63,11 @@
 #define PWRCTRL_MAIN_TIME_MMSTBY        (100000U / PWRCTRL_CFG_TASK_TIME)
 #define PWRCTRL_MAIN_TIME_AOSS          (5000U / PWRCTRL_CFG_TASK_TIME)
 #define PWRCTRL_MAIN_TIME_SAILERR       (5000U / PWRCTRL_CFG_TASK_TIME)
+#define PWRCTRL_MAIN_TIME_OTAWAIT       (200U / PWRCTRL_CFG_TASK_TIME)
+
+#define PWRCTRL_MAIN_OTA_OFF            (0x00U)  /* OTAアクティベート要求無し */
+#define PWRCTRL_MAIN_OTA_ON             (0x01U)  /* OTAアクティベート要求有り */
+#define PWRCTRL_MAIN_OTA_WAIT           (0x02U)  /* OTAアクティベート要求通知待ち */
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -105,7 +111,7 @@ static void vd_s_PwrCtrlMainStbyCancelSt2Seq( void );
 static void vd_s_PwrCtrlMainSailErrFsSeq( void );
 static void vd_s_PwrCtrlMainPmPsailFsSeq( void );
 static void vd_s_PwrCtrlMainPmaPsFsSeq( void );
-
+static U1 u1_s_PwrCtrlMainOtaExeChk( void );
 /*--------------------------------------------------------------------------*/
 /* Data                                                                     */
 /*--------------------------------------------------------------------------*/
@@ -122,6 +128,7 @@ static U1  u1_s_PwrCtrl_Main_SipOnInhFlag;
 static U4  u4_s_PwrCtrl_Main_MmStby;
 static U4  u4_s_PwrCtrl_Main_Aoss;
 static U4  u4_s_PwrCtrl_Main_SailErr;
+static U4  u4_s_PwrCtrl_Main_OtaReqwait;
 
 #ifdef PWRCTRL_CFG_PRIVATE_DBG_FAIL_OFF
 U1 u1_g_PwrCtrl_Main_DbgFailOffFlag; /* DBG-FAIL-OFF状態 */
@@ -236,6 +243,7 @@ void vd_g_PwrCtrlMainBonReq( void )
     u4_s_PwrCtrl_Main_Aoss      = (U4)PWRCTRL_MAIN_TIME_INIT;
     u4_s_PwrCtrl_Main_SailErr   = (U4)PWRCTRL_MAIN_TIME_INIT;
     u4_s_PwrCtrl_Main_MmStby    = (U4)PWRCTRL_MAIN_TIME_INIT;
+    u4_s_PwrCtrl_Main_OtaReqwait = (U4)PWRCTRL_MAIN_TIME_INIT;
 
     /* 監視処理初期化 */
     vd_g_PwrCtrlObserveInit();
@@ -371,6 +379,7 @@ void vd_g_PwrCtrlMainWakeupReq( void )
     u4_s_PwrCtrl_Main_Aoss      = (U4)PWRCTRL_MAIN_TIME_INIT;
     u4_s_PwrCtrl_Main_SailErr   = (U4)PWRCTRL_MAIN_TIME_INIT;
     u4_s_PwrCtrl_Main_MmStby    = (U4)PWRCTRL_MAIN_TIME_INIT;
+    u4_s_PwrCtrl_Main_OtaReqwait = (U4)PWRCTRL_MAIN_TIME_INIT;
 
     /* 監視処理初期化 */
     vd_g_PwrCtrlObserveInit();
@@ -1178,29 +1187,46 @@ static void vd_s_PwrCtrlMainBonSeq( void )
         {
             u1_s_PwrCtrl_Main_SysPwrInfo = (U1)TRUE;                           /* PGOOD_ASIL_VB端子モニタ条件(SYS電源ON制御完了)設定 */
             vd_g_PwrCtrlObservePgdAsilVbSysPwrReq((U1)PWRCTRL_OBSERVE_ON);     /* PGOOD_ASIL_VB監視 開始(SYS電源ON制御完了条件成立) */
-            u1_t_ota_req = u1_g_PwrCtrlOta_GetOtaReqNvmcRead();                /* OTAアクティベート要求不揮発読み出し値取得 */
-
-            /* OTAアクティベート要求有り時の処理 */
-            if(u1_t_ota_req == (U1)PWRCTRL_OTA_OTAREQ_ON)
-            {
-                vd_g_PwrCtrlSipSetWakeupStat1((U1)MCU_DIO_HIGH);                 /* リプロ時：MCUホットスタートを設定 */
-                vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_CDCNORM);  /* CDC正常リセットの設定 */
-                vd_g_PwrCtrlOta_SetOtaReqNvmcWrite((U1)PWRCTRL_OTA_WRITE_NOOTA); /* "OTAアクティベート要求無し"不揮発書き込み要求 */
-            }
-
             u1_s_PwrCtrl_Main_SysPwrSts = (U1)PWRCTRL_MAIN_SYS_STS_COMP;       /* SYS電源状態：実行中→完了 */
             /* SIP起動抑制フラグがOFFの場合 */
             if(u1_s_PwrCtrl_Main_SipOnInhFlag == (U1)PWRCTRL_MAIN_ONINHIBIT_OFF)
             {
-                u1_s_PwrCtrl_Main_SipPwrSts = (U1)PWRCTRL_MAIN_SIP_STS_INPRC;      /* SIP電源状態：初期状態→実行中 */
-                vd_g_PwrCtrlSipOnReq();                                            /* SIP電源ON要求(+B ON) */
-                vd_s_PwrCtrlMainFullInitExeChk();                                  /* 完全初期化実施判定処理 */
+                u1_s_PwrCtrl_Main_SipPwrSts = (U1)PWRCTRL_MAIN_SIP_STS_WAIT_VMCOM; /* SIP電源状態：初期状態→VM間通信通知待ち */
+                u4_s_PwrCtrl_Main_OtaReqwait = (U4)PWRCTRL_MAIN_TIME_INIT;         /* VM間通信通知待ちタイマクリア */
             }
             else
             {
                 u1_s_PwrCtrl_Main_Sts          = (U1)PWRCTRL_MAIN_NO_REQ;          /* 処理完了 */
                 u1_s_PwrCtrl_Main_StbyJdgFlag  = (U1)PWRCTRL_MAIN_STBYJDG_OK;      /* スタンバイ判定可 */
             }
+        }
+    }
+
+    /* VM間通信通知待ち */
+    if ( u1_s_PwrCtrl_Main_SipPwrSts == (U1)PWRCTRL_MAIN_SIP_STS_WAIT_VMCOM )
+    {
+        u1_t_ota_req = u1_s_PwrCtrlMainOtaExeChk();                            /* OTAアクティベート要求判定 */
+        /* OTAアクティベート要求有り時 */
+        if(u1_t_ota_req == (U1)PWRCTRL_MAIN_OTA_ON)
+        {
+            vd_g_PwrCtrlSipSetWakeupStat1((U1)MCU_DIO_HIGH);                   /* リプロ時：MCUホットスタートを設定 */
+            vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_CDCNORM);    /* CDC正常リセットの設定 */
+            vd_g_PwrCtrlOta_SetOtaReqNvmcWrite((U1)PWRCTRL_OTA_WRITE_NOOTA);   /* "OTAアクティベート要求無し"不揮発書き込み要求 */
+            u1_s_PwrCtrl_Main_SipPwrSts = (U1)PWRCTRL_MAIN_SIP_STS_INPRC;      /* SIP電源状態：VM間通信通知待ち→実行中 */
+            vd_g_PwrCtrlSipOnReq();                                            /* SIP電源ON要求(+B ON) */
+            vd_s_PwrCtrlMainFullInitExeChk();                                  /* 完全初期化実施判定処理 */
+        }
+        /* OTAアクティベート要求無し/VM間通信通知タイムアウト時 */
+        else if(u1_t_ota_req == (U1)PWRCTRL_MAIN_OTA_OFF)
+        {
+            u1_s_PwrCtrl_Main_SipPwrSts = (U1)PWRCTRL_MAIN_SIP_STS_INPRC;      /* SIP電源状態：VM間通信通知待ち→実行中 */
+            vd_g_PwrCtrlSipOnReq();                                            /* SIP電源ON要求(+B ON) */
+            vd_s_PwrCtrlMainFullInitExeChk();                                  /* 完全初期化実施判定処理 */
+        }
+        /* OTAアクティベート要求未受信時 */
+        else
+        {
+            /* 何もしない(VM間通信通知待ち継続) */
         }
     }
 
@@ -2279,6 +2305,51 @@ static void vd_s_PwrCtrlMainPmaPsFsSeq( void )
     }
 
     return;
+}
+
+/*****************************************************************************
+  Function      : u1_s_PwrCtrlMainOtaExeChk
+  Description   : OTAアクティベート要求判定
+  param[in/out] : none
+  return        : PWRCTRL_MAIN_OTA_OFF(0x00)  OTAアクティベート要求無し
+                  PWRCTRL_MAIN_OTA_ON(0x01)   OTAアクティベート要求有り
+                  PWRCTRL_MAIN_OTA_WAIT(0x02) OTAアクティベート要求通知待ち
+  Note          : none
+*****************************************************************************/
+static U1 u1_s_PwrCtrlMainOtaExeChk( void )
+{
+    U1 u1_t_ota_req;                                                /* OTAアクティベート要求 */
+    U1 u1_t_ret;
+
+    u1_t_ota_req = u1_g_PwrCtrlOta_GetOtaReqNvmcRead();             /* OTAアクティベート要求不揮発読み出し値取得 */
+
+    /* OTAアクティベート要求未受信の場合 */
+    if(u1_t_ota_req == (U1)PWRCTRL_OTA_READ_INVALID)
+    {
+        /* 通知待ち時間内 */
+        if(u4_s_PwrCtrl_Main_OtaReqwait < (U4)PWRCTRL_MAIN_TIME_OTAWAIT)
+        {
+            u4_s_PwrCtrl_Main_OtaReqwait++;
+            u1_t_ret = (U1)PWRCTRL_MAIN_OTA_WAIT;
+        }
+        /* 通知待ちタイムアウト */
+        else
+        {
+            u1_t_ret = (U1)PWRCTRL_MAIN_OTA_OFF;
+        }
+    }
+    /* OTAアクティベート要求有り */
+    else if(u1_t_ota_req == (U1)PWRCTRL_OTA_READ_OTA)
+    {
+        u1_t_ret = (U1)PWRCTRL_MAIN_OTA_ON;
+    }
+    /* OTAアクティベート要求無し */
+    else
+    {
+        u1_t_ret = (U1)PWRCTRL_MAIN_OTA_OFF;
+    }
+
+    return(u1_t_ret);
 }
 
 /****************************************************************************/
