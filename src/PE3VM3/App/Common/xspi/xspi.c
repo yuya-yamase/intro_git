@@ -519,12 +519,14 @@ void	xspi_Main(
 *					  OUT :	None											*
 *																			*
 *					  RET :	uint8											*
-*						XSPI_ERR_KIND_NONE			(0x00)	エラー無し 		*
-*						XSPI_ERR_KIND_TRX			(0x01)	送受信エラー 	*
-*						XSPI_ERR_KIND_INTG			(0x02)	データ整合性エラー *
-*						XSPI_ERR_KIND_ENCHG			(0x04)	EN信号変化 		*
-*						XSPI_ERR_KIND_TIM			(0x08)	通信時間オーバ 	*
-*						XSPI_ERR_KIND_RX_BUF_OVF	(0x10)	受信バッファオーバーフロー *
+*						XSPI_ERR_KIND_NONE			(0x00)	エラー無し		*
+*						XSPI_ERR_KIND_TRX			(0x01)	送受信エラー	*
+*						XSPI_ERR_KIND_INTG			(0x02)	データ整合性エラー	*
+*						XSPI_ERR_KIND_ENCHG			(0x04)	EN信号変化		*
+*						XSPI_ERR_KIND_TIM			(0x08)	通信時間オーバ	*
+*						XSPI_ERR_KIND_RX_BUF_OVF	(0x10)	受信バッファオーバーフロー	*
+*						XSPI_ERR_KIND_RX_BUF_EMPTY	(0x20)	受信バッファ空	*
+*						XSPI_ERR_KIND_ARG			(0x40)	引数値不正		*
 *																			*
 ****************************************************************************/
 uint8	xspi_GetErrInfo(
@@ -656,7 +658,7 @@ static uint8	fc_SpiStartPrepare(
 )
 {
 	uint8	result = XSPI_OK;
-	sint32	async_result = 0;
+	uint8	async_result = u1SPI_NO_ERROR;
 	uint8	spage, rpage;
 	uint8	*rcv_buf, *snd_buf;
 
@@ -696,7 +698,7 @@ static uint8	fc_SpiStartPrepare(
 		async_result = Spi_AsyncTransmit( XSPI_COMC_ID, (const Spi_ModeC_DataType *)snd_buf, (const Spi_ModeC_DataType *)rcv_buf,(U2)XSPI_FRM_MAX_WORD );
 	}
 
-	if( async_result == 0 )	/* No Error(==0) */
+	if( async_result == u1SPI_NO_ERROR )	/* No Error(==0) */
 	{
 		/* Frame信号をLow出力 */
 		PDR_SPI_FRM_WR( STD_LOW );

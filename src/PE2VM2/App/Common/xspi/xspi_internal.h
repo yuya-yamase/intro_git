@@ -53,10 +53,14 @@ enum {
 /*------------------------------*/
 /*	通信中呼び出しカウンタ状態	*/
 /*------------------------------*/
-#define	CMDRV_COM_TIME_0	(0)		/* 通信中呼び出しカウント 通信中0     */
-#define	CMDRV_COM_TIME_1	(1)		/* 通信中呼び出しカウント 通信中1     */
-#define	CMDRV_COM_TIME_2	(2)		/* 通信中呼び出しカウント 通信中2     */
-#define	CMDRV_COM_TIMEOUT	(3)		/* 通信中呼び出しカウント 通信中最大値 */
+enum {
+	CMDRV_COM_TIME_ENMONI = 0,			/* 通信中呼び出しカウント 5ms経過 */
+	CMDRV_COM_TIME_COMPLETION_CHECK,	/* 通信中呼び出しカウント 4.6ms/9.6ms経過 */
+	CMDRV_COM_TIME_ENMONI_KEEP,			/* 通信中呼び出しカウント 5ms/10ms経過 */
+	CMDRV_COM_TIME_ENMONI_CLKCHK,		/* 通信中呼び出しカウント 10ms/15ms経過 */
+	CMDRV_COM_TIME_ENMONI_FINAL,		/* 通信中呼び出しカウント 15ms/20ms経過 */
+	CMDRV_COM_TIME_MAX					/* 通信中呼び出しカウント 最大値 */
+};
 
 /*------------------------------*/
 /*	エンディアン変換マクロ		*/
@@ -71,20 +75,23 @@ enum {
 /*------------------------------*/
 /*	OSTM制御関連				*/
 /*------------------------------*/
-#define XSPI_OST_START_CTRL	(uint32)GPT_OST_START_CTRL_BIT_IRQ_EN |(uint32)GPT_OST_START_CTRL_BIT_TRG_ST	/* GPT_OST_START_CTRL */
-#define XSPI_OST_CNT_INIT	((uint32)( 1000UL * GPT_OST_1US ))	/* 初期化用（1.0ms） */
-#define XSPI_OST_CNT_COMEND	((uint32)( 400UL * GPT_OST_1US ))	/* 通信終了用（0.4ms） */
-#define XSPI_OST_CNT_N_NEXT	((uint32)( 5000UL * GPT_OST_1US ))	/* 通信継続用（5.0ms） */
+#define XSPI_OST_START_CTRL			(uint32)GPT_OST_START_CTRL_BIT_IRQ_EN |(uint32)GPT_OST_START_CTRL_BIT_TRG_ST	/* GPT_OST_START_CTRL */
+#define XSPI_OST_CNT_INIT			((uint32)( 1000UL * GPT_OST_1US ))	/* 初期化用（1.0ms） */
+#define XSPI_OST_CNT_COMINIT		((uint32)( 1000UL * GPT_OST_1US ))	/* 通信開始用（1.0ms） */
+#define XSPI_OST_CNT_ENMONI			((uint32)( 5000UL * GPT_OST_1US ))	/* EN信号監視用（5.0ms） */
+#define XSPI_OST_CNT_COMEND			((uint32)( 400UL * GPT_OST_1US ))	/* 通信終了用（0.4ms） */
+#define XSPI_OST_CNT_TIMEOUT		((uint32)( 1000UL * GPT_OST_1US ))	/* 転送未完了タイムアウト用（1.0ms） */
+#define XSPI_OST_CNT_COMM_ENMONI	((uint32)( 5000UL * GPT_OST_1US ))	/* 通信継続用（5.0ms） */
+#define XSPI_OST_CNT_ENMONI_RETURN	((uint32)( 400UL * GPT_OST_1US ))	/* 通信中EN監視周期復帰用（0.4ms） */
+#define XSPI_OST_CNT_COMM			((uint32)( 0xFFFFFFFF ))			/* 通信中タイマ設定用フラグ */
 
 #if ( XSPI_COMM_CYCLE == XSPI_COMM_CYCLE_5ms )
 
-#define XSPI_OST_CNT_NORMAL	((uint32)( 4600UL * GPT_OST_1US ))	/* 通常動作用（4.6ms） */
-#define XSPI_OST_CNT_ENMONI	((uint32)( 5000UL * GPT_OST_1US ))	/* EN信号監視用（5.0ms） */
+#define XSPI_OST_CNT_COMPLETE_CHECK	((uint32)( 4600UL * GPT_OST_1US ))	/* 通信完了判定用（4.6ms） */
 
 #else	/* (XSPI_COMM_CYCLE == XSPI_COMM_CYCLE_10ms) */
 
-#define XSPI_OST_CNT_NORMAL	((uint32)( 9600UL * GPT_OST_1US ))	/* 通常動作用（9.6ms） */
-#define XSPI_OST_CNT_ENMONI	((uint32)( 10000UL * GPT_OST_1US ))	/* EN信号監視用（10.0ms） */
+#define XSPI_OST_CNT_COMPLETE_CHECK	((uint32)( 4600UL * GPT_OST_1US ))	/* 通信完了判定用（4.6ms） */
 
 #endif	/* (XSPI_COMM_CYCLE) */
 
@@ -217,5 +224,40 @@ typedef struct {
 	uint8	next_stat;					/* 処理後の状態 */
 	uint32	ostm_cnt;					/* OSTMカウント */
 } TBL_DRV_SPI;
+
+/*------------------------------*/
+/*			変数宣言			*/
+/*------------------------------*/
+extern BF_DRV_SPI	bf_drv_SpiMng;		/* XSPI管理情報 */
+
+#ifdef XSPI_DEBUG
+extern uint8	bf_drv_Dbg_ErrInfo;		/* デバッグ用エラー情報 */
+#endif	/* XSPI_DEBUG */
+
+/*------------------------------*/
+/*		プロトタイプ宣言		*/
+/*------------------------------*/
+extern void		fc_drv_ClearXSpiMng( void );						/* XSPI管理情報初期化 */
+extern void		fc_drv_SpiSetErrInfoKind( uint8 kind );				/* エラー種別情報設定 */
+extern void		fc_drv_SpiClearErrInfoKind( uint8 kind );			/* エラー種別情報クリア */
+#ifdef XSPI_DEBUG
+extern void		fc_drv_SpiSetDbgErrInfo( uint8 err_info );			/* デバッグ用エラー情報設定 */
+#endif	/* XSPI_DEBUG */
+
+extern uint8	fc_drv_getRcvBufPage( void );						/* 受信バッファページ取得 */
+extern uint8	fc_drv_getSndBufPage( void );						/* 送信バッファページ取得 */
+extern uint8	fc_drv_ReadBuf( uint32* p_addr, uint32 size );		/* 受信データ読み出し */
+extern uint8	fc_drv_WriteBuf( const uint32* const p_addr, uint32 size );/* 送信データ書き込み */
+
+#if (XSPI_DATA_BUFFER != XSPI_DATA_BUFFER_DOUBLE)
+extern void		fc_drv_SpiRcvDpageRenew( void );					/* ドライバ用受信バッファページ更新 */
+extern void		fc_drv_SpiSendDpageRenew( void );					/* ドライバ用送信バッファページ更新 */
+#endif	/* XSPI_DATA_BUFFER */
+
+#if (XSPI_DATA_CHECK != XSPI_DATA_CHECK_NONE)
+extern void		fc_drv_AddIntegrityData( uint32* p_frame );			/* 整合性データ付加 */
+#endif	/* XSPI_DATA_CHECK */
+
+extern void		XSPI_MEMSET( void * p_dst, uint8 value, uint32 size);/* memset関数(XSPI用） */
 
 #endif	/* XSPI_INTERNAL_H */
