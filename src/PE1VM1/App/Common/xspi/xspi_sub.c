@@ -24,24 +24,8 @@ uint8	bf_drv_Dbg_ErrInfo;				/* デバッグ用エラー情報 */
 /****************************
 *		prototype			*
 ****************************/
-void	fc_drv_ClearXSpiMng( void );						/* XSPI管理情報初期化 */
-void	fc_drv_SpiSetErrInfoKind( uint8 kind );				/* エラー種別情報設定 */
-void	fc_drv_SpiClearErrInfoKind( uint8 kind );			/* エラー種別情報クリア */
-#ifdef XSPI_DEBUG
-void	fc_drv_SpiSetDbgErrInfo( uint8 err_info );			/* デバッグ用エラー情報設定 */
-#endif	/* XSPI_DEBUG */
-
-uint8	fc_drv_getRcvBufPage( void );						/* 受信バッファページ取得 */
-uint8	fc_drv_getSndBufPage( void );						/* 送信バッファページ取得 */
-uint8	fc_drv_ReadBuf( uint32* p_addr, uint32 size );		/* 受信データ読み出し */
-uint8	fc_drv_WriteBuf( const uint32* const p_addr, uint32 size );	/* 送信データ書き込み */
-#if (XSPI_DATA_BUFFER != XSPI_DATA_BUFFER_DOUBLE)
-void	fc_drv_SpiRcvDpageRenew( void );					/* ドライバ受信バッファページ更新(リングバッファ用) */
-void	fc_drv_SpiSendDpageRenew( void );					/* ドライバ送信バッファページ更新(リングバッファ用) */
-#endif /* XSPI_DATA_BUFFER */
 #if (XSPI_DATA_CHECK != XSPI_DATA_CHECK_NONE)
-uint8	fc_drv_CheckIntegrityData( const uint32* p_frame );	/* 整合性データチェック */
-void	fc_drv_AddIntegrityData( uint32* p_frame );			/* 整合性データ付加 */
+static uint8	fc_drv_CheckIntegrityData( const uint32* p_frame );	/* 整合性データチェック */
 #endif	/* XSPI_DATA_CHECK */
 
 /********************************
@@ -72,7 +56,7 @@ static const uint32 tb_drv_payload_size[XSPI_PAYLOAD_NUM] = {
 *						RET 	:	None									*
 *																			*
 *****************************************************************************/
-static void	XSPI_MEMSET (
+void	XSPI_MEMSET (
 	void * p_dst, uint8 value, uint32 size
 )
 {
@@ -330,11 +314,13 @@ uint8	fc_drv_ReadBuf(
 	uint8 page;
 	uint8 is_match;
 
-	if ( NULL_PTR != p_addr )
+	if (( NULL_PTR != p_addr ) && ( XSPI_RCV_FRM_MAX >= size ))
 	{
+		fc_drv_SpiClearErrInfoKind( XSPI_ERR_KIND_ARG );
 		rcv_inf = bf_drv_SpiMng.rcv.page_inf & ((uint8)XSPI_BUF_PAGE_LOCK | (uint8)XSPI_BUF_PAGE_1);
-		if (( XSPI_BUF_PAGE_LOCK > rcv_inf ) && ( XSPI_RCV_FRM_MAX >= size ))
+		if ( XSPI_BUF_PAGE_LOCK > rcv_inf )
 		{
+			fc_drv_SpiClearErrInfoKind( XSPI_ERR_KIND_RX_BUF_EMPTY );
 			page = rcv_inf ^ (uint8)XSPI_BUF_PAGE_1;
 			prcv_buf = (uint32 *)bf_drv_SpiMng.rcv.page[page].dat;
 
@@ -362,6 +348,14 @@ uint8	fc_drv_ReadBuf(
 
 			bf_drv_SpiMng.rcv.page_inf = ( rcv_inf | (uint8)XSPI_BUF_PAGE_LOCK);
 		}
+		else
+		{
+			fc_drv_SpiSetErrInfoKind( XSPI_ERR_KIND_RX_BUF_EMPTY );
+		}
+	}
+	else
+	{
+		fc_drv_SpiSetErrInfoKind( XSPI_ERR_KIND_ARG );
 	}
 
 	return( result );
@@ -532,8 +526,9 @@ uint8	fc_drv_ReadBuf(
 	uint8 page;
 	uint8 is_match;
 
-	if ( NULL_PTR != p_addr )
+	if (( NULL_PTR != p_addr ) && ( XSPI_RCV_FRM_MAX >= size ))
 	{
+		fc_drv_SpiClearErrInfoKind( XSPI_ERR_KIND_ARG );
 		page = bf_drv_SpiMng.rcv.page_task;
 		if ( page >= XSPI_RCV_PAGE )
 		{
@@ -545,8 +540,9 @@ uint8	fc_drv_ReadBuf(
 		}
 		rcv_inf = bf_drv_SpiMng.rcv.page[page].inf;
 
-		if (( RCV_FRM_DATA_FIX == rcv_inf ) && ( XSPI_RCV_FRM_MAX >= size ))
+		if ( RCV_FRM_DATA_FIX == rcv_inf )
 		{
+			fc_drv_SpiClearErrInfoKind( XSPI_ERR_KIND_RX_BUF_EMPTY );
 			prcv_buf = (uint32 *)bf_drv_SpiMng.rcv.page[page].dat;
 
 #if (XSPI_DATA_CHECK != XSPI_DATA_CHECK_NONE)
@@ -578,6 +574,14 @@ uint8	fc_drv_ReadBuf(
 			page %= (uint8)XSPI_RCV_PAGE;
 			bf_drv_SpiMng.rcv.page_task = page;
 		}
+		else
+		{
+			fc_drv_SpiSetErrInfoKind( XSPI_ERR_KIND_RX_BUF_EMPTY );
+		}
+	}
+	else
+	{
+		fc_drv_SpiSetErrInfoKind( XSPI_ERR_KIND_ARG );
 	}
 
 	return( result );
@@ -821,7 +825,7 @@ static uint32	fc_drv_CalculationFcc(
 *										XSPI_OK		(0x01)	 正常 			*
 *																			*
 ****************************************************************************/
-uint8	fc_drv_CheckIntegrityData(
+static uint8	fc_drv_CheckIntegrityData(
 	const uint32* p_frame
 )
 {
@@ -913,7 +917,7 @@ static uint32	fc_drv_CalculationChkSum(
 *										XSPI_OK		(0x01)	 正常 			*
 *																			*
 ****************************************************************************/
-uint8   fc_drv_CheckIntegrityData(
+static uint8   fc_drv_CheckIntegrityData(
 	const uint32* p_frame
 )
 {
