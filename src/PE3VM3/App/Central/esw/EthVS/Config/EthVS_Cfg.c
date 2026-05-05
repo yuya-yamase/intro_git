@@ -21,8 +21,8 @@ void EthVS_Cfg_MAC_Update(uint8 * const data, const uint32 size, uint32 * const 
 
     /* コア間通信のデータ取得できれば、データコピーする */
     if(iVDshResult != IVDSH_NO_REA) {
-        LIB_memcpy(data, macaddress, size);                 /* 注意！エンディアン・ビット箇所確認する */
-        *status = ETHVS_STATUS_UNKNOWN;
+        LIB_memcpy(data, macaddress, size);                 /* ビッグエンディアンで、8byteのうち先頭6byteにデータが格納されている */
+        *status = ETHVS_STATUS_UNKNOWN;                     /* コア間通信が一度でも成功している場合、最新値のため情報不明 */
     }
     
     return;

@@ -20,7 +20,7 @@ void EthVS_Init(void)
 /* -------------------------------------------------------------------------- */
 void EthVS_LoProc(void)
 {
-    /* 車両データ取得 */
+    /* 車両データ更新 */
     uint8   id;
     for (id = 0u; id < E_ETHVS_ID_NUM; id++) {
         if(G_ETHVS_CFG_TABLE[id].updateFunc != NULL_PTR){
@@ -36,11 +36,11 @@ Std_ReturnType EthVS_Get(const uint32 id, uint8 * const data, const uint32 size,
     Std_ReturnType  result = E_NOT_OK;
 
     do {
-        if (id >= E_ETHVS_ID_NUM)                       { break; }
-        if (data == NULL_PTR)                           { break; }
-        if (size != G_ETHVS_CFG_TABLE[id].size)         { break; }
-        if (status == NULL_PTR)                         { break; }
-        if (G_ETHVS_CFG_TABLE[id].getFunc == NULL_PTR)  { break; }
+        if (id >= E_ETHVS_ID_NUM)                       { break; }      /* ID異常 */
+        if (data == NULL_PTR)                           { break; }      /* dataポインタがNULL_PTR */
+        if (size != G_ETHVS_CFG_TABLE[id].size)         { break; }      /* size指定異常 */
+        if (status == NULL_PTR)                         { break; }      /* statusポインタがNULL_PTR */
+        if (G_ETHVS_CFG_TABLE[id].getFunc == NULL_PTR)  { break; }      /* get関数がNULL_PTR */
 
         result = G_ETHVS_CFG_TABLE[id].getFunc(data, size, status);
     } while (0);
