@@ -22,6 +22,7 @@
 #include "tydocan_met_esi_cfg_private.h"
 #include "tydocan_nvmif.h"
 #include "tydocan_ivdshif.h"
+#include "memcpy_u1.h"
 #include "memfill_u4.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -32,7 +33,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define OXDC_2EFD42XX_NB_GMA                         (6U)   /* Global MAC Address(6bytes)                               */
 #define OXDC_2EFD42XX_GMA_WORDS                      (2U)   /* Global MAC Address is 6bytes, and each word is 4bytes.   */
-#define OXDC_2EFD42XX_GMA_STRPOS                     (OXDC_2EFD42XX_NB_GMA - 1U)   /* Global MAC Address Start Position */
 
 #define OXDC_2EFD42XX_MT_PAS                         (0xF5U)
 #define OXDC_2EFD42XX_MT_FAI                         (0xFAU)
@@ -68,15 +68,9 @@ U1      u1_g_oXDoCANEsiTRx_2EFD42XX(const U1 * u1_ap_REQ_RX, U1 * u1_ap_ans_tx, 
     U1  u1_t_proc;
     U4  u4_tp_buff[OXDC_2EFD42XX_GMA_WORDS];
     U1* u1_tp_Addr;
-    U1  u1_t_cnt;
-
 
     vd_g_MemfillU4(&u4_tp_buff[0], (U4)0U, (U4)OXDC_2EFD42XX_GMA_WORDS);
-    u1_tp_Addr = (U1*)&u4_tp_buff[0];
-    for(u1_t_cnt = (U1)0U; u1_t_cnt < (U1)OXDC_2EFD42XX_NB_GMA; u1_t_cnt++){    /* Reverse the order of the buffer data. */
-            u1_tp_Addr[OXDC_2EFD42XX_GMA_STRPOS - u1_t_cnt] = u1_ap_REQ_RX[TYDC_MET_ESI_TRX_B3 + u1_t_cnt];
-    }
-    u1_t_wri = u1_g_TyDoCANNvmIfWrite(&u1_tp_Addr[0], u2_a_ELPSD, (U2)TYDC_NVM_BA_GMA);
+    u1_t_wri = u1_g_TyDoCANNvmIfWrite(&u1_ap_REQ_RX[TYDC_MET_ESI_TRX_B3], u2_a_ELPSD, (U2)TYDC_NVM_BA_GMA);
     if(u1_t_wri == (U1)OXDC_SAL_PROC_FIN){              /* sync complete */
 
         u1_t_proc = (U1)OXDC_SAL_PROC_FIN;
@@ -85,6 +79,8 @@ U1      u1_g_oXDoCANEsiTRx_2EFD42XX(const U1 * u1_ap_REQ_RX, U1 * u1_ap_ans_tx, 
         u1_ap_ans_tx[TYDC_MET_ESI_TRX_B2] = u1_ap_REQ_RX[TYDC_MET_ESI_TRX_B2];
         u1_ap_ans_tx[TYDC_MET_ESI_TRX_B3] = (U1)OXDC_2EFD42XX_MT_PAS;
 
+        u1_tp_Addr = (U1*)&u4_tp_buff[0];
+        vd_g_MemcpyU1(&u1_tp_Addr[0], &u1_ap_REQ_RX[TYDC_MET_ESI_TRX_B3], (U4)OXDC_2EFD42XX_NB_GMA);
         vd_g_TyDoCANiVDshIfWrite_Gma(&u4_tp_buff[0],(U2)OXDC_2EFD42XX_GMA_WORDS);
     }
     else if(u1_t_wri == (U1)OXDC_SAL_PROC_NR_72){       /* sync fail */
@@ -116,6 +112,7 @@ U1      u1_g_oXDoCANEsiTRx_2EFD42XX(const U1 * u1_ap_REQ_RX, U1 * u1_ap_ans_tx, 
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  BEV-1    03/27/2026  NY       Implemented processing to write the Global MAC Address to DTF and iVDsh.                           */
+/*  BEV-2    04/23/2026  NY       Revert the Global MAC Address data write process and remove unnecessary offsets.                   */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  * SI = Shugo Ichinose, DENSO-TECHNO                                                                                              */
