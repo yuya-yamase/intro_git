@@ -39,6 +39,7 @@
 #define RIMID_U1_GYRO_CYCCHK_STS                 (0x0009U)
 #define RIMID_U1_GYRO_RST                        (0x000AU)
 #define RIMID_U1_GSENS_RST                       (0x000BU)
+#define RIMID_U1_TIM_GET_REQ                     (0x000CU)
 /* END : ##TOOL_OUT#RIM_ID_MOD_3B_U1## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_3B_U2## */
 #define RIMID_U2_SAMPLE_BBB_2                    (0x4000U)
