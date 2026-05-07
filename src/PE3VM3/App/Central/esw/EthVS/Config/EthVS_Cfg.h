@@ -25,6 +25,8 @@ static const S_ETHVS_CFG_LIST G_ETHVS_CFG_TABLE[E_ETHVS_ID_NUM] = {
     {   E_ETHVS_MACADDRESS      , ETHVS_MAC_SIZE            , EthVS_MAC_Init            , EthVS_MAC_Update          , EthVS_MAC_Get             }   /* MACƒAƒhƒŒƒX */
 };
 /* -------------------------------------------------------------------------- */
+#define D_ETHVS_CFG_MAC_STATUS_INIT         ETHVS_STATUS_UNAVAILABLE
+#define D_ETHVS_CFG_MAC_ADDRESS_INIT        ((uint8[]){0x00,0x00,0x00,0x00,0x00,0x00})
 void EthVS_Cfg_MAC_Update(uint8 * const data, const uint32 size, uint32 * const status);
 void EthVS_Cfg_MAC_Notify(uint8 * const data, const uint32 size, const uint32 status);
 /* -------------------------------------------------------------------------- */

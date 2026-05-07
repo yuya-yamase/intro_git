@@ -12,8 +12,8 @@ static uint32   G_EthVS_MAC_STATUS;
 /* -------------------------------------------------------------------------- */
 void EthVS_MAC_Init(void)
 {
-    LIB_memset((uint8*)&G_EthVS_MAC_ADDRESS, 0, ETHVS_MAC_SIZE);
-    G_EthVS_MAC_STATUS = ETHVS_STATUS_INIT;
+    LIB_memcpy(G_EthVS_MAC_ADDRESS, D_ETHVS_CFG_MAC_ADDRESS_INIT, ETHVS_MAC_SIZE);
+    G_EthVS_MAC_STATUS = D_ETHVS_CFG_MAC_STATUS_INIT;
 
     return;
 }
