@@ -1405,7 +1405,7 @@ static void     vd_s_McuDev_Pwron_PowerIc(const U1 u1_a_PWR)
   Note          : シス検暫定対応あり
 *****************************************************************************/
 void    Mcu_Dev_Pwron_GNSS( void ){
-    static const uint32 MCU_PWRON_TIME_GNSS_T8  =   (uint32)(100U * GPT_FRT_1US);     /* typ 100ms /GPS-RSTのリセット時間幅 */
+    static const uint32 MCU_PWRON_TIME_GNSS_T8  =   (uint32)(100000U * GPT_FRT_1US);  /* typ 100ms /GPS-RSTのリセット時間幅 */
     static const uint32 MCU_PWRON_TIME_GNSS_T12 =   (uint32)(100000U * GPT_FRT_1US);  /* typ 100ms Hibernate移行状態ﾁｪｯｸ待ちおよび繰り返し時間 */
     static const uint8  MCU_PWRON_POLING_MAX    =   (uint8)45U;                       /* max 4500ms GPS-PCTL　=L指示後、Hibernate遷移終了時間 */
 
@@ -1504,6 +1504,7 @@ void    Mcu_Dev_Pwron_GNSS( void ){
                         Mcu_OnStep_GNSS = (uint8)MCU_STEP_GNSS_FIN;         /* 次状態に遷移 */
                     }
                     else{
+                        Mcu_frt_stamp[GPT_FRT_USELPSD_BASE] = u4_g_Gpt_FrtGetUsElapsed(vdp_PTR_NA);
                         Mcu_OnStep_GNSS = (uint8)MCU_STEP_GNSS_RESTART;         /* 次状態に遷移 */
                     }
                 }
