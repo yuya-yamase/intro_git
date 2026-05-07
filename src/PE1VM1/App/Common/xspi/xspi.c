@@ -23,12 +23,6 @@ static uint8 	bf_drv_skip_first_data = XSPI_NG;		/* 暫定対応 初回データ
 static uint32 	bf_drv_dummy_rcvdata = 0x00000000UL;	/* 暫定対応 初回データスキップ */
 static uint32 	bf_drv_dummy_snddata = 0x00000000UL;	/* 暫定対応 初回データスキップ */
 
-extern BF_DRV_SPI	bf_drv_SpiMng;		/* XSPI管理情報 */
-
-#ifdef XSPI_DEBUG
-extern uint8	bf_drv_Dbg_ErrInfo;		/* デバッグ用エラー情報 */
-#endif	/* XSPI_DEBUG */
-
 /****************************
 *		prototype			*
 ****************************/
@@ -38,30 +32,10 @@ static uint8	fc_SpiStartPrepare( void );							/* 送受信開始準備 */
 static uint8	fc_SpiEnd( void );									/* 送受信終了 */
 static uint8	fc_SpiAbort( void );								/* 送受信ドライバ中断 */
 static uint8	fc_SpiStop( void );									/* 送受信ドライバ停止 */
+static uint8	fc_SpiCommStop( void );								/* 送受信ドライバ停止（送受信状態） */
 
+static uint8	fc_drv_getCommEvent( void );						/* 送受信状態時のイベント取得 */
 static uint8	fc_drv_ENSigCheck( void );							/* EN信号状態チェック */
-
-extern void		fc_drv_ClearXSpiMng( void );						/* XSPI管理情報初期化 */
-extern void		fc_drv_SpiSetErrInfoKind( uint8 kind );				/* エラー種別情報設定 */
-extern void		fc_drv_SpiClearErrInfoKind( uint8 kind );			/* エラー種別情報クリア */
-#ifdef XSPI_DEBUG
-extern void		fc_drv_SpiSetDbgErrInfo( uint8 err_info );			/* デバッグ用エラー情報設定 */
-#endif	/* XSPI_DEBUG */
-
-extern uint8	fc_drv_getRcvBufPage( void );						/* 受信バッファページ取得 */
-extern uint8	fc_drv_getSndBufPage( void );						/* 送信バッファページ取得 */
-extern uint8	fc_drv_ReadBuf( uint32* p_addr, uint32 size );		/* 受信データ読み出し */
-extern uint8	fc_drv_WriteBuf( const uint32* const p_addr, uint32 size );/* 送信データ書き込み */
-
-#if (XSPI_DATA_BUFFER != XSPI_DATA_BUFFER_DOUBLE)
-extern void		fc_drv_SpiRcvDpageRenew( void );					/* ドライバ用受信バッファページ更新 */
-extern void		fc_drv_SpiSendDpageRenew( void );					/* ドライバ用送信バッファページ更新 */
-#endif	/* XSPI_DATA_BUFFER */
-
-#if (XSPI_DATA_CHECK != XSPI_DATA_CHECK_NONE)
-extern uint8	fc_drv_CheckIntegrityData( const uint8* p_frame );	/* 整合性データチェック */
-extern void		fc_drv_AddIntegrityData( uint8* p_frame );			/* 整合性データ付加 */
-#endif	/* XSPI_DATA_CHECK */
 
 /********************************
 *		table					*
@@ -71,27 +45,27 @@ static const TBL_DRV_SPI	tb_drv_SpiDrvJmp[CMDRV_STAT_MAX][CMDRV_EVT_MAX] = {
 /* 0: 初期化前 */
 	{																		/* Event */
 		{ 0,					0,					0					},	/* 0：初期化 */
-		{ 0,					0,					0					},	/* 1：通常動作 */
+		{ 0,					0,					XSPI_OST_CNT_ENMONI	},	/* 1：通常動作 */
 		{ 0,					0,					0					},	/* 2：通信継続 */
 		{ 0,					0,					0					},	/* 3：転送未完了タイムアウト */
-		{ fc_SpiInit,			CMDRV_STAT_IDLE,	XSPI_OST_CNT_ENMONI	},	/* 4：EN信号High */
+		{ fc_SpiInit,			CMDRV_STAT_IDLE,	XSPI_OST_CNT_COMINIT},	/* 4：EN信号High */
 		{ 0,					0,					0					},	/* 5：EN信号Low */
 		{ 0,					0,					0					},	/* 6：通信終了 */
 	},
 /* 1: 通信無効（EN信号Low） */
 	{																		/* Event */
 		{ 0,					0,					0					},	/* 0：初期化 */
-		{ 0,					0,					0					},	/* 1：通常動作 */
+		{ 0,					0,					XSPI_OST_CNT_ENMONI	},	/* 1：通常動作 */
 		{ 0,					0,					0					},	/* 2：通信継続 */
 		{ 0,					0,					0					},	/* 3：転送未完了タイムアウト */
-		{ fc_SpiInit,			CMDRV_STAT_IDLE,	XSPI_OST_CNT_ENMONI	},	/* 4：EN信号High */
+		{ fc_SpiInit,			CMDRV_STAT_IDLE,	XSPI_OST_CNT_COMINIT},	/* 4：EN信号High */
 		{ 0,					0,					0					},	/* 5：EN信号Low */
 		{ 0,					0,					0					},	/* 6：通信終了 */
 	},
 /* 2: アイドル状態（EN信号High） */
 	{																		/* Event */
 		{ 0,					0,					0					},	/* 0：初期化 */
-		{ fc_SpiStartPrepare,	CMDRV_STAT_COMM,	XSPI_OST_CNT_NORMAL	},	/* 1：通常動作 */
+		{ fc_SpiStartPrepare,	CMDRV_STAT_COMM,	XSPI_OST_CNT_COMM	},	/* 1：通常動作 */
 		{ 0,					0,					0					},	/* 2：通信継続 */
 		{ 0,					0,					0					},	/* 3：転送未完了タイムアウト */
 		{ 0,					0,					0					},	/* 4：EN信号High */
@@ -102,21 +76,21 @@ static const TBL_DRV_SPI	tb_drv_SpiDrvJmp[CMDRV_STAT_MAX][CMDRV_EVT_MAX] = {
 	{																		/* Event */
 		{ 0,					0,					0					},	/* 0：初期化 */
 		{ 0,					0,					0					},	/* 1：通常動作 */
-		{ 0,					0,					XSPI_OST_CNT_N_NEXT	},	/* 2：通信継続 */
-		{ fc_SpiAbort,			CMDRV_STAT_RETRY,	XSPI_OST_CNT_COMEND	},	/* 3：転送未完了タイムアウト */
+		{ 0,					0,					XSPI_OST_CNT_COMM	},	/* 2：通信継続 */
+		{ fc_SpiAbort,			CMDRV_STAT_RETRY,	XSPI_OST_CNT_TIMEOUT},	/* 3：転送未完了タイムアウト */
 		{ 0,					0,					0					},	/* 4：EN信号High */
-		{ fc_SpiStop,			CMDRV_STAT_INVALID,	XSPI_OST_CNT_ENMONI	},	/* 5：EN信号Low */
+		{ fc_SpiCommStop,		CMDRV_STAT_INVALID,	XSPI_OST_CNT_ENMONI	},	/* 5：EN信号Low */
 		{ fc_SpiEnd,			CMDRV_STAT_IDLE,	XSPI_OST_CNT_COMEND	},	/* 6：通信終了 */
 	},
 /* 4: リトライ状態(アイドル) */
 	{																		/* Event */
 		{ 0,					0,					0					},	/* 0：初期化 */
-		{ fc_SpiStartPrepare,	CMDRV_STAT_COMM,	XSPI_OST_CNT_NORMAL	},	/* 1：通常動作 */
+		{ fc_SpiStartPrepare,	CMDRV_STAT_COMM,	XSPI_OST_CNT_COMM	},	/* 1：通常動作 */
 		{ 0,					0,					0					},	/* 2：通信継続 */
 		{ 0,					0,					0					},	/* 3：転送未完了タイムアウト */
 		{ 0,					0,					0					},	/* 4：EN信号High */
 		{ fc_SpiStop,			CMDRV_STAT_INVALID,	XSPI_OST_CNT_ENMONI	},	/* 5：EN信号Low */
-		{ fc_SpiEnd,			CMDRV_STAT_IDLE,	XSPI_OST_CNT_COMEND	},	/* 6：通信終了 */
+		{ 0,					0,					0					},	/* 6：通信終了 */
 	}
 };
 
@@ -207,9 +181,6 @@ void	xspi_Init(
 	/* DMA転送カウントを初期化 */
 	bf_drv_DMA_Cnt = 0UL;
 
-	/* Frame信号をHigh出力 */
-	PDR_SPI_FRM_WR( STD_HIGH );
-
 	/* OSTM起動（初期化用） */
 	vd_g_Gpt_OstStart( XSPI_OST_CH, ost_start );
 
@@ -257,8 +228,8 @@ void	xspi_DeInit(
 	/* DMA転送カウントを初期化 */
 	bf_drv_DMA_Cnt = 0UL;
 
-	/* Frame信号をHigh出力 */
-	PDR_SPI_FRM_WR( STD_HIGH );
+	/* Frame信号をLow出力 */
+	PDR_SPI_FRM_WR( STD_LOW );
 
 	return;
 }
@@ -398,16 +369,16 @@ void	xspi_Main(
 	const uint8	ch
 )
 {
-	const Spi_ModeC_ChannelConfigType* t_pcstChannelConfig = &cstSpi_UcfgModeCData.pstChannelConfig[XSPI_COMC_ID];
 	(VOID)ch;
 	uint8	event;			/* イベントNo. */
 	uint8	stat;
-	uint8	spi_stat;
-	uint16	dtc;
 
 	/* テーブル処理前の状態を保存 */
 	stat = bf_drv_SpiMng.stat;
-	event = fc_drv_ENSigCheck();			/* EN信号状態チェック */
+	if( stat != CMDRV_STAT_COMM )				/* 送受信状態時はfc_drv_getCommEvent()内でEN信号チェック */
+	{
+		event = fc_drv_ENSigCheck();			/* EN信号状態チェック */
+	}
 
 	/* 現在の遷移状態のイベントをチェック */
 	switch( stat )				/* ドライバ状態 */
@@ -428,65 +399,7 @@ void	xspi_Main(
 			break;
 
 		case CMDRV_STAT_COMM :				/* 送受信状態 */
-			if( event == (uint8)CMDRV_EVT_NORMAL )
-			{
-				/* SPI通信状態の取得 */
-				spi_stat = Spi_GetStatus( XSPI_COMC_ID );
-				if( spi_stat == u1SPI_IDLE )
-				{
-					/* 通信終了 */
-					event = CMDRV_EVT_COMEND;
-				}
-				else
-				{
-					switch( bf_drv_ComTimeCount )
-					{
-						case	CMDRV_COM_TIME_0:		/* 呼び出し回数カウント 通信中0 */
-						case	CMDRV_COM_TIME_1:		/* 呼び出し回数カウント 通信中1 */
-							/* 通信継続 */
-							bf_drv_ComTimeCount++;
-							event = CMDRV_EVT_N_NEXT;
-
-							/* DMA転送カウントを保存 */
-							bf_drv_DMA_Cnt = Dma_GetTransCount( t_pcstChannelConfig->u1DmaRxChannel );
-							break;
-						case	CMDRV_COM_TIME_2:		/* 呼び出し回数カウント 通信中2 */
-							/* DMA転送カウントチェック(転送カウントに減少あり) */
-							dtc = Dma_GetTransCount( t_pcstChannelConfig->u1DmaRxChannel );
-							if ( dtc < bf_drv_DMA_Cnt ) 
-							{	/* 前回のカウント値よりカウントダウン */
-								/* 通信継続 */
-								bf_drv_ComTimeCount++;
-								event = CMDRV_EVT_N_NEXT;
-							}
-							else
-							{	/* 前回のカウント値に変化なし */
-								/* 転送未完了タイムアウト */
-								bf_drv_ComTimeCount = 0U;
-								event = CMDRV_EVT_TIMEOUT;
-								fc_drv_SpiSetErrInfoKind( XSPI_ERR_KIND_TIM );
-#ifdef XSPI_DEBUG
-								fc_drv_SpiSetDbgErrInfo( XSPI_ERR_DBG_SLAVETIM_NOCLK );
-#endif	/* XSPI_DEBUG */
-							}
-							break;
-						default:
-							/* 転送未完了タイムアウト */
-							bf_drv_ComTimeCount = 0U;
-							event = CMDRV_EVT_TIMEOUT;
-							fc_drv_SpiSetErrInfoKind( XSPI_ERR_KIND_TIM );
-#ifdef XSPI_DEBUG
-							fc_drv_SpiSetDbgErrInfo( XSPI_ERR_DBG_SLAVETIM );
-#endif	/* XSPI_DEBUG */
-							break;
-					}
-				}
-			}
-			else
-			{
-				fc_drv_SpiSetErrInfoKind( XSPI_ERR_KIND_ENCHG );
-				bf_drv_ComTimeCount = 0U;
-			}
+			event = fc_drv_getCommEvent();	/* 送受信状態のイベントを取得 */
 			break;
 
 		default :							/* 状態に該当なし */
@@ -519,12 +432,14 @@ void	xspi_Main(
 *					  OUT :	None											*
 *																			*
 *					  RET :	uint8											*
-*						XSPI_ERR_KIND_NONE			(0x00)	エラー無し 		*
-*						XSPI_ERR_KIND_TRX			(0x01)	送受信エラー 	*
-*						XSPI_ERR_KIND_INTG			(0x02)	データ整合性エラー *
-*						XSPI_ERR_KIND_ENCHG			(0x04)	EN信号変化 		*
-*						XSPI_ERR_KIND_TIM			(0x08)	通信時間オーバ 	*
-*						XSPI_ERR_KIND_RX_BUF_OVF	(0x10)	受信バッファオーバーフロー *
+*						XSPI_ERR_KIND_NONE			(0x00)	エラー無し		*
+*						XSPI_ERR_KIND_TRX			(0x01)	送受信エラー	*
+*						XSPI_ERR_KIND_INTG			(0x02)	データ整合性エラー	*
+*						XSPI_ERR_KIND_ENCHG			(0x04)	EN信号変化		*
+*						XSPI_ERR_KIND_TIM			(0x08)	通信時間オーバ	*
+*						XSPI_ERR_KIND_RX_BUF_OVF	(0x10)	受信バッファオーバーフロー	*
+*						XSPI_ERR_KIND_RX_BUF_EMPTY	(0x20)	受信バッファ空	*
+*						XSPI_ERR_KIND_ARG			(0x40)	引数値不正		*
 *																			*
 ****************************************************************************/
 uint8	xspi_GetErrInfo(
@@ -594,7 +509,21 @@ static uint8	fs_tbl_Excute(
 	/* OSTM停止 */
 	vd_g_Gpt_OstStop( XSPI_OST_CH );
 
-	if( tb_drv_SpiDrvJmp[stat][event].ostm_cnt != 0UL )
+	if( tb_drv_SpiDrvJmp[stat][event].ostm_cnt == XSPI_OST_CNT_COMM )
+	{
+		const uint32 ost_comm_table[CMDRV_COM_TIME_MAX] = {	/* 送受信状態OSTMテーブル */
+			XSPI_OST_CNT_COMM_ENMONI,
+			XSPI_OST_CNT_COMPLETE_CHECK,
+			XSPI_OST_CNT_ENMONI_RETURN,
+			XSPI_OST_CNT_COMM_ENMONI,
+			XSPI_OST_CNT_COMM_ENMONI
+		};
+
+		/* 送受信状態のOSTM割り込みのカウンタ値をセット */
+		bf_drv_ComTimeCount %= CMDRV_COM_TIME_MAX;
+		ost_start[GPT_OST_START_PERIOD] = ost_comm_table[bf_drv_ComTimeCount];
+	}
+	else if( tb_drv_SpiDrvJmp[stat][event].ostm_cnt != 0UL )
 	{
 		/* OSTM割り込みのカウンタ値をセット */
 		ost_start[GPT_OST_START_PERIOD] = tb_drv_SpiDrvJmp[stat][event].ostm_cnt;
@@ -602,7 +531,7 @@ static uint8	fs_tbl_Excute(
 	else
 	{
 		/* OSTM割り込みのカウンタ値をセット（通常の状態遷移では起こりえない） */
-		ost_start[GPT_OST_START_PERIOD] = XSPI_OST_CNT_N_NEXT;
+		ost_start[GPT_OST_START_PERIOD] = XSPI_OST_CNT_ENMONI;
 	}
 
 	/* OSTM起動 */
@@ -623,7 +552,7 @@ static uint8	fs_tbl_Excute(
 *					  OUT :	None											*
 *																			*
 *					  RET :	uint8											*
-*						XSPI_OK	(0x01)	成功			 	 				*
+*						XSPI_OK	(0x01)	成功								*
 *																			*
 ****************************************************************************/
 static uint8	fc_SpiInit(
@@ -647,8 +576,8 @@ static uint8	fc_SpiInit(
 *					  OUT :	None											*
 *																			*
 *					  RET :	result	実行結果								*
-*						XSPI_NG	(0x00)	失敗	 							*
-*						XSPI_OK	(0x01)	成功	 	 						*
+*						XSPI_NG	(0x00)	失敗								*
+*						XSPI_OK	(0x01)	成功								*
 *																			*
 ****************************************************************************/
 static uint8	fc_SpiStartPrepare(
@@ -656,7 +585,7 @@ static uint8	fc_SpiStartPrepare(
 )
 {
 	uint8	result = XSPI_OK;
-	sint32	async_result = 0;
+	uint8	async_result = u1SPI_NO_ERROR;
 	uint8	spage, rpage;
 	uint8	*rcv_buf, *snd_buf;
 
@@ -679,10 +608,14 @@ static uint8	fc_SpiStartPrepare(
 
 	/* 整合性データ付与 */
 #if (XSPI_DATA_CHECK != XSPI_DATA_CHECK_NONE)
-	fc_drv_AddIntegrityData(snd_buf);
+	fc_drv_AddIntegrityData((uint32 *)snd_buf);
 #endif	/* XSPI_DATA_CHECK */
 
-	bf_drv_ComTimeCount = 1U;	/* 呼び出し回数カウント開始 */
+#if ( XSPI_COMM_CYCLE == XSPI_COMM_CYCLE_5ms )
+	bf_drv_ComTimeCount = CMDRV_COM_TIME_COMPLETION_CHECK;	/* 呼び出しカウント設定（周期5ms時は最初に通信完了チェックを行う） */
+#else	/* (XSPI_COMM_CYCLE == XSPI_COMM_CYCLE_10ms) */
+	bf_drv_ComTimeCount = CMDRV_COM_TIME_ENMONI;	/* 呼び出しカウント設定（周期10ms時は最初にEN信号チェックを行う） */
+#endif	/* (XSPI_COMM_CYCLE) */
 
 	/* 暫定対応 初回データスキップ */
 	if( bf_drv_skip_first_data == XSPI_NG )
@@ -696,7 +629,7 @@ static uint8	fc_SpiStartPrepare(
 		async_result = Spi_AsyncTransmit( XSPI_COMC_ID, (const Spi_ModeC_DataType *)snd_buf, (const Spi_ModeC_DataType *)rcv_buf,(U2)XSPI_FRM_MAX_WORD );
 	}
 
-	if( async_result == 0 )	/* No Error(==0) */
+	if( async_result == u1SPI_NO_ERROR )	/* No Error(==0) */
 	{
 		/* Frame信号をLow出力 */
 		PDR_SPI_FRM_WR( STD_LOW );
@@ -721,7 +654,7 @@ static uint8	fc_SpiStartPrepare(
 *					  OUT :	None											*
 *																			*
 *					  RET :	uint8											*
-*						XSPI_OK	(0x01)	成功			 	 				*
+*						XSPI_OK	(0x01)	成功								*
 *																			*
 ****************************************************************************/
 static uint8	fc_SpiEnd(
@@ -780,7 +713,7 @@ static uint8	fc_SpiEnd(
 *					  OUT :	None											*
 *																			*
 *					  RET :	uint8											*
-*						XSPI_OK	(0x01)	成功			 	 				*
+*						XSPI_OK	(0x01)	成功								*
 *																			*
 ****************************************************************************/
 static uint8	fc_SpiAbort(
@@ -807,7 +740,7 @@ static uint8	fc_SpiAbort(
 *					  OUT :	None											*
 *																			*
 *					  RET :	uint8											*
-*						XSPI_OK	(0x01)	成功			 	 				*
+*						XSPI_OK	(0x01)	成功								*
 *																			*
 ****************************************************************************/
 static uint8	fc_SpiStop(
@@ -817,13 +750,199 @@ static uint8	fc_SpiStop(
 	/* SPI非同期通信中断 */
 	Spi_CancelAsyncTransmit( XSPI_COMC_ID );
 
-#if (XSPI_DATA_BUFFER != XSPI_DATA_BUFFER_DOUBLE)
-	fc_drv_SpiSendDpageRenew();	/* ドライバ用送信バッファページ更新 */
-#endif	/* XSPI_DATA_BUFFER */
+	/* 送受信バッファクリア */
+	XSPI_MEMSET( &bf_drv_SpiMng.snd, 0U, sizeof(bf_drv_SpiMng.snd) );
+	XSPI_MEMSET( &bf_drv_SpiMng.rcv, 0U, sizeof(bf_drv_SpiMng.rcv) );
 
 	PDR_SPI_FRM_WR( STD_HIGH );	/* Frame 信号High出力 */
 
 	return( XSPI_OK );
+}
+
+/****************************************************************************
+*																			*
+*		SYMBOL		: fc_SpiCommStop										*
+*																			*
+*		DESCRIPTION	: 送受信ドライバ停止（送受信状態）						*
+*																			*
+*		PARAMETER	: IN  :	None											*
+*																			*
+*					  OUT :	None											*
+*																			*
+*					  RET :	uint8											*
+*						XSPI_OK	(0x01)	成功								*
+*																			*
+****************************************************************************/
+static uint8	fc_SpiCommStop(
+	void
+)
+{
+	uint8	spi_stat;
+
+	spi_stat = Spi_GetStatus( XSPI_COMC_ID );
+	/* 通信が完了している場合 */
+	if( spi_stat == u1SPI_IDLE )
+	{
+		sint32	err;
+
+		fc_drv_SpiClearErrInfoKind( XSPI_ERR_KIND_TIM );
+
+		/* オーバーランエラー状態チェック */
+		err = Spi_GetOvrunErrStatus( XSPI_COMC_ID );
+		if( err != 0 )
+		{
+			fc_drv_SpiSetErrInfoKind( XSPI_ERR_KIND_TRX );
+
+#ifdef XSPI_DEBUG
+			fc_drv_SpiSetDbgErrInfo( XSPI_ERR_DBG_DMAOVERRUN );
+#endif	/* XSPI_DEBUG */
+		}
+		else
+		{
+			fc_drv_SpiClearErrInfoKind( XSPI_ERR_KIND_TRX );
+
+#if (XSPI_DATA_BUFFER != XSPI_DATA_BUFFER_DOUBLE)
+			/* 送受信バッファページ更新 */
+			fc_drv_SpiRcvDpageRenew();
+			fc_drv_SpiSendDpageRenew();
+#endif	/* XSPI_DATA_BUFFER */
+
+#ifdef XSPI_DEBUG
+			/* 暫定対応 初回データスキップ */
+			if( bf_drv_skip_first_data == XSPI_NG )
+			{
+				bf_drv_Dbg_ErrInfo = 0U;
+			}
+#endif	/* XSPI_DEBUG */
+
+			/* 暫定対応 初回データスキップ */
+			bf_drv_skip_first_data = XSPI_OK;
+		}
+	}
+	else
+	{
+		/* SPI非同期通信中断 */
+		Spi_CancelAsyncTransmit( XSPI_COMC_ID );
+
+		/* 送受信バッファクリア */
+		XSPI_MEMSET( &bf_drv_SpiMng.snd, 0U, sizeof(bf_drv_SpiMng.snd) );
+		XSPI_MEMSET( &bf_drv_SpiMng.rcv, 0U, sizeof(bf_drv_SpiMng.rcv) );
+	}
+
+	PDR_SPI_FRM_WR( STD_HIGH );	/* Frame 信号High出力 */
+
+	return( XSPI_OK );
+}
+
+/****************************************************************************
+*																			*
+*		SYMBOL		: fc_drv_getCommEvent									*
+*																			*
+*		DESCRIPTION	: 送受信状態イベント取得処理							*
+*																			*
+*		PARAMETER	: IN  :	None											*
+*																			*
+*					  OUT :	None											*
+*																			*
+*					  RET :	uint8											*
+*						event		イベントNo.								*
+*																			*
+****************************************************************************/
+static uint8 fc_drv_getCommEvent(
+	void
+)
+{
+	uint8	event;			/* イベントNo. */
+
+	if( bf_drv_ComTimeCount == CMDRV_COM_TIME_ENMONI )		/* 通信中呼び出しカウント 初回のEN信号チェック時（Centralはチェックしない） */
+	{
+		/* 通信継続 */
+		event = CMDRV_EVT_N_NEXT;
+	}
+	else
+	{
+		uint8	spi_stat;
+
+		/* SPI通信状態の取得 */
+		spi_stat = Spi_GetStatus( XSPI_COMC_ID );
+		if( spi_stat == u1SPI_IDLE )
+		{
+			/* 通信終了 */
+			event = CMDRV_EVT_COMEND;
+		}
+		else
+		{
+			const Spi_ModeC_ChannelConfigType* t_pcstChannelConfig = &cstSpi_UcfgModeCData.pstChannelConfig[XSPI_COMC_ID];
+			uint16	dtc;	/* DMA転送カウンタ */
+
+			switch( bf_drv_ComTimeCount )
+			{
+				case CMDRV_COM_TIME_COMPLETION_CHECK:		/* 通信中呼び出しカウント 初回の通信完了チェック時 */
+					/* 通信継続 */
+					event = CMDRV_EVT_N_NEXT;
+					break;
+
+				case CMDRV_COM_TIME_ENMONI_KEEP:			/* 通信中呼び出しカウント 通信継続後のEN信号チェック時 */
+					/* DMA転送カウントを保存 */
+					bf_drv_DMA_Cnt = Dma_GetTransCount( t_pcstChannelConfig->u1DmaRxChannel );
+					/* 通信継続 */
+					event = CMDRV_EVT_N_NEXT;
+					break;
+
+				case CMDRV_COM_TIME_ENMONI_CLKCHK:			/* 通信中呼び出しカウント CLK送出有無チェック時 */
+					/* DMA転送カウントチェック(転送カウントに減少あり) */
+					dtc = Dma_GetTransCount( t_pcstChannelConfig->u1DmaRxChannel );
+					if( dtc < bf_drv_DMA_Cnt )				/* 前回のカウント値よりカウントダウン */
+					{
+						/* 通信継続 */
+						event = CMDRV_EVT_N_NEXT;
+					}
+					else									/* 前回のカウント値に変化なし */
+					{
+						/* 転送未完了タイムアウト */
+						event = CMDRV_EVT_TIMEOUT;
+						fc_drv_SpiSetErrInfoKind( XSPI_ERR_KIND_TIM );
+#ifdef XSPI_DEBUG
+						fc_drv_SpiSetDbgErrInfo( XSPI_ERR_DBG_SLAVETIM_NOCLK );
+#endif	/* XSPI_DEBUG */
+					}
+					break;
+
+				default:									/* 通信中呼び出しカウント 通信時間が最大の時 */
+					/* 転送未完了タイムアウト */
+					event = CMDRV_EVT_TIMEOUT;
+					fc_drv_SpiSetErrInfoKind( XSPI_ERR_KIND_TIM );
+#ifdef XSPI_DEBUG
+					fc_drv_SpiSetDbgErrInfo( XSPI_ERR_DBG_SLAVETIM );
+#endif	/* XSPI_DEBUG */
+					break;
+			}
+		}
+	}
+
+	if( bf_drv_ComTimeCount != CMDRV_COM_TIME_COMPLETION_CHECK )	/* 通信開始から初回の通信完了チェック時はENを監視しない */
+	{
+		uint8	EN_event;		/* ENイベント情報 */
+
+		EN_event = fc_drv_ENSigCheck();			/* EN信号状態チェック */
+		if( EN_event != CMDRV_EVT_NORMAL )/* EN変化あり（High→Low） */
+		{
+			event = EN_event;
+			fc_drv_SpiSetErrInfoKind( XSPI_ERR_KIND_ENCHG );
+		}
+	}
+
+	if( event == CMDRV_EVT_N_NEXT )
+	{
+		/* イベントが通信継続時は通信中呼び出しカウント更新 */
+		bf_drv_ComTimeCount++;
+	}
+	else
+	{
+		bf_drv_ComTimeCount = 0U;
+	}
+
+	return ( event );
 }
 
 /****************************************************************************

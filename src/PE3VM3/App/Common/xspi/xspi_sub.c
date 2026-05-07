@@ -330,11 +330,13 @@ uint8	fc_drv_ReadBuf(
 	uint8 page;
 	uint8 is_match;
 
-	if ( NULL_PTR != p_addr )
+	if (( NULL_PTR != p_addr ) && ( XSPI_RCV_FRM_MAX >= size ))
 	{
+		fc_drv_SpiClearErrInfoKind( XSPI_ERR_KIND_ARG );
 		rcv_inf = bf_drv_SpiMng.rcv.page_inf & ((uint8)XSPI_BUF_PAGE_LOCK | (uint8)XSPI_BUF_PAGE_1);
-		if (( XSPI_BUF_PAGE_LOCK > rcv_inf ) && ( XSPI_RCV_FRM_MAX >= size ))
+		if ( XSPI_BUF_PAGE_LOCK > rcv_inf )
 		{
+			fc_drv_SpiClearErrInfoKind( XSPI_ERR_KIND_RX_BUF_EMPTY );
 			page = rcv_inf ^ (uint8)XSPI_BUF_PAGE_1;
 			prcv_buf = (uint32 *)bf_drv_SpiMng.rcv.page[page].dat;
 
@@ -362,6 +364,14 @@ uint8	fc_drv_ReadBuf(
 
 			bf_drv_SpiMng.rcv.page_inf = ( rcv_inf | (uint8)XSPI_BUF_PAGE_LOCK);
 		}
+		else
+		{
+			fc_drv_SpiSetErrInfoKind( XSPI_ERR_KIND_RX_BUF_EMPTY );
+		}
+	}
+	else
+	{
+		fc_drv_SpiSetErrInfoKind( XSPI_ERR_KIND_ARG );
 	}
 
 	return( result );
@@ -532,8 +542,9 @@ uint8	fc_drv_ReadBuf(
 	uint8 page;
 	uint8 is_match;
 
-	if ( NULL_PTR != p_addr )
+	if (( NULL_PTR != p_addr ) && ( XSPI_RCV_FRM_MAX >= size ))
 	{
+		fc_drv_SpiClearErrInfoKind( XSPI_ERR_KIND_ARG );
 		page = bf_drv_SpiMng.rcv.page_task;
 		if ( page >= XSPI_RCV_PAGE )
 		{
@@ -545,8 +556,9 @@ uint8	fc_drv_ReadBuf(
 		}
 		rcv_inf = bf_drv_SpiMng.rcv.page[page].inf;
 
-		if (( RCV_FRM_DATA_FIX == rcv_inf ) && ( XSPI_RCV_FRM_MAX >= size ))
+		if ( RCV_FRM_DATA_FIX == rcv_inf )
 		{
+			fc_drv_SpiClearErrInfoKind( XSPI_ERR_KIND_RX_BUF_EMPTY );
 			prcv_buf = (uint32 *)bf_drv_SpiMng.rcv.page[page].dat;
 
 #if (XSPI_DATA_CHECK != XSPI_DATA_CHECK_NONE)
@@ -578,6 +590,14 @@ uint8	fc_drv_ReadBuf(
 			page %= (uint8)XSPI_RCV_PAGE;
 			bf_drv_SpiMng.rcv.page_task = page;
 		}
+		else
+		{
+			fc_drv_SpiSetErrInfoKind( XSPI_ERR_KIND_RX_BUF_EMPTY );
+		}
+	}
+	else
+	{
+		fc_drv_SpiSetErrInfoKind( XSPI_ERR_KIND_ARG );
 	}
 
 	return( result );
