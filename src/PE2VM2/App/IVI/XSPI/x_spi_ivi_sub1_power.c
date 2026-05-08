@@ -296,10 +296,11 @@ static U4 u4_s_xspi_ivi_power_opests_to_vm3;
 static U1 u1_s_xspi_ivi_power_vmreset_comp;
 static U1 u1_s_xspi_ivi_power_cdcreset_comp;
 static U1 u1_s_xspi_ivi_power_usrreset_port;
-static U1 u1_s_xspi_ivi_power_usrrst_bonmask;
+static U1 u1_s_xspi_ivi_power_usrrst_inhibit;
 static U4 u4_s_xspi_ivi_power_siperr_pre;
 static U4 u4_s_xspi_ivi_power_restart_pre;
 static U1 u1_s_xspi_ivi_socbootrec_flg;
+static U1 u1_s_xspi_ivi_power_usrrst_trig;
 
 /*電源状態でのデバイス初期化確認*/
 static U4 u4_sp_xspi_ivi_power_dev_init[POWER_MODE_STATE_NUM] = {
@@ -443,24 +444,14 @@ void            vd_g_XspiIviSub1PowerInit(void)
     u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_POWER_BMONI] = (U4)XSPI_IVI_POWER_BMONVOL_TASK;
 
     u4_s_xspi_ivi_power_opests_to_vm3 = (U4)0U;
-    u1_s_xspi_ivi_power_vmreset_comp = (U4)0U;
-    u1_s_xspi_ivi_power_cdcreset_comp = (U4)0U;
+    u1_s_xspi_ivi_power_vmreset_comp = (U1)0U;
+    u1_s_xspi_ivi_power_cdcreset_comp = (U1)0U;
     u1_s_xspi_ivi_power_usrreset_port = (U1)STD_LOW;
     u4_s_xspi_ivi_power_siperr_pre = (U4)0U;
     u4_s_xspi_ivi_power_restart_pre = (U4)0U;
     u1_s_xspi_ivi_socbootrec_flg = (U1)FALSE;
-}
-
-/*===================================================================================================================================*/
-/*  void            vd_g_XspiIviSub1PowerBonInit(void)                                                                               */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    B-on Initial                                                                                                     */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void            vd_g_XspiIviSub1PowerBonInit(void)
-{
-    u1_s_xspi_ivi_power_usrrst_bonmask = (U1)XSPI_IVI_POWER_USRRESET_LOCK;
+    u1_s_xspi_ivi_power_usrrst_trig = (U1)FALSE;
+    u1_s_xspi_ivi_power_usrrst_inhibit = (U1)XSPI_IVI_POWER_USRRESET_LOCK;
 }
 
 /*===================================================================================================================================*/
@@ -669,26 +660,35 @@ void            vd_g_XspiIviSub1PowerResetRoutine(void)
         u4_s_xspi_ivi_power_restart_pre = u4_t_restart;
     }
 
-    /*ユーザーリセット処理*/
+    /* User Reset */
     u1_t_vm_ret = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM3TO2_USRRST_MASK, &u4_t_usrreset, (U2)XSPI_IVI_POWER_VMTRA_LEN);
-
     if(u1_t_vm_ret != (U1)IVDSH_NO_REA) {
-        if((u4_t_usrreset == (U4)XSPI_IVI_POWER_USRRESET_UNLOCK) &&
-           (u1_s_xspi_ivi_power_usrrst_bonmask == (U1)XSPI_IVI_POWER_USRRESET_UNLOCK)) {
+        /* SW ON Counter Clear */
+        if((u4_t_usrreset != (U4)XSPI_IVI_POWER_USRRESET_UNLOCK) ||
+           (u1_s_xspi_ivi_power_usrrst_inhibit != (U1)XSPI_IVI_POWER_USRRESET_UNLOCK)) {
+            u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_PWRSW_ON_TIME] = (U4)0U;
+        }
+        else {
             u1_t_pwr = ExtSigCtrl_GetSigSts(EXTSIGCTRL_KIND_EXT_PWR_SW);
-            if(u1_t_pwr == (U1)U1_EXTSIGCTRL_SIG_STS_ON){
-                if((u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_PWRSW_ON_TIME] >= (U4)XSPI_IVI_POWER_PWRSW_ON_TASK) &&
-                (u1_s_xspi_ivi_power_usrreset_port == (U1)STD_LOW)){
-                    /*ユーザリセット*/
-                    Dio_WriteChannel((Dio_ChannelType)XSPI_IVI_POWER_USRRESET_PORT, (Dio_LevelType)STD_HIGH);
-                    u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_RESET_PORT_OFF_TIME] = (U4)0U;
-                    u1_s_xspi_ivi_power_usrreset_port = (U1)STD_HIGH;
-                }
-            } else {
+            /* PWR-SW OFF*/
+            if(u1_t_pwr != (U1)U1_EXTSIGCTRL_SIG_STS_ON) {
+                u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_PWRSW_ON_TIME] = (U4)0U;
+                u1_s_xspi_ivi_power_usrrst_trig = (U1)FALSE;
+            }
+            /* PWR-SW ON(User reset executed) */
+            else if(u1_s_xspi_ivi_power_usrrst_trig == (U1)TRUE) {
                 u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_PWRSW_ON_TIME] = (U4)0U;
             }
-        } else {
-            u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_PWRSW_ON_TIME] = (U4)0U;
+            /* User Reset Trigger */
+            else if(u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_PWRSW_ON_TIME] >= (U4)XSPI_IVI_POWER_PWRSW_ON_TASK) {
+                Dio_WriteChannel((Dio_ChannelType)XSPI_IVI_POWER_USRRESET_PORT, (Dio_LevelType)STD_HIGH);
+                u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_RESET_PORT_OFF_TIME] = (U4)0U;
+                u1_s_xspi_ivi_power_usrreset_port = (U1)STD_HIGH;
+                u1_s_xspi_ivi_power_usrrst_trig = (U1)TRUE;
+            }
+            else {
+                /* Long press measurement: maintain counter */
+            }
         }
     }
 
@@ -1013,7 +1013,7 @@ static void            vd_s_XspiIviSub1PowerOperationStsRec(const U1 * u1_ap_XSP
 
     switch(u1_ap_XSPI_ADD[1]) {
         case XSPI_IVI_POWER_OPESTS_SOC_BOOT_COMP:
-            u1_s_xspi_ivi_power_usrrst_bonmask = (U1)XSPI_IVI_POWER_USRRESET_UNLOCK;
+            u1_s_xspi_ivi_power_usrrst_inhibit = (U1)XSPI_IVI_POWER_USRRESET_UNLOCK;
             break;
         case XSPI_IVI_POWER_OPESTS_SOC_VMRESET:
             if(u1_s_xspi_ivi_power_usrreset_port == (U1)STD_HIGH) {
@@ -1072,6 +1072,9 @@ static void            vd_s_XspiIviSub1PowerVMResetRec(void)
     vd_g_PictCtl_VmResetReq();
     vd_g_PncReqctl_ResetReq((U1)PNCREQCTL_RESETKIND_VM);
     vd_g_DtcCtl_ResetReq((U1)DTCCTL_RESETKIND_VM);
+
+    /*User Reset inhibit*/
+    u1_s_xspi_ivi_power_usrrst_inhibit = (U1)XSPI_IVI_POWER_USRRESET_LOCK;
 }
 
 /*===================================================================================================================================*/
@@ -1091,6 +1094,9 @@ static void            vd_s_XspiIviSub1PowerSoCResetRec(void)
     vd_g_PictCtl_SocResetReq();
     vd_g_PncReqctl_ResetReq((U1)PNCREQCTL_RESETKIND_SOC);
     vd_g_DtcCtl_ResetReq((U1)DTCCTL_RESETKIND_SOC);
+
+    /*User Reset inhibit*/
+    u1_s_xspi_ivi_power_usrrst_inhibit = (U1)XSPI_IVI_POWER_USRRESET_LOCK;
 }
 
 /*===================================================================================================================================*/
@@ -1122,7 +1128,7 @@ void            vd_g_XspiIviSub1PowerVMResetComp(const U1 u1_a_ID)
     if(u1_s_xspi_ivi_power_vmreset_comp == (U1)XSPI_IVI_POWER_VMRESET_COMP) {
         /*準備応答*/
         vd_s_XspiIviSub1PowerVMResetSend();
-        u1_s_xspi_ivi_power_vmreset_comp = (U4)0U;
+        u1_s_xspi_ivi_power_vmreset_comp = (U1)0U;
     }
 }
 
@@ -1139,7 +1145,7 @@ void            vd_g_XspiIviSub1PowerCDCResetComp(const U1 u1_a_ID)
     u1_s_xspi_ivi_power_cdcreset_comp |= u1_a_ID;
     if(u1_s_xspi_ivi_power_cdcreset_comp == (U1)XSPI_IVI_POWER_CDCRESET_COMP) {
         vd_s_XspiIviSub1PowerOperationStsToVM3();
-        u1_s_xspi_ivi_power_cdcreset_comp = (U4)0U;
+        u1_s_xspi_ivi_power_cdcreset_comp = (U1)0U;
     }
 }
 
