@@ -1185,7 +1185,7 @@ void            vd_g_McuDev_Pwroff(void)
   Description   : 
   param[in/out] : 
   return        : PWROFF_USB_BIT ：プロセス完了
-  Note          : "スタンバイ" もしくは "縮退走行"へ遷移した時
+  Note          : "見た目オン" もしくは "OTA"以外へ遷移した時
 *****************************************************************************/
 static U2       u2_s_McuDev_Pwroff_USB(const U1 u1_a_PWR)
 {
@@ -1193,7 +1193,7 @@ static U2       u2_s_McuDev_Pwroff_USB(const U1 u1_a_PWR)
 
     u2_t_ret    = (U2)PWROFF_BIT_OFF;
 
-    if((u1_a_PWR == (U1)POWER_MODE_STATE_STANDBY) || (u1_a_PWR == (U1)POWER_MODE_STATE_EDS)){
+    if(u1_a_PWR != (U1)POWER_MODE_STATE_APPON){
         vd_g_McuDevPwronSetPort(MCU_PORT_USB_LED_ON, MCU_DIO_LOW);
         u2_t_ret    = (U2)PWROFF_USB_BIT;
     }

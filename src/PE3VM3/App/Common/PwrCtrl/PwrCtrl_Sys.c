@@ -1100,7 +1100,7 @@ static void     vd_s_McuDev_Polling_AUDIO(void)
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : "スタンバイ" もしくは "縮退走行"以外へ遷移後100ms経過でUSB-LED-ON = Hi
+  Note          : "見た目オン" もしくは "OTA"へ遷移後100ms経過でUSB-LED-ON = Hi
 *****************************************************************************/
 static void     vd_s_McuDev_Pwron_USB(const U1 u1_a_PWR)
 {
@@ -1108,8 +1108,8 @@ static void     vd_s_McuDev_Pwron_USB(const U1 u1_a_PWR)
 
     U1      u1_t_timchk;
 
-    if((u1_a_PWR != (U1)POWER_MODE_STATE_STANDBY) && (u1_a_PWR != (U1)POWER_MODE_STATE_EDS)){
-        /* "スタンバイ" もしくは "縮退走行"以外はカウンタインクリメント */
+    if(u1_a_PWR == (U1)POWER_MODE_STATE_APPON){
+        /* "見た目オン" もしくは "OTA"の場合はカウンタインクリメント */
         if(u4_s_PwrCtrl_waittim_usb < U4_MAX){
             u4_s_PwrCtrl_waittim_usb++;
         }
