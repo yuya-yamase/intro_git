@@ -1,4 +1,4 @@
-/* 5.4.0 */
+/* 5.5.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_C_STEER_C_MAJOR                      (5)
-#define ALERT_C_STEER_C_MINOR                      (4)
+#define ALERT_C_STEER_C_MINOR                      (5)
 #define ALERT_C_STEER_C_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -44,7 +44,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U1      u1_s_alert_c_steerpd_msgsts;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -134,7 +133,7 @@ static const U4  u4_sp_ALERT_C_STEER_PD_CRIT[ALERT_C_STEER_PD_NUM_DST] = {
     (U4)0x00000013U,                                                           /* 22 NONSYNC_MOD                                     */
     (U4)0x00000014U,                                                           /* 23 SELF_CALIB                                      */
     (U4)0x00000015U,                                                           /* 24 RDY_DRIVE                                       */
-    (U4)0x00000016U,                                                           /* 25 SPDLIMIT                                        */
+    (U4)0x00000016U,                                                           /* 25 UNKNOWN                                         */
     (U4)0x00000017U,                                                           /* 26 FURLMTSPD                                       */
     (U4)0x00000018U,                                                           /* 27 CMAXSPDLMT                                      */
     (U4)0x00000019U,                                                           /* 28 CMAXSPDFLMT                                     */
@@ -173,7 +172,7 @@ static const U4  u4_sp_ALERT_C_STEER_PD_MASK[ALERT_C_STEER_PD_NUM_DST] = {
     (U4)0x0000007FU,                                                           /* 22 NONSYNC_MOD                                     */
     (U4)0x0000007FU,                                                           /* 23 SELF_CALIB                                      */
     (U4)0x0000007FU,                                                           /* 24 RDY_DRIVE                                       */
-    (U4)0x0000007FU,                                                           /* 25 SPDLIMIT                                        */
+    (U4)0x0000007FU,                                                           /* 25 UNKNOWN                                         */
     (U4)0x0000007FU,                                                           /* 26 FURLMTSPD                                       */
     (U4)0x0000007FU,                                                           /* 27 CMAXSPDLMT                                      */
     (U4)0x0000007FU,                                                           /* 28 CMAXSPDFLMT                                     */
@@ -212,7 +211,7 @@ static const U1  u1_sp_ALERT_C_STEER_PD_DST[ALERT_C_STEER_PD_NUM_DST] = {
     (U1)ALERT_REQ_C_STEER_PD_NONSYNC_MOD,                                      /* 22 NONSYNC_MOD                                     */
     (U1)ALERT_REQ_C_STEER_PD_SELF_CALIB,                                       /* 23 SELF_CALIB                                      */
     (U1)ALERT_REQ_C_STEER_PD_RDY_DRIVE,                                        /* 24 RDY_DRIVE                                       */
-    (U1)ALERT_REQ_C_STEER_PD_SPDLIMIT,                                         /* 25 SPDLIMIT                                        */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 25 UNKNOWN                                         */
     (U1)ALERT_REQ_C_STEER_PD_FURLMTSPD,                                        /* 26 FURLMTSPD                                       */
     (U1)ALERT_REQ_C_STEER_PD_CMAXSPDLMT,                                       /* 27 CMAXSPDLMT                                      */
     (U1)ALERT_REQ_C_STEER_PD_CMAXSPDFLMT,                                      /* 28 CMAXSPDFLMT                                     */
@@ -266,17 +265,6 @@ const ST_ALERT_MTRX st_gp_ALERT_C_STEER_MTRX[3] = {
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*===================================================================================================================================*/
-/*  void    vd_g_AlertC_steerInit(void)                                                                                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_AlertC_steerInit(void)
-{
-    u1_s_alert_c_steerpd_msgsts   = (U1)COM_NO_RX;
-}
-
 /*===================================================================================================================================*/
 /*  static U4      u4_s_AlertC_steerTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -352,16 +340,14 @@ static U4      u4_s_AlertC_steerPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
     U1              u1_t_ptinfb;
     U4              u4_t_src_chk;
 
-	u1_t_msgsts = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EPS1S90_CH0,
+    u1_t_msgsts = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EPS1S90_CH0,
                                     (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
                                     u2_s_ALERT_C_STEERPD_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
-
-    u1_s_alert_c_steerpd_msgsts = u1_t_msgsts;
 
     u1_t_sgnl       = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_EPS_MINF, &u1_t_sgnl);
     u4_t_src_chk    = (U4)u1_t_sgnl;
-    u4_t_src_chk   |= ((U4)u1_s_alert_c_steerpd_msgsts << u1_s_ALERT_C_STEERPD_LSB_COMRX);
+    u4_t_src_chk   |= ((U4)u1_t_msgsts << u1_s_ALERT_C_STEERPD_LSB_COMRX);
 
     u1_t_ptinfb = u1_g_AlertPtinfb();
     switch (u1_t_ptinfb)
@@ -404,10 +390,14 @@ static U4      u4_s_AlertC_steerPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
 /*                                Removed Special processing                                                                         */
 /*  5.3.0    10/11/2024  KO       Change for BEV System_Consideration_1.                                                             */
 /*  5.4.0    12/05/2025  KH       Change for BEV System_Consideration_ADAS.                                                          */
+/*  5.5.0    04/09/2026  HY       Change for BEV Electronic CV.                                                                      */
+/*                                MET-C_STEER-CSTD-0-03-A-C0                                                                         */
+/*                                Remove Alert_REQ30 for C_STEER MID.                                                                */
 /*                                                                                                                                   */
 /*  * DR   = Dyan Reyes, Denso Techno Philippines Inc                                                                                */
 /*  * JMH  = James Michael Hilarion, Denso Techno Philippines Inc.                                                                   */
 /*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*  * KH   = Kiko Huerte,  Denso Techno                                                                                              */
+/*  * HY   = Haruki Yagi,  KSE                                                                                                       */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -17,7 +17,7 @@
 /*------------------------------*/
 /*	通信フレーム最大長			*/
 /*------------------------------*/
-#define XSPI_FRM_MAX				(2012UL)			/* フレーム最大長		*/
+#define XSPI_FRM_MAX				(1512UL)			/* フレーム最大長		*/
 #define XSPI_FRM_MAX_WORD			(XSPI_FRM_MAX / 4)	/* フレーム最大長（4byte単位） */
 #define XSPI_RCV_FRM_MAX			(XSPI_FRM_MAX_WORD)	/* 受信フレーム最大長	*/
 #define XSPI_SND_FRM_MAX			(XSPI_FRM_MAX_WORD)	/* 送信フレーム最大長	*/
@@ -40,13 +40,15 @@
 /*------------------------------*/
 /*	通信エラー検出状態フラグ	*/
 /*------------------------------*/
-#define		XSPI_ERR_MSK_KIND			(0x1F)		/* MASK：エラー種別 */
+#define		XSPI_ERR_MSK_KIND			(0x7F)		/* MASK：エラー種別 */
 #define		XSPI_ERR_KIND_NONE			(0x00)		/* エラー無し       */
 #define		XSPI_ERR_KIND_TRX			(0x01)		/* 送受信エラー     */
 #define		XSPI_ERR_KIND_INTG			(0x02)		/* データ整合性エラー */
 #define		XSPI_ERR_KIND_ENCHG			(0x04)		/* EN信号変化		*/
 #define		XSPI_ERR_KIND_TIM			(0x08)		/* 通信時間オーバ	*/
 #define		XSPI_ERR_KIND_RX_BUF_OVF	(0x10)		/* 受信バッファオーバーフロー */
+#define		XSPI_ERR_KIND_RX_BUF_EMPTY	(0x20)		/* 受信バッファ空 */
+#define		XSPI_ERR_KIND_ARG			(0x40)		/* 引数値不正 */
 
 /*------------------------------*/
 /*	XSPI異常判定フラグ			*/

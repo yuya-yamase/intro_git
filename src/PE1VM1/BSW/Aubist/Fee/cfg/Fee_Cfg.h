@@ -41,8 +41,8 @@
 
 
 #define FEE_PHYSICAL_SECTOR_NUM_PER_VIRTUAL (1U)
-#define FEE_AREA_NUM                        (46U)
-#define FEE_SCTR_NUM_TOTAL                  (98U)
+#define FEE_AREA_NUM                        (49U)
+#define FEE_SCTR_NUM_TOTAL                  (104U)
 
 #define FEE_SCTR_NUM_A000                   (2U)
 #define FEE_SCTR_NUM_A001                   (2U)
@@ -90,6 +90,9 @@
 #define FEE_SCTR_NUM_A043                   (2U)
 #define FEE_SCTR_NUM_A044                   (2U)
 #define FEE_SCTR_NUM_A045                   (2U)
+#define FEE_SCTR_NUM_A046                   (2U)
+#define FEE_SCTR_NUM_A047                   (2U)
+#define FEE_SCTR_NUM_A048                   (2U)
 
 #define FEE_MAX_RCRD_NUM_A000               (127U)
 #define FEE_MAX_RCRD_NUM_A001               (127U)
@@ -137,6 +140,9 @@
 #define FEE_MAX_RCRD_NUM_A043               (89U)
 #define FEE_MAX_RCRD_NUM_A044               (122U)
 #define FEE_MAX_RCRD_NUM_A045               (102U)
+#define FEE_MAX_RCRD_NUM_A046               (159U)
+#define FEE_MAX_RCRD_NUM_A047               (78U)
+#define FEE_MAX_RCRD_NUM_A048               (78U)
 
 #define FEE_RCRD_SRCH_NUM_A000              (127U)
 #define FEE_RCRD_SRCH_NUM_A001              (127U)
@@ -184,6 +190,9 @@
 #define FEE_RCRD_SRCH_NUM_A043              (89U)
 #define FEE_RCRD_SRCH_NUM_A044              (122U)
 #define FEE_RCRD_SRCH_NUM_A045              (102U)
+#define FEE_RCRD_SRCH_NUM_A046              (159U)
+#define FEE_RCRD_SRCH_NUM_A047              (78U)
+#define FEE_RCRD_SRCH_NUM_A048              (78U)
 
 #define FEE_RCRD_WRITE_RETRY_NUM_A000       (1U)
 #define FEE_RCRD_WRITE_RETRY_NUM_A001       (1U)
@@ -231,6 +240,9 @@
 #define FEE_RCRD_WRITE_RETRY_NUM_A043       (1U)
 #define FEE_RCRD_WRITE_RETRY_NUM_A044       (1U)
 #define FEE_RCRD_WRITE_RETRY_NUM_A045       (1U)
+#define FEE_RCRD_WRITE_RETRY_NUM_A046       (1U)
+#define FEE_RCRD_WRITE_RETRY_NUM_A047       (1U)
+#define FEE_RCRD_WRITE_RETRY_NUM_A048       (1U)
 
 #define FEE_INTENT_RBLD_BLOCK_ID_A000       (FEE_INTENT_RBLD_BLOCK_ID_NONE)
 #define FEE_INTENT_RBLD_BLOCK_ID_A001       (FEE_INTENT_RBLD_BLOCK_ID_NONE)
@@ -278,6 +290,9 @@
 #define FEE_INTENT_RBLD_BLOCK_ID_A043       (FEE_INTENT_RBLD_BLOCK_ID_NONE)
 #define FEE_INTENT_RBLD_BLOCK_ID_A044       (FEE_INTENT_RBLD_BLOCK_ID_NONE)
 #define FEE_INTENT_RBLD_BLOCK_ID_A045       (FEE_INTENT_RBLD_BLOCK_ID_NONE)
+#define FEE_INTENT_RBLD_BLOCK_ID_A046       (FEE_INTENT_RBLD_BLOCK_ID_NONE)
+#define FEE_INTENT_RBLD_BLOCK_ID_A047       (FEE_INTENT_RBLD_BLOCK_ID_NONE)
+#define FEE_INTENT_RBLD_BLOCK_ID_A048       (FEE_INTENT_RBLD_BLOCK_ID_NONE)
 
 #define FEE_BLOCK_NUM_A000_LV1              (1U)
 #define FEE_BLOCK_NUM_A001_LV1              (1U)
@@ -325,6 +340,9 @@
 #define FEE_BLOCK_NUM_A043_LV1              (21U)
 #define FEE_BLOCK_NUM_A044_LV1              (41U)
 #define FEE_BLOCK_NUM_A045_LV1              (21U)
+#define FEE_BLOCK_NUM_A046_LV1              (40U)
+#define FEE_BLOCK_NUM_A047_LV1              (32U)
+#define FEE_BLOCK_NUM_A048_LV1              (31U)
 
 #define FEE_BLOCK_NUM_A000_LV2              (0U)
 #define FEE_BLOCK_NUM_A001_LV2              (0U)
@@ -372,6 +390,9 @@
 #define FEE_BLOCK_NUM_A043_LV2              (0U)
 #define FEE_BLOCK_NUM_A044_LV2              (0U)
 #define FEE_BLOCK_NUM_A045_LV2              (0U)
+#define FEE_BLOCK_NUM_A046_LV2              (0U)
+#define FEE_BLOCK_NUM_A047_LV2              (0U)
+#define FEE_BLOCK_NUM_A048_LV2              (0U)
 
 #endif /* FEE_CFG_H */
 

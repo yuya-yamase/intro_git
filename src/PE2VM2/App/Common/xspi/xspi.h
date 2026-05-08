@@ -40,13 +40,15 @@
 /*------------------------------*/
 /*	通信エラー検出状態フラグ	*/
 /*------------------------------*/
-#define		XSPI_ERR_MSK_KIND			(0x1F)		/* MASK：エラー種別 */
+#define		XSPI_ERR_MSK_KIND			(0x7F)		/* MASK：エラー種別 */
 #define		XSPI_ERR_KIND_NONE			(0x00)		/* エラー無し       */
 #define		XSPI_ERR_KIND_TRX			(0x01)		/* 送受信エラー     */
 #define		XSPI_ERR_KIND_INTG			(0x02)		/* データ整合性エラー */
 #define		XSPI_ERR_KIND_ENCHG			(0x04)		/* EN信号変化		*/
 #define		XSPI_ERR_KIND_TIM			(0x08)		/* 通信時間オーバ	*/
 #define		XSPI_ERR_KIND_RX_BUF_OVF	(0x10)		/* 受信バッファオーバーフロー */
+#define		XSPI_ERR_KIND_RX_BUF_EMPTY	(0x20)		/* 受信バッファ空 */
+#define		XSPI_ERR_KIND_ARG			(0x40)		/* 引数値不正 */
 
 /*------------------------------*/
 /*	XSPI異常判定フラグ			*/

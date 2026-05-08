@@ -59,8 +59,8 @@ const U1                           u1_gp_OXCAN_E2E_TRA_LEN[OXCAN_E2E_NUM_TRA] = 
 /* Reception   */
 #if (OXCAN_E2E_NUM_REC > 0U)
 const U2                           u2_gp_OXCAN_E2E_REC_BY_IPDU[] = {
-    (U2)0U,                         /* #define MSG_BDC1S81_RXCH0                       (2U) */
-    (U2)1U                          /* #define MSG_BDC1S91_RXCH1                       (3U) */
+    (U2)0U,                         /* #define MSG_BDC1S81_RXCH0                       (0U) */
+    (U2)1U                          /* #define MSG_BDC1S91_RXCH1                       (1U) */
 };
 const U1                           u1_gp_OXCAN_E2E_REC_LEN[OXCAN_E2E_NUM_REC] = {
     (U1)21U,                        /* 0 BDC1S81 32 - FV/KZK 11 bytes */

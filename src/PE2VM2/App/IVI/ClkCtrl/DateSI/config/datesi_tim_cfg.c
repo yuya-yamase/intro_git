@@ -1,4 +1,4 @@
-/* 0.0.1 */
+/* 0.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define DATESI_TIM_CFG_C_MAJOR                  (0)
-#define DATESI_TIM_CFG_C_MINOR                  (0)
-#define DATESI_TIM_CFG_C_PATCH                  (1)
+#define DATESI_TIM_CFG_C_MINOR                  (1)
+#define DATESI_TIM_CFG_C_PATCH                  (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -297,6 +297,7 @@ void            vd_g_DateSITimCfgCanTx(const U4 u4_a_HHMMSS_24H, const U1 u1_a_E
     U1  u1_t_ba_is_on;
     U1  u1_t_acc_is_on;
     U1  u1_t_ig_is_on;
+    U4  u4_t_datesi_tim_fmt_write;
 
     u4_t_fmt_is12h = (U4)0U;
     u1_t_read_sts  = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM1TO2_TIMFMT, &u4_t_fmt_is12h, (U2)DATESI_TIME_VM_1WORD);
@@ -304,6 +305,8 @@ void            vd_g_DateSITimCfgCanTx(const U4 u4_a_HHMMSS_24H, const U1 u1_a_E
         if(u1_s_datesi_tim_fmt != (U1)u4_t_fmt_is12h){
             u1_s_datesi_tim_fmt = (U1)u4_t_fmt_is12h;
             vd_g_Rim_WriteU1((U2)RIMID_U1_TIME_FORMAT, (U1)u4_t_fmt_is12h);
+            u4_t_datesi_tim_fmt_write = (U4)U4_MAX;
+            vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO1_TIMFMT, &u4_t_datesi_tim_fmt_write, (U2)DATESI_TIME_VM_1WORD);
         }
     }
     u4_t_hhmmss    = u4_a_HHMMSS_24H;
@@ -749,6 +752,7 @@ U1      u1_g_TimeZoneCfgRxDST_S30(U1 * u1p_a_rx)
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  BEV-1    12/18/2025  MN       Addressing issues.                                                                                 */
+/*  BEV-2    04/07/2026  MN       Add processing to clear inter-VM communication values for 12h/24h switch information.              */
 /*                                                                                                                                   */
 /*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*                                                                                                                                   */

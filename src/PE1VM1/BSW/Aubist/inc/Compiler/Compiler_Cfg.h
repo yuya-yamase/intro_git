@@ -16,7 +16,8 @@
 /* Include Files                                                            */
 /*--------------------------------------------------------------------------*/
 
-
+#include "./Compiler_Dcm_Cfg.h"
+#include "./Compiler_Dem_Cfg.h"
 #include "./Compiler_Fee_Cfg.h"
 #include "./Compiler_Fls_Cfg.h"
 #include "./Compiler_MemAcc_Cfg.h"

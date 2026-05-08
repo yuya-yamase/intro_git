@@ -14,7 +14,6 @@
 #include "CarSpdPls.h"
 #include "SysEcDrc.h"
 #include "DtcCtl.h"
-#include "gyro.h"
 #include "PwrCtl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -31,6 +30,7 @@
 #define GYRODEV_I2C_RWC_BYTE4                       (4U)
 #define GYRODEV_I2C_RWC_BYTE7                       (7U)
 #define GYRODEV_I2C_RWC_BYTE8                       (8U)
+#define GYRODEV_I2C_RWC_BYTE34                      (34U)
 
 /* Register Bit Mask */
 #define GYRODEV_REG_MASK_BIT_0                      (0x01U)
@@ -57,12 +57,37 @@
 #define GYRODEV_GSENSDTC_XYZ_MIN_ERRCNT_MAX         (600U)
 #define GYRODEV_GSENSDTC_RSTCNT_MAX                 (3U)
 
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define GYRODEV_IO_STS_LOW                          (0U)
-#define GYRODEV_IO_STS_HIGH                         (1U)
+#define GYRO_TASK_TIME                          (1U)    /* 周期の時間指定(LSB:1ms) */
+
+/* シーケンス実行No 共通 */
+#define GYRO_SEQ_IDLE_STA                       (0U)    /* アイドルシーケンス実行No */
+
+/* ジャイロ状態遷移モード */
+#define GYRO_MODE_MAX                           (7U)    /* 状態最大数 */
+#define GYRO_MODE_UNINIT                        (0U)    /* 0:未初期化 */
+#define GYRO_MODE_STUP1_PRO                     (1U)    /* 1:起動(1)実施中 */
+#define GYRO_MODE_STUP1_COMP                    (2U)    /* 2:起動(1)実施完了 */
+#define GYRO_MODE_STUP2_PRO                     (3U)    /* 3:起動(2)実施中 */
+#define GYRO_MODE_NORM                          (4U)    /* 4:通常動作中 */
+#define GYRO_MODE_SHTDN1_PRO                    (5U)    /* 5:終了(1)実施中 */
+#define GYRO_MODE_ERR                           (6U)    /* 6:異常停止中 */
+
+/* ジャイロ状態遷移イベント */
+#define GYRO_EVENT_MAX                          (11U)   /* イベント最大数 */
+#define GYRO_EVENT_TASKSTUP                     (0U)    /* 0:タスク起動 */
+#define GYRO_EVENT_V33PERION_ON                 (1U)    /* 1:V33-Peri-ON ON */
+#define GYRO_EVENT_V33PERION_OFF                (2U)    /* 2:V33-Peri-ON OFF */
+#define GYRO_EVENT_SYS_OFF                      (3U)    /* 3:システムオフ 予備設計 */
+#define GYRO_EVENT_SEQ_COMP                     (4U)    /* 4:シーケンス完了 */
+#define GYRO_EVENT_STUP_ERR                     (5U)    /* 5:起動異常検知 */
+#define GYRO_EVENT_DTC_ERR                      (6U)    /* 6:DTC異常検知 */
+#define GYRO_EVENT_SHTDN_ERR                    (7U)    /* 7:終了異常検知 */
+#define GYRO_EVENT_DEV_RST                      (8U)    /* 8:リセット */
+#define GYRO_EVENT_BUDET_HI                     (9U)    /* 9:BUDET LO -> HI */
+#define GYRO_EVENT_BUDET_LO                     (10U)   /* 10:BUDET HI -> LO */
 
 #define GYRODEV_READ_DATA_OK                        (0U)
 #define GYRODEV_READ_DATA_NG                        (1U)
@@ -81,26 +106,19 @@
 #define GYRODEV_EVENT_DTC_ERR                       (GYRO_EVENT_DTC_ERR)
 #define GYRODEV_EVENT_DEV_RST                       (GYRO_EVENT_DEV_RST)
 
-#define u1_GYRODEV_GYRO_I2C_CTRL_REGSET(u, v, w, x, y, z)    (Mcu_Dev_I2c_Ctrl_RegSet((U1)MCU_I2C_ACK_GYRO, (u), (v), (U1)GP_I2C_MA_SLA_6_GYRO, (w), (x), (y), (z)))
-#define u1_GYRODEV_GYRO_I2C_CTRL_REGREAD(w, x, y, z)         (Mcu_Dev_I2c_Ctrl_RegRead((U1)MCU_I2C_ACK_GYRO, (w), (U1)GP_I2C_MA_SLA_6_GYRO, (x), (y), (z), (U1)MCU_I2C_WAIT_NON))
-#define u1_GYRODEV_GSENS_I2C_CTRL_REGSET(u, v, w, x, y, z)   (Mcu_Dev_I2c_Ctrl_RegSet((U1)MCU_I2C_ACK_G_MONI, (u), (v), (U1)GP_I2C_MA_SLA_7_G_MONI, (w), (x), (y), (z)))
-#define u1_GYRODEV_GSENS_I2C_CTRL_REGREAD(w, x, y, z)        (Mcu_Dev_I2c_Ctrl_RegRead((U1)MCU_I2C_ACK_G_MONI, (w), (U1)GP_I2C_MA_SLA_7_G_MONI, (x), (y), (z), (U1)MCU_I2C_WAIT_NON))
-#define u1_GYRODEV_GSENS_I2C_CTRL_REGACCESS(u, v, w, x, y, z) (Mcu_Dev_I2c_Ctrl_RegSet((U1)MCU_I2C_ACK_G_MONI, (u), (v), (U1)GP_I2C_MA_SLA_7_G_MONI, (w), (x), (y), (z)))
+
+#define GYRODEV_GYRO_I2C_CTRL_REGSET(s, t, u, v, w, x, y, z)    (Mcu_Dev_I2c_Ctrl_RegSet((s), (t), (u), (v), (w), (x), (y), (z)))
+#define GYRODEV_GYRO_I2C_CTRL_REGREAD(t, u, v, w, x, y, z)         (Mcu_Dev_I2c_Ctrl_RegRead((t), (u), (v), (w), (x), (y), (z)))
 
 #define vd_GYRODEV_DREC_REQ(x, y, z)                (vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_GYROACC, (x), (y), (z)))
 #define vd_GYRODEV_DTC_REQ(x, y)                    (vd_g_DtcCtl_SetDtcId((x), (y)))
 
-#define u1_GYRODEV_GET_V33_PERI_ON()                (Dio_ReadChannel(DIO_ID_PORT10_CH2))
-#define u1_GYRODEV_SET_SENSOR_ON_L()                (Dio_WriteChannel(DIO_ID_PORT8_CH7, (Dio_LevelType)GYRODEV_IO_STS_LOW))
-#define u1_GYRODEV_SET_SENSOR_ON_H()                (Dio_WriteChannel(DIO_ID_PORT8_CH7, (Dio_LevelType)GYRODEV_IO_STS_HIGH))
 #define u1_GYRODEV_GET_APP_ON()                     (u1_g_Power_ModeState())
 #define vd_GYRODEV_OSCMD_GYRO_DATA_NOTIF(x)         (vd_g_XspiIviSub2GyroDataPut(x))
-#define u1_GYRODEV_GET_LAST_PLS()                   (u2_g_CarSpdPls_LastPlsGet())
+#define u2_GYRODEV_GET_LAST_PLS()                   (u2_g_CarSpdPls_LastPlsGet())
 #define vd_GYRODEV_NOTIFCONDSET_RESULT(x)           (vd_g_XspiIviSub2GyroIntSetSend(x))
 #define vd_GYRODEV_NOTIFCONDREAD_RESULT(x)          (vd_g_XspiIviSub2GyroIntGetSend(x))
 #define vd_GYRODEV_CTRLOUTSETSET_RESULT(x)          (vd_g_XspiIviSub2GyroIntOutSend(x))
-#define vd_GYRODEV_GET_MODESTS()                    (u1_g_GyroDevCtlMngModGet())
-#define vd_GYRODEV_DEVICE_EVENT(x)                  (vd_g_GyroDevEventGo(x))
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
@@ -125,12 +143,15 @@ typedef struct{
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+void    vd_g_GyroMainTask(void);
+
 void    vd_g_GyroDev_BonInit(void);
 void    vd_g_GyroDev_WkupInit(void);
 void    vd_g_GyroDev_Routine(void);
 void    vd_g_GyroDev_NotifCond_SetReq(ST_GYRODEV_NOTIFCOND_SETDATA st_a_oscmd_data);
 void    vd_g_GyroDev_NotifCond_ReadReq(void);
 void    vd_g_GyroDev_OutCtl_SetReq(ST_GYRODEV_CTRLOUT_SETDATA st_a_oscmd_data);
+
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

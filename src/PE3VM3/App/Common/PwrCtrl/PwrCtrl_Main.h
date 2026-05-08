@@ -69,6 +69,10 @@
 #define PWRCTRL_MAIN_ETH_LINKUP_NODETECT   (PWRCTRL_COM_ETH_LINKUP_NODETECT)
 #define PWRCTRL_MAIN_ETH_LINKUP_DETECT     (PWRCTRL_COM_ETH_LINKUP_DETECT)
 
+/* SIP起動抑制フラグ */
+#define PWRCTRL_MAIN_ONINHIBIT_OFF         (0x00U) /* SIP起動抑制解除 */
+#define PWRCTRL_MAIN_ONINHIBIT_ON          (0x01U) /* SIP起動抑制 */
+
 /*-------------------------------------------------------------------------------------------*/
 /* Function Prototypes                                                                       */
 /*-------------------------------------------------------------------------------------------*/
@@ -81,6 +85,7 @@ void vd_g_PwrCtrlMainTask( void );
 U1 u1_g_PwrCtrlMainShtdwnOk( void );
 U1 u1_g_PwrCtrlWakeUpInfo( void );
 U1 u1_g_PwrCtrlMainSysPwrInfo( void );
+U1 u1_g_PwrCtrlMainSipOnInhFlag( void );
 
 void vd_g_PwrCtrlMainProhibitSleep( const U1 u1_a_ProhibitSleep );
 

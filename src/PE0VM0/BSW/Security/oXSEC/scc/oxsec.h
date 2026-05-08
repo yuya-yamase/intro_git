@@ -24,6 +24,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+/* vd_g_oXSECFvRead :BootCause */
+#define OXSEC_BOOT_CAUSE_BON                     (0U)
+#define OXSEC_BOOT_CAUSE_RST_WKUP                (1U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -48,6 +51,19 @@ void    vd_g_oXSECBonKeyInit(void);
 void    vd_g_oXSECMainPreHigh(void);
 void    vd_g_oXSECMainPosHigh(void);
 #endif /* #if (OXSEC_MAIN_HIGH == 1U) */
+
+#if (OXSEC_AUB_EN_IED == 1U)
+void    vd_g_oXSECIedOmaRslt(const U2 u2_a_RX, const U1 u1_a_OMA_VR, const U4 u4_a_CANID, const U1* u1_ap_FV);
+#endif /* (OXSEC_AUB_EN_IED == 1U) */
+
+#if (OXSEC_FV_EN_SET == 1U)
+U1    u1_g_oXSECFvRx(void);
+#endif /* #if (OXSEC_FV_EN_SET == 1U) */
+
+#if (OXSEC_FV_EN_RW == 1U)
+void    vd_g_oXSECFvRead(const U4 u4_a_BOOTCAUSE);
+void    vd_g_oXSECFvWrite(void);
+#endif /* #if (OXSEC_FV_EN_RW == 1U) */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

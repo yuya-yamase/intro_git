@@ -69,11 +69,11 @@ CanConst CanHohCfgType Can_stHohCfgTbl[ CAN_TB_HOHNUM ] =
   /*   u1ControllerID         , u1MboxNo          */
   /*========== User define Area [Start] ==========*/
   /*--- Reception --------------------------------*/
-     { (uint8)CAN_CONTROLLER_3,  (uint8)CAN_MB002 }   /* [0] HOH230 */
-    ,{ (uint8)CAN_CONTROLLER_3,  (uint8)CAN_MB003 }   /* [1] HOH231 */
-    ,{ (uint8)CAN_CONTROLLER_3,  (uint8)CAN_MB004 }   /* [2] HOH232 */
+     { (uint8)CAN_CONTROLLER_3,  (uint8)CAN_MB002 }   /* [0] HOH228 */
+    ,{ (uint8)CAN_CONTROLLER_3,  (uint8)CAN_MB003 }   /* [1] HOH229 */
+    ,{ (uint8)CAN_CONTROLLER_3,  (uint8)CAN_MB004 }   /* [2] HOH230 */
   /*--- Transmission -----------------------------*/
-    ,{ (uint8)CAN_CONTROLLER_3,  (uint8)CAN_MB001 }   /* [3] HOH236 */
+    ,{ (uint8)CAN_CONTROLLER_3,  (uint8)CAN_MB001 }   /* [3] HOH233 */
   /*========== User define Area [End] ============*/
 };
 #endif /* (CAN_CFG_TRANSMIT == CAN_USE) */

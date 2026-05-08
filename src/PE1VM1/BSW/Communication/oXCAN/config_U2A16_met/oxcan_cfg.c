@@ -21,6 +21,7 @@
 #include "veh_opemd.h"
 /* #include "can_lpr_test.h" */
 
+#include "iohw_diflt.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -155,36 +156,36 @@ void    vd_g_oXCANCfgWkupInit(void)
 #endif /* (OXCAN_CFG_NUM_IRQ_EN != 0U) */
 }
 /*===================================================================================================================================*/
-/*  void    vd_g_oXCANCfgVomEvhk(const U4 u4_a_SYSBIT_LAST, const U4 u4_a_SYSBIT_NEXT)                                               */
+/*  void    vd_g_oXCANCfgVomEvhk(const U4 u4_a_SYS_LAST, const U4 u4_a_SYS_NEXT)                                                     */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_oXCANCfgVomEvhk(const U4 u4_a_SYSBIT_LAST, const U4 u4_a_SYSBIT_NEXT)
+void    vd_g_oXCANCfgVomEvhk(const U4 u4_a_SYS_LAST, const U4 u4_a_SYS_NEXT)
 {
 #ifdef CAN_LPR_TEST_H
     vd_g_CANLpRTestLogStart();
 #endif /* #ifdef CAN_LPR_TEST_H */
 }
 /*===================================================================================================================================*/
-/*  void    vd_g_oXCANCfgPreTask(const U4 u4_a_SYSBIT)                                                                               */
+/*  void    vd_g_oXCANCfgPreTask(const U4 u4_a_SYS_ACT)                                                                              */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_oXCANCfgPreTask(const U4 u4_a_SYSBIT)
+void    vd_g_oXCANCfgPreTask(const U4 u4_a_SYS_ACT)
 {
 #ifdef CAN_LPR_TEST_H
     vd_g_CANLpRTestMainTask();
 #endif /* #ifdef CAN_LPR_TEST_H */
 }
 /*===================================================================================================================================*/
-/*  void    vd_g_oXCANCfgPosTask(const U4 u4_a_SYSBIT, const U2 u2_a_FATAL)                                                          */
+/*  void    vd_g_oXCANCfgPosTask(const U4 u4_a_SYS_ACT, const U2 u2_a_FATAL)                                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_oXCANCfgPosTask(const U4 u4_a_SYSBIT, const U2 u2_a_FATAL)
+void    vd_g_oXCANCfgPosTask(const U4 u4_a_SYS_ACT, const U2 u2_a_FATAL)
 {
     /* ------------------------------------------------------------------------------------------------- */
     /* Attention :                                                                                       */
@@ -243,11 +244,21 @@ U4      u4_g_oXCANCfgVomchk(void)
 #else
 
     U4                 u4_t_vom_chk;
+    U1                 u1_t_diag_pon;
+    U1                 u1_t_pb2_10p5v;
 
     u4_t_vom_chk = u4_g_VehopemdMdfield() & ((U4)OXCAN_SYS_ACC |
                                              (U4)OXCAN_SYS_IGP |
                                              (U4)OXCAN_SYS_PBA |
                                              (U4)OXCAN_SYS_IGR);
+
+    /* check : DTC detection inhibiton conditions */
+    u1_t_diag_pon = u1_g_VehopemdDiagOn();
+    u1_t_pb2_10p5v = u1_g_IoHwDifltSwitch((U2)IOHW_DISGNL_B_MONI2_10P5V);
+    if((u1_t_diag_pon == (U1)TRUE) &&
+       (u1_t_pb2_10p5v == (U1)IOHW_DIFLT_SWITCH_ACT)){
+        u4_t_vom_chk |= (U4)OXCAN_SYS_DIC;
+    }
 
     return(u4_t_vom_chk | (U4)OXCAN_SYS_BAT);
 #endif

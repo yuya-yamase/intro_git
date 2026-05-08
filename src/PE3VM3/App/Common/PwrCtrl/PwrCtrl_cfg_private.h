@@ -29,6 +29,7 @@
 #include "ivdsh.h"
 #include "VIS.h"
 #include "rim_ctl.h"
+#include "mcu_drv.h"
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
@@ -49,6 +50,8 @@
 #include "PwrCtrl_Observe.h"
 #include "PwrCtrl_Com.h"
 #include "PwrCtrl_ObserveSAIL.h"
+#include "PwrCtrl_FullInit.h"
+#include "PwrCtrl_Ota.h"
 
 /*--------------------------------------------------------------------------*/
 /*  Literal Definitions                                                     */
@@ -120,36 +123,36 @@
 #define     MCU_PORT_NUM                    (57)
 
 /* 端子モニタ処理用定義 */
-#define     PWRCTRL_CFG_PRIVATE_AOSS_SLEEP_ENTRY_EXIT_JUDGECOUNT (3U) /* AOSS_SLEEP_ENTRY_EXITの論理確定回数(3回) */
-#define     PWRCTRL_CFG_PRIVATE_POFF_COMPLETE_N_JUDGECOUNT       (3U) /* POFF_COMPLETE_Nの論理確定回数(3回) */
-#define     PWRCTRL_CFG_PRIVATE_PMA_PS_HOLD_JUDGECOUNT           (3U) /* PMA_PS_HOLDの論理確定回数(3回) */
-#define     PWRCTRL_CFG_PRIVATE_SOC_RESOUT_N_JUDGECOUNT          (3U) /* SOC_RESOUT_Nの論理確定回数(3回) */
-#define     PWRCTRL_CFG_PRIVATE_SAIL_RESOUT_N_JUDGECOUNT         (3U) /* SAIL_RESOUT_Nの論理確定回数(3回) */
-#define     PWRCTRL_CFG_PRIVATE_MM_STBY_N_JUDGECOUNT             (3U) /* MM_STBY_Nの論理確定回数(3回) */
-#define     PWRCTRL_CFG_PRIVATE_BOOT_JUDGECOUNT                  (3U) /* BOOTの論理確定回数(3回) */
-#define     PWRCTRL_CFG_PRIVATE_BU_DET_JUDGECOUNT                (1U) /* BU_DETの論理確定回数(1回) */
-#define     PWRCTRL_CFG_PRIVATE_DBG_FAIL_OFF_JUDGECOUNT          (3U) /* DBG_FAIL_OFFの論理確定回数(3回) */
-#define     PWRCTRL_CFG_PRIVATE_SAIL_ERR1_JUDGECOUNT             (3U) /* SAIL-ERR1の論理確定回数(3回) */
-#define     PWRCTRL_CFG_PRIVATE_SAIL_ERR2_JUDGECOUNT             (3U) /* SAIL-ERR2の論理確定回数(3回) */
-#define     PWRCTRL_CFG_PRIVATE_PM_PSAIL_ERR_N_JUDGECOUNT        (3U) /* PM_PSAIL_ERR_Nの論理確定回数(3回) */
-#define     PWRCTRL_CFG_PRIVATE_PGOOD_ASIL_VB_JUDGECOUNT         (3U) /* PGOOD_ASIL_VBの論理確定回数(3回) */
-#define     PWRCTRL_CFG_PRIVATE_PGOOD_ASIL_VSYS_JUDGECOUNT       (3U) /* PGOOD_ASIL_VSYSの論理確定回数(3回) */
-#define     PWRCTRL_CFG_PRIVATE_PGOOD_ASIL_VSYS_V11_JUDGECOUNT   (3U) /* PGOOD_ASIL_VSYS(V11)の論理確定回数(3回) */
-#define     PWRCTRL_CFG_PRIVATE_PGOOD_DIODE_JUDGECOUNT           (3U) /* PGOOD_DIODEの論理確定回数(3回) */
-#define     PWRCTRL_CFG_PRIVATE_PGOOD_VB_JUDGECOUNT              (3U) /* PGOOD_VBの論理確定回数(3回) */
-#define     PWRCTRL_CFG_PRIVATE_PGOOD_VSYS_JUDGECOUNT            (3U) /* PGOOD_VSYSの論理確定回数(3回) */
-#define     PWRCTRL_CFG_PRIVATE_AOSS_SLEEP_ENTRY_EXIT_WAITTIME   (0U) /* AOSS_SLEEP_ENTRY_EXITのウェイト時間(0ms) */
-#define     PWRCTRL_CFG_PRIVATE_POFF_COMPLETE_N_WAITTIME         (0U) /* POFF_COMPLETE_Nのウェイト時間(0ms) */
-#define     PWRCTRL_CFG_PRIVATE_PMA_PS_HOLD_WAITTIME             (0U) /* PMA_PS_HOLDのウェイト時間(0ms) */
-#define     PWRCTRL_CFG_PRIVATE_SOC_RESOUT_N_WAITTIME            (0U) /* SOC_RESOUT_Nのウェイト時間(0ms) */
-#define     PWRCTRL_CFG_PRIVATE_SAIL_RESOUT_N_WAITTIME           (0U) /* SAIL_RESOUT_Nのウェイト時間(0ms) */
-#define     PWRCTRL_CFG_PRIVATE_MM_STBY_N_WAITTIME               (0U) /* MM_STBY_Nのウェイト時間(0ms) */
-#define     PWRCTRL_CFG_PRIVATE_BOOT_WAITTIME                    (0U) /* BOOTのウェイト時間(0ms) */
-#define     PWRCTRL_CFG_PRIVATE_BU_DET_WAITTIME                  (0U) /* BU_DETのウェイト時間(0ms) */
-#define     PWRCTRL_CFG_PRIVATE_DBG_FAIL_OFF_WAITTIME            (0U) /* DBG_FAIL_OFFのウェイト時間(0ms) */
-#define     PWRCTRL_CFG_PRIVATE_SAIL_ERR1_WAITTIME               (0U) /* SAIL-ERR1のウェイト時間(0ms) */
-#define     PWRCTRL_CFG_PRIVATE_SAIL_ERR2_WAITTIME               (0U) /* SAIL-ERR2のウェイト時間(0ms) */
-#define     PWRCTRL_CFG_PRIVATE_PM_PSAIL_ERR_N_WAITTIME          (0U) /* PM_PSAIL_ERR_Nのウェイト時間(0ms) */
+#define     PWRCTRL_CFG_PRIVATE_AOSS_SLEEP_ENTRY_EXIT_JUDGECOUNT (3U)    /* AOSS_SLEEP_ENTRY_EXITの論理確定回数(3回) */
+#define     PWRCTRL_CFG_PRIVATE_POFF_COMPLETE_N_JUDGECOUNT       (3U)    /* POFF_COMPLETE_Nの論理確定回数(3回) */
+#define     PWRCTRL_CFG_PRIVATE_PMA_PS_HOLD_JUDGECOUNT           (3U)    /* PMA_PS_HOLDの論理確定回数(3回) */
+#define     PWRCTRL_CFG_PRIVATE_SOC_RESOUT_N_JUDGECOUNT          (3U)    /* SOC_RESOUT_Nの論理確定回数(3回) */
+#define     PWRCTRL_CFG_PRIVATE_SAIL_RESOUT_N_JUDGECOUNT         (3U)    /* SAIL_RESOUT_Nの論理確定回数(3回) */
+#define     PWRCTRL_CFG_PRIVATE_MM_STBY_N_JUDGECOUNT             (3U)    /* MM_STBY_Nの論理確定回数(3回) */
+#define     PWRCTRL_CFG_PRIVATE_BOOT_JUDGECOUNT                  (3U)    /* BOOTの論理確定回数(3回) */
+#define     PWRCTRL_CFG_PRIVATE_BU_DET_JUDGECOUNT                (1U)    /* BU_DETの論理確定回数(1回) */
+#define     PWRCTRL_CFG_PRIVATE_DBG_FAIL_OFF_JUDGECOUNT          (3U)    /* DBG_FAIL_OFFの論理確定回数(3回) */
+#define     PWRCTRL_CFG_PRIVATE_SAIL_ERR1_JUDGECOUNT             (3U)    /* SAIL-ERR1の論理確定回数(3回) */
+#define     PWRCTRL_CFG_PRIVATE_SAIL_ERR2_JUDGECOUNT             (3U)    /* SAIL-ERR2の論理確定回数(3回) */
+#define     PWRCTRL_CFG_PRIVATE_PM_PSAIL_ERR_N_JUDGECOUNT        (3U)    /* PM_PSAIL_ERR_Nの論理確定回数(3回) */
+#define     PWRCTRL_CFG_PRIVATE_PGOOD_ASIL_VB_JUDGECOUNT         (50U)   /* PGOOD_ASIL_VBの論理確定回数(50回) */
+#define     PWRCTRL_CFG_PRIVATE_PGOOD_ASIL_VSYS_JUDGECOUNT       (50U)   /* PGOOD_ASIL_VSYSの論理確定回数(50回) */
+#define     PWRCTRL_CFG_PRIVATE_PGOOD_ASIL_VSYS_V11_JUDGECOUNT   (50U)   /* PGOOD_ASIL_VSYS(V11)の論理確定回数(50回) */
+#define     PWRCTRL_CFG_PRIVATE_PGOOD_DIODE_JUDGECOUNT           (2000U) /* PGOOD_DIODEの論理確定回数(2000回) */
+#define     PWRCTRL_CFG_PRIVATE_PGOOD_VB_JUDGECOUNT              (50U)   /* PGOOD_VBの論理確定回数(50回) */
+#define     PWRCTRL_CFG_PRIVATE_PGOOD_VSYS_JUDGECOUNT            (50U)   /* PGOOD_VSYSの論理確定回数(50回) */
+#define     PWRCTRL_CFG_PRIVATE_AOSS_SLEEP_ENTRY_EXIT_WAITTIME   (0U)    /* AOSS_SLEEP_ENTRY_EXITのウェイト時間(0ms) */
+#define     PWRCTRL_CFG_PRIVATE_POFF_COMPLETE_N_WAITTIME         (0U)    /* POFF_COMPLETE_Nのウェイト時間(0ms) */
+#define     PWRCTRL_CFG_PRIVATE_PMA_PS_HOLD_WAITTIME             (0U)    /* PMA_PS_HOLDのウェイト時間(0ms) */
+#define     PWRCTRL_CFG_PRIVATE_SOC_RESOUT_N_WAITTIME            (0U)    /* SOC_RESOUT_Nのウェイト時間(0ms) */
+#define     PWRCTRL_CFG_PRIVATE_SAIL_RESOUT_N_WAITTIME           (0U)    /* SAIL_RESOUT_Nのウェイト時間(0ms) */
+#define     PWRCTRL_CFG_PRIVATE_MM_STBY_N_WAITTIME               (0U)    /* MM_STBY_Nのウェイト時間(0ms) */
+#define     PWRCTRL_CFG_PRIVATE_BOOT_WAITTIME                    (0U)    /* BOOTのウェイト時間(0ms) */
+#define     PWRCTRL_CFG_PRIVATE_BU_DET_WAITTIME                  (0U)    /* BU_DETのウェイト時間(0ms) */
+#define     PWRCTRL_CFG_PRIVATE_DBG_FAIL_OFF_WAITTIME            (0U)    /* DBG_FAIL_OFFのウェイト時間(0ms) */
+#define     PWRCTRL_CFG_PRIVATE_SAIL_ERR1_WAITTIME               (0U)    /* SAIL-ERR1のウェイト時間(0ms) */
+#define     PWRCTRL_CFG_PRIVATE_SAIL_ERR2_WAITTIME               (0U)    /* SAIL-ERR2のウェイト時間(0ms) */
+#define     PWRCTRL_CFG_PRIVATE_PM_PSAIL_ERR_N_WAITTIME          (0U)    /* PM_PSAIL_ERR_Nのウェイト時間(0ms) */
 #define     PWRCTRL_CFG_PRIVATE_PGOOD_ASIL_VB_WAITTIME           ( 5U / PWRCTRL_CFG_TASK_TIME)  /* PGOOD_ASIL_VBのウェイト時間(1ms(5ms扱い)) */
 #define     PWRCTRL_CFG_PRIVATE_PGOOD_ASIL_VSYS_WAITTIME         (15U / PWRCTRL_CFG_TASK_TIME)  /* PGOOD_ASIL_VSYSのウェイト時間(15ms) */
 #define     PWRCTRL_CFG_PRIVATE_PGOOD_ASIL_VSYS_V11_WAITTIME     ( 5U / PWRCTRL_CFG_TASK_TIME)  /* PGOOD_ASIL_VSYS(V11)のウェイト時間(2ms(5ms扱い)) */

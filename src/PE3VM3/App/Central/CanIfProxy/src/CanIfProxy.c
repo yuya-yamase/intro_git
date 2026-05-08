@@ -163,6 +163,7 @@ static void CanIfProxy_TransmitRequest( void );
 static uint8 CanIfProxy_TransmitSF( void );
 static uint8 CanIfProxy_TransmitFF( void );
 static uint8 CanIfProxy_TransmitCF( void );
+static uint8 CanIfProxy_TransmitFC( const CanMsgType* t_pstMsg );
 static uint8 CanIfProxy_ReceiveFC( void );
 static void CanIfProxy_TransmitMfAbort( void );
 static void CanIfProxy_ReadFfNpci( uint8* t_pu1Data );
@@ -197,6 +198,9 @@ static CanIfProxy_MfStatusType CanIfProxy_stMfReqStatus;
 
 /* OBC Transmit Mode */
 static uint8 CanIfProxy_u1ObcTxMode;
+
+/* Buffer Transmit FC */
+static CanMsgType CanIfProxy_stFcTxBuf;
 
 #define CANIFPROXY_STOP_SEC_VAR_CLEARED_32
 #include <CanIfProxy_MemMap.h>
@@ -451,6 +455,11 @@ static void CanIfProxy_ReceiveRequest( const CanMsgType* t_pstMsg )
 		{
 			/* Set SF request buffer */
 			CanIfProxy_SetSfToReqBuff( t_pstMsg );
+		}
+		else if ( t_u1NPduType == (uint8)CANIFPROXY_NPDUTYPE_FC )
+		{
+			/* Transmit FC to Virtual CAN */
+			(void)CanIfProxy_TransmitFC( t_pstMsg );
 		}
 		else
 		{
@@ -896,6 +905,32 @@ static uint8 CanIfProxy_TransmitFF( void )
 }
 
 /*****************************************************************************
+  Function		: Transmit Flow Control frame
+  Description	: Transmit Flow Control frame to Virtual CAN
+  param[in/out] : CAN message (FC frame)
+  return		: CAN_PROC_OK if transmission succeeded, otherwise error code
+  Note			: none
+*****************************************************************************/
+static uint8 CanIfProxy_TransmitFC( const CanMsgType* t_pstMsg )
+{
+	uint8 t_u1Ret;
+	uint8 t_u1VcanRet;
+	
+	t_u1Ret = (uint8)CAN_PROC_OK;
+	CanIfProxy_stFcTxBuf = *t_pstMsg;
+
+	/* Transmit FC to Virtual CAN */
+	t_u1VcanRet = VCan_TxReq( CanIfProxy_cu1VcanCtrl, CanIfProxy_cu1VcanMbox, &CanIfProxy_stFcTxBuf );
+
+	if ( t_u1VcanRet != (uint8)CAN_PROC_OK )
+	{
+		t_u1Ret = (uint8)CAN_PROC_NG;
+	}
+
+	return t_u1Ret;
+}
+
+/*****************************************************************************
   Function		: 
   Description	: 
   param[in/out] : 
@@ -931,7 +966,7 @@ static uint8 CanIfProxy_TransmitCF( void )
 	/* Set Throughput */
 	CanIfProxy_CalcCfThroughput();
 
-	if ( t_u1IsPowerOn == (uint8)FALSE )
+	if ( t_u1IsPowerOn == (uint8)FALSE ) /* TRUE: STD_ON, FALSE: STD_OFF */
 	{
 		t_u1CfPeriod = CanIfProxy_stMfReqStatus.u1CfPeriodPwrOn;
 		t_u1CfTxNum = CanIfProxy_stMfReqStatus.u1CfTxNumPwrOn;
@@ -969,7 +1004,7 @@ static uint8 CanIfProxy_TransmitCF( void )
 		t_u1FrameCntInTxPre = t_u1FrameCntInTx;
 		
 		t_u4FfDl = CanIfProxy_stMfReqStatus.u4FfDl;
-
+		
 		for ( t_u1TxCnt = (uint8)0U; t_u1TxCnt < t_u1CfTxNum; t_u1TxCnt++ )
 		{
 			if ( ( t_u2Head < t_u2Tail )
@@ -1289,7 +1324,7 @@ static void CanIfProxy_CalcCfThroughput( void )
 		&& ( t_u1StMin <= (uint8)CANIFPROXY_STMIN_MAX_US ) )
 	{
 		t_u1PeriodPwrOn = CanIfProxy_cu1CfPeriodDef + (uint8)CANIFPROXY_STMIN_MARGIN;
-		t_u1PeriodPwrOff = CanIfProxy_cu1CfPeriodDef + (uint8)CANIFPROXY_STMIN_MARGIN;
+		t_u1PeriodPwrOff = CanIfProxy_cu1CfPeriodDef;
 		t_u1TxNumPwrOn = CanIfProxy_cu1CfTxNumDef;
 		t_u1TxNumPwrOff = CanIfProxy_cu1CfTxNumDef;
 	}
@@ -1307,11 +1342,12 @@ static void CanIfProxy_CalcCfThroughput( void )
 		if ( t_u1StMin > t_u1FrameTransInt )
 		{
 			/* STmin > FrameTransInt: use STmin */
+			t_u1PeriodPwrOn = t_u1StMin + (uint8)CANIFPROXY_STMIN_MARGIN;
 		}
 		else
 		{
 			/* otherwise: use FrameTransInt */
-			t_u1PeriodPwrOn = t_u1FrameTransInt;
+			t_u1PeriodPwrOn = t_u1FrameTransInt + (uint8)CANIFPROXY_STMIN_MARGIN;
 		}
 	}
 	

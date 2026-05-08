@@ -24,7 +24,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IVDSH_NUM_DID_WRI                        (16U)
+#define IVDSH_NUM_DID_WRI                        (17U)
 
 /*-------------------------------------------------------------------------------*/
 /* CPREQ_XXX = "https://wiki.geniie.net/x/Wcq5pQ" numbering list (sample config) */
@@ -45,32 +45,34 @@
 #define IVDSH_DID_WRI_FWUPXRES                   (13U)
 #define IVDSH_DID_WRI_VM1TO3_NMDIAG              (14U)
 #define IVDSH_DID_WRI_VM1TO3_MAC_ADDRESS         (15U)
+#define IVDSH_DID_WRI_VM1TO3_OTAACT_INF          (16U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IVDSH_NUM_DID_REA                        (20U)
+#define IVDSH_NUM_DID_REA                        (21U)
 
 /* Read from VM#2 */
-#define IVDSH_DID_REA_VM2TO1_TIMOFST             (16U)
-#define IVDSH_DID_REA_VM2TO1_TIMFMT              (17U)
-#define IVDSH_DID_REA_VM2TO1_DSPTIM              (18U)
-#define IVDSH_DID_REA_VM2TO1_DSPCAL              (19U)
-#define IVDSH_DID_REA_VM2TO1_CAL                 (20U)
-#define IVDSH_DID_REA_VM2TO1_CAM_DIAP            (21U)
-#define IVDSH_DID_REA_VM2TO1_WHLINI_REQ          (22U)
-#define IVDSH_DID_REA_VM2TO1_DMS1S02             (23U)
-#define IVDSH_DID_REA_VM2TO1_MET1S27             (24U)
-#define IVDSH_DID_REA_VM2TO1_MET1S28             (25U)
-#define IVDSH_DID_REA_VM2TO1_MET1S29             (26U)
-#define IVDSH_DID_REA_VM2TO1_MET1S30             (27U)
-#define IVDSH_DID_REA_VM2TO1_MET1S43             (28U)
-#define IVDSH_DID_REA_VM2TO1_MET1S62             (29U)
-#define IVDSH_DID_REA_VM2TO1_MET1S70             (30U)
-#define IVDSH_DID_REA_FWUPXREQ_H                 (31U)
-#define IVDSH_DID_REA_FWUPXREQ_D                 (32U)
+#define IVDSH_DID_REA_VM2TO1_TIMOFST             (17U)
+#define IVDSH_DID_REA_VM2TO1_TIMFMT              (18U)
+#define IVDSH_DID_REA_VM2TO1_DSPTIM              (19U)
+#define IVDSH_DID_REA_VM2TO1_DSPCAL              (20U)
+#define IVDSH_DID_REA_VM2TO1_CAL                 (21U)
+#define IVDSH_DID_REA_VM2TO1_CAM_DIAP            (22U)
+#define IVDSH_DID_REA_VM2TO1_WHLINI_REQ          (23U)
+#define IVDSH_DID_REA_VM2TO1_DMS1S02             (24U)
+#define IVDSH_DID_REA_VM2TO1_MET1S27             (25U)
+#define IVDSH_DID_REA_VM2TO1_MET1S28             (26U)
+#define IVDSH_DID_REA_VM2TO1_MET1S29             (27U)
+#define IVDSH_DID_REA_VM2TO1_MET1S30             (28U)
+#define IVDSH_DID_REA_VM2TO1_MET1S43             (29U)
+#define IVDSH_DID_REA_VM2TO1_MET1S62             (30U)
+#define IVDSH_DID_REA_VM2TO1_MET1S70             (31U)
+#define IVDSH_DID_REA_FWUPXREQ_H                 (32U)
+#define IVDSH_DID_REA_FWUPXREQ_D                 (33U)
 /* Read from VM#3 */
-#define IVDSH_DID_REA_VM3TO12_RESTART            (33U)
-#define IVDSH_DID_REA_VM3TO1_WHLINI_STA          (34U)
-#define IVDSH_DID_REA_VM3TO1_SOC_POW_STS         (35U)
+#define IVDSH_DID_REA_VM3TO12_RESTART            (34U)
+#define IVDSH_DID_REA_VM3TO1_WHLINI_STA          (35U)
+#define IVDSH_DID_REA_VM3TO1_SOC_POW_STS         (36U)
+#define IVDSH_DID_REA_VM3TO1_OTAACT_REQ          (37U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define IVDSH_NUM_DID                            (IVDSH_NUM_DID_WRI + IVDSH_NUM_DID_REA)

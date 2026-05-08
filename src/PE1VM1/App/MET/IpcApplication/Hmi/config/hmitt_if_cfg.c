@@ -74,6 +74,7 @@ const ST_ALERT_REQBIT   st_gp_HMITTASILREQBIT[HMITTCFG_IF_ASIL_NUM] = {
     {  (U2)ALERT_CH_C_EPB_TT_PKB,     (U1)ALERT_REQ_C_EPB_TT_PKB_FLASH_2HZ,     (U1)0U,    u4_HMITT_HB5(HMITT_BLINK_CO_2P00HZ__50P_EPB)                },
     {  (U2)ALERT_CH_C_EPB_TT_PKB,     (U1)ALERT_REQ_C_EPB_TT_PKB_FLASH_4HZ,     (U1)0U,    u4_HMITT_HB5(HMITT_BLINK_CO_4P00HZ__50P_EPB)                },
     {  (U2)ALERT_CH_C_ABS_TT,         (U1)ALERT_REQ_C_ABS_TT_ON,                (U1)0U,    u4_HMITT_HB6(HMITT_BLINK_CO_ON_____100P)                    },
+    {  (U2)ALERT_CH_C_ABS_TT,         (U1)ALERT_REQ_C_ABS_TT_ASIL_ON,           (U1)0U,    u4_HMITT_HB6(HMITT_BLINK_CO_ON_____100P)                    },
     {  (U2)ALERT_CH_C_ABS_TT,         (U1)ALERT_REQ_C_ABS_TT_FLASH_1HZ,         (U1)0U,    u4_HMITT_HB6(HMITT_BLINK_CO_1P00HZ__50P)                    },
     {  (U2)ALERT_CH_C_ABS_TT,         (U1)ALERT_REQ_C_ABS_TT_FLASH_4HZ,         (U1)0U,    u4_HMITT_HB6(HMITT_BLINK_CO_4P00HZ__50P)                    },
     {  (U2)ALERT_CH_C_BRLV_2_WRN,     (U1)ALERT_REQ_C_BRLV_2_WRN_MALFUNC,       (U1)0U,    u4_HMITT_HB7(HMITT_BLINK_CO_ON_____100P)                    },
@@ -177,6 +178,7 @@ U2 u2_g_HmittSizeReqbit(void){
 /*  BEV-9     3/16/2026  NI       Change config for BEV Full_Function_2.                                                             */
 /*                                MET-C_BRK-CSTD-2-00-C-C0,MET-C_ECB-CSTD-1-00-C-C0                                                  */
 /*                                Changed split TT and PD, and rename/delete the definitions accordingly.                            */
+/*  BEV-10    4/13/2026  KO       Change for BEV Electronic CV. (Add TT abnormality monitoring)                                      */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */

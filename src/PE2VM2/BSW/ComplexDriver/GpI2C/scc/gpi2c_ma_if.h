@@ -87,7 +87,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* U2      u2_g_GpI2cMaIfFrt(void); */
 
-void    vd_g_GpI2cMaIfEnaCh(const ST_GP_I2C_MA_CH * st_ap_CH, const U1 u1_a_PIN_ACT);
+void    vd_g_GpI2cMaIfEnaCh(const ST_GP_I2C_MA_CH * st_ap_CH, const U1 u1_a_RES_EN);
 void    vd_g_GpI2cMaIfDisCh(const ST_GP_I2C_MA_CH * st_ap_CH);
 void    vd_g_GpI2cMaIfResbyFrT(const ST_GP_I2C_MA_CH * st_ap_CH);                                    /* Reset by FrT : Frame Timeout */
 

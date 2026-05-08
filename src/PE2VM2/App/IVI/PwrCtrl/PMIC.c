@@ -8,6 +8,7 @@
 #include "SysEcDrc.h"
 
 #include "ivdsh.h"
+#include "rim_ctl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -210,10 +211,15 @@ static const U1 u1_sp_PMIC_INIT_SET_PDU_NUM = (U1)(sizeof(u1_sp_PMIC_INIT_SET_PD
 void    vd_g_Pmic_BonInit(void)
 {
     U2 u2_t_cnt;
-
-    vd_g_Pmic_Init();
+    U4 u4_t_vmcom_req;
 
     u1_s_pmic_bon_exec_flag = (U1)TRUE;
+    vd_g_Rim_WriteU1((U2)RIMID_U1_PMIC_EXEC_FLG, u1_s_pmic_bon_exec_flag);
+
+    u2_s_pmic_regstep = (U2)0U;
+    u4_s_pmic_i2c_ack_wait_time = (U4)0U;
+    u2_s_pmic_reg_btwn_time = (U2)0xFFFFU;
+    u1_s_pmic_state = (U1)PMIC_BON_ST_RD_CAUSE;
 
     /*  データリード用テーブル(BurstRead)初期化 */
     u1_sp_PMIC_INIT_RD_PDU2[0] = (U1)PMIC_I2C_SLAVEADR_RD;    /* Slave Address */
@@ -285,6 +291,14 @@ void    vd_g_Pmic_BonInit(void)
     u1_sp_PMIC_INIT_SET_PDU13[0] = (U1)PMIC_I2C_SLAVEADR_WR;    /* Slave Address */
     u1_sp_PMIC_INIT_SET_PDU13[1] = (U1)0x3DU;    /* Write Address */
     u1_sp_PMIC_INIT_SET_PDU13[2] = (U1)0U;    /* Write Data初期値(定期処理内で更新) */
+
+    /*  データリード用テーブル初期化 */
+    u1_sp_PMIC_DATA_RD_PDU2[0] = (U1)PMIC_I2C_SLAVEADR_RD;    /* Slave Address */
+    u1_sp_PMIC_DATA_RD_PDU2[1] = (U1)0U;    /* 読出しデータ初期値 */
+
+    u4_t_vmcom_req = (U4)PMIC_VMCOM_POWER_OFF;
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO3_DIN2_STAT, &u4_t_vmcom_req, (U2)PMIC_VMCOM_WORD_1);    /* To VM3 */
+
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_Pmic_Init(void)                                                                                                     */
@@ -294,12 +308,93 @@ void    vd_g_Pmic_BonInit(void)
 /*===================================================================================================================================*/
 void    vd_g_Pmic_Init(void)
 {
+    U2 u2_t_cnt;
+    U1 u1_t_rim_sts;
+    U1 u1_t_rim_data;
     U4 u4_t_vmcom_req;
+
+
+    u1_t_rim_data = (U1)0U;
+    u1_t_rim_sts  = u1_g_Rim_ReadU1withStatus((U2)RIMID_U1_PMIC_EXEC_FLG, &u1_t_rim_data);
+    if((u1_t_rim_sts & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK){
+        u1_s_pmic_bon_exec_flag = u1_t_rim_data;
+    }
 
     u2_s_pmic_regstep = (U2)0U;
     u4_s_pmic_i2c_ack_wait_time = (U4)0U;
     u2_s_pmic_reg_btwn_time = (U2)0xFFFFU;
     u1_s_pmic_state = (U1)PMIC_BON_ST_RD_CAUSE;
+
+    /*  データリード用テーブル(BurstRead)初期化 */
+    u1_sp_PMIC_INIT_RD_PDU2[0] = (U1)PMIC_I2C_SLAVEADR_RD;    /* Slave Address */
+    for(u2_t_cnt = (U2)1U; u2_t_cnt < (U2)PMIC_I2C_RWC_BYTE14; u2_t_cnt++) {
+        u1_sp_PMIC_INIT_RD_PDU2[u2_t_cnt] = (U1)0U;    /* 読出しデータ初期値 */
+    }
+
+    /* レジスタ初期設定 書込み用テーブル(Data可変)初期化 */
+    u1_sp_PMIC_INIT_SET_PDU1[0] = (U1)PMIC_I2C_SLAVEADR_WR;    /* Slave Address */
+    u1_sp_PMIC_INIT_SET_PDU1[1] = (U1)0x31U;    /* Write Address */
+    u1_sp_PMIC_INIT_SET_PDU1[2] = (U1)0U;    /* Write Data初期値(定期処理内で更新) */
+
+    /*  書込み用テーブル(Data可変)初期化 */
+    u1_sp_PMIC_INIT_SET_PDU2[0] = (U1)PMIC_I2C_SLAVEADR_WR;    /* Slave Address */
+    u1_sp_PMIC_INIT_SET_PDU2[1] = (U1)0x32U;    /* Write Address */
+    u1_sp_PMIC_INIT_SET_PDU2[2] = (U1)0U;    /* Write Data初期値(定期処理内で更新) */
+
+    /*  書込み用テーブル(Data可変)初期化 */
+    u1_sp_PMIC_INIT_SET_PDU3[0] = (U1)PMIC_I2C_SLAVEADR_WR;    /* Slave Address */
+    u1_sp_PMIC_INIT_SET_PDU3[1] = (U1)0x33U;    /* Write Address */
+    u1_sp_PMIC_INIT_SET_PDU3[2] = (U1)0U;    /* Write Data初期値(定期処理内で更新) */
+
+    /*  書込み用テーブル(Data可変)初期化 */
+    u1_sp_PMIC_INIT_SET_PDU4[0] = (U1)PMIC_I2C_SLAVEADR_WR;    /* Slave Address */
+    u1_sp_PMIC_INIT_SET_PDU4[1] = (U1)0x34U;    /* Write Address */
+    u1_sp_PMIC_INIT_SET_PDU4[2] = (U1)0U;    /* Write Data初期値(定期処理内で更新) */
+
+    /*  書込み用テーブル(Data可変)初期化 */
+    u1_sp_PMIC_INIT_SET_PDU5[0] = (U1)PMIC_I2C_SLAVEADR_WR;    /* Slave Address */
+    u1_sp_PMIC_INIT_SET_PDU5[1] = (U1)0x35U;    /* Write Address */
+    u1_sp_PMIC_INIT_SET_PDU5[2] = (U1)0U;    /* Write Data初期値(定期処理内で更新) */
+
+    /*  書込み用テーブル(Data可変)初期化 */
+    u1_sp_PMIC_INIT_SET_PDU6[0] = (U1)PMIC_I2C_SLAVEADR_WR;    /* Slave Address */
+    u1_sp_PMIC_INIT_SET_PDU6[1] = (U1)0x36U;    /* Write Address */
+    u1_sp_PMIC_INIT_SET_PDU6[2] = (U1)0U;    /* Write Data初期値(定期処理内で更新) */
+
+    /*  書込み用テーブル(Data可変)初期化 */
+    u1_sp_PMIC_INIT_SET_PDU7[0] = (U1)PMIC_I2C_SLAVEADR_WR;    /* Slave Address */
+    u1_sp_PMIC_INIT_SET_PDU7[1] = (U1)0x37U;    /* Write Address */
+    u1_sp_PMIC_INIT_SET_PDU7[2] = (U1)0U;    /* Write Data初期値(定期処理内で更新) */
+
+    /*  書込み用テーブル(Data可変)初期化 */
+    u1_sp_PMIC_INIT_SET_PDU8[0] = (U1)PMIC_I2C_SLAVEADR_WR;    /* Slave Address */
+    u1_sp_PMIC_INIT_SET_PDU8[1] = (U1)0x38U;    /* Write Address */
+    u1_sp_PMIC_INIT_SET_PDU8[2] = (U1)0U;    /* Write Data初期値(定期処理内で更新) */
+
+    /*  書込み用テーブル(Data可変)初期化 */
+    u1_sp_PMIC_INIT_SET_PDU9[0] = (U1)PMIC_I2C_SLAVEADR_WR;    /* Slave Address */
+    u1_sp_PMIC_INIT_SET_PDU9[1] = (U1)0x39U;    /* Write Address */
+    u1_sp_PMIC_INIT_SET_PDU9[2] = (U1)0U;    /* Write Data初期値(定期処理内で更新) */
+
+    /*  書込み用テーブル(Data可変)初期化 */
+    u1_sp_PMIC_INIT_SET_PDU10[0] = (U1)PMIC_I2C_SLAVEADR_WR;    /* Slave Address */
+    u1_sp_PMIC_INIT_SET_PDU10[1] = (U1)0x3AU;    /* Write Address */
+    u1_sp_PMIC_INIT_SET_PDU10[2] = (U1)0U;    /* Write Data初期値(定期処理内で更新) */
+
+    /*  書込み用テーブル(Data可変)初期化 */
+    u1_sp_PMIC_INIT_SET_PDU11[0] = (U1)PMIC_I2C_SLAVEADR_WR;    /* Slave Address */
+    u1_sp_PMIC_INIT_SET_PDU11[1] = (U1)0x3BU;    /* Write Address */
+    u1_sp_PMIC_INIT_SET_PDU11[2] = (U1)0U;    /* Write Data初期値(定期処理内で更新) */
+
+    /*  書込み用テーブル(Data可変)初期化 */
+    u1_sp_PMIC_INIT_SET_PDU12[0] = (U1)PMIC_I2C_SLAVEADR_WR;    /* Slave Address */
+    u1_sp_PMIC_INIT_SET_PDU12[1] = (U1)0x3CU;    /* Write Address */
+    u1_sp_PMIC_INIT_SET_PDU12[2] = (U1)0U;    /* Write Data初期値(定期処理内で更新) */
+
+    /*  書込み用テーブル(Data可変)初期化 */
+    u1_sp_PMIC_INIT_SET_PDU13[0] = (U1)PMIC_I2C_SLAVEADR_WR;    /* Slave Address */
+    u1_sp_PMIC_INIT_SET_PDU13[1] = (U1)0x3DU;    /* Write Address */
+    u1_sp_PMIC_INIT_SET_PDU13[2] = (U1)0U;    /* Write Data初期値(定期処理内で更新) */
 
     /*  データリード用テーブル初期化 */
     u1_sp_PMIC_DATA_RD_PDU2[0] = (U1)PMIC_I2C_SLAVEADR_RD;    /* Slave Address */
@@ -307,6 +402,7 @@ void    vd_g_Pmic_Init(void)
 
     u4_t_vmcom_req = (U4)PMIC_VMCOM_POWER_OFF;
     vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO3_DIN2_STAT, &u4_t_vmcom_req, (U2)PMIC_VMCOM_WORD_1);    /* To VM3 */
+
 }
 
 /*===================================================================================================================================*/
@@ -409,6 +505,7 @@ static void vd_s_Pmic_BonInitProc(void)
             if(u1_t_reg_req_sts == (U1)TRUE){
                 u1_s_pmic_state = (U1)PMIC_BON_ST_RD_CAUSE;
                 u1_s_pmic_bon_exec_flag = (U1)FALSE;
+                vd_g_Rim_WriteU1((U2)RIMID_U1_PMIC_EXEC_FLG, u1_s_pmic_bon_exec_flag);
             }
             break;
         default:

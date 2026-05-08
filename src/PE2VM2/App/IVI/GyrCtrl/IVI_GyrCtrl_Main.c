@@ -17,7 +17,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include    "IVI_GyrCtrl_Main.h"
 
-#include    "gyro.h"
 #include    "GyroDevCtl.h"
 #include    "CarSpdPls.h"
 
@@ -63,7 +62,6 @@
 /*===================================================================================================================================*/
 void            vd_g_Ivi_GyrCtrl_Main_Bon_init(void)
 {
-    vd_g_GyroInit();
 	vd_g_CarSpdPls_Init();
     vd_g_GyroDev_BonInit();
 }
@@ -77,7 +75,6 @@ void            vd_g_Ivi_GyrCtrl_Main_Bon_init(void)
 /*===================================================================================================================================*/
 void            vd_g_Ivi_GyrCtrl_Main_Wkup_init(void)
 {
-    vd_g_GyroInit();
 	vd_g_CarSpdPls_Init();
     vd_g_GyroDev_WkupInit();
 }
@@ -91,7 +88,6 @@ void            vd_g_Ivi_GyrCtrl_Main_Wkup_init(void)
 /*===================================================================================================================================*/
 void            vd_g_Ivi_GyrCtrl_Main_Rst_init(void)
 {
-    vd_g_GyroInit();
 	vd_g_CarSpdPls_Init();
     vd_g_GyroDev_WkupInit();
 }

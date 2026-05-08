@@ -15,7 +15,7 @@
 #include "Mcu_I2c_Ctrl_private.h"
 #include "Mcu_Sys_Pwr_Gvif3Rx.h"
 #include "gvif3rx.h"
-#include "pictic.h"
+#include "ML86294Ctl.h"
 #include "SysEcDrc.h"
 #include "RobCtl.h"
 #include "PwrCtl.h"
@@ -1201,6 +1201,7 @@ static void    vd_s_Gvif3RxProcessChk(void)
     U4 u4_t_cond_met_flg_tmp;
     U4 u4_t_proc_que_tmp;
 
+    u1_t_func_sts = (U1)FALSE;
     u4_t_cond_met_flg_tmp = u4_s_gvif3rxproccond_met_flg & (U4)GVIF3RX_PROC_RESERVE;
 
     if((u1_s_gvif3rxprocexe_cnt < (U1)GVIF3RX_PROC_REQNUM)
@@ -1376,10 +1377,6 @@ static void    vd_s_Gvif3RxProcessChk(void)
                     /* Excuted Flag ON */
                     u1_s_gvif3rxgpioset_flg = (U1)TRUE;
                 }
-                break;
-            case GVIF3RX_PROC_NON:
-                /* ‰½‚à‚µ‚È‚¢ */
-                /* do noting */
                 break;
             default:
                 vd_s_Gvif3RxProcessInit();

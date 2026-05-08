@@ -18,41 +18,41 @@
 /*--------------------------------------------------------------------------*/
 
 /*========== User define Area [Start] ==========*/
-#define BSW_CANTP_CFG_DYNBSSTMIN_ADOPT      (BSW_CANTP_LATEST_BSSTMIN)          /* Dynamic BSSTmin adoption             */
+#define BSW_CANTP_CFG_DYNBSSTMIN_ADOPT      (BSW_CANTP_FIRST_BSSTMIN)           /* Dynamic BSSTmin adoption             */
 #define BSW_CANTP_CFG_FIXED_BS              (0U)                                /* BS fixed value                       */
 #define BSW_CANTP_CFG_FIXED_STMIN           (0U)                                /* STmin fixed value                    */
 #define BSW_CANTP_CFG_STMIN_USDEF           (BSW_CANTP_USSTMIN_NORMAL)          /* Change the definition of us STmin    */
 
 #define BSW_CANTP_CFG_FDSUPPORT             (BSW_USE)                           /* CANFD Frame Use/NoUse                */
-#define BSW_CANTP_CFG_DISABLE_TX            (BSW_USE)                           /* Tx disable Func Use/NoUse            */
+#define BSW_CANTP_CFG_DISABLE_TX            (BSW_NOUSE)                         /* Tx disable Func Use/NoUse            */
 #define BSW_CANTP_CFG_ABORT_TX              (BSW_USE)                           /* Tx abort Func Use/NoUse              */
-#define BSW_CANTP_CFG_CHANGE_RXPARAM        (BSW_USE)                           /* Change Rx Parameter Use/NoUse        */
+#define BSW_CANTP_CFG_CHANGE_RXPARAM        (BSW_NOUSE)                         /* Change Rx Parameter Use/NoUse        */
 #define BSW_CANTP_CFG_READ_RXPARAM          (BSW_NOUSE)                         /* Read Rx Parameter Use/NoUse          */
 #define BSW_CANTP_CFG_LOWCOSTOPERATION      (BSW_NOUSE)                         /* Low Cost Operation Use/NoUse         */
 
-#define BSW_CANTP_CFG_PADDINGBYTE           (0x00U)                             /* Padding Byte Data                    */
+#define BSW_CANTP_CFG_PADDINGBYTE           (0xCCU)                             /* Padding Byte Data                    */
 #define BSW_CANTP_CFG_MAXPDULENGTH          (BSW_CANTP_LENGTH_4K)               /* The max Length of Pdu                */
 
 #define BSW_CANTP_CFG_CANCEL_TX             (BSW_CANTP_FALSE)                   /* Cancel transmit                      */
 #define BSW_CANTP_CFG_NEWRX_IN_LASTTX       (BSW_CANTP_TX_INCOMPLETE)           /* New Msg Rx Handling In Last Msg Tx   */
-#define BSW_CANTP_CFG_NEXTRX_IN_TX          (BSW_CANTP_TX_REGARD_OK)            /* Next Msg Rx Handling In Msg Tx       */
+#define BSW_CANTP_CFG_NEXTRX_IN_TX          (BSW_CANTP_TX_INCOMPLETE)           /* Next Msg Rx Handling In Msg Tx       */
 
 #define BSW_CANTP_CFG_FCWAIT_TXPDTIME       (0U)                                /* FC.WAIT Tx Period time               */
-#define BSW_CANTP_CFG_FC_TXTIMEOUT          (0U)                                /* FC Tx wait timeout time              */
-#define BSW_CANTP_CFG_CF_TXTIMEOUT          (0U)                                /* CF Tx wait timeout time              */
+#define BSW_CANTP_CFG_FC_TXTIMEOUT          (1000U)                             /* FC Tx wait timeout time              */
+#define BSW_CANTP_CFG_CF_TXTIMEOUT          (1000U)                             /* CF Tx wait timeout time              */
 
 #define BSW_CANTP_CFG_RXPARAMPTNNUM         (0U)                                /* Rx Parameter pattern num             */
 #define BSW_CANTP_CFG_TXPARAMPTNNUM         (0U)                                /* Tx Parameter pattern num             */
 
 /* The number of Connection Channels */
-#define BSW_CANTP_CFG_CHNUM                 (1U)
+#define BSW_CANTP_CFG_CHNUM                 (8U)
 
 /* Minimum NSdu Id */
-#define BSW_CANTP_CFG_MIN_RXNSDUID          (BSW_PDUR_LOCOMP_CANTP | 0x0000U)
+#define BSW_CANTP_CFG_MIN_RXNSDUID          (BSW_PDUR_LOCOMP_CANTP | 0x0004U)
 #define BSW_CANTP_CFG_MIN_TXNSDUID          (BSW_PDUR_LOCOMP_CANTP | 0x0000U)
 
 /* Minimum NPdu Id */
-#define BSW_CANTP_CFG_MIN_RXNPDUID          (BSW_PDUR_LOCOMP_CANTP | 0x0000U)
+#define BSW_CANTP_CFG_MIN_RXNPDUID          (BSW_PDUR_LOCOMP_CANTP | 0x0004U)
 #define BSW_CANTP_CFG_MIN_TXNPDUID          (BSW_PDUR_LOCOMP_CANTP | 0x0000U)
 
 /* Connection Channel Mode */
@@ -90,14 +90,14 @@
 #define BSW_CANTP_CFG_CHANNELMODE_CH31      (BSW_CANTP_MODE_HALF_DUPLEX)
 
 /* The number of RxNSdus */
-#define BSW_CANTP_CFG_RXNSDUNUM_CH00        (0U)
-#define BSW_CANTP_CFG_RXNSDUNUM_CH01        (0U)
-#define BSW_CANTP_CFG_RXNSDUNUM_CH02        (0U)
-#define BSW_CANTP_CFG_RXNSDUNUM_CH03        (0U)
-#define BSW_CANTP_CFG_RXNSDUNUM_CH04        (0U)
-#define BSW_CANTP_CFG_RXNSDUNUM_CH05        (0U)
-#define BSW_CANTP_CFG_RXNSDUNUM_CH06        (0U)
-#define BSW_CANTP_CFG_RXNSDUNUM_CH07        (0U)
+#define BSW_CANTP_CFG_RXNSDUNUM_CH00        (1U)
+#define BSW_CANTP_CFG_RXNSDUNUM_CH01        (1U)
+#define BSW_CANTP_CFG_RXNSDUNUM_CH02        (1U)
+#define BSW_CANTP_CFG_RXNSDUNUM_CH03        (1U)
+#define BSW_CANTP_CFG_RXNSDUNUM_CH04        (1U)
+#define BSW_CANTP_CFG_RXNSDUNUM_CH05        (1U)
+#define BSW_CANTP_CFG_RXNSDUNUM_CH06        (1U)
+#define BSW_CANTP_CFG_RXNSDUNUM_CH07        (1U)
 #define BSW_CANTP_CFG_RXNSDUNUM_CH08        (0U)
 #define BSW_CANTP_CFG_RXNSDUNUM_CH09        (0U)
 #define BSW_CANTP_CFG_RXNSDUNUM_CH10        (0U)
@@ -124,13 +124,13 @@
 #define BSW_CANTP_CFG_RXNSDUNUM_CH31        (0U)
 
 /* The number of TxNSdus */
-#define BSW_CANTP_CFG_TXNSDUNUM_CH00        (0U)
+#define BSW_CANTP_CFG_TXNSDUNUM_CH00        (1U)
 #define BSW_CANTP_CFG_TXNSDUNUM_CH01        (0U)
-#define BSW_CANTP_CFG_TXNSDUNUM_CH02        (0U)
+#define BSW_CANTP_CFG_TXNSDUNUM_CH02        (1U)
 #define BSW_CANTP_CFG_TXNSDUNUM_CH03        (0U)
-#define BSW_CANTP_CFG_TXNSDUNUM_CH04        (0U)
+#define BSW_CANTP_CFG_TXNSDUNUM_CH04        (1U)
 #define BSW_CANTP_CFG_TXNSDUNUM_CH05        (0U)
-#define BSW_CANTP_CFG_TXNSDUNUM_CH06        (0U)
+#define BSW_CANTP_CFG_TXNSDUNUM_CH06        (1U)
 #define BSW_CANTP_CFG_TXNSDUNUM_CH07        (0U)
 #define BSW_CANTP_CFG_TXNSDUNUM_CH08        (0U)
 #define BSW_CANTP_CFG_TXNSDUNUM_CH09        (0U)
@@ -158,14 +158,14 @@
 #define BSW_CANTP_CFG_TXNSDUNUM_CH31        (0U)
 
 /* The number of RxNPdus */
-#define BSW_CANTP_CFG_RXNPDUNUM_CH00        (0U)
-#define BSW_CANTP_CFG_RXNPDUNUM_CH01        (0U)
-#define BSW_CANTP_CFG_RXNPDUNUM_CH02        (0U)
-#define BSW_CANTP_CFG_RXNPDUNUM_CH03        (0U)
-#define BSW_CANTP_CFG_RXNPDUNUM_CH04        (0U)
-#define BSW_CANTP_CFG_RXNPDUNUM_CH05        (0U)
-#define BSW_CANTP_CFG_RXNPDUNUM_CH06        (0U)
-#define BSW_CANTP_CFG_RXNPDUNUM_CH07        (0U)
+#define BSW_CANTP_CFG_RXNPDUNUM_CH00        (1U)
+#define BSW_CANTP_CFG_RXNPDUNUM_CH01        (1U)
+#define BSW_CANTP_CFG_RXNPDUNUM_CH02        (1U)
+#define BSW_CANTP_CFG_RXNPDUNUM_CH03        (1U)
+#define BSW_CANTP_CFG_RXNPDUNUM_CH04        (1U)
+#define BSW_CANTP_CFG_RXNPDUNUM_CH05        (1U)
+#define BSW_CANTP_CFG_RXNPDUNUM_CH06        (1U)
+#define BSW_CANTP_CFG_RXNPDUNUM_CH07        (1U)
 #define BSW_CANTP_CFG_RXNPDUNUM_CH08        (0U)
 #define BSW_CANTP_CFG_RXNPDUNUM_CH09        (0U)
 #define BSW_CANTP_CFG_RXNPDUNUM_CH10        (0U)
@@ -192,13 +192,13 @@
 #define BSW_CANTP_CFG_RXNPDUNUM_CH31        (0U)
 
 /* The number of TxNPdus */
-#define BSW_CANTP_CFG_TXNPDUNUM_CH00        (0U)
+#define BSW_CANTP_CFG_TXNPDUNUM_CH00        (1U)
 #define BSW_CANTP_CFG_TXNPDUNUM_CH01        (0U)
-#define BSW_CANTP_CFG_TXNPDUNUM_CH02        (0U)
+#define BSW_CANTP_CFG_TXNPDUNUM_CH02        (1U)
 #define BSW_CANTP_CFG_TXNPDUNUM_CH03        (0U)
-#define BSW_CANTP_CFG_TXNPDUNUM_CH04        (0U)
+#define BSW_CANTP_CFG_TXNPDUNUM_CH04        (1U)
 #define BSW_CANTP_CFG_TXNPDUNUM_CH05        (0U)
-#define BSW_CANTP_CFG_TXNPDUNUM_CH06        (0U)
+#define BSW_CANTP_CFG_TXNPDUNUM_CH06        (1U)
 #define BSW_CANTP_CFG_TXNPDUNUM_CH07        (0U)
 #define BSW_CANTP_CFG_TXNPDUNUM_CH08        (0U)
 #define BSW_CANTP_CFG_TXNPDUNUM_CH09        (0U)
@@ -229,8 +229,8 @@
 #define BSW_CANTP_CFG_DLCHKSF_PTN           (BSW_CANTP_DLCHKSF_PTN0)
 
 /* DL check error action */
-#define BSW_CANTP_CFG_DLCHKLCF_ERRACT       (BSW_CANTP_ERRACT_ABORT)
-#define BSW_CANTP_CFG_DLCHKFC_ERRACT        (BSW_CANTP_ERRACT_ABORT)
+#define BSW_CANTP_CFG_DLCHKLCF_ERRACT       (BSW_CANTP_ERRACT_IGNORE)
+#define BSW_CANTP_CFG_DLCHKFC_ERRACT        (BSW_CANTP_ERRACT_IGNORE)
 
 /*========== User define Area [End] ============*/
 

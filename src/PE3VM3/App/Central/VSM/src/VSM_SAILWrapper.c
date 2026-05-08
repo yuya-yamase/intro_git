@@ -40,24 +40,32 @@ void vd_g_VSM_SAILWrapper_Init(void)
 void vd_g_VSM_SAILWrapper(void)
 {
     U1 u1_t_ret;
+    U1 u1_t_datasts;
     U2 u2_t_len = (U2)0U;
     U1 u1_t_data = (U1)VSM_SLEEPOK;
-    U4 u4_t_counter = 0U;
+    U4 u4_t_counter = (U4)0U;
 
-    u1_t_ret = ChipCom_GetPeriodicRxData((U1)CHIPCOM_PERIODICID_VSM_SLEEPNG, &u2_t_len, &u1_t_data, &u4_t_counter);
+    u1_t_datasts = ChipCom_GetSignalStatus((U2)SIGNAL_CHIPCOM_BUS_CSS1S01_MCUSLEEPINFO);
 
-    if(u1_t_ret == (U1)E_OK){
-        if(u1_t_data == (U1)VSM_SLEEPNG){
-            u1_s_vsm_sailsleepsts = (U1)VSM_SLEEPNG;
-        }
-        else if(u1_t_data == (U1)VSM_SLEEPOK){
-            u1_s_vsm_sailsleepsts = (U1)VSM_SLEEPOK;
-        }
-        else{
-            /* do nothing */
+    if(u1_t_datasts == (U1)CHIPCOM_STATUS_NONE){
+        u1_t_ret = ChipCom_GetPeriodicRxData((U1)CHIPCOM_PERIODICID_VSM_SLEEPNG, &u2_t_len, &u1_t_data, &u4_t_counter);
+
+        if(u1_t_ret == (U1)E_OK){
+            if(u1_t_data == (U1)VSM_SLEEPNG){
+                u1_s_vsm_sailsleepsts = (U1)VSM_SLEEPNG;
+            }
+            else if(u1_t_data == (U1)VSM_SLEEPOK){
+                u1_s_vsm_sailsleepsts = (U1)VSM_SLEEPOK;
+            }
+            else{
+                /* do nothing */
+            }
         }
     }
-    
+    else{
+        u1_s_vsm_sailsleepsts = (U1)VSM_SLEEPOK;
+    }
+
     PutCnSleepNG_SAIL(u1_s_vsm_sailsleepsts);
 
     return;
