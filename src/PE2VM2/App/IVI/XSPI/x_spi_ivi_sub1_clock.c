@@ -20,6 +20,7 @@
 #include    "x_spi_ivi_sub1_clock.h"
 #include    "datesi_com.h"
 #include    "x_spi_ivi_sub4_private.h"
+#include    "rim_ctl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -70,6 +71,7 @@ U1      u1_s_xspi_ivi_clock_data_get_req_flg;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static void            vd_s_XspiIviSub1ClockInit(void);
 static void            vd_s_XspiIviSub1ClockData(void);
 static void            vd_s_XspiIviSub1ClockDataToQueue(const U2 u2_a_size,const U1* u1_ap_XSPI_ADD);
 static U1              u1_s_XspiIviSub1ClockDataEventJdg(const U1* u1_ap_DATA,const U1* u1_ap_DATA_PRE,const U1 u1_a_size);
@@ -80,16 +82,50 @@ static U1              u1_s_XspiIviSub1ClockDataEventJdg(const U1* u1_ap_DATA,co
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  void            vd_g_XspiIviSub1ClockInit(void)                                                                                  */
+/*  void            vd_g_XspiIviSub1ClockBonInit(void)                                                                               */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    Bon Initial processing                                                                                           */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub1ClockBonInit(void)
+{
+    u1_s_xspi_ivi_clock_data_get_req_flg = (U1)FALSE;
+    vd_g_Rim_WriteU1((U2)RIMID_U1_TIM_GET_REQ, u1_s_xspi_ivi_clock_data_get_req_flg);
+
+    vd_s_XspiIviSub1ClockInit();
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub1ClockRstWkupInit(void)                                                                           */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    Reset/Wakeup Initial processing                                                                                  */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub1ClockRstWkupInit(void)
+{
+    U1  u1_t_rim_sts;
+    U1  u1_t_rim_data;
+
+    u1_s_xspi_ivi_clock_data_get_req_flg = (U1)FALSE;
+    u1_t_rim_sts = u1_g_Rim_ReadU1withStatus((U2)RIMID_U1_TIM_GET_REQ, &u1_t_rim_data);
+    if((u1_t_rim_sts & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK){
+        u1_s_xspi_ivi_clock_data_get_req_flg = u1_t_rim_data;
+    }
+
+    vd_s_XspiIviSub1ClockInit();
+}
+
+/*===================================================================================================================================*/
+/*  static void     vd_s_XspiIviSub1ClockInit(void)                                                                                  */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Description:    初期化処理                                                                                                        */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void            vd_g_XspiIviSub1ClockInit(void)
+static void     vd_s_XspiIviSub1ClockInit(void)
 {
-    u1_s_xspi_ivi_clock_data_get_req_flg = (U1)FALSE;
-
     vd_g_MemfillU1(&u1_sp_xspi_ivi_clock_rtc_data[0], (U1)0U, (U4)XSPI_IVI_CLOCK_RTC_DATA_SIZE);
     vd_g_MemfillU1(&u1_sp_xspi_ivi_clock_disp_data[0], (U1)0U, (U4)XSPI_IVI_CLOCK_DISP_DATA_SIZE);
     vd_g_MemfillU1(&u1_sp_xspi_ivi_clock_rtc_data_pre[0], (U1)0U, (U4)XSPI_IVI_CLOCK_RTC_DATA_SIZE);
@@ -164,6 +200,7 @@ void            vd_g_XspiIviSub1ClockAna(const U1 * u1_ap_XSPI_ADD, const U2 u2_
         break;
     case XSPI_IVI_CLOCK_GET_REQ:
         u1_s_xspi_ivi_clock_data_get_req_flg = (U1)TRUE;
+        vd_g_Rim_WriteU1((U2)RIMID_U1_TIM_GET_REQ, u1_s_xspi_ivi_clock_data_get_req_flg);
         break;
     default:
         break;

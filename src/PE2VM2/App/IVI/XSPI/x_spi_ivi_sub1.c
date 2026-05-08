@@ -100,7 +100,6 @@ void            vd_g_XspiIviSub1Init(void)
     vd_g_XspiIviSub1SystemInit();
     vd_g_XspiIviSub1CameraInit();
     vd_g_XspiIviSub1DiagInit();
-    vd_g_XspiIviSub1ClockInit();
 	vd_g_XspiIviSub1VersionInit();
     vd_g_XspiIviSub1ReproInit();
 }
@@ -115,6 +114,19 @@ void            vd_g_XspiIviSub1Init(void)
 void            vd_g_XspiIviSub1BonInit(void)
 {
     vd_g_XspiIviSub1PowerBonInit();
+    vd_g_XspiIviSub1ClockBonInit();
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub1RstWkupInit(void)                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    Reset/Wakeup Initial                                                                                             */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub1RstWkupInit(void)
+{
+    vd_g_XspiIviSub1ClockRstWkupInit();
 }
 
 /*===================================================================================================================================*/

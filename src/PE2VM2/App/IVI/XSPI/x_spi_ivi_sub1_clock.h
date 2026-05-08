@@ -62,7 +62,8 @@ typedef struct{
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-void            vd_g_XspiIviSub1ClockInit(void);
+void            vd_g_XspiIviSub1ClockBonInit(void);
+void            vd_g_XspiIviSub1ClockRstWkupInit(void);
 void            vd_g_XspiIviSub1ClcokMainTask(void);
 void            vd_g_XspiIviSub1ClockAna(const U1 * u1_ap_XSPI_ADD, const U2 u2_a_DATA_SIZE);
 void            vd_g_XspiIviSub1ClockSettingSend(const U1 u1_a_DATA);
