@@ -118,6 +118,8 @@
 
 /*Reset Signal Mask Value*/
 #define XSPI_IVI_CAN_CDSIZE_MASK            (0x0FU)
+#define XSPI_IVI_CAN_MMRESET_MASK           (0x01U)
+#define XSPI_IVI_CAN_HFDISP_MASK            (0x03U)
 #define XSPI_IVI_CAN_PVMREQ_MASK            (0x03U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -258,6 +260,8 @@ void            vd_g_XspiIviSub4SoCResetInit(void)
 static void            vd_s_XspiIviSub4ResetInit(void)
 {
     U1  u1_t_sgnl_cdsize;
+    U1  u1_t_sgnl_mmreset;
+    U1  u1_t_sgnl_hfdisp;
     U1  u1_t_sgnl_pvmreq;
     U1  u1_tp_candata_AVN1S73[8];
     U1  u1_tp_candata_AVN1SF7[32];
@@ -267,12 +271,16 @@ static void            vd_s_XspiIviSub4ResetInit(void)
     vd_g_MemfillU1(&u1_tp_candata_AVN1SF7[0], (U1)0U, (U4)XSPI_IVI_CAN_DLC_32);
 
     (void)Com_ReceiveSignal(ComConf_ComSignal_CD_SIZE, &u1_t_sgnl_cdsize);
+    (void)Com_ReceiveSignal(ComConf_ComSignal_MM_RESET, &u1_t_sgnl_mmreset);
+    (void)Com_ReceiveSignal(ComConf_ComSignal_HF_DISP, &u1_t_sgnl_hfdisp);
     (void)Com_ReceiveSignal(ComConf_ComSignal_PVM_REQ, &u1_t_sgnl_pvmreq);
 
 
     for(u4_t_lpcnt = (U4)MSG_AVN1S01_TXCH0; u4_t_lpcnt <= (U4)MSG_MET1S33_TXCH0; u4_t_lpcnt++){
         if(u4_t_lpcnt == (U4)MSG_AVN1S73_TXCH0) {
+            u1_tp_candata_AVN1S73[0] |= (u1_t_sgnl_mmreset & (U1)XSPI_IVI_CAN_MMRESET_MASK) << (U1)XSPI_IVI_SFT_02;
             u1_tp_candata_AVN1S73[6] |= (u1_t_sgnl_cdsize & (U1)XSPI_IVI_CAN_CDSIZE_MASK) << (U1)XSPI_IVI_SFT_04;
+            u1_tp_candata_AVN1S73[6] |= (u1_t_sgnl_hfdisp & (U1)XSPI_IVI_CAN_HFDISP_MASK) << (U1)XSPI_IVI_SFT_02;
             (void)Com_SendIPDU((PduIdType)MSG_AVN1S73_TXCH0, &u1_tp_candata_AVN1S73[0] );
         } else if(u4_t_lpcnt == (U4)MSG_AVN1SF7_TXCH0) {
             u1_tp_candata_AVN1SF7[27] |= u1_t_sgnl_pvmreq & (U1)XSPI_IVI_CAN_PVMREQ_MASK;

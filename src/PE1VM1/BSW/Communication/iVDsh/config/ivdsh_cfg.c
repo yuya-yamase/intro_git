@@ -44,11 +44,11 @@
 #define IVDSH_FQ_CH_WRI                          (2U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IVDSH_WA_NWORD_WRI                       (20U)
-#define IVDSH_WA_NWORD_REA_0                     (26U)
+#define IVDSH_WA_NWORD_WRI                       (25U)
+#define IVDSH_WA_NWORD_REA_0                     (29U)
 #define IVDSH_WA_NWORD_REA_1                     (15U)
 
-#define IVDSH_WA_NWORD                           (102U)
+#define IVDSH_WA_NWORD                           (113U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -105,6 +105,10 @@ const ST_IVDSH_WA           st_gp_IVDSH_WA_BY_DID[IVDSH_NUM_DID] =
     {(U2)16U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM1TO3_NMDIAG     */
     {(U2)17U,       (U2)2U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM1TO3_MAC_ADDRESS*/
     {(U2)19U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM1TO3_OTAACT_INF */
+    {(U2)20U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM1TO2_DRC_ALVCNT */
+    {(U2)21U,       (U2)2U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM1TO2_DRC_RDDATA */
+    {(U2)23U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM1TO2_DRC_FSTRD  */
+    {(U2)24U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM1TO2_DRC_WRINF  */
     /*------------------------------------------------------------------*/
     /* Read from VM#2                                                   */
     /*------------------------------------------------------------------*/
@@ -125,6 +129,8 @@ const ST_IVDSH_WA           st_gp_IVDSH_WA_BY_DID[IVDSH_NUM_DID] =
     {(U2)20U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM2TO1_MET1S70    */
     {(U2)21U,       (U2)2U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_FWUPXREQ_H        */
     {(U2)23U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_FWUPXREQ_D        */
+    {(U2)26U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM2TO1_DRC_ALVCNT */
+    {(U2)27U,       (U2)2U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM2TO1_DRC_WRDATA */
     /*------------------------------------------------------------------*/
     /* Read from VM#3                                                   */
     /*------------------------------------------------------------------*/

@@ -36,6 +36,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define OXDC_EOM_IGN_ON                          (0x01U)                 /* Ignition is ON                        */
 #define OXDC_EOM_DIAG_ON                          (0x02U)                 /* DiagPower is ON                     */
+#define OXDC_EOM_RPG_EN                          (0x02U)                 /* Reprog is enabled                     */
 #define OXDC_EOM_SI_ACT                          (0x04U)                 /* Shipping Inspection is activated      */
 #define OXDC_EOM_NUO_DI                          (0x08U)                 /* NvM update operation is disabled      */
 

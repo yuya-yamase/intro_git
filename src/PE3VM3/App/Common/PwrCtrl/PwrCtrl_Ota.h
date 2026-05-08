@@ -20,6 +20,7 @@
 /* 不揮発Read定義 */
 #define PWRCTRL_OTA_READ_NOOTA         (0x00)
 #define PWRCTRL_OTA_READ_OTA           (0x01)
+#define PWRCTRL_OTA_READ_INVALID       (0xFF)
 
 /* 不揮発Write定義 */
 #define PWRCTRL_OTA_WRITE_NOOTA        (0x00)

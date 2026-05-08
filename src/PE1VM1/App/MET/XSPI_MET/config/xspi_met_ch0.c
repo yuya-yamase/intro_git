@@ -758,7 +758,7 @@ static inline void    vd_s_XSpiCfgTxMulmed(        U4 * u4_ap_pdu_tx) {
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxMetcstmMcst(    U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[0]  = (((U4)u1_g_McstReset((U1)FALSE) & (U4)XSPI_MSK_02BIT) << 22);           /* Customize Reset                */
-    u4_ap_pdu_tx[0] |= ((u4_g_McstBf((U1)MCST_BFI_METWRNCSTM) & (U4)0x00000007U) << (U1)28);
+    u4_ap_pdu_tx[0] |= ((u4_g_McstBf((U1)MCST_BFI_METWRNCSTM) & (U4)XSPI_MSK_03BIT) << 28);
 }
 
 /*===================================================================================================================================*/

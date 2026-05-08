@@ -923,8 +923,8 @@ const ST_GP_I2C_MA_REQ st_sp_GVIF3RX_REG_GPIO3_WR[GVIF3RX_CAMKINDWRTBL_NUM] = {
 void    vd_g_Gvif3RxInit(void)
 {
     u1_s_gvif3rxstby3sts = (U1)FALSE;
-    u1_s_gvif3rxcamkind_now = (U1)GVIF3RX_KIND_CAM_NONE; /* DTF読み出し値(暫定) */
-    u1_s_gvifcamKind_last = (U1)GVIF3RX_KIND_CAM_NONE;   /* DTF読み出し値(暫定) */
+    vd_s_Gvif3RxCamKindGet();
+    u1_s_gvifcamKind_last = u1_s_gvif3rxcamkind_now;
     u1_s_gvif3rxchk_cnt = (U1)GVIF3RX_CNT_CLR;
     u1_s_gvif3rxdeverrflg = (U1)GVIF3RX_DEVERR_FLGOFF;
     u1_s_gvif3rx0unconflg = (U1)GVIF3RX_UNCON_FLGOFF;

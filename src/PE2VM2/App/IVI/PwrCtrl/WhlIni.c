@@ -7,6 +7,7 @@
 #include "WhlIni.h"
 
 #include "ivdsh.h"
+#include "PictCtl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -160,6 +161,7 @@ void    vd_g_WhlIni_Routine(void)
                 u1_t_vmcom_rcv_sts = (U1)((u4_t_vmcom_rcv_sts_vm3 >> WHLINI_SHIFT_1BYTE) & (U4)WHLINI_MASK_BYTE);
                 if(u1_t_vmcom_rcv_sts == (U1)WHLINI_VMCOM_FROMVM3_STA_START){
                     /* （provisional）Initialize all RIM and DTF */
+                    vd_g_PictCtl_Init_DTF();
 
                     /* VM communication: Set Wholly Initialization completion status to SUCCESS */
                     u4_s_vmcom_req_vm3 &= ~((U4)WHLINI_MASK_BYTE << WHLINI_SHIFT_1BYTE);

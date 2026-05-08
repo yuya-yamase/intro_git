@@ -58,7 +58,6 @@
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 void            vd_g_XspiIviSub1PowerInit(void);
-void            vd_g_XspiIviSub1PowerBonInit(void);
 void            vd_g_XspiIviSub1PowerMainTask(void);
 void            vd_g_XspiIviSub1PowerResetRoutine(void);
 void            vd_g_XspiIviSub1PowerGetSts(U1* u1_ap_data);

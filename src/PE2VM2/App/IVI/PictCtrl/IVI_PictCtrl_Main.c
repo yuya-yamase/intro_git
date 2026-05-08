@@ -67,7 +67,7 @@
 /*===================================================================================================================================*/
 void            vd_g_Ivi_PictCtrl_Main_Bon_init(void)
 {
-    vd_g_PictCtl_Init();
+    vd_g_PictCtl_BonInit();
     vd_g_Gvif3RxInit();
 
     gvif3rx_Init();
@@ -86,7 +86,7 @@ void            vd_g_Ivi_PictCtrl_Main_Bon_init(void)
 /*===================================================================================================================================*/
 void            vd_g_Ivi_PictCtrl_Main_Wkup_init(void)
 {
-    vd_g_PictCtl_Init();
+    vd_g_PictCtl_WkupInit();
     vd_g_Gvif3RxInit();
 
     gvif3rx_Init();
@@ -105,7 +105,7 @@ void            vd_g_Ivi_PictCtrl_Main_Wkup_init(void)
 /*===================================================================================================================================*/
 void            vd_g_Ivi_PictCtrl_Main_Rst_init(void)
 {
-    vd_g_PictCtl_Init();
+    vd_g_PictCtl_WkupInit();
     vd_g_Gvif3RxInit();
 
     gvif3rx_Init();
