@@ -9,6 +9,7 @@
 #include "Mcu_I2c_Ctrl_private.h"
 #include "Mcu_Sys_Pwr_Gvif3Rx.h"
 #include "x_spi_ivi_sub1_power.h"
+#include "PictCtl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -22,6 +23,10 @@
 /* GVIF受信制御仕様 */
 #define MCU_WRINUM_GVIF3RX_INISET       (63U)   /* 6-2. 初期設定処理 初期設定 (7-1. 初期設定値 参照) レジスタ書込み回数 */
 #define MCU_WRINUM_GVIF3RX_TYPSET       (10U)    /* 6ｰ3. カメラシステム種別による設定 レジスタ書込み回数 */
+
+/* カメラシステム種別 */
+#define MCU_KIND_CAM_NONE               (0U)
+#define MCU_KIND_DOMECON_EXIST          (1U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
@@ -38,9 +43,12 @@ static uint16   Mcu_RegStep_GVIF3RX;            /* GVIF3RX レジスタ書込み
 /* レジスタアクセス */
 static uint16   Mcu_RegSet_BetWaitTime_Stub;    /* レジスタアクセス間Waitタイマ スタブ */
 
+static uint8    Mcu_RegSet_CamKind;
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static void     Mcu_Dev_Pwron_GvifRx_CamKindGet( void );
 static void     Mcu_Dev_Pwron_GvifRx_Polling_Rst( void );
 static void     Mcu_Dev_Pwron_GvifRx_RegSetting( void );
 static uint8    Mcu_Dev_Pwron_TimChk( uint32 mcu_tim_cnt, const uint32 mcu_tim_fim);
@@ -65,6 +73,29 @@ void    gvif3rx_Init( void )
     Mcu_RegStep_GVIF3RX         = (uint16)0U;
 
     Mcu_RegSet_BetWaitTime_Stub = (uint16)0xFFFFU;
+
+    Mcu_Dev_Pwron_GvifRx_CamKindGet();
+}
+
+/*****************************************************************************
+  Function      : Mcu_Dev_Pwron_GvifRx_CamKindGet
+  Description   : 
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static void     Mcu_Dev_Pwron_GvifRx_CamKindGet( void )
+{
+    uint8   mcu_camexis;
+
+    mcu_camexis = u1_g_PictCtl_GvifCamKindSts();
+
+    if(mcu_camexis == (uint8)PICT_KIND_DOMECON_EXIST){
+        Mcu_RegSet_CamKind = (uint8)MCU_KIND_DOMECON_EXIST;
+    }
+    else{
+        Mcu_RegSet_CamKind = (uint8)MCU_KIND_CAM_NONE;
+    }
 }
 
 /*****************************************************************************
@@ -261,16 +292,34 @@ static void     Mcu_Dev_Pwron_GvifRx_SetReg( void )
 
         if(mcu_sts == (uint8)TRUE){
             /* 全書込み完了 次状態に遷移 */
-            Mcu_OnStep_GVIF3RX_OVRALL = (uint8)MCU_STEP_GVIF3RX_OVERALL_2;
+        	if(Mcu_RegSet_CamKind == (uint8)MCU_KIND_DOMECON_EXIST){
+            	Mcu_OnStep_GVIF3RX_OVRALL = (uint8)MCU_STEP_GVIF3RX_OVERALL_3;
+        	}
+        	else{
+            	Mcu_OnStep_GVIF3RX_OVRALL = (uint8)MCU_STEP_GVIF3RX_OVERALL_2;
+        	}
         }
         break;
     
     case MCU_STEP_GVIF3RX_OVERALL_2:
         /* レジスタ書込み処理 */
-        /* ToDo：バックアップ処理がないためカメラなし固定でレジスタ設定する */
         mcu_sts = Mcu_Dev_I2c_Ctrl_RegSet((uint8)MCU_I2C_ACK_GVIF_RX, &Mcu_RegStep_GVIF3RX, (uint16)MCU_WRINUM_GVIF3RX_TYPSET,
                                                 (uint8)GP_I2C_MA_SLA_2_GVIF_RX, GVIFRX_DOMCONSET, &Mcu_OnStep_GVIF3RX_AckTime,
                                                 st_sp_MCU_SYS_PWR_GVIF3RX_REG_CAMNON, &Mcu_RegSet_BetWaitTime_Stub);
+
+        if(mcu_sts == (uint8)TRUE){
+            /* 全書込み完了 次状態に遷移 */
+            Mcu_OnStep_GVIF3RX_OVRALL = (uint8)MCU_STEP_GVIF3RX_OVERALL_FIN;
+            /* 初期化完了通知 */
+            vd_g_XspiIviSub1PowerDevInitCmpApp((U1)XSPI_IVI_POWER_GVIFRECV_INI);
+        }
+        break;
+    
+    case MCU_STEP_GVIF3RX_OVERALL_3:
+        /* レジスタ書込み処理 */
+        mcu_sts = Mcu_Dev_I2c_Ctrl_RegSet((uint8)MCU_I2C_ACK_GVIF_RX, &Mcu_RegStep_GVIF3RX, (uint16)MCU_WRINUM_GVIF3RX_TYPSET,
+                                                (uint8)GP_I2C_MA_SLA_2_GVIF_RX, GVIFRX_DOMCONSET, &Mcu_OnStep_GVIF3RX_AckTime,
+                                                st_sp_MCU_SYS_PWR_GVIF3RX_REG_DOMCON, &Mcu_RegSet_BetWaitTime_Stub);
 
         if(mcu_sts == (uint8)TRUE){
             /* 全書込み完了 次状態に遷移 */
