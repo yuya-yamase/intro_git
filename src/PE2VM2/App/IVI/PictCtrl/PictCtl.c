@@ -21,6 +21,7 @@
 #include "PwrCtl.h"
 #include "veh_opemd.h"
 #include "ivdsh.h"
+#include "rim_ctl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -432,6 +433,8 @@
 #define PICT_MUTEFLG_ALL                                (0x01U)
 #define PICT_MUTEFLG_NOAIS                              (0x02U)
 
+#define PICT_CAM_DIAP_INIT                              (0x00000000U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -619,6 +622,7 @@ static U1    u1_s_pict_heacon;
 static U1    u1_s_pict_reset_req;
 static U1    u1_s_pict_mm_reset;
 static U4    u4_s_pict_power_sts;
+static U1    u1_s_pict_dtfinit_req;
 static U1    u1_s_pict_vmreset_bpass;
 static U1    u1_s_pict_socreset_req;
 static U1    u1_s_pict_cdcreset_req;
@@ -627,6 +631,7 @@ static U1    u1_s_pict_mutelog_flg;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static void vd_s_PictCtl_Init(void);
 static void vd_s_PictCtl_PollMngInit(void);
 static void vd_s_PictCtl_SeqMng(void);
 static void vd_s_PictCtl_SetMlSeqReq(U1 u1_a_SeqNo);
@@ -637,6 +642,7 @@ static void vd_s_PictCtl_SetTim(U1 u1_a_Id, U2 u2_a_Tim);
 static void vd_s_PictCtl_ClrTim(U1 u1_a_Id);
 static void vd_s_PictCtl_StsMng(void);
 static void vd_s_PictCtl_IgStsChk(void);
+static void vd_s_PictCtl_DtfChk(void);
 static void vd_s_PictCtl_CamCapStbyStsChk(void);
 static void vd_s_PictCtl_CamCapStby2StsChk(void);
 static void vd_s_PictCtl_CamCapStby3StsChk(void);
@@ -712,6 +718,7 @@ static void vd_s_PictCtl_GvifCamKindConverdUpDate(void);
 static U1   u1_s_PictCtl_CenterCamSizjdg(void);
 static U1   u1_s_PictCtl_CenterCamSizValidChk(U1 u1_a_CenterCamSiz);
 static void vd_s_PictCtl_Bkup_Write(void);
+static void vd_s_PictCtl_Bkup_DTF(void);
 static void vd_s_PictCtl_CamKindNtyChk(void);
 static void vd_s_PictCtl_CamKindNtySnd(void);
 static void vd_s_PictCtl_CamOffMuteOff(void);
@@ -890,12 +897,60 @@ static const U1 u1_sp_PICT_HANDLE_TBL[PICT_STRG_WHL_MAX] =
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  void vd_g_PictCtl_Init(void)                                                                                                     */
+/*  void vd_g_PictCtl_BonInit(void)                                                                                                  */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void vd_g_PictCtl_Init(void)
+void vd_g_PictCtl_BonInit(void)
+{
+    st_sp_Pict_BackUpInf.u1_CamKind = (U1)PICT_CAN_CAM_KIND_UNFIX;
+    st_sp_Pict_BackUpInf.u1_CenterCamSiz = (U1)PICT_CAN_CAM_SIZE_NONE;
+    st_sp_Pict_BackUpInf.u1_handle = (U1)PICT_HANDLE_UNKNOWN;
+    vd_g_Rim_WriteU1((U2)RIMID_U1_MAVTYPE, st_sp_Pict_BackUpInf.u1_CamKind);
+    vd_g_Rim_WriteU1((U2)RIMID_U1_R_CROP_0, st_sp_Pict_BackUpInf.u1_CenterCamSiz);
+    vd_g_Rim_WriteU1((U2)RIMID_U1_HANDLE, st_sp_Pict_BackUpInf.u1_handle);
+    
+    vd_s_PictCtl_Init();
+}
+
+/*===================================================================================================================================*/
+/*  void vd_g_PictCtl_WkupInit(void)                                                                                                 */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void vd_g_PictCtl_WkupInit(void)
+{
+    U1 u1_t_rim_sts;
+    U1 u1_t_rim_data;
+    
+    u1_t_rim_sts  = u1_g_Rim_ReadU1withStatus((U2)RIMID_U1_MAVTYPE, &u1_t_rim_data) & (U1)RIM_RESULT_KIND_MASK;
+    if(u1_t_rim_sts == (U1)RIM_RESULT_KIND_OK){
+        st_sp_Pict_BackUpInf.u1_CamKind = u1_t_rim_data;
+    }
+    
+    u1_t_rim_sts  = u1_g_Rim_ReadU1withStatus((U2)RIMID_U1_R_CROP_0, &u1_t_rim_data) & (U1)RIM_RESULT_KIND_MASK;
+    if(u1_t_rim_sts == (U1)RIM_RESULT_KIND_OK){
+        st_sp_Pict_BackUpInf.u1_CenterCamSiz = u1_t_rim_data;
+    }
+    
+    u1_t_rim_sts  = u1_g_Rim_ReadU1withStatus((U2)RIMID_U1_HANDLE, &u1_t_rim_data) & (U1)RIM_RESULT_KIND_MASK;
+    if(u1_t_rim_sts == (U1)RIM_RESULT_KIND_OK){
+        st_sp_Pict_BackUpInf.u1_handle = u1_t_rim_data;
+    }
+    
+    vd_s_PictCtl_Init();
+
+}
+
+/*===================================================================================================================================*/
+/*  static void vd_s_PictCtl_Init(void)                                                                                              */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_PictCtl_Init(void)
 {
     U1 u1_t_trg;
     U1 u1_t_cnt;
@@ -916,9 +971,6 @@ void vd_g_PictCtl_Init(void)
     bfg_Ml_Ctl.u1_SyncChkLoopCnt = (U1)PICT_CNT_INI;
     bfg_Ml_Ctl.u1_SyncChkSyncCnt = (U1)PICT_CNT_INI;
     bfg_Ml_Ctl.u1_SyncChkRlt = (U1)PICT_CAM_SYNC_CHK_UNJDG;
-
-    st_sp_Pict_BackUpInf.u1_CamKind = (U1)0U;      /* DTFバックアップ値を設定(暫定) */
-    st_sp_Pict_BackUpInf.u1_CenterCamSiz= (U1)0U;  /* DTFバックアップ値を設定(暫定) */
 
     bfg_Pict_StsMng.u1_stasts = (U1)POWER_MODE_STATE_PARK;
     bfg_Pict_StsMng.u1_RcvQualModeFlg = (U1)FALSE;
@@ -1001,6 +1053,7 @@ void vd_g_PictCtl_Init(void)
     u1_s_pict_reset_req = (U1)PICT_RESETREQ_OFF;
     u1_s_pict_mm_reset = (U1)PICT_MM_RESET_OFF;
     u4_s_pict_power_sts = (U1)PICT_VEHOPE_STS_INI;
+    u1_s_pict_dtfinit_req = (U1)FALSE;
     
     st_sp_send.u1_CamKind = st_sp_Pict_BackUpInf.u1_CamKind;
     st_sp_send.u1_CenterCamSiz = st_sp_Pict_BackUpInf.u1_CenterCamSiz;
@@ -1383,6 +1436,9 @@ static void vd_s_PictCtl_StsMng(void)
     /* DISP-REQ-GPIO0状態チェック */
     vd_s_PictCtl_DispReqGpio0StsChk();
     
+    if(u1_s_pict_dtfinit_req == (U1)FALSE){
+        vd_s_PictCtl_DtfChk();
+    }
     
     vd_s_PictCtl_PmsPsHoldstsChk();
     
@@ -1459,6 +1515,54 @@ static void vd_s_PictCtl_IgStsChk(void)
     bfg_Pict_StsMng.u1_stasts = u1_t_stasts;
 }
 
+/*===================================================================================================================================*/
+/*  static void vd_s_PictCtl_DtfChk(void)                                                                                            */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_PictCtl_DtfChk(void)
+{
+    U4 u4_t_read;
+    U1 u1_t_sts;
+    U1 u1_t_chk;
+    U1 u1_t_camkind;
+    U1 u1_t_centercamsiz;
+    U1 u1_t_handle;
+
+    u4_t_read = (U4)0U;
+    u1_t_sts = (U1)0U;
+    u1_t_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM1TO2_CAM_DIAP, &u4_t_read, (U2)PICT_VM_1WORD);
+    
+    if(u1_t_sts != (U1)IVDSH_NO_REA){
+        if(st_sp_Pict_BackUpInf.u1_CamKind == (U1)PICT_CAN_CAM_KIND_UNFIX){
+            u1_t_camkind = (U1)(u4_t_read & (U4)PICT_MASK_1BYTE);
+            u1_t_chk = u1_s_PictCtl_CamKindValidChk(u1_t_camkind);
+            if(u1_t_chk == (U1)TRUE){
+                st_sp_Pict_BackUpInf.u1_CamKind = u1_t_camkind;
+                vd_s_PictCtl_CamKindConverdUpDate();
+                vd_s_PictCtl_GvifCamKindConverdUpDate();
+                vd_s_PictCtl_CdsizeChk();  /* 他の信号が組み合わせで無効値に設定する必要がある場合は他の信号も更新処理を行う */
+                u1_s_pict_regwrite_req = (U1)TRUE;
+            }
+        }
+        if(st_sp_Pict_BackUpInf.u1_CenterCamSiz == (U1)PICT_CAN_CAM_SIZE_NONE){
+            u1_t_centercamsiz = (U1)((u4_t_read & (U4)PICT_MASK_2BYTE) >> PICT_SHIF_1BYTE);
+            u1_t_chk = u1_s_PictCtl_CenterCamSizValidChk(u1_t_centercamsiz);
+            if(u1_t_chk == (U1)TRUE){
+                st_sp_Pict_BackUpInf.u1_CenterCamSiz = u1_t_centercamsiz;
+                u1_s_pict_regwrite_req = (U1)TRUE;
+            }
+        }
+        if(st_sp_Pict_BackUpInf.u1_handle == (U1)PICT_HANDLE_UNKNOWN){
+            u1_t_handle = (U1)((u4_t_read & (U4)PICT_MASK_3BYTE) >> PICT_SHIF_2BYTE);
+            if(u1_t_handle != (U1)PICT_HANDLE_UNKNOWN){
+                st_sp_Pict_BackUpInf.u1_handle = u1_t_handle;
+                u1_s_pict_regwrite_req = (U1)TRUE;
+            }
+        }
+    }
+}
 
 /*===================================================================================================================================*/
 /*  static void  vd_s_PictCtl_CamCapStbyStsChk(void)                                                                                 */
@@ -4508,10 +4612,67 @@ static void vd_s_PictCtl_Bkup_Write(void)
 
     /* カメラシステム種別 */
     u1_t_CamKind = st_sp_Pict_BackUpInf.u1_CamKind;
+    vd_g_Rim_WriteU1((U2)RIMID_U1_MAVTYPE, u1_t_CamKind);
     /* 表示用映像サイズ */
     u1_t_CenterCamSiz = st_sp_Pict_BackUpInf.u1_CenterCamSiz;
+    vd_g_Rim_WriteU1((U2)RIMID_U1_R_CROP_0, u1_t_CenterCamSiz);
+    /* DTFへ記憶要求 */
+    vd_s_PictCtl_Bkup_DTF();
+}
 
-    /* DTFへ記憶要求(暫定) */
+/*===================================================================================================================================*/
+/*  static void vd_s_PictCtl_Bkup_DTF(void)                                                                                          */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_PictCtl_Bkup_DTF(void)
+{
+    U1 u1_t_mavtype;
+    U1 u1_t_size;
+    U1 u1_t_handle;
+    U4 u4_t_write;
+    
+    u1_t_mavtype = st_sp_Pict_BackUpInf.u1_CamKind;
+    u1_t_size = st_sp_Pict_BackUpInf.u1_CenterCamSiz;
+    u1_t_handle = st_sp_Pict_BackUpInf.u1_handle;
+    
+    u4_t_write  = (U4)u1_t_mavtype;
+    u4_t_write |= (U4)((U4)u1_t_size << PICT_SHIF_1BYTE);
+    u4_t_write |= (U4)((U4)u1_t_handle  << PICT_SHIF_2BYTE);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO1_CAM_DIAP, &u4_t_write, (U2)PICT_VM_1WORD);
+}
+
+/*===================================================================================================================================*/
+/*  void vd_g_PictCtl_Init_DTF(void)                                                                                                 */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void vd_g_PictCtl_Init_DTF(void)
+{
+    U4 u4_t_write;
+    
+    u1_s_pict_dtfinit_req = (U1)TRUE;
+    
+    st_sp_Pict_BackUpInf.u1_CamKind = (U1)PICT_CAN_CAM_KIND_UNFIX;
+    st_sp_Pict_BackUpInf.u1_CenterCamSiz = (U1)PICT_CAN_CAM_SIZE_NONE;
+    st_sp_Pict_BackUpInf.u1_handle = (U1)PICT_HANDLE_UNKNOWN;
+    vd_g_Rim_WriteU1((U2)RIMID_U1_MAVTYPE, st_sp_Pict_BackUpInf.u1_CamKind);
+    vd_g_Rim_WriteU1((U2)RIMID_U1_R_CROP_0, st_sp_Pict_BackUpInf.u1_CenterCamSiz);
+    vd_g_Rim_WriteU1((U2)RIMID_U1_HANDLE, st_sp_Pict_BackUpInf.u1_handle);
+    
+    u4_t_write  = (U4)PICT_CAM_DIAP_INIT;
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO1_CAM_DIAP, &u4_t_write, (U2)PICT_VM_1WORD);
+    
+    bfg_Pict_StsMng.st_CamDisc.u1_LastCamKind = st_sp_Pict_BackUpInf.u1_CamKind;
+    bfg_Pict_StsMng.st_CamDisc.u1_CamKindCnt = (U1)PICT_SAMECNT_INI;
+    bfg_Pict_StsMng.st_CamDisc.u1_LastCenterCamSiz = st_sp_Pict_BackUpInf.u1_CenterCamSiz;
+    bfg_Pict_StsMng.st_CamDisc.u1_CenterCamSizCnt = (U1)PICT_SAMECNT_INI;
+    bfg_Pict_StsMng.u1_CamKindConverd = (U1)PICT_GVIFIF_NONE;
+    bfg_Pict_StsMng.u1_GvifCamKindConverd = (U1)PICT_KIND_CAM_NONE;
+    
+    u1_s_pict_regwrite_req = (U1)TRUE;
 }
 
 /*===================================================================================================================================*/
@@ -4580,7 +4741,9 @@ static void vd_s_PictCtl_StrgwhlUpdate(const U1 u1_a_HANDLE)
         if((u1_a_HANDLE == (U1)PICT_HANDLE_RIGHT) || (st_sp_Pict_BackUpInf.u1_handle !=(U1)PICT_HANDLE_UNKNOWN)){
             u1_s_pict_regwrite_req = (U1)TRUE;
         }
+        vd_g_Rim_WriteU1((U2)RIMID_U1_HANDLE, u1_a_HANDLE);
         st_sp_Pict_BackUpInf.u1_handle = u1_a_HANDLE;
+        vd_s_PictCtl_Bkup_DTF();
     }
 }
 

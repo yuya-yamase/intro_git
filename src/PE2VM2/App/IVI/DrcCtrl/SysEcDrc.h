@@ -50,6 +50,7 @@
 void    vd_g_SysEcDrc_BonInit(void);
 void    vd_g_SysEcDrc_WkupInit(void);
 void    vd_g_SysEcDrc_MainTask(void);
+void    vd_g_SysEcDrc_MainTask5ms(void);
 void    vd_g_SysEcDrc_Drec(const U1 u1_a_ARGTRCKIND, const U1 u1_a_DREC1, const U1 u1_a_DREC2, const U1 u1_a_DREC3);
 void    vd_g_SysEcDrc_SendDateSet(U4* u4p_a_size, U1* u1p_a_buff, const U4 u4_a_BUFF_MAX);
 U4      u4_g_SysEcDrc_GetSystime(void);

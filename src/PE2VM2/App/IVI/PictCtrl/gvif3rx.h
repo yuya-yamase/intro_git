@@ -14,8 +14,9 @@
 
 /* フロー */
 #define MCU_STEP_GVIF3RX_OVERALL_1      (1U)    /* 6-2. 初期設定処理 初期設定 (7-1. 初期設定値 参照) */
-#define MCU_STEP_GVIF3RX_OVERALL_2      (2U)    /* 6ｰ3. カメラシステム種別による設定 */
-#define MCU_STEP_GVIF3RX_OVERALL_FIN    (3U)    /* 6-4. 定期監視  */
+#define MCU_STEP_GVIF3RX_OVERALL_2      (2U)    /* 6ｰ3. カメラシステム種別(カメラなし)による設定 */
+#define MCU_STEP_GVIF3RX_OVERALL_3      (3U)    /* 6ｰ3. カメラシステム種別(ドメコンあり)による設定 */
+#define MCU_STEP_GVIF3RX_OVERALL_FIN    (4U)    /* 6-4. 定期監視  */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */

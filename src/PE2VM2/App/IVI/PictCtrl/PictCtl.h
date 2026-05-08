@@ -71,12 +71,14 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-void    vd_g_PictCtl_Init(void);
+void    vd_g_PictCtl_BonInit(void);
+void    vd_g_PictCtl_WkupInit(void);
 void    vd_g_PictCtl_MainTask(void);
 void    vd_g_PictCtl_RcvBCC1S05(void);
 void    vd_g_PictCtl_DispQualPraChk(U1 u1_a_MODE);
 U1      u1_g_PictCtl_CamStsGet(void);
 U1      u1_g_PictCtl_GetCamDiagMode(void);
+void    vd_g_PictCtl_Init_DTF(void);
 U1      u1_g_PictCtl_CamSizeSts(void);
 U1      u1_g_PictCtl_CamKindSts(void);
 U1      u1_g_PictCtl_GvifCamKindSts(void);

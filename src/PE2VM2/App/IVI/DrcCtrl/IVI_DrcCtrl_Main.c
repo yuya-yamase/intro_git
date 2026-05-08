@@ -124,6 +124,7 @@ void            vd_g_Ivi_DrcCtrl_Main(void)
 void            vd_g_Ivi_DrcCtrl_Main5ms(void)
 {
     vd_g_BootLogCtl_MainTask();
+    vd_g_SysEcDrc_MainTask5ms();
 }
 
 /*===================================================================================================================================*/
