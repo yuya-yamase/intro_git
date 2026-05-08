@@ -95,6 +95,7 @@ void            vd_g_XspiIviBonInit(void)
 void            vd_g_XspiIviWkupInit(void)
 {
     vd_s_XspiIviInit();
+    vd_g_XspiIviSub1RstWkupInit();
 }
 /*===================================================================================================================================*/
 /*  void            vd_g_XspiIviBonInit(void)                                                                                        */
@@ -106,6 +107,7 @@ void            vd_g_XspiIviWkupInit(void)
 void            vd_g_XspiIviRstInit(void)
 {
     vd_s_XspiIviInit();
+    vd_g_XspiIviSub1RstWkupInit();
 }
 /*===================================================================================================================================*/
 /*  void            vd_s_XspiIviInit(void)                                                                                           */

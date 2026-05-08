@@ -111,8 +111,8 @@
 
 #define PICT_ML_CAN_MOV_STOW                    (1U)
 #define PICT_ML_CAN_MOV_UNSTOW                  (2U)
-#define PICT_ML_CAN_HD_LHD                      (0U)
-#define PICT_ML_CAN_HD_RHD                      (1U)
+#define PICT_ML_CAN_HD_LHD                      (PICT_HANDLE_LEFT)
+#define PICT_ML_CAN_HD_RHD                      (PICT_HANDLE_RIGHT)
 
 
 #define u1_PICT_ML_I2C_CTRL_REGSET(u, v, w, x, y, z)    (Mcu_Dev_I2c_Ctrl_RegSet((U1)MCU_I2C_ACK_VIDEO_IC, (u), (v), (U1)GP_I2C_MA_SLA_1_VIDEO_IC, (w), (x), (y), (z)))
@@ -134,6 +134,8 @@
 #define vd_PICT_MLCAMAREASET_GET_CAMAREA_KIND()         (u1_g_PictCtl_CamKindSts())
 #define vd_PICT_MLCAMAREASET_GET_CAMAREA_SIZE()         (u1_g_PictCtl_CamSizeSts())
 /* #define vd_PICT_MLCAMAREASET_GET_CID_TYPE()             (u1_g_PictCtl_CidType())     暫定 車パラI/F展開後に見直し */
+#define u1_PICT_MLCAMAREASET_GET_HANDLE_STS()           (u1_g_PictCtl_handleSts())
+
 
 #define vd_PICT_MLFAILCYCCHK_V_IC_RST_L()               (Dio_WriteChannel(DIO_ID_PORT3_CH3, (Dio_LevelType)PICT_ML_IO_STS_LOW))
 #define vd_PICT_MLFAILCYCCHK_V_IC_RST_H()               (Dio_WriteChannel(DIO_ID_PORT3_CH3, (Dio_LevelType)PICT_ML_IO_STS_HIGH))

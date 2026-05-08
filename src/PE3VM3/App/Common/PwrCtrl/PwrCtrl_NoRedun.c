@@ -1109,6 +1109,7 @@ static void vd_s_PwrCtrlNoRedunBetWait( void )
 void            vd_g_McuDev_Pwroff(void)
 {
     U1      u1_t_pwr;
+    U2      u2_t_ret;
 
     /* 電源状態取得 */
     u1_t_pwr    = u1_g_PowerSup_ModeState();
@@ -1167,9 +1168,9 @@ void            vd_g_McuDev_Pwroff(void)
     }
 
     /* GNSS制御 */
-    if((u2_g_PwrCtrl_OffSts & (U2)PWROFF_GNSS_BIT) != (U2)PWROFF_GNSS_BIT){
-        u2_g_PwrCtrl_OffSts |=  (U2)Mcu_Dev_Pwroff_GNSS(u1_t_pwr);
-    }
+    u2_t_ret = (U2)Mcu_Dev_Pwroff_GNSS(u1_t_pwr);
+    u2_g_PwrCtrl_OffSts |=  (U2)(u2_t_ret & (U2)PWROFF_GNSS_BIT);
+
 
     /* ジャイロ・加速度センサ(SMI230)制御 */
     if((u2_g_PwrCtrl_OffSts & (U2)PWROFF_GYRO_BIT) != (U2)PWROFF_GYRO_BIT){
@@ -1184,7 +1185,7 @@ void            vd_g_McuDev_Pwroff(void)
   Description   : 
   param[in/out] : 
   return        : PWROFF_USB_BIT ：プロセス完了
-  Note          : "スタンバイ" もしくは "縮退走行"へ遷移した時
+  Note          : "見た目オン" もしくは "OTA"以外へ遷移した時
 *****************************************************************************/
 static U2       u2_s_McuDev_Pwroff_USB(const U1 u1_a_PWR)
 {
@@ -1192,7 +1193,7 @@ static U2       u2_s_McuDev_Pwroff_USB(const U1 u1_a_PWR)
 
     u2_t_ret    = (U2)PWROFF_BIT_OFF;
 
-    if((u1_a_PWR == (U1)POWER_MODE_STATE_STANDBY) || (u1_a_PWR == (U1)POWER_MODE_STATE_EDS)){
+    if(u1_a_PWR != (U1)POWER_MODE_STATE_APPON){
         vd_g_McuDevPwronSetPort(MCU_PORT_USB_LED_ON, MCU_DIO_LOW);
         u2_t_ret    = (U2)PWROFF_USB_BIT;
     }
@@ -1506,6 +1507,7 @@ uint16 Mcu_Dev_Pwroff_GNSS(const U1 u1_a_PWR){
         }
         else if(u1_a_PWR == (uint8)POWER_MODE_STATE_STANDBY){
             Mcu_OffStep_GNSS = (uint8)MCU_STEP_GNSS_OVERALL_2;      /* 次状態に遷移 */
+            mcu_return = (uint16)PWROFF_GNSS_BIT;    /* 完了通知 */
         }
         else{
             /* do nothing */
@@ -1513,14 +1515,18 @@ uint16 Mcu_Dev_Pwroff_GNSS(const U1 u1_a_PWR){
         break;
 
     case MCU_STEP_GNSS_OVERALL_2:
-        mcu_dio_ret_gpsrst   =   Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_GPS_RST]);
-        if(mcu_dio_ret_gpsrst == (uint8)STD_HIGH){
-            /* t10はmin0msのため、判定せず即次処理を実施する */
-            vd_g_McuDevPwronSetPort(MCU_PORT_GPS_PCTL , MCU_DIO_LOW);
-            Mcu_OffStep_GNSS = (uint8)MCU_STEP_GNSS_OVERALL_4;      /* 次状態に遷移 */
-        }
-        else{
-            Mcu_OffStep_GNSS = (uint8)MCU_STEP_GNSS_OVERALL_5;      /* 次状態に遷移 */
+        mcu_dio_ret_v33peri   =   Dio_ReadChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_V33_PERI]);
+        if(mcu_dio_ret_v33peri == (uint8)STD_LOW){
+
+            mcu_dio_ret_gpsrst   =   Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_GPS_RST]);
+            if(mcu_dio_ret_gpsrst == (uint8)STD_HIGH){
+                /* t10はmin0msのため、判定せず即次処理を実施する */
+                vd_g_McuDevPwronSetPort(MCU_PORT_GPS_PCTL , MCU_DIO_LOW);
+                Mcu_OffStep_GNSS = (uint8)MCU_STEP_GNSS_OVERALL_4;      /* 次状態に遷移 */
+            }
+            else{
+                Mcu_OffStep_GNSS = (uint8)MCU_STEP_GNSS_OVERALL_5;      /* 次状態に遷移 */
+            }
         }
         break;
 
@@ -1587,7 +1593,7 @@ uint16 Mcu_Dev_Pwroff_GNSS(const U1 u1_a_PWR){
             mcu_return          = (uint16)PWROFF_BIT_OFF;    /* 未完了通知 */
         }
         break;
-    
+
     default:
         /* do nothing */
         break;

@@ -222,7 +222,6 @@
 /* 映像IC制御仕様 */
 #define MCU_WRINUM_EIZOIC_INISET        (147U)  /* 6.2 初期化処理 レジスタ書込み回数 */
 #define MCU_WRINUM_EIZOIC_SIPSET        (4U)    /* 6.3 SiP映像表示に関する処理 レジスタ書込み回数 */
-#define MCU_WRINUM_EIZOIC_CAMSET        (45U)   /* 6.5.1.1 起動時のカメラ映像表示に関する設定 レジスタ書込み回数 */
 #define MCU_WRINUM_EIZOIC_CNTDSPSET     (17U)   /* 6.4.1 別体センターディスプレイへの映像出力ON ( eDP出力ON ) レジスタ書込み回数 */
 #define MCU_WRINUM_EIZOIC_HPDPLUGSET    (1U)    /* 6.4.1 別体センターディスプレイへの映像出力ON ( eDP出力ON ) HPD_PLUG通知のクリア */
 
@@ -69729,8 +69728,7 @@ static U1   u1_s_Pict_MlCamAreaRegSet(void)
                         u1_t_disp_state = (U1)PICT_ML_CAN_MOV_STOW;
                         if(u1_t_disp_state == (U1)PICT_ML_CAN_MOV_STOW){
                             /* Get the handle state */
-                            /* 暫定 カメラのIF接続 左ハンドル固定 */
-                            u1_t_handle = (U1)PICT_ML_CAN_HD_LHD;
+                            u1_t_handle = u1_PICT_MLCAMAREASET_GET_HANDLE_STS();
                             if(u1_t_handle ==  (U1)PICT_ML_CAN_HD_LHD){
                                 /* Next Process */
                                 u1_s_pict_mlcamarea_set_sts = u1_sp_ML86294_CAMAREA_SIZE_FUNC_STEP_MOV_STOW_LHD[u1_t_camarea_camsize];
@@ -71596,56 +71594,6 @@ static void     vd_s_Pict_SetReg( void )
         {        2,         1,         0},
         {        3,         1,         0}
     };
-    /* 6.5.1.1 起動時のカメラ映像表示に関する設定 */
-    /* どのカメラサイズでも書込み位置と個数は共通 */
-    static const ST_REG_WRI_REQ EIZOIC_CAMSET[MCU_WRINUM_EIZOIC_CAMSET] = {
-        /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
-        {        0,         1,         0},
-        {        1,         4,         0},
-        {        5,         4,         0},
-        {        9,         4,         0},
-        {       13,         4,         0},
-        {       17,         4,         0},
-        {       21,         2,         0},
-        {       23,         1,         0},
-        {       24,         4,         0},
-        {       28,         4,         0},
-        {       32,         4,         0},
-        {       36,         4,         0},
-        {       40,         1,         0},
-        {       41,         4,         0},
-        {       45,         4,         0},
-        {       49,         1,         0},
-        {       50,         4,         0},
-        {       54,         4,         0},
-        {       58,         4,         0},
-        {       62,         4,         0},
-        {       66,         4,         0},
-        {       70,         4,         0},
-        {       74,         4,         0},
-        {       78,         4,         0},
-        {       82,         4,         0},
-        {       86,         4,         0},
-        {       90,         4,         0},
-        {       94,         4,         0},
-        {       98,         4,         0},
-        {      102,         4,         0},
-        {      106,         4,         0},
-        {      110,         4,         0},
-        {      114,         4,         0},
-        {      118,         2,         0},
-        {      120,         1,         0},
-        {      121,         2,         0},
-        {      123,         1,         0},
-        {      124,         4,         0},
-        {      128,         1,         0},
-        {      129,         4,         0},
-        {      133,         4,         0},
-        {      137,         4,         0},
-        {      141,         4,         0},
-        {      145,         4,         0},
-        {      149,         2,         0}
-    };
     /* 6.4.1 別体センターディスプレイへの映像出力ON ( eDP出力ON ) */
     static const ST_REG_WRI_REQ EIZOIC_CNTDSPSET[MCU_WRINUM_EIZOIC_CNTDSPSET] = {
         /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
@@ -71678,8 +71626,10 @@ static void     vd_s_Pict_SetReg( void )
     U1   u1_t_rg_set;
     U1   u1_t_time_chk;
     U1   u1_t_hpd_chk;
+    U1   u1_t_func_sts;
 
     u1_t_sts         = (U1)FALSE;
+    u1_t_func_sts    = (U1)FALSE;
 
     if(u2_s_pict_polling_wait < (U2)U2_MAX){
         u2_s_pict_polling_wait++;
@@ -71719,13 +71669,9 @@ static void     vd_s_Pict_SetReg( void )
         break;
 
     case MCU_STEP_EIZOIC_OVERALL_3:
-        /* レジスタ書込み処理 */
-        /* ToDo：MCUにバックアップしている「カメラシステム種別」と「カメラ映像の切り出しサイズ 」に基づき設定値を切り替えする。現時点ではカメラなし決め打ち */
-        u1_t_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)MCU_WRINUM_EIZOIC_CAMSET,
-                                                EIZOIC_CAMSET, &u4_s_pict_ml_i2c_ack_wait_time,
-                                                st_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON, &u2_s_pict_ml_reg_btwn_time);
-
-        if(u1_t_sts == (U1)TRUE){
+        /* MCUにバックアップしている「カメラシステム種別」と「カメラ映像の切り出しサイズ 」に基づき設定値を切り替えする。 */
+        u1_t_func_sts = (U1)u1_s_Pict_MlCamAreaRegSet();
+        if(u1_t_func_sts == (U1)TRUE){
             /* 全書込み完了 次状態に遷移 */
             Mcu_OnStep_EIZOIC_OVRALL = (U1)MCU_STEP_EIZOIC_OVERALL_4;
             u2_s_pict_polling_wait = (U2)0U;
