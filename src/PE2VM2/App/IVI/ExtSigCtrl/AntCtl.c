@@ -957,7 +957,7 @@ static void vd_s_Ant_DAB_Fail(void)
     /*フェール処理*/
     if((u1_s_dab1_short_cnt != (U1)0U) ||
        (u1_s_dab2_short_cnt != (U1)0U)){
-        if((u1_s_dab1_short_cnt <= (U1)ANTCTL_SHORT_DET_CNT) ||
+        if((u1_s_dab1_short_cnt <= (U1)ANTCTL_SHORT_DET_CNT) &&
            (u1_s_dab2_short_cnt <= (U1)ANTCTL_SHORT_DET_CNT)) {
             Dio_WriteChannel((U2)DIO_ID_PORT11_CH4,(U1)ANTCTL_DIO_LOW);
             st_s_antctl_dab.u1_antena_reboot_flg = (U1)TRUE;
@@ -982,9 +982,9 @@ static void vd_s_Ant_DTV_Fail(void)
        (u1_s_dtv2_short_cnt != (U1)0U) ||
        (u1_s_dtv3_short_cnt != (U1)0U) ||
        (u1_s_dtv4_short_cnt != (U1)0U)){
-        if((u1_s_dtv1_short_cnt <= (U1)ANTCTL_SHORT_DET_CNT) ||
-           (u1_s_dtv2_short_cnt <= (U1)ANTCTL_SHORT_DET_CNT) ||
-           (u1_s_dtv3_short_cnt <= (U1)ANTCTL_SHORT_DET_CNT) ||
+        if((u1_s_dtv1_short_cnt <= (U1)ANTCTL_SHORT_DET_CNT) &&
+           (u1_s_dtv2_short_cnt <= (U1)ANTCTL_SHORT_DET_CNT) &&
+           (u1_s_dtv3_short_cnt <= (U1)ANTCTL_SHORT_DET_CNT) &&
            (u1_s_dtv4_short_cnt <= (U1)ANTCTL_SHORT_DET_CNT)) {
             Dio_WriteChannel((U2)DIO_ID_PORT11_CH4,(U1)ANTCTL_DIO_LOW);
             st_s_antctl_dtv.u1_antena_reboot_flg = (U1)TRUE;
