@@ -100,6 +100,7 @@
 #define XSPI_IVI_WEEK_SUNDAY_RTC            (7U)
 #define XSPI_IVI_WEEK_SUNDAY_UTC            (0U)
 #define XSPI_IVI_YEAR_OFFSET                (100U)
+#define XSPI_IVI_MONTH_OFFSET               (1U)
 #define XSPI_IVI_UTC_STATUS_VARID           (1U)
 #define XSPI_IVI_BCD_HUNDREDS               (100U)
 #define XSPI_IVI_BCD_TENS                   (10U)
@@ -1726,6 +1727,7 @@ void            vd_g_XspiIviClockUTCPut(const U1* u1_ap_DATA)
     U2 u2_t_year_lo;
     U1 u1_t_week;
     U2 u2_t_year;
+    U1 u1_t_month;
 
     /*BCDデータで格納*/
     /*second*/
@@ -1741,8 +1743,13 @@ void            vd_g_XspiIviClockUTCPut(const U1* u1_ap_DATA)
     u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_3] = (u1_ap_DATA[XSPI_IVI_CAN_BUF_2] % (U1)XSPI_IVI_BCD_TENS) & (U1)XSPI_IVI_LOWER_NIBBLE_MASK;
     u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_3] |= ((u1_ap_DATA[XSPI_IVI_CAN_BUF_2] / (U1)XSPI_IVI_BCD_TENS) << XSPI_IVI_SFT_04) & (U1)XSPI_IVI_UPPER_NIBBLE_MASK;
     /*month*/
-    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_4] = (u1_ap_DATA[XSPI_IVI_CAN_BUF_1] % (U1)XSPI_IVI_BCD_TENS) & (U1)XSPI_IVI_LOWER_NIBBLE_MASK;
-    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_4] |= ((u1_ap_DATA[XSPI_IVI_CAN_BUF_1] / (U1)XSPI_IVI_BCD_TENS) << XSPI_IVI_SFT_04) & (U1)XSPI_IVI_UPPER_NIBBLE_MASK;
+    if(u1_ap_DATA[XSPI_IVI_CAN_BUF_1] != (U1)0U) {
+        u1_t_month = u1_ap_DATA[XSPI_IVI_CAN_BUF_1] - (U1)XSPI_IVI_MONTH_OFFSET;
+    } else {
+        u1_t_month = u1_ap_DATA[XSPI_IVI_CAN_BUF_1];
+    }
+    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_4] = (u1_t_month % (U1)XSPI_IVI_BCD_TENS) & (U1)XSPI_IVI_LOWER_NIBBLE_MASK;
+    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_4] |= ((u1_t_month / (U1)XSPI_IVI_BCD_TENS) << XSPI_IVI_SFT_04) & (U1)XSPI_IVI_UPPER_NIBBLE_MASK;
     /*year*/
     u2_t_year = (U2)(u1_ap_DATA[XSPI_IVI_CAN_BUF_0] + (U1)XSPI_IVI_YEAR_OFFSET);
     u2_t_year_hi = u2_t_year / (U2)XSPI_IVI_BCD_HUNDREDS;
