@@ -38,7 +38,6 @@
 
 /* Qci取得対象は、QciID = 0, 1, 2, 3, 4 */
 #define D_ETHSWT_DATA_QCI_TARGET                    (D_ETHSWT_DATA_UPDATE_QCI0 | D_ETHSWT_DATA_UPDATE_QCI1 | D_ETHSWT_DATA_UPDATE_QCI2 | D_ETHSWT_DATA_UPDATE_QCI3 | D_ETHSWT_DATA_UPDATE_QCI4)
-
 /* -------------------------------------------------------------------------- */
 typedef struct {
     uint8 arrayID;                                                              /* 送信用データIndex        */
