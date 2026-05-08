@@ -113,7 +113,6 @@ void            vd_g_XspiIviSub1Init(void)
 /*===================================================================================================================================*/
 void            vd_g_XspiIviSub1BonInit(void)
 {
-    vd_g_XspiIviSub1PowerBonInit();
     vd_g_XspiIviSub1ClockBonInit();
 }
 
