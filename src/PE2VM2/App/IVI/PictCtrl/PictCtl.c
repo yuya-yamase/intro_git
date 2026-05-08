@@ -86,9 +86,13 @@
 /* Sip異常時シーケンスStep定義 */
 #define PICT_SEQ_SIPERRCHK_STEP0                        (0U)
 #define PICT_SEQ_SIPERRCHK_STEP1                        (1U)
-#define PICT_SEQ_SIPERRCHK_STEP2                        (2U)
-#define PICT_SEQ_SIPERRCHK_STEP_FIN                     (3U)
-#define PICT_SEQ_SIPERRCHK_STEP_NON                     (4U)
+#define PICT_SEQ_SIPERRCHK_STEP_FIN                     (2U)
+#define PICT_SEQ_SIPERRCHK_STEP_NON                     (3U)
+
+/* VM Reset Step */
+#define PICT_SEQ_VMRESETCHK_STEP0                       (0U)
+#define PICT_SEQ_VMRESETCHK_STEP1                       (1U)
+#define PICT_SEQ_VMRESETCHK_STEP_FIN                    (2U)
 
 /*--- ポーリング管理 ---*/
 #define PICT_POLLPORT_NONDECI                           (0xFFU)     /* ポーリング未確定 */
@@ -108,13 +112,11 @@
 #define PICT_POLLTRG_AUDIOON                            (0x01U)     /* BIT0: AUDIO-ON */
 #define PICT_POLLTRG_MMSTBY                             (0x02U)     /* BIT1: /MM-STBY */
 #define PICT_POLLTRG_LOWPOWERON                         (0x04U)     /* BIT2: LOW-POWER-ON */
-#define PICT_POLLTRG_PGOOD                              (0x08U)     /* BIT3: PGOOD MONI START */
 
-#define PICT_POLLFACT_NUM                               (4U)
+#define PICT_POLLFACT_NUM                               (3U)
 #define PICT_POLLFACT_AUDIO                             (0U)
 #define PICT_POLLFACT_MMSTBY                            (1U)
 #define PICT_POLLFACT_LOWPOWERON                        (2U)
-#define PICT_POLLFACT_PGOOD                             (3U)
 
 /* ポーリング番号 */        
 #define PICT_POLLNO_DISPREQGPIO0                        (0U)        /* DISP-REQ-GPIO0 */
@@ -123,7 +125,7 @@
 #define PICT_POLLNO_CAMCAPSTBY3                         (3U)        /* MIPI(FEYE)キャプチャ */
 
 /* ポーリング番号最大数 */
-#define PICT_POLLNO_MAX                                 (9U)
+#define PICT_POLLNO_MAX                                 (8U)
 
 #define PICT_CNT_INI                                    (0U)
 #define PICT_SAME_FIRST                                 (1U)
@@ -147,7 +149,8 @@
 #define PICT_TIMID_CAMSYNCPATHINFO_SENDCYC              (9U)    /* 同期検知・経路情報通知?定期送信タイマ                        */
 #define PICT_TIMID_MAVTYPE_TIMEOUT                      (10U)   /* MAVTYPE 3Cycle(3000ms) TimeOut                               */
 #define PICT_TIMID_BCC1S05_TIMEOUT                      (11U)   /* BCC1S05 TimeOut                                              */
-#define PICT_TIMID_MAX                                  (12U)   /* タイマＩＤ ＭＡＸ数                                          */
+#define PICT_TIMID_CANSIGNAL_GETCYC                     (12U)   /* CAN Signal Get Cycle                                         */
+#define PICT_TIMID_MAX                                  (13U)   /* タイマＩＤ ＭＡＸ数                                          */
 
 /* 仕様値のMIN値を使用する場合は、設定値+1msが必要 */
 #define PICT_TIMER_CORRECTION_1MS                       (1U)
@@ -169,6 +172,7 @@
 #define PICT_TIMER_CAM_KIND_DISC_STA                    (1000U)
 #define PICT_TIMER_MAVTYPE_TIMEOUT                      (3000U)
 #define PICT_TIMER_BCC1S05_TIMEOUT                      (3000U)
+#define PICT_TIMER_CANSIGNAL_GETCYC                     (100U)
 
 #define PICT_CAN_CAM_CNTMAX                             (3U)    /* カメラ種別確定回数 */
 
@@ -219,10 +223,11 @@
 #define PICT_SYNC_CHKCNTL1                              (1U)    /* カメラ同期異常判定L1 */
 #define PICT_SYNC_CHKCNTL2                              (8U)    /* カメラ同期異常判定L2 */
 
-/* メインマイコンへのカメラ映像出力状態 */
-#define PICT_MIPI_STS_OFF                               (0x00U) /* MIPI出力状態：OFF */
-#define PICT_MIPI_STS_ON                                (0x01U) /* MIPI出力状態：ON */
-#define PICT_MIPI_STS_UNJDG                             (0xFFU) /* MIPI出力状態：未確定 */
+/* MIPI 出力設定要求 */
+#define PICT_MIPI_OUT_NON                               (0x00U) /* MIPI出力設定要求：無し            */
+#define PICT_MIPI_OUT_HS                                (0x01U) /* MIPI出力設定要求：HS              */
+#define PICT_MIPI_OUT_LP11                              (0x02U) /* MIPI出力設定要求：LP-11           */
+#define PICT_MIPI_OUT_VMRESET                           (0x04U) /* MIPI出力設定要求：LP-11(VM RESET) */
 
 /* メインマイコンのCAMERA-MODE1=Hi 検知異常判定 */
 #define PICT_CAM_MODE_H_MAIN_CHKERR_CNT_L1              (12U)   /* メインマイコンのCAMERA-MODE1=Hi 検知異常の判定用カウント数 */
@@ -265,7 +270,6 @@
 #define PICT_PORT_CAMERA_CAP_STBY3                      (DIO_ID_PORT21_CH6)
 #define PICT_PORT_PMA_PS_HOLD                           (DIO_ID_PORT3_CH1)
 #define PICT_PORT_PM_PSAIL_ERR_N                        (DIO_ID_PORT8_CH4)
-#define PICT_PORT_PGOOD_ASIL_VB                         (DIO_ID_APORT3_CH2)
 #define PICT_PORT_V_IC_RST                              (DIO_ID_PORT3_CH3)
 #define PICT_PORT_CAMERA_MODE1                          (DIO_ID_PORT20_CH14)
 #define PICT_PORT_MIPI_MUTE                             (DIO_ID_PORT24_CH8)
@@ -274,14 +278,20 @@
 #define PICT_PORT_GVIF_CAM_RST                          (DIO_ID_PORT10_CH6)
 #define PICT_PORT_MM_OFF_REQ                            (DIO_ID_PORT17_CH2)
 
-#define PICT_MIPITIMECNT_INIT                           (U1_MAX)
-#define PICT_MIPITIMECNT_START                          (0U)
-#define PICT_MIPITIMECNT_TIMEOUT                        (40U)   /* 40ms */
+#define PICT_TIMEOUTCNT_INIT                            (U1_MAX)
+#define PICT_TIMEOUTCNT_START                           (0U)
+#define PICT_MIPITIMECNT_OFFOUT                         (40U)   /* 40ms */
+#define PICT_MIPITIMECNT_OFFOUT2                        (3U)    /* 3ms  */
+#define PICT_MIPITIMECNT_OFFOUT3                        (40U)   /* 40ms */
 
 #define PICT_SIP_ERR_OFF                                (0U)
 #define PICT_SIP_ERR_ON                                 (1U)
 
-#define PICT_SIPERR_FACTNUM                             (8U)
+#define PICT_SIP_ERR_NON                                (0U)
+#define PICT_SIP_ERR_AUTO                               (1U)
+#define PICT_SIP_ERR_MCU                                (2U)
+
+#define PICT_SIPERR_FACTNUM                             (7U)
 #define PICT_SIPERR_PMRESIN                             (0U)
 #define PICT_SIPERR_PMICFAST                            (1U)
 #define PICT_SIPERR_OTA_ACT                             (2U)
@@ -289,10 +299,10 @@
 #define PICT_SIPERR_PMPSAIL_RAW                         (4U)
 #define PICT_SIPERR_PMAPSHOLD_POL                       (5U)
 #define PICT_SIPERR_PMAPSHOLD_RAW                       (6U)
-#define PICT_SIPERR_PGOOD_POL                           (7U)
 
-#define PICT_SIPERRMUTE_OTA                             (0U)
-#define PICT_SIPERRMUTE_MCU                             (1U)
+#define PICT_SIPERRMUTE_NON                             (0U)
+#define PICT_SIPERRMUTE_OTA                             (1U)
+#define PICT_SIPERRMUTE_MCU                             (2U)
 
 #define PICT_SIPERRREQ_NON                              (0U)
 #define PICT_SIPERRREQ_SOC_ERR                          (1U)
@@ -300,10 +310,9 @@
 
 #define PICT_SIPERRREQ_OTA_ACT                          (1U)
 
-#define PICT_MONIENSTS_NUM                              (3U)
+#define PICT_MONIENSTS_NUM                              (2U)
 #define PICT_MONIENSTS_PMPSAILERRN                      (0U)
 #define PICT_MONIENSTS_PMAPSHOLD                        (1U)
-#define PICT_MONIENSTS_PGOOD                            (2U)
 
 #define PICT_MONI_DISABLE                               (0U)
 #define PICT_MONI_ENABLE                                (1U)
@@ -357,6 +366,8 @@
 
 #define PICT_TIM_BDB1S08_FAILTIM                        (10000U / OXCAN_MAIN_TICK)
 
+#define PICT_STRG_WHL_MAX                               (3U)
+
 #define PICT_RESETREQ_OFF                               (0U)
 #define PICT_RESETREQ_ON                                (1U)
 
@@ -382,7 +393,6 @@
 
 #define PICT_DRCID_BPASS_SET                            (SYSECDRC_DREC_ID_1)
 #define PICT_DRCID_T_SIP_NOTIF_OUT                      (SYSECDRC_DREC_ID_2)
-#define PICT_DRCID_CAMFAIL_JDG                          (SYSECDRC_DREC_ID_3)
 #define PICT_DRCID_POWERON                              (SYSECDRC_DREC_ID_4)
 #define PICT_DRCID_GPIO0_EDG                            (SYSECDRC_DREC_ID_5)
 #define PICT_DRCID_MUTE                                 (SYSECDRC_DREC_ID_6)
@@ -500,7 +510,6 @@ typedef struct {
     U1 u1_pmapshold_pol_sts;        /* PMA_PS_HOLD(POLLING)検知状態                     */
     U1 u1_pmpsholderr_raw_sts;      /* PM_PSAIL_ERR_N(RAW)検知状態                      */
     U1 u1_pmpsholderr_pol_sts;      /* PM_PSAIL_ERR_N(POLLING)検知状態                  */
-    U1 u1_pgoodasilvb_pol_sts;      /* PGOOD_ASIL_VB(POLLING)検知状態                   */
 } ST_PICT_STSMNG;                   /* 映像制御状態管理構造体                           */
 
  typedef struct {
@@ -513,8 +522,9 @@ typedef struct {
 
 /* バックアップデータ管理用 */
 typedef struct {
-    U1 u1_CamKind;                               /* カメラ種別 */
-    U1 u1_CenterCamSiz;                      /* センターカメラサイズ */
+    U1 u1_CamKind;                  /* MAVTYPE  */
+    U1 u1_CenterCamSiz;             /* R_CROP_0 */
+    U1 u1_handle;                   /* STRG_WHL */
 }ST_PICT_BACKUP_MNG_INF;
 
 typedef struct {
@@ -584,6 +594,7 @@ static U1    u1_s_pict_camoff_muteoff_flg;
 static U1    u1_s_pict_camsynccyc_flg;
 static U1    u1_s_pict_camsynccyc_step;
 static U1    u1_s_pict_camsyncng_step;
+static U1    u1_s_pict_vmresetchk_step;
 static U1    u1_s_pict_siperrchk_step;
 static U1    u1_s_pict_campass_chg_flg;
 static U1    u1_s_pict_mipi_chg_flg;
@@ -593,11 +604,14 @@ static U1    u1_s_pict_regwrite_req;
 static U1    u1_s_pict_regwrite_sts;
 static U1    u1_s_pict_cd_size;
 static U1    u1_s_pict_cammodelog_flg;
+static U1    u1_s_pict_vmrsttimeoutcnt;
 static U1    u1_s_pict_mipitimeoutcnt;
+static U1    u1_s_pict_mipitimeout_jdgval;
 static U1    u1_s_pict_siperrfailsafe_flg;
 static U1    u1_s_pict_pwrnext_req;
 static U1    u1_s_pict_falsepositive_jdgreq;
 static U1    u1_s_pict_siperrmute_flg;
+static U1    u1_s_pict_siperrmute_req;
 static U1    u1_s_pict_siperrmoni_ensts[PICT_MONIENSTS_NUM];
 static U1    u1_s_pict_dispsize;
 static U1    u1_s_pict_mvdisp_exsit;
@@ -627,6 +641,7 @@ static void vd_s_PictCtl_CamCapStbyStsChk(void);
 static void vd_s_PictCtl_CamCapStby2StsChk(void);
 static void vd_s_PictCtl_CamCapStby3StsChk(void);
 static void vd_s_PictCtl_DispReqGpio0StsChk(void);
+static void vd_s_PictCtl_MipiOutUpDate(void);
 static void vd_s_PictCtl_MipiChg(void);
 static void vd_s_PictCtl_CamPathUpDate(void);
 static void vd_s_PictCtl_CamPathChg(void);
@@ -662,16 +677,15 @@ static U1   u1_s_PictCtl_PmsPsHoldChk(void);
 static void vd_s_PictCtl_PmPsailErrnRawChg(U1 u1_a_STS);
 static void vd_s_PictCtl_PmPsailErrnPollChg(U1 u1_a_STS);
 static U1   u1_s_PictCtl_PmPsailErrnChk(void);
-static void vd_s_PictCtl_PgoodAsilVbChg(U1 u1_a_STS);
-static U1   u1_s_PictCtl_PgoodAsilVbChk(void);
 static void vd_s_PictCtl_TSocNotifTout(void);
 static void vd_s_PictCtl_CamSyncChkStaTout(void);
 static void vd_s_PictCtl_CamSyncChkSta(void);
 static void vd_s_PictCtl_CamSyncChkStop(void);
 static void vd_s_PictCtl_CamSyncCycChk(void);
 static void vd_s_PictCtl_CamSyncJdg(void);
+static void vd_s_PictCtl_VmResetChk(void);
 static void vd_s_PictCtl_SiPErrChk(void);
-static U1   u1_s_PictCtl_SiPErrstsChk(void);
+static U1   u1_s_PictCtl_SiPErrstsChk(U1* u1p_a_fact);
 static void vd_s_PictCtl_SiPErrGetSts(void);
 static void vd_s_PictCtl_SiPErrReadReq(void);
 static void vd_s_PictCtl_SiPErrReadMoni(void);
@@ -679,6 +693,7 @@ static U1   u1_s_PictCtl_AutoSiPOffChk(void);
 static U1   u1_s_PictCtl_AutoSiPOffjdg(const U1 u1_a_ENSTS, const U1 u1_a_POL_PRE, const U1 u1_a_POL_NOW, const U1 u1_a_RAW_PRE, const U1 u1_a_RAW_NOW);
 static U1   u1_s_PictCtl_McuSiPOffChk(void);
 static void vd_s_PictCtl_SiPErrMute(const U1 u1_a_FACT);
+static void vd_s_PictCtl_SipErrVIcRstChk(void);
 static void vd_s_PictCtl_FalsePositiveChk(void);
 static void vd_s_PictCtl_SiPErrClearChk(void);
 static void vd_s_PictCtl_PmsPsHoldstsChk(void);
@@ -701,6 +716,9 @@ static void vd_s_PictCtl_CamKindNtyChk(void);
 static void vd_s_PictCtl_CamKindNtySnd(void);
 static void vd_s_PictCtl_CamOffMuteOff(void);
 static void vd_s_PictCtl_CamAreaChk(void);
+static void vd_s_PictCtl_CanInputChk(void);
+static void vd_s_PictCtl_StrgwhlChk(void);
+static void vd_s_PictCtl_StrgwhlUpdate(const U1 u1_a_HANDLE);
 static void vd_s_PictCtl_Bcc1s05Timeout(void);
 static void vd_s_PictCtl_MmresetSndChk(void);
 static void vd_s_PictCtl_MutelogChk(const U1 u1_a_KIND);
@@ -736,7 +754,8 @@ static const ST_PICT_TIMENT tbl_Pict_TimInf[] = {
     {   (U1)PICT_TIMID_CAMKIND_SENDCYC,                 vd_s_PictCtl_CamKindNtySnd              },
     {   (U1)PICT_TIMID_CAMSYNCPATHINFO_SENDCYC,         vd_s_PictCtl_CamSyncPathInfoNtySnd      },
     {   (U1)PICT_TIMID_MAVTYPE_TIMEOUT,                 vd_s_PictCtl_MavtypeTimeout             },
-    {   (U1)PICT_TIMID_BCC1S05_TIMEOUT,                 vd_s_PictCtl_Bcc1s05Timeout             }
+    {   (U1)PICT_TIMID_BCC1S05_TIMEOUT,                 vd_s_PictCtl_Bcc1s05Timeout             },
+    {   (U1)PICT_TIMID_CANSIGNAL_GETCYC,                vd_s_PictCtl_CanInputChk                }
 };
 
 
@@ -837,18 +856,6 @@ static const ST_PICT_POLLMNG tb_Pict_PollMng[PICT_POLLNO_MAX]
         (U1)3U,                             /* 判定確定回数                 */
         (U1)PICT_POLLPORT_HIACTIVE,         /* 種別 (正論理 or 負論理)      */
         (U1)PICT_POLLTRG_LOWPOWERON,        /* ポーリング開始終了トリガー   */
-    },
-    /*-- No.03 -------------------------------------------------------------*/
-    /*  PGOOD_ASIL_VB監視          監視開始から1msで開始, 5ms周期, 連続3回  */
-    /*----------------------------------------------------------------------*/
-    {
-        u1_s_PictCtl_PgoodAsilVbChk,        /* チェック関数アドレス         */
-        vd_s_PictCtl_PgoodAsilVbChg,        /* 結果送信関数アドレス         */
-        (U2)1U,                             /* 開始待ち時間(ms)             */
-        (U1)5U,                             /* 定周期時間:検知間隔(ms)      */
-        (U1)3U,                             /* 判定確定回数                 */
-        (U1)PICT_POLLPORT_HIACTIVE,         /* 種別 (正論理 or 負論理)      */
-        (U1)PICT_POLLTRG_PGOOD,             /* ポーリングトリガー           */
     }
 };
 
@@ -870,6 +877,13 @@ static const ST_PICT_CNTDSP_STS st_sp_PICT_CDSIZE_TBL[PICT_CD_SIZE_TBLNUM] =
     {(U1)PICT_SIZE_105IN, (U1)PICT_AIS_KIND_HEACON,  (U1)PICT_GVIFIF_CNVBOX, (U1)PICT_CD_SIZE_1104X621_105IN },
     {(U1)PICT_SIZE_80IN,  (U1)PICT_AIS_KIND_NOMAL,   (U1)PICT_GVIFIF_ADAS,   (U1)PICT_CD_SIZE_1280X720_8IN   },
     {(U1)PICT_SIZE_80IN,  (U1)PICT_AIS_KIND_NOMAL,   (U1)PICT_GVIFIF_CNVBOX, (U1)PICT_CD_SIZE_1280X720_8IN   }
+};
+
+static const U1 u1_sp_PICT_HANDLE_TBL[PICT_STRG_WHL_MAX] =
+{
+    (U1)PICT_HANDLE_RIGHT,
+    (U1)PICT_HANDLE_LEFT,
+    (U1)PICT_HANDLE_RIGHT
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -940,7 +954,6 @@ void vd_g_PictCtl_Init(void)
     bfg_Pict_StsMng.u1_pmapshold_pol_sts = (U1)PICT_POLLPORT_UNFIX;
     bfg_Pict_StsMng.u1_pmpsholderr_raw_sts = (U1)PICT_POLLPORT_UNFIX;
     bfg_Pict_StsMng.u1_pmpsholderr_pol_sts = (U1)PICT_POLLPORT_UNFIX;
-    bfg_Pict_StsMng.u1_pgoodasilvb_pol_sts = (U1)PICT_POLLPORT_UNFIX;
 
 /* タイマカウンタ */
     for(u1_t_cnt = (U1)0U; u1_t_cnt < (U1)PICT_TIMID_MAX; u1_t_cnt++)
@@ -964,20 +977,24 @@ void vd_g_PictCtl_Init(void)
     u1_s_pict_camsynccyc_flg = (U1)FALSE;
     u1_s_pict_camsynccyc_step = (U1)PICT_SEQ_CAMSYNCCHK_STEP0;
     u1_s_pict_camsyncng_step  = (U1)PICT_SEQ_CAMONSYNCNG_STEP0;
+    u1_s_pict_vmresetchk_step = (U1)PICT_SEQ_VMRESETCHK_STEP_FIN;
     u1_s_pict_siperrchk_step = (U1)PICT_SEQ_SIPERRCHK_STEP_NON;
     u1_s_pict_campass_chg_flg = (U1)PICT_CAM_PATH_NOCHG;
-    u1_s_pict_mipi_chg_flg = (U1)FALSE;
+    u1_s_pict_mipi_chg_flg = (U1)PICT_MIPI_OUT_NON;
     u1_s_pict_icreset_sts = (U1)FALSE;
     u1_s_pict_camsyncinfo = (U1)PICT_ML_MIPI_SYNC_OFF;
     u1_s_pict_regwrite_req = (U1)FALSE;
     u1_s_pict_regwrite_sts = (U1)PICT_ML_CAMAREASET_COMPLETED;
     u1_s_pict_cd_size = (U1)PICT_CD_SIZE_INVALID;
     u1_s_pict_cammodelog_flg = (U1)FALSE;
-    u1_s_pict_mipitimeoutcnt = (U1)PICT_MIPITIMECNT_INIT;
+    u1_s_pict_vmrsttimeoutcnt = (U1)PICT_TIMEOUTCNT_INIT;
+    u1_s_pict_mipitimeoutcnt = (U1)PICT_TIMEOUTCNT_INIT;
+    u1_s_pict_mipitimeout_jdgval = (U1)PICT_MIPITIMECNT_OFFOUT2;
     u1_s_pict_siperrfailsafe_flg = (U1)PICT_SIP_ERR_OFF;
     u1_s_pict_pwrnext_req = (U1)FALSE;
     u1_s_pict_falsepositive_jdgreq = (U1)FALSE;
     u1_s_pict_siperrmute_flg = (U1)FALSE;
+    u1_s_pict_siperrmute_req = (U1)PICT_SIPERRMUTE_NON;
     u1_s_pict_dispsize = (U1)PICT_SIZE_140IN; /* 車パラ対応までの暫定 */
     u1_s_pict_mvdisp_exsit = (U1)TRUE; /* 車パラ対応までの暫定 */
     u1_s_pict_heacon = (U1)PICT_AIS_KIND_HEACON; /* 車パラ対応までの暫定 */
@@ -1021,6 +1038,7 @@ void vd_g_PictCtl_Init(void)
 
     vd_s_PictCtl_CamKindNtySnd();
     vd_s_PictCtl_CamSyncPathInfoNtySnd();
+    vd_s_PictCtl_SetTim((U1)PICT_TIMID_CANSIGNAL_GETCYC, (U2)PICT_TIMER_CANSIGNAL_GETCYC);
 }
 
 /*============================================================================
@@ -1349,6 +1367,8 @@ static void vd_s_PictCtl_StsMng(void)
     
     vd_s_PictCtl_PollStsChk();
     
+    vd_s_PictCtl_VmResetChk();
+    
     vd_s_PictCtl_SiPErrChk();
     
     /* DCAMERA-CAP-STBY2状態チェック */
@@ -1452,10 +1472,24 @@ static void  vd_s_PictCtl_CamCapStbyStsChk(void)
     if(bfg_Pict_StsMng.u1_CamCapStbyPreSts != bfg_Pict_StsMng.u1_CamCapStbySts) {
         /* 前回値更新 */
         bfg_Pict_StsMng.u1_CamCapStbyPreSts = bfg_Pict_StsMng.u1_CamCapStbySts;
-
-        u1_s_pict_mipi_chg_flg = (U1)TRUE;
-
+        vd_s_PictCtl_MipiOutUpDate();
         vd_s_PictCtl_MainMipiSetEndStsUpDate();
+    }
+}
+
+/*===================================================================================================================================*/
+/*  static void vd_s_PictCtl_CamPathUpDate(void)                                                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_PictCtl_MipiOutUpDate(void)
+{
+    if(bfg_Pict_StsMng.u1_CamCapStbySts == (U1)PICT_POLLPORT_ON){
+        u1_s_pict_mipi_chg_flg |= (U1)PICT_MIPI_OUT_HS;
+    }
+    else{
+        u1_s_pict_mipi_chg_flg |= (U1)PICT_MIPI_OUT_LP11;
     }
 }
 
@@ -1467,21 +1501,44 @@ static void  vd_s_PictCtl_CamCapStbyStsChk(void)
 /*===================================================================================================================================*/
 static void vd_s_PictCtl_MipiChg(void)
 {
+    static const U1 u1_s_PICT_MASK_HS = (U1)(PICT_MIPI_OUT_LP11 | PICT_MIPI_OUT_VMRESET);
+
     U1 u1_t_sts;
+    U1 u1_t_hs_flg;
+    U1 u1_t_lp11_flg;
+    U1 u1_t_chk_fact;
+    U1 u1_t_chk_req;
 
     u1_t_sts = (U1)FALSE;
-    if(u1_s_pict_mipi_chg_flg == (U1)TRUE){
-        /* MIPI(BEYE)キャプチャ準備更新 */
-        if(bfg_Pict_StsMng.u1_CamCapStbySts == (U1)PICT_POLLPORT_ON){
-            u1_t_sts = u1_g_Pict_MlMipiSetOn();
-        }
-        else{
-            u1_t_sts = u1_g_Pict_MlMipiSetOff();
+    u1_t_chk_req = (U1)PICT_MIPI_OUT_NON;
+    u1_t_hs_flg = u1_s_pict_mipi_chg_flg & (U1)PICT_MIPI_OUT_HS;
+    u1_t_lp11_flg = u1_s_pict_mipi_chg_flg & u1_s_PICT_MASK_HS;
+ 
+    if(u1_t_hs_flg == (U1)PICT_MIPI_OUT_HS){
+        u1_t_sts = u1_g_Pict_MlMipiSetOn();
+        if(u1_t_sts == (U1)TRUE){
+            u1_s_pict_mipi_chg_flg &= ~(U1)PICT_MIPI_OUT_HS;
+            u1_t_chk_req = (U1)PICT_MIPI_OUT_HS;
         }
     }
     
-    if(u1_t_sts == (U1)TRUE){
-        u1_s_pict_mipi_chg_flg = (U1)FALSE;
+    if(u1_t_lp11_flg != (U1)0U){
+        u1_t_sts = u1_g_Pict_MlMipiSetOff();
+        if(u1_t_sts == (U1)TRUE){
+            u1_t_chk_fact = u1_s_pict_mipi_chg_flg & (U1)PICT_MIPI_OUT_LP11;
+            if(u1_t_chk_fact == (U1)PICT_MIPI_OUT_LP11){
+                u1_t_chk_req = (U1)PICT_MIPI_OUT_LP11;
+            }
+            u1_s_pict_mipi_chg_flg &= ~u1_s_PICT_MASK_HS;
+        }
+    }
+    if((u1_s_pict_mipi_chg_flg == (U1)PICT_MIPI_OUT_NON) && (u1_t_chk_req != (U1)PICT_MIPI_OUT_NON)){
+        if(((bfg_Pict_StsMng.u1_CamCapStbySts == (U1)PICT_POLLPORT_ON) &&
+            (u1_t_chk_req == (U1)PICT_MIPI_OUT_LP11)) ||
+            ((bfg_Pict_StsMng.u1_CamCapStbySts == (U1)PICT_POLLPORT_OFF) &&
+            (u1_t_chk_req == (U1)PICT_MIPI_OUT_HS))){
+            vd_s_PictCtl_MipiOutUpDate();
+        }
     }
 }
 
@@ -1598,7 +1655,6 @@ static void vd_s_PictCtl_CamPathChg(void)
     U1 u1_t_siperr_flg;
     U1 u1_t_vmreset_flg;
     U1 u1_t_chk_req;
-    U1 u1_t_chk_flg;
 
     u1_t_sts = (U1)FALSE;
     u1_t_chk_req = (U1)FALSE;
@@ -1614,6 +1670,7 @@ static void vd_s_PictCtl_CamPathChg(void)
        ((u1_t_norm_flg == (U1)PICT_CAM_PATH_NORM) && 
         (bfg_Pict_SeqMlMng.u1_SeqNo == (U1)PICT_SEQ_ML_IDLE))){
         st_sp_pict_path_req_sts.u1_normal = (U1)PICT_PATH_CHG;
+        u1_s_pict_cammodelog_flg = (U1)TRUE;
     }
     
     if((((u1_t_camfail_flg == (U1)PICT_CAM_PATH_CAMMODEFAIL) ||
@@ -1650,31 +1707,31 @@ static void vd_s_PictCtl_CamPathChg(void)
             if(u1_t_bpass_flg == (U1)PICT_CAM_PATH_BPASS){
                 vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_CAMCTL, (U1)PICT_DRCID_BPASS_SET, (U1)PICT_DRCID_PATH_STBY2, (U1)PICT_DRCID_PATH_BPASS);
                 bfg_Pict_StsMng.u1_CamChgSts = (U1)PICT_CAMCHG_STS_BPASS;
+                u1_t_chk_req = (U1)TRUE;
             }
             if(u1_t_siperr_flg == (U1)PICT_CAM_PATH_SIPERR){
                 vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_CAMCTL, (U1)PICT_DRCID_BPASS_SET, (U1)PICT_DRCID_PATH_SIPERR, (U1)PICT_DRCID_PATH_BPASS);
                 bfg_Pict_StsMng.u1_CamChgSts = (U1)PICT_CAMCHG_STS_BPASS;
                 u1_s_pict_falsepositive_jdgreq = (U1)TRUE;
             }
-            if(u1_t_camfail_flg == (U1)PICT_CAM_PATH_CAMMODEFAIL){
+            if((u1_t_camfail_flg == (U1)PICT_CAM_PATH_CAMMODEFAIL) &&
+               (u1_s_pict_cammodelog_flg == (U1)TRUE)){
                 vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_CAMCTL, (U1)PICT_DRCID_BPASS_SET, (U1)PICT_DRCID_PATH_CAMFAIL, (U1)PICT_DRCID_PATH_BPASS);
+                u1_s_pict_cammodelog_flg = (U1)FALSE;
             }
             if(u1_t_vmreset_flg == (U1)PICT_CAM_PATH_VMRESET){
                 vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_CAMCTL, (U1)PICT_DRCID_BPASS_SET, (U1)PICT_DRCID_PATH_VMRESET, (U1)PICT_DRCID_PATH_BPASS);
                 bfg_Pict_StsMng.u1_CamChgSts = (U1)PICT_CAMCHG_STS_BPASS;
                 u1_s_pict_vmreset_bpass = (U1)PICT_VMRESET_BPASS;
-                vd_g_XspiIviSub1PowerVMResetComp((U1)XSPI_IVI_POWER_RESET_COMP_CAMERA);
             }
             
             vd_g_PictLogCtl_LogReq((U1)PICTLOGCTL_POINT_BPASS);
             u1_s_pict_campass_chg_flg &= ~u1_s_PICT_MASK_BPASS;
-            u1_t_chk_req = (U1)TRUE;
             st_sp_pict_path_req_sts.u1_bypass = (U1)PICT_PATH_NOCHG;
         }
     }
     
-    u1_t_chk_flg = u1_s_pict_campass_chg_flg & (U1)PICT_CAM_PATH_NOCHG;
-    if((u1_t_chk_flg == (U1)PICT_CAM_PATH_NOCHG) && (u1_t_chk_req == (U1)TRUE)){
+    if((u1_s_pict_campass_chg_flg == (U1)PICT_CAM_PATH_NOCHG) && (u1_t_chk_req == (U1)TRUE)){
         vd_s_PictCtl_CamPathUpDate();
     }
 }
@@ -2719,20 +2776,6 @@ static void vd_s_PictCtl_PollStsChk(void)
             u1_s_pict_poll_act[PICT_POLLFACT_LOWPOWERON] = (U1)TRUE;
         }
     }
-    
-    if(u1_s_pict_siperrmoni_ensts[PICT_MONIENSTS_PGOOD] == (U1)PICT_MONI_DISABLE){
-        if(u1_s_pict_poll_act[PICT_POLLFACT_PGOOD] != (U1)FALSE){
-            vd_s_PictCtl_PollMngStop((U1)PICT_POLLTRG_PGOOD);
-            u1_s_pict_poll_act[PICT_POLLFACT_PGOOD] = (U1)FALSE;
-        }
-    }
-    else{
-        if(u1_s_pict_poll_act[PICT_POLLFACT_PGOOD] != (U1)TRUE){
-            vd_s_PictCtl_PollMngStart((U1)PICT_POLLTRG_PGOOD);
-            u1_s_pict_poll_act[PICT_POLLFACT_PGOOD] = (U1)TRUE;
-        }
-    }
-    
 }
 
 /*============================================================================
@@ -2959,31 +3002,6 @@ static U1 u1_s_PictCtl_PmPsailErrnChk(void)
     U1 u1_t_port;
 
     u1_t_port = (U1)Dio_ReadChannel(PICT_PORT_PM_PSAIL_ERR_N);
-    return(u1_t_port);
-}
-
-/*===================================================================================================================================*/
-/*  static U1 vd_s_PictCtl_PgoodAsilVbChg(U1 u1_a_STS)                                                                               */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void vd_s_PictCtl_PgoodAsilVbChg(U1 u1_a_STS)
-{
-    bfg_Pict_StsMng.u1_pgoodasilvb_pol_sts = u1_a_STS;
-}
-
-/*===================================================================================================================================*/
-/*  static U1 u1_s_PictCtl_PgoodAsilVbChk(void)                                                                                      */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static U1 u1_s_PictCtl_PgoodAsilVbChk(void)
-{
-    U1 u1_t_port;
-
-    u1_t_port = (U1)Dio_ReadChannel(PICT_PORT_PGOOD_ASIL_VB);
     return(u1_t_port);
 }
 
@@ -3241,6 +3259,81 @@ U1 u1_g_PictCtl_GetCamDiagMode(void)
 }
 
 /*===================================================================================================================================*/
+/*  static void vd_s_PictCtl_VmResetChk(void)                                                                                        */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_PictCtl_VmResetChk(void)
+{
+    U1 u1_t_vicrset;
+    U1 u1_t_gvifrset;
+    U1 u1_t_mode;
+    U1 u1_t_sts;
+
+    u1_t_vicrset = (U1)Dio_ReadChannel((U1)PICT_PORT_V_IC_RST);
+    u1_t_gvifrset = (U1)Dio_ReadChannel((U1)PICT_PORT_GVIF_CAM_RST);
+    u1_t_mode = u1_g_PictCtl_CamStsGet();
+    u1_t_sts = (U1)FALSE;
+
+    switch (u1_s_pict_vmresetchk_step)
+    {
+        case PICT_SEQ_VMRESETCHK_STEP0:
+            u1_t_sts = u1_s_pict_mipi_chg_flg & (U1)PICT_MIPI_OUT_VMRESET;
+            if(u1_t_sts != (U1)PICT_MIPI_OUT_VMRESET){
+                if(u1_t_gvifrset == (U1)TRUE){
+                    (void)u1_g_Gvif3SipFail();
+                    u1_s_pict_vmresetchk_step = (U1)PICT_SEQ_VMRESETCHK_STEP1;
+                }
+                else{
+                    u1_s_pict_vmrsttimeoutcnt = (U1)PICT_MIPITIMECNT_OFFOUT3;
+                    u1_s_pict_vmresetchk_step = (U1)PICT_SEQ_VMRESETCHK_STEP_FIN;
+                }
+            }
+            break;
+
+        case PICT_SEQ_VMRESETCHK_STEP1:
+            u1_t_sts = u1_g_Gvif3SipFail();
+            if(u1_t_sts == (U1)TRUE){
+                if(u1_s_pict_vmrsttimeoutcnt != (U1)PICT_TIMEOUTCNT_INIT){
+                    u1_s_pict_vmrsttimeoutcnt = (U1)PICT_MIPITIMECNT_OFFOUT3;
+                }
+                u1_s_pict_vmresetchk_step = (U1)PICT_SEQ_VMRESETCHK_STEP_FIN;
+            }
+            break;
+
+        case PICT_SEQ_VMRESETCHK_STEP_FIN:
+            /* 何もしない */
+            break;
+
+        default:
+            u1_s_pict_vmresetchk_step = (U1)PICT_SEQ_CAMSYNCCHK_STEP0;
+            break;
+    }
+    if((u1_s_pict_vmrsttimeoutcnt >= (U1)PICT_MIPITIMECNT_OFFOUT3) &&
+       (u1_s_pict_vmrsttimeoutcnt != (U1)PICT_TIMEOUTCNT_INIT)){
+        if(u1_t_mode == (U1)FALSE){
+            vd_g_PictMute_VmResetReq((U1)TRUE);
+            vd_s_PictCtl_ClrTim((U1)PICT_TIMID_ML_T_SIP_NOTIF_OUT);
+        }
+        vd_g_XspiIviSub1PowerVMResetComp((U1)XSPI_IVI_POWER_RESET_COMP_CAMERA);
+        if(u1_t_mode == (U1)TRUE){
+            if(u1_t_vicrset == (U1)TRUE){
+                /* カメラバイパス経路切替要求設定 */
+                u1_s_pict_campass_chg_flg |= (U1)PICT_CAM_PATH_VMRESET;
+                u1_s_pict_vmreset_bpass = (U1)PICT_VMRESET_REQ;
+            }
+        }
+        u1_s_pict_vmrsttimeoutcnt = (U1)PICT_TIMEOUTCNT_INIT;
+
+    }
+    
+    if(u1_s_pict_vmrsttimeoutcnt < (U1)PICT_TIMEOUTCNT_INIT){
+        u1_s_pict_vmrsttimeoutcnt++;
+    }
+}
+
+/*===================================================================================================================================*/
 /*  static void vd_s_PictCtl_SiPErrChk(void)                                                                                         */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -3248,26 +3341,33 @@ U1 u1_g_PictCtl_GetCamDiagMode(void)
 /*===================================================================================================================================*/
 static void vd_s_PictCtl_SiPErrChk(void)
 {
-    U1 u1_t_mode;
     U1 u1_t_vicrset;
     U1 u1_t_gvifrset;
     U1 u1_t_sts;
+    U1 u1_t_fact;
     U4 u4_t_comp;
 
-    u1_t_mode = u1_g_PictCtl_CamStsGet();
     u1_t_vicrset = (U1)Dio_ReadChannel((U1)PICT_PORT_V_IC_RST);
     u1_t_gvifrset = (U1)Dio_ReadChannel((U1)PICT_PORT_GVIF_CAM_RST);
     u1_t_sts = (U1)FALSE;
+    u1_t_fact = (U1)PICT_SIP_ERR_NON;
     u4_t_comp = (U4)FALSE;
     
-    u1_s_pict_siperr = u1_s_PictCtl_SiPErrstsChk();
+    u1_s_pict_siperr = u1_s_PictCtl_SiPErrstsChk(&u1_t_fact);
     if((u1_s_pict_siperr == (U1)PICT_SIP_ERR_ON) && (u1_s_pict_siperr_old == (U1)PICT_SIP_ERR_OFF)){
         if(u1_s_pict_siperrfailsafe_flg == (U1)PICT_SIP_ERR_OFF){
             u1_s_pict_siperrchk_step = PICT_SEQ_SIPERRCHK_STEP0;
+            u1_s_pict_siperrmute_flg = (U1)TRUE;
             u1_s_pict_siperrfailsafe_flg = (U1)PICT_SIP_ERR_ON;
+            if(u1_t_fact == (U1)PICT_SIP_ERR_MCU){
+                u1_s_pict_mipitimeout_jdgval = (U1)PICT_MIPITIMECNT_OFFOUT;
+            }
+            else{
+                u1_s_pict_mipitimeout_jdgval = (U1)PICT_MIPITIMECNT_OFFOUT2;
+            }
         }
-        else if((u1_s_pict_siperrchk_step == (U1)PICT_SEQ_SIPERRCHK_STEP_FIN) && (u1_s_pict_mipitimeoutcnt == (U1)PICT_MIPITIMECNT_INIT)){
-            u1_s_pict_mipitimeoutcnt = (U1)PICT_MIPITIMECNT_TIMEOUT;
+        else if((u1_s_pict_siperrchk_step == (U1)PICT_SEQ_SIPERRCHK_STEP_FIN) && (u1_s_pict_mipitimeoutcnt == (U1)PICT_TIMEOUTCNT_INIT)){
+            u1_s_pict_mipitimeoutcnt = u1_s_pict_mipitimeout_jdgval;
         }
         else{
             /* do nothing */
@@ -3283,11 +3383,11 @@ static void vd_s_PictCtl_SiPErrChk(void)
             if(u1_t_gvifrset == (U1)TRUE){
                 /* MIPI出力ポートOFF設定 */
                 (void)u1_g_Gvif3SipFail(); /* 暫定 */
-                u1_s_pict_mipitimeoutcnt = (U1)PICT_MIPITIMECNT_START;
+                u1_s_pict_mipitimeoutcnt = (U1)PICT_TIMEOUTCNT_START;
                 u1_s_pict_siperrchk_step = (U1)PICT_SEQ_SIPERRCHK_STEP1;
             }
             else{
-                u1_s_pict_mipitimeoutcnt = (U1)PICT_MIPITIMECNT_TIMEOUT;
+                u1_s_pict_mipitimeoutcnt = u1_s_pict_mipitimeout_jdgval;
                 u1_s_pict_siperrchk_step = (U1)PICT_SEQ_SIPERRCHK_STEP_FIN;
             }
             break;
@@ -3295,8 +3395,8 @@ static void vd_s_PictCtl_SiPErrChk(void)
         case PICT_SEQ_SIPERRCHK_STEP1:
                 u1_t_sts = u1_g_Gvif3SipFail();
                 if(u1_t_sts == (U1)TRUE){
-                    if(u1_s_pict_mipitimeoutcnt != (U1)PICT_MIPITIMECNT_INIT){
-                        u1_s_pict_mipitimeoutcnt = (U1)PICT_MIPITIMECNT_TIMEOUT;
+                    if(u1_s_pict_mipitimeoutcnt != (U1)PICT_TIMEOUTCNT_INIT){
+                        u1_s_pict_mipitimeoutcnt = u1_s_pict_mipitimeout_jdgval;
                     }
                     u1_s_pict_siperrchk_step = (U1)PICT_SEQ_SIPERRCHK_STEP_FIN;
                 }
@@ -3311,26 +3411,19 @@ static void vd_s_PictCtl_SiPErrChk(void)
             u1_s_pict_siperrchk_step = (U1)PICT_SEQ_CAMSYNCCHK_STEP0;
             break;
     }
-    if((u1_s_pict_mipitimeoutcnt >= (U1)PICT_MIPITIMECNT_TIMEOUT) &&
-       (u1_s_pict_mipitimeoutcnt != (U1)PICT_MIPITIMECNT_INIT)){
+    if((u1_s_pict_mipitimeoutcnt >= u1_s_pict_mipitimeout_jdgval) &&
+       (u1_s_pict_mipitimeoutcnt != (U1)PICT_TIMEOUTCNT_INIT)){
         if(u1_s_pict_pwrnext_req == (U1)TRUE){
-            /* (暫定)VM3の制御再開要求 */
             u4_t_comp = (U4)TRUE;
             vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO3_SIPERRCMP, &u4_t_comp, (U2)PICT_VM_1WORD);
             u1_s_pict_pwrnext_req = (U1)FALSE;
         }
-        if((u1_t_mode == (U1)TRUE) && (u1_t_vicrset == (U1)TRUE)){
-            /* カメラバイパス経路切替要求設定 */
-            u1_s_pict_campass_chg_flg |= (U1)PICT_CAM_PATH_SIPERR;
-        }
-        else{
-            u1_s_pict_falsepositive_jdgreq = (U1)TRUE;
-        }
+        vd_s_PictCtl_SipErrVIcRstChk();
         if(u1_s_pict_cdcreset_req == (U1)PICT_CDCRESET_EXE){
             u1_s_pict_cdcreset_req = (U1)PICT_CDCRESET_NON;
             vd_g_XspiIviSub1PowerCDCResetComp((U1)XSPI_IVI_POWER_RESET_COMP_CAMERA);
         }
-        u1_s_pict_mipitimeoutcnt = (U1)PICT_MIPITIMECNT_INIT;
+        u1_s_pict_mipitimeoutcnt = (U1)PICT_TIMEOUTCNT_INIT;
     }
     
     if(u1_s_pict_falsepositive_jdgreq == (U1)TRUE){
@@ -3339,7 +3432,7 @@ static void vd_s_PictCtl_SiPErrChk(void)
     
     vd_s_PictCtl_SiPErrClearChk();
     
-    if(u1_s_pict_mipitimeoutcnt < (U1)PICT_MIPITIMECNT_INIT){
+    if(u1_s_pict_mipitimeoutcnt < (U1)PICT_TIMEOUTCNT_INIT){
         u1_s_pict_mipitimeoutcnt++;
     }
     
@@ -3347,21 +3440,36 @@ static void vd_s_PictCtl_SiPErrChk(void)
 }
 
 /*===================================================================================================================================*/
-/*  static U1 u1_s_PictCtl_SiPErrstsChk(void)                                                                                        */
+/*  static U1 u1_s_PictCtl_SiPErrstsChk(U1* u1p_a_fact)                                                                              */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static U1 u1_s_PictCtl_SiPErrstsChk(void)
+static U1 u1_s_PictCtl_SiPErrstsChk(U1* u1p_a_fact)
 {
     U1 u1_t_sts;
+    U1 u1_t_req;
+    U1 u1_t_fact;
     
-    u1_t_sts = (U1)PICT_SIP_ERR_OFF;
+    u1_t_sts  = (U1)PICT_SIP_ERR_OFF;
+    u1_t_req  = (U1)PICT_SIP_ERR_OFF;
+    u1_t_fact = (U1)PICT_SIP_ERR_NON;
     
     vd_s_PictCtl_SiPErrGetSts();
     
-    u1_t_sts  = u1_s_PictCtl_AutoSiPOffChk();
-    u1_t_sts |= u1_s_PictCtl_McuSiPOffChk();
+    u1_t_req = u1_s_PictCtl_AutoSiPOffChk();
+    if(u1_t_req == (U1)PICT_SIP_ERR_ON){
+        u1_t_sts = PICT_SIP_ERR_ON;
+        u1_t_fact = (U1)PICT_SIP_ERR_AUTO;
+    }
+    
+    u1_t_req = u1_s_PictCtl_McuSiPOffChk();
+    if(u1_t_req == (U1)PICT_SIP_ERR_ON){
+        u1_t_sts |= PICT_SIP_ERR_ON;
+        u1_t_fact |= (U1)PICT_SIP_ERR_MCU;
+    }
+    
+    *u1p_a_fact = u1_t_fact;
     
     return(u1_t_sts);
 }
@@ -3381,7 +3489,6 @@ static void vd_s_PictCtl_SiPErrGetSts(void)
     st_sp_siperr_sts[PICT_SIPERR_PMPSAIL_RAW].u1_pre = st_sp_siperr_sts[PICT_SIPERR_PMPSAIL_RAW].u1_now;
     st_sp_siperr_sts[PICT_SIPERR_PMAPSHOLD_POL].u1_pre = st_sp_siperr_sts[PICT_SIPERR_PMAPSHOLD_POL].u1_now;
     st_sp_siperr_sts[PICT_SIPERR_PMAPSHOLD_RAW].u1_pre = st_sp_siperr_sts[PICT_SIPERR_PMAPSHOLD_RAW].u1_now;
-    st_sp_siperr_sts[PICT_SIPERR_PGOOD_POL].u1_pre = st_sp_siperr_sts[PICT_SIPERR_PGOOD_POL].u1_now;
     
     vd_s_PictCtl_SiPErrReadReq();
     vd_s_PictCtl_SiPErrReadMoni();
@@ -3409,12 +3516,6 @@ static void vd_s_PictCtl_SiPErrGetSts(void)
     }
     else{
         st_sp_siperr_sts[PICT_SIPERR_PMAPSHOLD_RAW].u1_now = (U1)PICT_SIP_ERR_OFF;
-    }
-    if(bfg_Pict_StsMng.u1_pgoodasilvb_pol_sts == (U1)PICT_POLLPORT_OFF){
-        st_sp_siperr_sts[PICT_SIPERR_PGOOD_POL].u1_now = (U1)PICT_SIP_ERR_ON;
-    }
-    else{
-        st_sp_siperr_sts[PICT_SIPERR_PGOOD_POL].u1_now = (U1)PICT_SIP_ERR_OFF;
     }
 }
 
@@ -3516,11 +3617,6 @@ static U1 u1_s_PictCtl_AutoSiPOffChk(void)
     u1_t_sts |= u1_s_PictCtl_AutoSiPOffjdg(u1_t_enable,
                                             st_sp_siperr_sts[PICT_SIPERR_PMAPSHOLD_POL].u1_pre, st_sp_siperr_sts[PICT_SIPERR_PMAPSHOLD_POL].u1_now,
                                             st_sp_siperr_sts[PICT_SIPERR_PMAPSHOLD_RAW].u1_pre, st_sp_siperr_sts[PICT_SIPERR_PMAPSHOLD_RAW].u1_now);
-    
-    u1_t_sts |= u1_s_PictCtl_AutoSiPOffjdg(u1_s_pict_siperrmoni_ensts[PICT_MONIENSTS_PGOOD],
-                                            st_sp_siperr_sts[PICT_SIPERR_PGOOD_POL].u1_pre, st_sp_siperr_sts[PICT_SIPERR_PGOOD_POL].u1_now,
-                                            (U1)PICT_POLLPORT_UNFIX, (U1)PICT_POLLPORT_UNFIX);
-    
     return(u1_t_sts);
 }
 
@@ -3546,7 +3642,7 @@ static U1 u1_s_PictCtl_AutoSiPOffjdg(const U1 u1_a_ENSTS, const U1 u1_a_POL_PRE,
             u1_s_pict_siperr_edg_flg = (U1)TRUE;
         }
         if((u1_a_POL_NOW == (U1)PICT_SIP_ERR_ON) && (u1_a_POL_PRE == (U1)PICT_SIP_ERR_OFF)){
-            if((u1_t_mode == (U1)FALSE) && (u1_s_pict_siperrmute_flg == (U1)FALSE)){
+            if((u1_t_mode == (U1)FALSE) && (u1_s_pict_siperrmute_req == (U1)PICT_SIPERRMUTE_NON)){
                 vd_s_PictCtl_SiPErrMute((U1)PICT_SIPERRMUTE_MCU);
             }
             u1_t_sts = (U1)PICT_SIP_ERR_ON;
@@ -3576,7 +3672,7 @@ static U1 u1_s_PictCtl_McuSiPOffChk(void)
        ((st_sp_siperr_sts[PICT_SIPERR_PMICFAST].u1_now == (U1)PICT_SIP_ERR_ON) &&
         (st_sp_siperr_sts[PICT_SIPERR_PMICFAST].u1_pre == (U1)PICT_SIP_ERR_OFF)) ||
        (u1_s_pict_socreset_req == (U1)PICT_SOCRESET_REQ)){
-        if((u1_t_mode == (U1)FALSE) && (u1_s_pict_siperrmute_flg == (U1)FALSE)){
+        if((u1_t_mode == (U1)FALSE) && (u1_s_pict_siperrmute_req == (U1)PICT_SIPERRMUTE_NON)){
             vd_s_PictCtl_SiPErrMute((U1)PICT_SIPERRMUTE_MCU);
         }
         u1_s_pict_pwrnext_req = (U1)TRUE;
@@ -3590,7 +3686,7 @@ static U1 u1_s_PictCtl_McuSiPOffChk(void)
     if(((st_sp_siperr_sts[PICT_SIPERR_OTA_ACT].u1_now == (U1)PICT_SIP_ERR_ON) &&
         (st_sp_siperr_sts[PICT_SIPERR_OTA_ACT].u1_pre == (U1)PICT_SIP_ERR_OFF)) ||
        (u1_s_pict_cdcreset_req == (U1)PICT_CDCRESET_REQ)){
-        if((u1_t_mode == (U1)FALSE) && (u1_s_pict_siperrmute_flg == (U1)FALSE)){
+        if((u1_t_mode == (U1)FALSE) && (u1_s_pict_siperrmute_req == (U1)PICT_SIPERRMUTE_NON)){
             vd_s_PictCtl_SiPErrMute((U1)PICT_SIPERRMUTE_OTA);
         }
         u1_s_pict_pwrnext_req = (U1)TRUE;
@@ -3614,13 +3710,44 @@ static void vd_s_PictCtl_SiPErrMute(const U1 u1_a_FACT)
 {
     bfg_Pict_StsMng.u1_RcvNoCamQualModeFlg = (U1)PICT_RCV_NOCAMQUAL_STOP;
     vd_s_PictCtl_ClrTim((U1)PICT_TIMID_ML_T_SIP_NOTIF_OUT);
-    if(u1_a_FACT == (U1)PICT_SIPERRMUTE_MCU){
-        vd_g_PictMute_SipResetReq((U1)TRUE);
+    u1_s_pict_siperrmute_req = u1_a_FACT;
+}
+
+/*===================================================================================================================================*/
+/*  static void vd_s_PictCtl_SipErrVIcRstChk(void)                                                                                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_PictCtl_SipErrVIcRstChk(void)
+{
+    U1 u1_t_mode;
+    U1 u1_t_vicrset;
+    
+    u1_t_mode = u1_g_PictCtl_CamStsGet();
+    u1_t_vicrset = (U1)Dio_ReadChannel((U1)PICT_PORT_V_IC_RST);
+    
+    if(u1_t_vicrset == (U1)TRUE){
+        if(u1_t_mode == (U1)TRUE){
+            /* カメラバイパス経路切替要求設定 */
+            u1_s_pict_campass_chg_flg |= (U1)PICT_CAM_PATH_SIPERR;
+        }
+        else{
+            if(u1_s_pict_siperrmute_flg == (U1)TRUE){
+                if(u1_s_pict_siperrmute_req == (U1)PICT_SIPERRMUTE_OTA){
+                    vd_g_PictMute_CdcResetReq((U1)TRUE);
+                }
+                else{
+                    vd_g_PictMute_SipResetReq((U1)TRUE);
+                }
+                u1_s_pict_siperrmute_flg = (U1)FALSE;
+            }
+            u1_s_pict_falsepositive_jdgreq = (U1)TRUE;
+        }
     }
     else{
-        vd_g_PictMute_CdcResetReq((U1)TRUE);
+        u1_s_pict_falsepositive_jdgreq = (U1)TRUE;
     }
-    u1_s_pict_siperrmute_flg = (U1)TRUE;
 }
 
 /*===================================================================================================================================*/
@@ -3687,11 +3814,10 @@ static void vd_s_PictCtl_SiPErrClearChk(void)
        (bfg_Pict_StsMng.u1_pmapshold_pol_sts != (U1)PICT_POLLPORT_OFF) &&
        (bfg_Pict_StsMng.u1_pmpsholderr_raw_sts != (U1)PICT_POLLPORT_OFF) &&
        (bfg_Pict_StsMng.u1_pmpsholderr_pol_sts != (U1)PICT_POLLPORT_OFF) &&
-       (bfg_Pict_StsMng.u1_pgoodasilvb_pol_sts != (U1)PICT_POLLPORT_OFF) &&
        (u1_s_pict_siperrchk_step == (U1)PICT_SEQ_SIPERRCHK_STEP_FIN) &&
        (u1_t_bypass_flg != (U1)PICT_CAM_PATH_SIPERR)){
         u1_s_pict_siperrfailsafe_flg = (U1)PICT_SIP_ERR_OFF;
-        u1_s_pict_siperrmute_flg = (U1)FALSE;
+        u1_s_pict_siperrmute_req = (U1)PICT_SIPERRMUTE_NON;
         u1_s_pict_siperrchk_step = (U1)PICT_SEQ_SIPERRCHK_STEP_NON;
         vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO3_SIPERRCMP, &u4_t_comp, (U2)PICT_VM_1WORD);
     }
@@ -3869,10 +3995,6 @@ static void vd_s_PictCtl_CamModeHMainChkErrCycChk(void)
             if(bfg_Pict_StsMng.u1_RcvCamQualModeFlg == (U1)FALSE){
                 /* 管理するカメラのパス設定は、カメラ通常経路を保持し強制的にカメラバイパス切替を行う */
                 u1_s_pict_campass_chg_flg |= (U1)PICT_CAM_PATH_CAMMODEFAIL;
-            }
-            if(u1_s_pict_cammodelog_flg == (U1)TRUE){
-                vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_CAMCTL, (U1)PICT_DRCID_CAMFAIL_JDG, (U1)0x00U, (U1)0x00U);
-                u1_s_pict_cammodelog_flg = (U1)FALSE;
             }
             /* N1=0 */
             bfg_Ml_Ctl.u1_CamModeHMainChkErrCnt_N1 = (U1)PICT_CNT_INI;  
@@ -4409,6 +4531,60 @@ static void vd_s_PictCtl_CamAreaChk(void)
 }
 
 /*===================================================================================================================================*/
+/*  static void vd_s_PictCtl_CanInputChk(void)                                                                                       */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_PictCtl_CanInputChk(void)
+{
+    vd_s_PictCtl_StrgwhlChk();
+    vd_s_PictCtl_SetTim((U1)PICT_TIMID_CANSIGNAL_GETCYC, (U2)PICT_TIMER_CANSIGNAL_GETCYC);
+}
+
+/*===================================================================================================================================*/
+/*  static void vd_s_PictCtl_StrgwhlChk(void)                                                                                        */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_PictCtl_StrgwhlChk(void)
+{
+    U1 u1_t_sig;
+    U1 u1_t_msgsts;
+    U1 u1_t_handle;
+    
+    u1_t_sig = (U1)0U;
+    u1_t_msgsts = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BDB1S08_CH0,
+                                    (U4)OXCAN_SYS_PNC_16 | (U4)OXCAN_SYS_PNC_40 | (U4)OXCAN_SYS_PNC_43 | (U4)OXCAN_SYS_PNC_44 | \
+                                    (U4)OXCAN_SYS_PBA | (U4)OXCAN_SYS_ACC | (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                    (U2)PICT_TIM_BDB1S08_FAILTIM) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+    if(u1_t_msgsts == (U1)0U){
+        (void)Com_ReceiveSignal(ComConf_ComSignal_STRG_WHL, &u1_t_sig);
+        if(u1_t_sig < (U1)PICT_STRG_WHL_MAX){
+            u1_t_handle = u1_sp_PICT_HANDLE_TBL[u1_t_sig];
+            vd_s_PictCtl_StrgwhlUpdate(u1_t_handle);
+        }
+    }
+}
+
+/*===================================================================================================================================*/
+/*  static void vd_s_PictCtl_StrgwhlUpdate(const U1 u1_a_HANDLE)                                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_PictCtl_StrgwhlUpdate(const U1 u1_a_HANDLE)
+{
+    if(u1_a_HANDLE != st_sp_Pict_BackUpInf.u1_handle){
+        if((u1_a_HANDLE == (U1)PICT_HANDLE_RIGHT) || (st_sp_Pict_BackUpInf.u1_handle !=(U1)PICT_HANDLE_UNKNOWN)){
+            u1_s_pict_regwrite_req = (U1)TRUE;
+        }
+        st_sp_Pict_BackUpInf.u1_handle = u1_a_HANDLE;
+    }
+}
+
+/*===================================================================================================================================*/
 /*  U1 u1_g_PictCtl_CamSizeSts(void)                                                                                                 */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -4463,6 +4639,25 @@ U1 u1_g_PictCtl_RcvQualModeRevDate(void)
     return(bfg_Pict_StsMng.u1_RcvQualModeDate);
 }
 
+/*===================================================================================================================================*/
+/*  U1 u1_g_PictCtl_handleSts(void)                                                                                                  */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1 u1_g_PictCtl_handleSts(void)
+{
+    U1 u1_t_return;
+    
+    u1_t_return = st_sp_Pict_BackUpInf.u1_handle;
+    
+    if((st_sp_Pict_BackUpInf.u1_handle != PICT_HANDLE_LEFT) &&
+       (st_sp_Pict_BackUpInf.u1_handle != PICT_HANDLE_RIGHT)){
+        u1_t_return = (U1)PICT_HANDLE_LEFT;
+    }
+    
+    return(u1_t_return);
+}
 
 /*============================================================================
  * カメラ種別判別通知要求イベント処理
@@ -4658,7 +4853,7 @@ static void vd_s_PictCtl_CdsizeChk(void)
     (void)Com_ReceiveSignal(ComConf_ComSignal_CD_SIZE , &u1_t_pre_sig);
     if(u1_t_pre_sig != u1_s_pict_cd_size){
         (void)Com_SendSignal(ComConf_ComSignal_CD_SIZE , &u1_s_pict_cd_size);
-        Com_TriggerIPDUSend((PduIdType)MSG_AVN1S97_TXCH0);
+        Com_TriggerIPDUSend((PduIdType)MSG_AVN1S73_TXCH0);
         vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_CAMCTL, (U1)PICT_DRCID_CD_SIZE, u1_s_pict_cd_size, (U1)0x00U);
         vd_g_PictLogCtl_LogReq((U1)PICTLOGCTL_POINT_CD_SIZE);
     }
@@ -4683,22 +4878,31 @@ U1 u1_g_PictCtl_CdsizeSnd(void)
 /*===================================================================================================================================*/
 void vd_g_PictCtl_VmResetReq(void)
 {
-    U1  u1_t_mode;
+    U1 u1_t_vicrset;
+    U1 u1_t_gvifrset;
+
+    u1_t_vicrset = (U1)Dio_ReadChannel((U1)PICT_PORT_V_IC_RST);
+    u1_t_gvifrset = (U1)Dio_ReadChannel((U1)PICT_PORT_GVIF_CAM_RST);
     
     if(bfg_Pict_StsMng.u1_DiagMode == (U1)PICT_DIAG_MOD_CAMON) {
         u1_s_pict_reset_req = (U1)PICT_RESETREQ_ON;
         vd_s_PictCtl_MmresetSndChk();
     }
     
-    u1_t_mode   = u1_g_PictCtl_CamStsGet();
-    if(u1_t_mode == (U1)FALSE){
-        vd_g_PictMute_VmResetReq((U1)TRUE);
-        vd_s_PictCtl_ClrTim((U1)PICT_TIMID_ML_T_SIP_NOTIF_OUT);
-        vd_g_XspiIviSub1PowerVMResetComp((U1)XSPI_IVI_POWER_RESET_COMP_CAMERA);
+    if(u1_t_vicrset == (U1)TRUE){
+        u1_s_pict_mipi_chg_flg |= (U1)PICT_MIPI_OUT_VMRESET;
+        u1_s_pict_vmresetchk_step = (U1)PICT_SEQ_VMRESETCHK_STEP0;
+        u1_s_pict_vmrsttimeoutcnt = (U1)PICT_TIMEOUTCNT_START;
+    }
+    else if(u1_t_gvifrset == (U1)TRUE){
+        (void)u1_g_Gvif3SipFail();
+        u1_s_pict_vmresetchk_step = (U1)PICT_SEQ_VMRESETCHK_STEP1;
+        u1_s_pict_vmrsttimeoutcnt = (U1)PICT_TIMEOUTCNT_START;
+        
     }
     else{
-        u1_s_pict_campass_chg_flg |= (U1)PICT_CAM_PATH_VMRESET;
-        u1_s_pict_vmreset_bpass = (U1)PICT_VMRESET_REQ;
+        u1_s_pict_vmresetchk_step = (U1)PICT_SEQ_VMRESETCHK_STEP_FIN;
+        u1_s_pict_vmrsttimeoutcnt = (U1)PICT_MIPITIMECNT_OFFOUT3;
     }
 }
 

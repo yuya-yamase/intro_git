@@ -52,6 +52,10 @@
 #define PICT_POLLPORT_ON                                (1U)    /* ON */
 #define PICT_POLLPORT_UNFIX                             (0xFFU) /* –¢Šm’è */
 
+#define PICT_HANDLE_LEFT                                (0U)
+#define PICT_HANDLE_RIGHT                               (1U)
+#define PICT_HANDLE_UNKNOWN                             (2U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -80,6 +84,7 @@ U1      u1_g_PictCtl_CamSyncSts(void);
 U1      u1_g_PictCtl_RcvQualModeRevFlgSts(void);
 U1      u1_g_PictCtl_RcvQualModeRevDate(void);
 void    vd_g_PictCtl_RcvDiagModInd(const U1 u1_a_MODE);
+U1      u1_g_PictCtl_handleSts(void);
 U1      u1_g_PictCtl_CdsizeSnd(void);
 void    vd_g_PictCtl_VmResetReq(void);
 void    vd_g_PictCtl_SocResetReq(void);
